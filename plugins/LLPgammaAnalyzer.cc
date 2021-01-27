@@ -11,62 +11,16 @@
      [Notes on implementation]
 */
 //
-// Original Author:  Jack King
+// Original Author:  Jack W King III
 //         Created:  Wed, 27 Jan 2021 19:19:35 GMT
 //
 //
 
+//----------------------------------------  cc file   --------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 
-// system include files
-#include <memory>
-
-// user include files
-#include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/one/EDAnalyzer.h"
-
-#include "FWCore/Framework/interface/Event.h"
-#include "FWCore/Framework/interface/MakerMacros.h"
-
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
- #include "FWCore/Utilities/interface/InputTag.h"
- #include "DataFormats/TrackReco/interface/Track.h"
- #include "DataFormats/TrackReco/interface/TrackFwd.h"
-//
-// class declaration
-//
-
-// If the analyzer does not use TFileService, please remove
-// the template argument to the base class so the class inherits
-// from  edm::one::EDAnalyzer<>
-// This will improve performance in multithreaded jobs.
-
-
-using reco::TrackCollection;
-
-class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
-   public:
-      explicit LLPgammaAnalyzer(const edm::ParameterSet&);
-      ~LLPgammaAnalyzer();
-
-      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-
-
-   private:
-      virtual void beginJob() override;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() override;
-
-      // ----------member data ---------------------------
-      edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-};
-
-//
-// constants, enums and typedefs
-//
-
-//
-// static data member definitions
-//
+#include "LLPgamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.hh"
+using namespace std;
 
 //
 // constructors and destructor
@@ -74,6 +28,42 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig)
  :
   tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks")))
+
+// to be reworked to this methodology 
+  // triggers
+  triggerResultsToken = consumes<edm::TriggerResults> (triggerResultsTag);
+  triggerObjectsToken = consumes<std::vector<pat::TriggerObjectStandAlone> > (triggerObjectsTag);
+
+  // MET flags
+  triggerFlagsToken     = consumes<edm::TriggerResults> (triggerFlagsTag);
+  ecalBadCalibFlagToken = consumes<bool> (ecalBadCalibFlagTag);
+
+  // tracks 
+  tracksToken = consumes<std::vector<reco::Track> > (tracksTag);
+
+  // vertices
+  verticesToken = consumes<std::vector<reco::Vertex> > (verticesTag);
+
+  // rho
+  rhoToken = consumes<double> (rhoTag);
+
+  // mets
+  metsToken = consumes<std::vector<pat::MET> > (metsTag);
+
+  // jets
+  jetsToken = consumes<std::vector<pat::Jet> > (jetsTag);
+
+  // leptons
+  electronsToken = consumes<std::vector<pat::Electron> > (electronsTag);
+  muonsToken = consumes<std::vector<pat::Muon> > (muonsTag);
+
+  // rechits
+  recHitsEBToken = consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > (recHitsEBTag);
+  recHitsEEToken = consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > (recHitsEETag);
+
+  // photons
+  gedPhotonsToken = consumes<std::vector<pat::Photon> > (gedPhotonsTag);
+  ootPhotonsToken = consumes<std::vector<pat::Photon> > (ootPhotonsTag);
 
 {
    //now do what ever initialization is needed
