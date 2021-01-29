@@ -137,59 +137,81 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
       virtual void endJob() override;
 
+      int GetPFJetID(const pat::Jet & jet);
+
       // ----------member data ---------------------------
+     
+      TTree * outTree;
+ 
+      // Event
+      unsigned long int event; // technically unsigned long long in Event.h...
+      unsigned int run, lumi; 
+
       // Tracks
       const edm::InputTag tracksTag;
       edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-      edm::Handle<std::vector<reco::Track> > tracksH;
+      edm::Handle<std::vector<reco::Track> > tracks_;
+
       // vertices
       const edm::InputTag verticesTag;
-      edm::EDGetTokenT<std::vector<reco::Vertex> > verticesToken;
-      edm::Handle<std::vector<reco::Vertex> > verticesH;
+      edm::EDGetTokenT<std::vector<reco::Vertex> > verticesToken_;
+      edm::Handle<std::vector<reco::Vertex> > vertices_;
+      int nVtx;
+      float vtxX, vtxY, vtxZ;
+
       // mets
       const edm::InputTag metsTag;
-      edm::EDGetTokenT<std::vector<pat::MET> > metsToken;
-      edm::Handle<std::vector<pat::MET> > metsH;
+      edm::EDGetTokenT<std::vector<pat::MET> > metsToken_;
+      edm::Handle<std::vector<pat::MET> > mets_;
 
       // jets
       const edm::InputTag jetsTag;
-      edm::EDGetTokenT<std::vector<pat::Jet> > jetsToken;
-      edm::Handle<std::vector<pat::Jet> > jetsH;
+      edm::EDGetTokenT<std::vector<pat::Jet> > jetsToken_;
+      edm::Handle<std::vector<pat::Jet> > jets_;
       std::vector<pat::Jet> jets;
+      int nJets;
+      std::vector<float> jetE, jetpt, jetphi, jeteta;
+      std::vector<int>   jetID;
+      std::vector<float> jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM;
 
       // electrons
       const edm::InputTag electronsTag;
-      edm::EDGetTokenT<std::vector<pat::Electron> > electronsToken;
-      edm::Handle<std::vector<pat::Electron> > electronsH;
+      edm::EDGetTokenT<std::vector<pat::Electron> > electronsToken_;
+      edm::Handle<std::vector<pat::Electron> > electrons_;
       std::vector<pat::Electron> electrons;
       
       // muons
       const edm::InputTag muonsTag;
-      edm::EDGetTokenT<std::vector<pat::Muon> > muonsToken;
-      edm::Handle<std::vector<pat::Muon> > muonsH;
+      edm::EDGetTokenT<std::vector<pat::Muon> > muonsToken_;
+      edm::Handle<std::vector<pat::Muon> > muons_;
       std::vector<pat::Muon> muons;
       
-      // RecHits EB
+      // RecHits
       const edm::InputTag recHitsEBTag;
-      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEBToken;
-      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEBH;
+      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEBToken_;
+      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEB_;
       const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEB;
-
-      // RecHits EE
       const edm::InputTag recHitsEETag;
-      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEEToken;
-      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEEH;
+      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEEToken_;
+      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEE_;
       const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEE;
+      int nRecHits;
+      std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
+      std::vector<unsigned int> rhID;
+      std::vector<bool> rhisOOT, rhisGS6, rhisGS1;
+      std::vector<float> rhadcToGeV;
+      std::vector<float> rhped12, rhped6, rhped1;
+      std::vector<float> rhpedrms12, rhpedrms6, rhpedrms1;
 
       // gedPhotons
       const edm::InputTag gedPhotonsTag;
-      edm::EDGetTokenT<std::vector<pat::Photon> > gedPhotonsToken;
-      edm::Handle<std::vector<pat::Photon> > gedPhotonsH;
+      edm::EDGetTokenT<std::vector<pat::Photon> > gedPhotonsToken_;
+      edm::Handle<std::vector<pat::Photon> > gedPhotons_;
 
       // ootPhotons
       const edm::InputTag ootPhotonsTag;
-      edm::EDGetTokenT<std::vector<pat::Photon> > ootPhotonsToken;
-      edm::Handle<std::vector<pat::Photon> > ootPhotonsH;
+      edm::EDGetTokenT<std::vector<pat::Photon> > ootPhotonsToken_;
+      edm::Handle<std::vector<pat::Photon> > ootPhotons_;
 
 };
 
@@ -197,7 +219,11 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 // constants, enums and typedefs
 //
 
+      const auto sortByPt = [](const auto & obj1, const auto & obj2) {return obj1.pt() > obj2.pt();};
+
 //
 // static data member definitions
 //
 
+
+//-------------------------------------------------------------------------------------------------------------------
