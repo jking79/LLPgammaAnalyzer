@@ -22,6 +22,21 @@
 // system include files
 #include <memory>
 
+// basic C++ types
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <utility>
+#include <map>
+#include <unordered_map>
+#include <cmath>
+#include <limits>
+#include <algorithm>
+#include <memory>
+#include <tuple>
+#include <random>
+
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/one/EDAnalyzer.h"
@@ -105,6 +120,15 @@
 #include "CondFormats/EcalObjects/interface/EcalPedestals.h"
 #include "CondFormats/DataRecord/interface/EcalPedestalsRcd.h"
 
+// JECS
+#include "CondFormats/JetMETObjects/interface/JetCorrectorParameters.h"
+#include "JetMETCorrections/Objects/interface/JetCorrectionsRecord.h"
+#include "CondFormats/JetMETObjects/interface/JetCorrectionUncertainty.h"
+
+// JERs
+#include "CondFormats/JetMETObjects/interface/JetResolutionObject.h"
+#include "JetMETCorrections/Modules/interface/JetResolution.h"
+
 // ROOT
 #include "TH1F.h"
 #include "TTree.h"
@@ -130,14 +154,12 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       ~LLPgammaAnalyzer();
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-
+      int GetPFJetID(const pat::Jet & jet);
 
    private:
       virtual void beginJob() override;
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
       virtual void endJob() override;
-
-      int GetPFJetID(const pat::Jet & jet);
 
       // ----------member data ---------------------------
      

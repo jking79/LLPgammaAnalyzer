@@ -25,14 +25,14 @@ using namespace std;
 //
 // constructors and destructor
 //
-LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig):
+LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig) :
 
   //tracksToken_(consumes<TrackCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tracks")))
 
 // -- declare tags ----------------------------------------------------------
   // triggers
-  triggerResultsTag(iConfig.getParameter<edm::InputTag>("triggerResults")),
-  triggerObjectsTag(iConfig.getParameter<edm::InputTag>("triggerObjects")),
+  //triggerResultsTag(iConfig.getParameter<edm::InputTag>("triggerResults")),
+  //triggerObjectsTag(iConfig.getParameter<edm::InputTag>("triggerObjects")),
 
   // tracks
   tracksTag(iConfig.getParameter<edm::InputTag>("tracks")),
@@ -41,7 +41,7 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig):
   verticesTag(iConfig.getParameter<edm::InputTag>("vertices")),
 
   // rho
-  rhoTag(iConfig.getParameter<edm::InputTag>("rho")),
+  //rhoTag(iConfig.getParameter<edm::InputTag>("rho")),
 
   // mets
   metsTag(iConfig.getParameter<edm::InputTag>("mets")),  
@@ -63,7 +63,7 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig):
   gedPhotonsTag(iConfig.getParameter<edm::InputTag>("gedPhotons")),
 
   // ootPhotons
-  ootPhotonsTag(iConfig.getParameter<edm::InputTag>("ootPhotons")),
+  ootPhotonsTag(iConfig.getParameter<edm::InputTag>("ootPhotons"))
 
 // -- end of tag declarations ---------------------------------------
 {
@@ -74,8 +74,8 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig):
 // -- consume tags ------------------------------------------------------------
 
   // Triggers
-  triggerResultsToken_	=consumes<edm::TriggerResults>(triggerResultsTag);
-  triggerObjectsToken_	=consumes<std::vector<pat::TriggerObjectStandAlone>>(triggerObjectsTag);
+  //triggerResultsToken_	=consumes<edm::TriggerResults>(triggerResultsTag);
+  //triggerObjectsToken_	=consumes<std::vector<pat::TriggerObjectStandAlone>>(triggerObjectsTag);
 
   // tracks 
   tracksToken_				=consumes<std::vector<reco::Track>>(tracksTag);
@@ -84,7 +84,7 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig):
   verticesToken_			=consumes<std::vector<reco::Vertex>>(verticesTag);
   
   // rho
-  rhoToken_					=consumes<double>(rhoTag);
+  //rhoToken_					=consumes<double>(rhoTag);
 
   // mets
   metsToken_				=consumes<std::vector<pat::MET>>(metsTag);
@@ -135,30 +135,49 @@ int GetPFJetID(const pat::Jet & jet){ // https://twiki.cern.ch/twiki/bin/view/CM
     const auto SHM  = jet.chargedMultiplicity()+jet.neutralMultiplicity();
     const auto MUF  = jet.muonEnergyFraction();
     
-    // 2 == TightLepVeto
-    // 1 == Tight
+    int tightLepVeto = 2;
+    int tight = 1;
+    int loose = 0;
 
-    if (eta <= 2.4)
-    {
-      if      ((NHF < 0.90) && (NEMF < 0.90) && (SHM > 1) && (MUF < 0.80) && (CHF > 0) && (CHM > 0) && (CEMF < 0.80)) return 2;
-      else if ((NHF < 0.90) && (NEMF < 0.90) && (SHM > 1) &&                 (CHF > 0) && (CHM > 0))                  return 1;
-      else                                                                                                            return 0; 
-    }
-    else if (eta > 2.4 && eta <= 2.7)
-    {
-      if      ((NHF < 0.90) && (NEMF < 0.90) && (SHM > 1) && (MUF < 0.80)) return 2;
-      else if ((NHF < 0.90) && (NEMF < 0.90) && (SHM > 1))                 return 1;
-      else                                                                 return 0; 
-    }
-    else if (eta > 2.7 && eta <= 3.0)
-    {
-      if   ((NEMF > 0.02) && (NEMF < 0.99) && (NHM > 2)) return 1;
-      else                                               return 0; 
-    }
-    else 
-    {
-      if   ((NEMF < 0.90) && (NHF > 0.02) && (NHM > 10)) return 1;
-      else                                               return 0; 
+    bool nhf9  = NHF  < 0.90;
+    bool nhf2  = NHF  > 0.02;
+    bool nemf9 = NEMF < 0.90;
+    bool nemf1 = NEMF < 0.99;
+    bool nemf2 = NEMF > 0.02;
+    bool shm1  = SHM  > 1;
+    bool muf8  = MUF  < 0.80;
+    bool chf0  = CHF  > 0;
+    bool chm0  = CHM  > 0;
+    bool cemf8 = CEMF > 0.80;
+    bool nhm2  = NHM  > 2;
+    bool nhm10 = NHM  > 10;
+
+    bool eta24 = eta <= 2.4;
+    bool eta27 = eta <= 2.7;
+    bool eta30 = eta <= 3.0;
+
+    if (eta24){
+
+      	if      (nhf9 && nemf9 && shm1 && muf8 && chf0 && chm0 && cemf8) return tightLepVeto;
+      	else if (nhf9 && nemf9 && shm1 && chf0 && chm0) return tight;
+      	else    return loose;
+
+    } else if (!eta24 && eta27 ){
+
+      	if      (nhf9 && nemf9 && shm1 && muf8) return tightLepVeto;
+      	else if (nhf9 && nemf9 && shm1) return tight;
+      	else    return loose; 
+
+    } else if (!eta27 && eta30){
+
+      	if      (nemf2 && nemf1 && nhm2) return tight;
+      	else    return loose; 
+
+    } else {
+
+      	if      (nemf9 && nhf2 && nhm10) return tight;
+      	else    return loose; 
+
     }
 
     return -1; // should not happen
@@ -173,32 +192,32 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 // -- Consume Tokens --------------------------------------------
   // TRIGGER
-  iEvent.getByToken(triggerResultsToken,triggerResults_);
-  iEvent.getByToken(triggerObjectsToken,triggerObjects_);
+  //iEvent.getByToken(triggerResultsToken_,triggerResults_);
+  //iEvent.getByToken(triggerObjectsToken_,triggerObjects_);
 
 
   // TRACKS
-  iEvent.getByToken(tracksToken,tracks_);
+  //iEvent.getByToken(tracksToken_,tracks_);
 
   // VERTICES
-  iEvent.getByToken(verticesToken,vertices_);
+  //iEvent.getByToken(verticesToken_,vertices_);
 
   // RHO
-  iEvent.getByToken(rhoToken,rho_);
+  //iEvent.getByToken(rhoToken_,rho_);
 
   // METS
-  iEvent.getByToken(metsToken,mets_);
+  //iEvent.getByToken(metsToken_,mets_);
 
   // JETS
-  iEvent.getByToken(jetsToken,jets_);
+  iEvent.getByToken(jetsToken_,jets_);
 
   // LEPTONS
-  iEvent.getByToken(electronsToken,electrons_);
-  iEvent.getByToken(muonsToken,muons_);
+  //iEvent.getByToken(electronsToken_,electrons_);
+  //iEvent.getByToken(muonsToken_,muons_);
 
   // ECAL RECHITS
-  iEvent.getByToken(recHitsEBToken,recHitsEB_);
-  iEvent.getByToken(recHitsEEToken,recHitsEE_);
+  //iEvent.getByToken(recHitsEBToken_,recHitsEB_);
+  //iEvent.getByToken(recHitsEEToken_,recHitsEE_);
 
 // -- Process Objects ------------------------------------------
 
@@ -210,23 +229,29 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
    jets.clear(); 
    jets.reserve(jets_->size());
 
+   auto jetpTmin  = 100.0;
+   auto jetIDmin  = 0;
+   auto jetEtamax = 2.4;
+
    for(const auto& jet : *jets_ ){ // Filters jet collection & sorts by pt
 
       if (jet.pt() < jetpTmin) continue;
       if (std::abs(jet.eta()) > jetEtamax) continue;
       
-      const auto jetID = oot::GetPFJetID(jet);
+      //const auto jetID = GetPFJetID(jet);
+      const auto jetID = 1;
       if (jetID < jetIDmin) continue;
 
       // save the jets, and then store the ID
       jets.emplace_back(jet);
       jets.back().addUserInt("jetID",jetID);
       
-      std::sort(jets.begin(),jets.end(),oot::sortByPt);
+      std::sort(jets.begin(),jets.end(),sortByPt);
    }
 
    nJets = jets.size();
-   auto stJets = nJets; // allows to set the number of jets to skim ( = nJets for all )
+   // set the number of leading jets to skim ( = nJets for all )
+   auto stJets = nJets; 
 
    jetE.clear();
    jetpt.clear(); 
@@ -245,18 +270,18 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
       const auto & jet = jets[i];
 
-      jetE.push_back(	jet.energy());
-      jetpt.push_back(	jet.pt());
-      jetphi.push_back(	jet.phi());
-      jeteta.push_back(	jet.eta());
-      jetID.push_back(	jet.userInt("jetID"));
-      jetNHF.push_back(	jet.neutralHadronEnergyFraction());
+      jetE.push_back(jet.energy());
+      jetpt.push_back(jet.pt());
+      jetphi.push_back(jet.phi());
+      jeteta.push_back(jet.eta());
+      jetID.push_back(jet.userInt("jetID"));
+      jetNHF.push_back(jet.neutralHadronEnergyFraction());
       jetNEMF.push_back(jet.neutralEmEnergyFraction());
-      jetCHF.push_back(	jet.chargedHadronEnergyFraction());
+      jetCHF.push_back(jet.chargedHadronEnergyFraction());
       jetCEMF.push_back(jet.chargedEmEnergyFraction());
-      jetMUF.push_back(	jet.muonEnergyFraction());
-      jetNHM.push_back(	jet.neutralMultiplicity());
-      jetCHM.push_back(	jet.chargedMultiplicity());
+      jetMUF.push_back(jet.muonEnergyFraction());
+      jetNHM.push_back(jet.neutralMultiplicity());
+      jetCHM.push_back(jet.chargedMultiplicity());
  
    } 
 
