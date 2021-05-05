@@ -26,7 +26,7 @@ options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singlet
 options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsing.varType.string,'process name to be considered');
 
 ## outputFile Name
-options.register('outputFileName','llpgana_output_test.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
+options.register('outputFileName','llpgana_output_t12_id3pt200rh32eta15.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
 options.parseArguments()
@@ -54,12 +54,22 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.destinations = ['cout', 'cerr']
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
-process.MessageLogger.cerr.FwkReport.reportEvery = 100000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 ## Define the input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(#'file:jwk_reco_data_DIGI2RAW.root'),
-        '/store/data/Run2018D/EGamma/MINIAOD/22Jan2019-v2/70001/F0FE59FC-F29E-904B-A1BC-817C1CB09A7E.root'
+        #'/store/data/Run2018D/EGamma/MINIAOD/22Jan2019-v2/70001/F0FE59FC-F29E-904B-A1BC-817C1CB09A7E.root'
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/062A29F3-416F-6A43-8E0A-90BE80607677.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/0632DF20-D859-EE4B-8FC4-3ECC56B2987D.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/0685BE81-54CF-3A4C-8D66-8E0E059D263F.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/06CBEAC6-F3C1-BE48-96D9-A7EF3CF42048.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/06CC5637-77D3-8145-B3BD-0AF5F16410AB.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/06DE38F0-4330-C546-8D1A-0865C50FAA14.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/071F2728-A0CA-9446-A1E3-38B4FB08D6AE.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/077E7C54-C588-F642-BBA8-0960D5FD7A96.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/07971C26-63F0-D943-BA77-88D6F636F780.root',
+        '/store/data/Run2018A/EGamma/MINIAOD/12Nov2019_UL2018-v2/100000/07A40762-F4E1-9E4D-8750-7DD65EA01B8A.root',
         ),
 )
 
@@ -67,6 +77,7 @@ process.source = cms.Source("PoolSource",
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
@@ -85,6 +96,8 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    tracks = cms.InputTag("unpackedTracksAndVertices"),
    ## vertices
    vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+   ## pfcandidates
+   pfcandidates = cms.InputTag("packedPFCandidates"),
    ## rho
    rho = cms.InputTag("fixedGridRhoFastjetAll"), #fixedGridRhoAll
    ## METs
@@ -102,6 +115,10 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## ecal recHits
    recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
    recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
+
+	## superclusters
+   superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
+   ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
 )
 
 
