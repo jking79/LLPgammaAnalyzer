@@ -164,6 +164,9 @@ using namespace edm;
 using reco::TrackCollection;
 
 typedef edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>> recHitCol;
+typedef vector<EcalRecHit> rhGroup;
+typedef vector< reco::SuperCluster> scGroup;
+
 
 class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
@@ -173,8 +176,14 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       ~LLPgammaAnalyzer();
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-      int GetPFJetID(const pat::Jet & jet);
-		vector<float> GetRecHitdRMatchedTime( const recHitCol* rheb, const recHitCol* rhee, float eta, float phi, float drmin );
+
+      int getPFJetID(const pat::Jet & jet);
+		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, float eta, float phi, float drmin, float minenr );
+      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, DetId detid );
+		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee );
+		EcalRecHit getLeadRh( rhGroup recHits );
+      vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
+		vector<float> getRecHitdRMatchedTime( const recHitCol* rheb, const recHitCol* rhee, float eta, float phi, float drmin );
 
    private:
       virtual void beginJob() override;
@@ -183,107 +192,11 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       // ----------member data ---------------------------
 
-      TTree * outTree;
+      TTree *outTree;
 
-      TH1D * jetTimeHist;
-      TH1D * jetRHTimeHist;
-      TH1D * hist1d1;
-      TH1D * hist1d2;
-      TH1D * hist1d3;
-      TH1D * hist1d4;
-      TH1D * hist1d5;
-      TH1D * hist1d6;
-      TH1D * hist1d7;
-      TH1D * hist1d8;
-      TH1D * hist1d9;
-      TH1D * hist1d10;
-      TH1D * hist1d11;
-      TH1D * hist1d12;
-      TH1D * hist1d13;
-      TH1D * hist1d14;
-      TH1D * hist1d15;
-      TH1D * hist1d16;
-      TH1D * hist1d17;
-      TH1D * hist1d18;
-      TH1D * hist1d19;
-      TH1D * hist1d20;
-      TH1D * hist1d21;
-      TH1D * hist1d22;
-      TH1D * hist1d23;
-      TH1D * hist1d24;
-      TH1D * hist1d25;
-      TH1D * hist1d26;
-      TH1D * hist1d27;
-      TH1D * hist1d28;
-      TH1D * hist1d29;
-      TH1D * hist1d30;
-      TH1D * hist1d31;
-      TH1D * hist1d32;
-      TH1D * hist1d33;
-      TH1D * hist1d34;
-      TH1D * hist1d35;
-      TH1D * hist1d36;
-      TH1D * hist1d37;
-      TH1D * hist1d38;
-      TH1D * hist1d39;
-      TH1D * hist1d40;
-      TH1D * hist1d41;
-      TH1D * hist1d42;
-      TH1D * hist1d43;
-      TH1D * hist1d44;
-      TH1D * hist1d45;
-      TH1D * hist1d46;
-      TH1D * hist1d47;
-      TH1D * hist1d48;
-
-      TH2D * hist2d1;
-      TH2D * hist2d2;
-      TH2D * hist2d3;
-      TH2D * hist2d4;
-      TH2D * hist2d5;
-      TH2D * hist2d6;
-      TH2D * hist2d7;
-      TH2D * hist2d8;
-      TH2D * hist2d9;
-      TH2D * hist2d10;
-      TH2D * hist2d11;
-      TH2D * hist2d12;
-      TH2D * hist2d13;
-      TH2D * hist2d14;
-      TH2D * hist2d15;
-      TH2D * hist2d16;
-      TH2D * hist2d17;
-      TH2D * hist2d18;
-      TH2D * hist2d19;
-      TH2D * hist2d20;
-      TH2D * hist2d21;
-      TH2D * hist2d22;
-      TH2D * hist2d23;
-      TH2D * hist2d24; 
-      TH2D * hist2d25;
-      TH2D * hist2d26;
-      TH2D * hist2d27;
-      TH2D * hist2d28;
-      TH2D * hist2d29;
-      TH2D * hist2d30;
-      TH2D * hist2d31;
-      TH2D * hist2d32;
-      TH2D * hist2d33;
-      TH2D * hist2d34;
-      TH2D * hist2d35;
-      TH2D * hist2d36;
-      TH2D * hist2d37;
-      TH2D * hist2d38;
-      TH2D * hist2d39;
-      TH2D * hist2d40;
-      TH2D * hist2d41;
-      TH2D * hist2d42;
-      TH2D * hist2d43;
-      TH2D * hist2d44;
-      TH2D * hist2d45;
-      TH2D * hist2d46;
-      TH2D * hist2d47;
-      TH2D * hist2d48;
+      TH1D *jetTimeHist, *jetRHTimeHist;
+		TH1D *hist1d[64];
+      TH2D *hist2d[64];
 
       // Event
       unsigned long int event; // technically unsigned long long in Event.h...
@@ -312,13 +225,18 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       edm::Handle<std::vector<pat::MET> > mets_;
 
 	   // supercluster
-	   const edm::InputTag superClusterCollectionEBTag;
-      edm::EDGetTokenT<reco::SuperClusterCollection> ebScToken_;
-      edm::Handle<reco::SuperClusterCollection> superClusterEB_;
+	   const edm::InputTag superClusterCollectionTag;
+      edm::EDGetTokenT<reco::SuperClusterCollection> scToken_;
+      edm::Handle<reco::SuperClusterCollection> superCluster_;
 
-      const edm::InputTag superClusterCollectionEETag;
-      edm::EDGetTokenT<reco::SuperClusterCollection> eeScToken_;
-		edm::Handle<reco::SuperClusterCollection> superClusterEE_;
+      const edm::InputTag ootSuperClusterCollectionTag;
+      edm::EDGetTokenT<reco::SuperClusterCollection> ootScToken_;
+		edm::Handle<reco::SuperClusterCollection> ootSuperCluster_;
+
+		// calocluster
+      const edm::InputTag caloClusterTag;
+      edm::EDGetTokenT<vector<reco::CaloCluster>> ccToken_;
+      edm::Handle<vector<reco::CaloCluster>> caloCluster_;
 
       // jets
       const edm::InputTag jetsTag;

@@ -1,0 +1,3648 @@
+Histograms Booked
+Processing New Event : 
+Calo # 0 energy: 36.715 nrh: 10 rawID: 838939231
+Calo # 1 energy: 3.7411 nrh: 2 rawID: 838939235
+Processing New Event : 
+Calo # 0 energy: 84.1444 nrh: 19 rawID: 838960241
+Calo # 1 energy: 16.3056 nrh: 16 rawID: 838960243
+Calo # 2 energy: 2.9527 nrh: 3 rawID: 838960249
+Calo # 3 energy: 2.68216 nrh: 5 rawID: 838960247
+Calo # 4 energy: 0.445421 nrh: 1 rawID: 838963283
+Calo # 5 energy: 98.2339 nrh: 23 rawID: 838867760
+Calo # 6 energy: 4.71031 nrh: 16 rawID: 838867245
+Calo # 7 energy: 1.3785 nrh: 1 rawID: 872438555
+Processing New Event : 
+Calo # 0 energy: 266.784 nrh: 3 rawID: 872420269
+Calo # 1 energy: 181.713 nrh: 9 rawID: 872424250
+Processing New Event : 
+Calo # 0 energy: 81.4525 nrh: 13 rawID: 838878912
+Calo # 1 energy: 22.3953 nrh: 9 rawID: 838937120
+Processing New Event : 
+Calo # 0 energy: 54.6001 nrh: 14 rawID: 872438036
+Calo # 1 energy: 55.5974 nrh: 11 rawID: 838947633
+Calo # 2 energy: 14.1245 nrh: 7 rawID: 838962834
+Calo # 3 energy: 4.70647 nrh: 8 rawID: 838962828
+Calo # 4 energy: 1.69182 nrh: 3 rawID: 838964352
+Calo # 5 energy: 1.16015 nrh: 1 rawID: 838963836
+Calo # 6 energy: 0.73785 nrh: 2 rawID: 838964346
+Calo # 7 energy: 1.42683 nrh: 1 rawID: 838951983
+Processing New Event : 
+Calo # 0 energy: 41.7753 nrh: 17 rawID: 838877941
+Calo # 1 energy: 21.3702 nrh: 13 rawID: 838877432
+Calo # 2 energy: 4.11317 nrh: 10 rawID: 838877424
+Calo # 3 energy: 1.63437 nrh: 3 rawID: 838877929
+Calo # 4 energy: 1.44677 nrh: 2 rawID: 838877436
+Calo # 5 energy: 0.671384 nrh: 2 rawID: 838877438
+Calo # 6 energy: 0.310009 nrh: 1 rawID: 838877910
+Calo # 7 energy: 44.1643 nrh: 10 rawID: 838894668
+Calo # 8 energy: 9.36454 nrh: 4 rawID: 838894673
+Calo # 9 energy: 1.84454 nrh: 1 rawID: 838898279
+Calo # 10 energy: 0.330843 nrh: 1 rawID: 838896688
+Processing New Event : 
+Calo # 0 energy: 619.729 nrh: 15 rawID: 872422431
+Calo # 1 energy: 63.5838 nrh: 11 rawID: 872422476
+Calo # 2 energy: 20.7476 nrh: 9 rawID: 872422731
+Calo # 3 energy: 7.03865 nrh: 3 rawID: 872423239
+Calo # 4 energy: 5.15207 nrh: 5 rawID: 872421964
+Calo # 5 energy: 3.1235 nrh: 4 rawID: 838959816
+Processing New Event : 
+Calo # 0 energy: 65.7381 nrh: 9 rawID: 872418477
+Calo # 1 energy: 2.29068 nrh: 1 rawID: 872418602
+Calo # 2 energy: 60.9722 nrh: 13 rawID: 838959120
+Calo # 3 energy: 1.84382 nrh: 2 rawID: 838959973
+Calo # 4 energy: 1.3272 nrh: 2 rawID: 838959642
+Calo # 5 energy: 0.948171 nrh: 1 rawID: 838959640
+Calo # 6 energy: 0.279342 nrh: 1 rawID: 838959651
+Calo # 7 energy: 1.50582 nrh: 1 rawID: 838866094
+Processing New Event : 
+Calo # 0 energy: 110.946 nrh: 10 rawID: 872434727
+Calo # 1 energy: 13.8328 nrh: 10 rawID: 838941192
+Calo # 2 energy: 7.7122 nrh: 9 rawID: 838941701
+Calo # 3 energy: 4.76642 nrh: 3 rawID: 838941196
+Processing New Event : 
+Calo # 0 energy: 80.8268 nrh: 18 rawID: 838963462
+Calo # 1 energy: 4.09293 nrh: 6 rawID: 838963964
+Calo # 2 energy: 3.86877 nrh: 16 rawID: 838963465
+Calo # 3 energy: 2.65787 nrh: 6 rawID: 838963966
+Calo # 4 energy: 1.88702 nrh: 11 rawID: 838963467
+Calo # 5 energy: 0.880424 nrh: 7 rawID: 838963981
+Calo # 6 energy: 0.361312 nrh: 1 rawID: 838964460
+Processing New Event : 
+Calo # 0 energy: 16.9969 nrh: 6 rawID: 838930520
+Calo # 1 energy: 0.578131 nrh: 1 rawID: 838930499
+Calo # 2 energy: 0.358814 nrh: 1 rawID: 838930522
+Processing New Event : 
+Calo # 0 energy: 147.366 nrh: 26 rawID: 872435151
+Calo # 1 energy: 120.632 nrh: 22 rawID: 872435281
+Calo # 2 energy: 1.01931 nrh: 3 rawID: 872435924
+Calo # 3 energy: 44.1245 nrh: 11 rawID: 838930760
+Calo # 4 energy: 0.530443 nrh: 1 rawID: 838930746
+Calo # 5 energy: 2.40556 nrh: 3 rawID: 838877925
+Processing New Event : 
+Calo # 0 energy: 18.3935 nrh: 10 rawID: 838866564
+Calo # 1 energy: 14.207 nrh: 10 rawID: 838866562
+Calo # 2 energy: 1.9786 nrh: 3 rawID: 838866574
+Calo # 3 energy: 0.640694 nrh: 1 rawID: 838866550
+Processing New Event : 
+Calo # 0 energy: 95.5756 nrh: 14 rawID: 872424623
+Calo # 1 energy: 1.96125 nrh: 1 rawID: 872424233
+Calo # 2 energy: 168.238 nrh: 14 rawID: 872424367
+Calo # 3 energy: 39.4721 nrh: 9 rawID: 838956273
+Calo # 4 energy: 0.725109 nrh: 1 rawID: 838956266
+Calo # 5 energy: 0.410713 nrh: 1 rawID: 838958289
+Processing New Event : 
+Calo # 0 energy: 29.1904 nrh: 22 rawID: 838953702
+Calo # 1 energy: 27.0693 nrh: 18 rawID: 838953194
+Calo # 2 energy: 23.4423 nrh: 23 rawID: 838954216
+Calo # 3 energy: 6.47483 nrh: 9 rawID: 838953186
+Calo # 4 energy: 1.12446 nrh: 1 rawID: 838954226
+Calo # 5 energy: 0.554081 nrh: 1 rawID: 838954191
+Calo # 6 energy: 0.391779 nrh: 1 rawID: 838954750
+Calo # 7 energy: 126.33 nrh: 1 rawID: 872421413
+Calo # 8 energy: 242.43 nrh: 24 rawID: 838944831
+Calo # 9 energy: 25.0192 nrh: 16 rawID: 838946366
+Calo # 10 energy: 1.18279 nrh: 2 rawID: 838945331
+Calo # 11 energy: 0.423999 nrh: 1 rawID: 838945352
+Calo # 12 energy: 7.21102 nrh: 6 rawID: 838959841
+Calo # 13 energy: 0.262025 nrh: 1 rawID: 838960836
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 5 pce: 5.02566
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 4 pce: 39.1983
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 8 pce: 8.01744
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 10 pce: 242.763
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 9 pce: 0.527197
+ Match to photon SC with seedid: 838944831 nrh: 43 sce: 270.867 nClust: 4
+  SC Clust # 0 energy: 242.43 nrh: 24 rawID: 838944831
+  SC Clust # 1 energy: 25.0192 nrh: 16 rawID: 838946366
+  SC Clust # 2 energy: 1.18279 nrh: 2 rawID: 838945331
+  SC Clust # 3 energy: 0.423999 nrh: 1 rawID: 838945352
+Processing New Event : 
+Calo # 0 energy: 316.204 nrh: 13 rawID: 872436389
+Calo # 1 energy: 6.00443 nrh: 6 rawID: 872436135
+Processing New Event : 
+Calo # 0 energy: 110.368 nrh: 16 rawID: 838896174
+Calo # 1 energy: 0.463714 nrh: 1 rawID: 838896181
+Calo # 2 energy: 8.35644 nrh: 4 rawID: 872424213
+Calo # 3 energy: 5.5107 nrh: 1 rawID: 872440853
+Processing New Event : 
+Calo # 0 energy: 232.536 nrh: 25 rawID: 838955818
+Processing New Event : 
+Calo # 0 energy: 3.28775 nrh: 3 rawID: 838955103
+Processing New Event : 
+Calo # 0 energy: 60.1592 nrh: 22 rawID: 838950081
+Calo # 1 energy: 10.3947 nrh: 16 rawID: 838950084
+Calo # 2 energy: 7.14955 nrh: 14 rawID: 838950078
+Calo # 3 energy: 3.21713 nrh: 3 rawID: 838950071
+Calo # 4 energy: 2.78052 nrh: 8 rawID: 838950086
+Calo # 5 energy: 1.94619 nrh: 8 rawID: 838948546
+Calo # 6 energy: 0.837704 nrh: 1 rawID: 838950093
+Calo # 7 energy: 100.584 nrh: 15 rawID: 838966291
+Calo # 8 energy: 9.37027 nrh: 10 rawID: 838966287
+Calo # 9 energy: 6.5697 nrh: 12 rawID: 838966293
+Calo # 10 energy: 4.01209 nrh: 6 rawID: 838967319
+Calo # 11 energy: 0.484952 nrh: 1 rawID: 838968362
+Processing New Event : 
+Calo # 0 energy: 279.19 nrh: 13 rawID: 872436772
+Processing New Event : 
+Calo # 0 energy: 171.182 nrh: 6 rawID: 872423991
+Calo # 1 energy: 2.36559 nrh: 2 rawID: 838947085
+Processing New Event : 
+Calo # 0 energy: 145.272 nrh: 6 rawID: 872435258
+Processing New Event : 
+Calo # 0 energy: 215.774 nrh: 12 rawID: 872420513
+Calo # 1 energy: 27.2254 nrh: 13 rawID: 838938178
+Processing New Event : 
+Calo # 0 energy: 228.54 nrh: 38 rawID: 872432836
+Processing New Event : 
+Calo # 0 energy: 168.196 nrh: 28 rawID: 872441034
+Calo # 1 energy: 5.684 nrh: 7 rawID: 872440525
+Calo # 2 energy: 5.1909 nrh: 5 rawID: 872440270
+Processing New Event : 
+Calo # 0 energy: 77.4783 nrh: 2 rawID: 872439606
+Calo # 1 energy: 104.035 nrh: 8 rawID: 872423999
+Calo # 2 energy: 169.025 nrh: 7 rawID: 872419373
+Processing New Event : 
+Calo # 0 energy: 60.7916 nrh: 11 rawID: 838896757
+Processing New Event : 
+Calo # 0 energy: 15.3275 nrh: 8 rawID: 838871302
+Calo # 1 energy: 15.1268 nrh: 9 rawID: 838870787
+Calo # 2 energy: 0.468493 nrh: 1 rawID: 838870777
+Calo # 3 energy: 0.391269 nrh: 1 rawID: 838871287
+Calo # 4 energy: 0.307923 nrh: 1 rawID: 838870779
+Calo # 5 energy: 0.270628 nrh: 1 rawID: 838871283
+Calo # 6 energy: 13.2818 nrh: 16 rawID: 838961739
+Calo # 7 energy: 1.32343 nrh: 2 rawID: 838962745
+Calo # 8 energy: 70.2344 nrh: 20 rawID: 838963272
+Calo # 9 energy: 13.0385 nrh: 17 rawID: 838963276
+Calo # 10 energy: 2.84513 nrh: 8 rawID: 838963268
+Calo # 11 energy: 2.35866 nrh: 3 rawID: 838963281
+Calo # 12 energy: 1.83241 nrh: 2 rawID: 838963797
+Processing New Event : 
+Calo # 0 energy: 95.3215 nrh: 13 rawID: 838956378
+Calo # 1 energy: 0.323496 nrh: 1 rawID: 838956366
+Calo # 2 energy: 23.0438 nrh: 13 rawID: 838956176
+Calo # 3 energy: 2.75982 nrh: 10 rawID: 838956692
+Calo # 4 energy: 0.98644 nrh: 2 rawID: 838957734
+Calo # 5 energy: 0.573334 nrh: 1 rawID: 838956187
+Calo # 6 energy: 11.7422 nrh: 4 rawID: 872435876
+Calo # 7 energy: 6.51327 nrh: 2 rawID: 872435623
+Processing New Event : 
+Calo # 0 energy: 111.267 nrh: 18 rawID: 872425105
+Calo # 1 energy: 3.9504 nrh: 3 rawID: 872426010
+Calo # 2 energy: 44.4163 nrh: 8 rawID: 838875768
+Processing New Event : 
+Calo # 0 energy: 93.6194 nrh: 13 rawID: 838897339
+Calo # 1 energy: 6.94363 nrh: 3 rawID: 838897333
+Calo # 2 energy: 5.04493 nrh: 2 rawID: 838897343
+Calo # 3 energy: 1.13782 nrh: 2 rawID: 838897864
+Calo # 4 energy: 1.14431 nrh: 2 rawID: 838897345
+Calo # 5 energy: 0.825218 nrh: 1 rawID: 838898859
+Calo # 6 energy: 0.414494 nrh: 1 rawID: 838897329
+Processing New Event : 
+Calo # 0 energy: 126.081 nrh: 11 rawID: 872420171
+Calo # 1 energy: 27.6047 nrh: 10 rawID: 872420428
+Calo # 2 energy: 2.27452 nrh: 3 rawID: 838893195
+Calo # 3 energy: 9.65547 nrh: 4 rawID: 872424226
+Processing New Event : 
+Calo # 0 energy: 43.9508 nrh: 11 rawID: 838879249
+Calo # 1 energy: 0.261249 nrh: 1 rawID: 838880302
+Calo # 2 energy: 76.3778 nrh: 15 rawID: 872416820
+Calo # 3 energy: 4.08043 nrh: 5 rawID: 872416941
+Calo # 4 energy: 3.76885 nrh: 9 rawID: 872416816
+Calo # 5 energy: 2.70774 nrh: 7 rawID: 872416951
+Processing New Event : 
+Calo # 0 energy: 141.076 nrh: 13 rawID: 872418486
+Calo # 1 energy: 55.3417 nrh: 5 rawID: 872422041
+Calo # 2 energy: 4.20422 nrh: 3 rawID: 872421658
+Calo # 3 energy: 35.5146 nrh: 14 rawID: 838901805
+Calo # 4 energy: 3.32062 nrh: 5 rawID: 838901800
+Calo # 5 energy: 2.26148 nrh: 2 rawID: 838902810
+Calo # 6 energy: 0.86439 nrh: 1 rawID: 838902309
+Calo # 7 energy: 21.2724 nrh: 15 rawID: 838902834
+Calo # 8 energy: 11.134 nrh: 15 rawID: 838902830
+Calo # 9 energy: 10.064 nrh: 10 rawID: 838902828
+Calo # 10 energy: 6.94219 nrh: 5 rawID: 838902314
+Calo # 11 energy: 3.53265 nrh: 4 rawID: 838902824
+Calo # 12 energy: 2.47298 nrh: 3 rawID: 838903328
+Calo # 13 energy: 1.63195 nrh: 3 rawID: 838902840
+Calo # 14 energy: 0.84295 nrh: 2 rawID: 838904349
+Calo # 15 energy: 0.543681 nrh: 1 rawID: 838904404
+Processing New Event : 
+Calo # 0 energy: 18.3843 nrh: 10 rawID: 838880261
+Calo # 1 energy: 22.7707 nrh: 13 rawID: 838878212
+Calo # 2 energy: 6.71803 nrh: 8 rawID: 838878730
+Calo # 3 energy: 53.0285 nrh: 13 rawID: 838866115
+Calo # 4 energy: 3.32177 nrh: 13 rawID: 838866113
+Calo # 5 energy: 0.288876 nrh: 1 rawID: 838866122
+Calo # 6 energy: 0.236823 nrh: 1 rawID: 838866093
+Calo # 7 energy: 1.11684 nrh: 1 rawID: 872438032
+Processing New Event : 
+Calo # 0 energy: 35.7534 nrh: 14 rawID: 838958859
+Calo # 1 energy: 11.0131 nrh: 9 rawID: 838958854
+Calo # 2 energy: 3.61022 nrh: 2 rawID: 838958863
+Calo # 3 energy: 3.518 nrh: 8 rawID: 838958852
+Calo # 4 energy: 2.10426 nrh: 4 rawID: 838959382
+Calo # 5 energy: 1.96716 nrh: 4 rawID: 838959384
+Calo # 6 energy: 1.41894 nrh: 3 rawID: 838959871
+Calo # 7 energy: 0.98213 nrh: 1 rawID: 838958866
+Calo # 8 energy: 0.760315 nrh: 1 rawID: 838959867
+Calo # 9 energy: 0.343105 nrh: 1 rawID: 838962989
+Processing New Event : 
+Calo # 0 energy: 115.483 nrh: 11 rawID: 872421526
+Processing New Event : 
+Calo # 0 energy: 271.397 nrh: 15 rawID: 872440383
+Processing New Event : 
+Calo # 0 energy: 46.8576 nrh: 11 rawID: 838895425
+Calo # 1 energy: 4.40468 nrh: 2 rawID: 838895949
+Calo # 2 energy: 2.06512 nrh: 4 rawID: 838895431
+Calo # 3 energy: 1.12754 nrh: 1 rawID: 838895418
+Calo # 4 energy: 1.18047 nrh: 2 rawID: 838896939
+Calo # 5 energy: 0.984369 nrh: 2 rawID: 838895420
+Calo # 6 energy: 0.721965 nrh: 1 rawID: 838895927
+Calo # 7 energy: 140.09 nrh: 14 rawID: 872437190
+Processing New Event : 
+Calo # 0 energy: 262.554 nrh: 23 rawID: 838887495
+Calo # 1 energy: 0.674857 nrh: 1 rawID: 838890024
+Calo # 2 energy: 0.370174 nrh: 1 rawID: 838890086
+Calo # 3 energy: 5.70369 nrh: 2 rawID: 872438287
+Processing New Event : 
+Calo # 0 energy: 50.558 nrh: 15 rawID: 872443835
+Calo # 1 energy: 27.787 nrh: 3 rawID: 872415403
+Calo # 2 energy: 1.25061 nrh: 2 rawID: 872415935
+Calo # 3 energy: 39.4702 nrh: 7 rawID: 838904004
+Calo # 4 energy: 6.32988 nrh: 8 rawID: 838904011
+Calo # 5 energy: 1.30406 nrh: 1 rawID: 838904505
+Calo # 6 energy: 1.08395 nrh: 2 rawID: 838903997
+Processing New Event : 
+Calo # 0 energy: 131.46 nrh: 12 rawID: 872424264
+Calo # 1 energy: 1.69308 nrh: 2 rawID: 872424516
+Processing New Event : 
+Calo # 0 energy: 32.3996 nrh: 9 rawID: 838929238
+Processing New Event : 
+Calo # 0 energy: 161.36 nrh: 22 rawID: 838958623
+Calo # 1 energy: 14.2135 nrh: 18 rawID: 838958620
+Calo # 2 energy: 4.44417 nrh: 3 rawID: 838958631
+Calo # 3 energy: 0.702814 nrh: 1 rawID: 838960693
+Calo # 4 energy: 0.321674 nrh: 1 rawID: 838960130
+Processing New Event : 
+Calo # 0 energy: 217.212 nrh: 29 rawID: 872442771
+Calo # 1 energy: 153.103 nrh: 27 rawID: 838874372
+Calo # 2 energy: 4.50876 nrh: 13 rawID: 838874880
+Calo # 3 energy: 0.707028 nrh: 2 rawID: 838874872
+Calo # 4 energy: 0.592313 nrh: 5 rawID: 838874365
+Calo # 5 energy: 14.9685 nrh: 8 rawID: 838868200
+Calo # 6 energy: 0.346336 nrh: 1 rawID: 838868196
+Calo # 7 energy: 2.04683 nrh: 3 rawID: 838965878
+Calo # 8 energy: 9.94786 nrh: 3 rawID: 872435740
+Calo # 9 energy: 6.85751 nrh: 6 rawID: 838875916
+Match found at ph: 0 asc: 0 jet: 1/2 kid: 11 pce: 59.5877
+Match found at ph: 0 asc: 1 jet: 1/2 kid: 10 pce: 9.64269
+Match found at ph: 0 asc: 2 jet: 1/2 kid: 30 pce: 120.392
+Match found at ph: 0 asc: 3 jet: 1/2 kid: 29 pce: 0.669658
+Match found at ph: 0 asc: 4 jet: 1/2 kid: 31 pce: 0.846254
+ Match to photon SC with seedid: 838874372 nrh: 47 sce: 161.734 nClust: 4
+  SC Clust # 0 energy: 153.103 nrh: 27 rawID: 838874372
+  SC Clust # 1 energy: 4.50876 nrh: 13 rawID: 838874880
+  SC Clust # 2 energy: 0.707028 nrh: 2 rawID: 838874872
+  SC Clust # 3 energy: 0.592313 nrh: 5 rawID: 838874365
+Processing New Event : 
+Calo # 0 energy: 46.9818 nrh: 18 rawID: 838966804
+Calo # 1 energy: 20.291 nrh: 21 rawID: 838967319
+Calo # 2 energy: 14.9421 nrh: 17 rawID: 838967321
+Calo # 3 energy: 6.60329 nrh: 9 rawID: 838967313
+Calo # 4 energy: 2.33369 nrh: 3 rawID: 838967817
+Calo # 5 energy: 1.39583 nrh: 2 rawID: 838967813
+Calo # 6 energy: 1.01927 nrh: 2 rawID: 838968359
+Calo # 7 energy: 0.796267 nrh: 1 rawID: 838967307
+Calo # 8 energy: 0.388291 nrh: 2 rawID: 838968323
+Calo # 9 energy: 0.327457 nrh: 1 rawID: 838967838
+Calo # 10 energy: 0.316899 nrh: 1 rawID: 838967845
+Calo # 11 energy: 209.185 nrh: 20 rawID: 872435497
+Calo # 12 energy: 27.5473 nrh: 16 rawID: 872435494
+Calo # 13 energy: 8.98822 nrh: 12 rawID: 872435749
+Calo # 14 energy: 63.1499 nrh: 10 rawID: 872436870
+Calo # 15 energy: 2.46993 nrh: 4 rawID: 872437765
+Calo # 16 energy: 0.677117 nrh: 1 rawID: 872436616
+Calo # 17 energy: 41.5111 nrh: 14 rawID: 872434720
+Calo # 18 energy: 25.7824 nrh: 11 rawID: 872434716
+Calo # 19 energy: 7.6078 nrh: 11 rawID: 872434338
+Calo # 20 energy: 8.32504 nrh: 2 rawID: 872421405
+Calo # 21 energy: 2.53847 nrh: 2 rawID: 838948501
+Processing New Event : 
+Calo # 0 energy: 270.707 nrh: 17 rawID: 872422937
+Calo # 1 energy: 1.44116 nrh: 1 rawID: 872422295
+Calo # 2 energy: 1.08736 nrh: 1 rawID: 872423837
+Calo # 3 energy: 252.011 nrh: 5 rawID: 872437182
+Processing New Event : 
+Calo # 0 energy: 18.8561 nrh: 20 rawID: 838953199
+Calo # 1 energy: 227.24 nrh: 36 rawID: 838954735
+Calo # 2 energy: 12.925 nrh: 20 rawID: 838954731
+Calo # 3 energy: 7.10521 nrh: 17 rawID: 838955253
+Calo # 4 energy: 1.94034 nrh: 4 rawID: 838955237
+Calo # 5 energy: 1.00043 nrh: 1 rawID: 838955259
+Calo # 6 energy: 1.11468 nrh: 4 rawID: 838954727
+Calo # 7 energy: 0.539601 nrh: 1 rawID: 838954750
+Calo # 8 energy: 0.524583 nrh: 1 rawID: 838956250
+Calo # 9 energy: 0.368946 nrh: 1 rawID: 838955232
+Calo # 10 energy: 6.40698 nrh: 1 rawID: 872419397
+Match found at ph: 0 asc: 0 jet: 0/2 kid: 7 pce: 117.591
+Match found at ph: 0 asc: 1 jet: 0/2 kid: 6 pce: 35.0364
+Match found at ph: 0 asc: 2 jet: 0/2 kid: 5 pce: 7.45883
+Match found at ph: 0 asc: 3 jet: 0/2 kid: 18 pce: 124.908
+Match found at ph: 0 asc: 4 jet: 0/2 kid: 3 pce: 4.73707
+Match found at ph: 0 asc: 5 jet: 0/2 kid: 16 pce: 0.688476
+Match found at ph: 0 asc: 6 jet: 0/2 kid: 12 pce: 0.662499
+Match found at ph: 0 asc: 7 jet: 0/2 kid: 15 pce: 2.19451
+Match found at ph: 0 asc: 8 jet: 0/2 kid: 17 pce: 1.26043
+Match found at ph: 0 asc: 9 jet: 0/2 kid: 14 pce: 1.29276
+Match found at ph: 0 asc: 10 jet: 0/2 kid: 13 pce: 0.456492
+ Match to photon SC with seedid: 838954735 nrh: 85 sce: 256.381 nClust: 9
+  SC Clust # 0 energy: 227.24 nrh: 36 rawID: 838954735
+  SC Clust # 1 energy: 12.925 nrh: 20 rawID: 838954731
+  SC Clust # 2 energy: 7.10521 nrh: 17 rawID: 838955253
+  SC Clust # 3 energy: 1.94034 nrh: 4 rawID: 838955237
+  SC Clust # 4 energy: 1.00043 nrh: 1 rawID: 838955259
+  SC Clust # 5 energy: 1.11468 nrh: 4 rawID: 838954727
+  SC Clust # 6 energy: 0.539601 nrh: 1 rawID: 838954750
+  SC Clust # 7 energy: 0.524583 nrh: 1 rawID: 838956250
+  SC Clust # 8 energy: 0.368946 nrh: 1 rawID: 838955232
+Match found at ph: 1 asc: 0 jet: 0/2 kid: 4 pce: 3.77863
+Match found at ph: 1 asc: 1 jet: 0/2 kid: 20 pce: 0.325969
+Match found at ph: 1 asc: 2 jet: 0/2 kid: 22 pce: 19.9532
+Match found at ph: 1 asc: 3 jet: 0/2 kid: 21 pce: 13.3463
+Match found at ph: 1 asc: 4 jet: 0/2 kid: 19 pce: 0.299028
+ Match to photon SC with seedid: 838953199 nrh: 0 sce: 36.7105 nClust: 4
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 133.512 nrh: 11 rawID: 872440738
+Calo # 1 energy: 0.828738 nrh: 1 rawID: 872440224
+Calo # 2 energy: 38.2184 nrh: 14 rawID: 838964385
+Calo # 3 energy: 14.8171 nrh: 12 rawID: 838964388
+Calo # 4 energy: 1.94577 nrh: 1 rawID: 838964912
+Calo # 5 energy: 0.923938 nrh: 1 rawID: 838964390
+Calo # 6 energy: 0.729572 nrh: 2 rawID: 838964905
+Processing New Event : 
+Calo # 0 energy: 302.835 nrh: 4 rawID: 872420269
+Calo # 1 energy: 133.18 nrh: 7 rawID: 872420002
+Calo # 2 energy: 52.3115 nrh: 12 rawID: 872424395
+Calo # 3 energy: 24.9851 nrh: 11 rawID: 872424650
+Calo # 4 energy: 1.48776 nrh: 1 rawID: 872423758
+Calo # 5 energy: 1.5998 nrh: 1 rawID: 872424346
+Processing New Event : 
+Calo # 0 energy: 223.448 nrh: 10 rawID: 872437701
+Calo # 1 energy: 47.8304 nrh: 18 rawID: 872441619
+Calo # 2 energy: 15.3713 nrh: 11 rawID: 872441233
+Calo # 3 energy: 5.25359 nrh: 3 rawID: 872440462
+Calo # 4 energy: 0.847415 nrh: 1 rawID: 872439184
+Calo # 5 energy: 0.75945 nrh: 4 rawID: 872440976
+Calo # 6 energy: 0.615176 nrh: 1 rawID: 872439053
+Calo # 7 energy: 19.5582 nrh: 9 rawID: 838936752
+Processing New Event : 
+Calo # 0 energy: 144.17 nrh: 10 rawID: 872421149
+Calo # 1 energy: 21.5182 nrh: 5 rawID: 872421533
+Calo # 2 energy: 2.01163 nrh: 1 rawID: 872420639
+Processing New Event : 
+Calo # 0 energy: 133.928 nrh: 13 rawID: 872418357
+Calo # 1 energy: 52.7359 nrh: 9 rawID: 872442159
+Calo # 2 energy: 6.19135 nrh: 7 rawID: 872442033
+Calo # 3 energy: 10.2062 nrh: 3 rawID: 872442018
+Processing New Event : 
+Calo # 0 energy: 246.221 nrh: 10 rawID: 872437062
+Calo # 1 energy: 5.29749 nrh: 2 rawID: 872420937
+Calo # 2 energy: 15.0705 nrh: 4 rawID: 872420565
+Calo # 3 energy: 1.84538 nrh: 1 rawID: 872422484
+Processing New Event : 
+Calo # 0 energy: 40.7658 nrh: 8 rawID: 838957805
+Calo # 1 energy: 1.72359 nrh: 2 rawID: 838958332
+Calo # 2 energy: 1.36343 nrh: 3 rawID: 838959826
+Calo # 3 energy: 0.346884 nrh: 1 rawID: 838957290
+Calo # 4 energy: 0.341252 nrh: 1 rawID: 838960911
+Calo # 5 energy: 116.074 nrh: 7 rawID: 872435141
+Calo # 6 energy: 11.4392 nrh: 3 rawID: 872424495
+Processing New Event : 
+Calo # 0 energy: 37.8039 nrh: 10 rawID: 838939447
+Calo # 1 energy: 0.283607 nrh: 1 rawID: 838939463
+Processing New Event : 
+Calo # 0 energy: 368.597 nrh: 19 rawID: 872420554
+Calo # 1 energy: 7.10029 nrh: 3 rawID: 872421196
+Calo # 2 energy: 178.837 nrh: 10 rawID: 872438559
+Calo # 3 energy: 101.264 nrh: 14 rawID: 872441245
+Calo # 4 energy: 2.51895 nrh: 4 rawID: 872440730
+Processing New Event : 
+Calo # 0 energy: 429.411 nrh: 14 rawID: 872424374
+Calo # 1 energy: 6.15011 nrh: 8 rawID: 838890724
+Calo # 2 energy: 3.54961 nrh: 7 rawID: 838890225
+Calo # 3 energy: 1.00858 nrh: 1 rawID: 838890215
+Calo # 4 energy: 0.272351 nrh: 1 rawID: 838874265
+Calo # 5 energy: 59.4648 nrh: 8 rawID: 872424364
+Processing New Event : 
+Calo # 0 energy: 63.8889 nrh: 12 rawID: 838961283
+Calo # 1 energy: 0.275656 nrh: 1 rawID: 838961287
+Processing New Event : 
+Calo # 0 energy: 44.0974 nrh: 13 rawID: 872416429
+Calo # 1 energy: 31.0407 nrh: 13 rawID: 872416432
+Calo # 2 energy: 3.94603 nrh: 3 rawID: 872416552
+Calo # 3 energy: 1.33631 nrh: 2 rawID: 872416827
+Calo # 4 energy: 0.802116 nrh: 1 rawID: 872416436
+Calo # 5 energy: 0.640658 nrh: 1 rawID: 872417184
+Calo # 6 energy: 3.3658 nrh: 2 rawID: 838862155
+Calo # 7 energy: 7.11215 nrh: 9 rawID: 838895638
+Calo # 8 energy: 6.81981 nrh: 12 rawID: 838895640
+Calo # 9 energy: 0.721207 nrh: 1 rawID: 838899765
+Calo # 10 energy: 0.292763 nrh: 1 rawID: 838896643
+Calo # 11 energy: 5.87439 nrh: 2 rawID: 838898204
+Processing New Event : 
+Calo # 0 energy: 265.68 nrh: 18 rawID: 872435998
+Calo # 1 energy: 10.9234 nrh: 3 rawID: 872421067
+Calo # 2 energy: 11.7962 nrh: 3 rawID: 872440747
+Processing New Event : 
+Calo # 0 energy: 50.1081 nrh: 15 rawID: 838942328
+Calo # 1 energy: 3.83776 nrh: 11 rawID: 838942324
+Calo # 2 energy: 3.34135 nrh: 4 rawID: 838942321
+Calo # 3 energy: 0.285943 nrh: 1 rawID: 838942300
+Calo # 4 energy: 147.304 nrh: 10 rawID: 872424090
+Calo # 5 energy: 8.92863 nrh: 7 rawID: 872423832
+Calo # 6 energy: 1.60317 nrh: 1 rawID: 872422424
+Calo # 7 energy: 18.7545 nrh: 1 rawID: 872441009
+Calo # 8 energy: 0.401238 nrh: 1 rawID: 838897756
+Processing New Event : 
+Calo # 0 energy: 21.6627 nrh: 8 rawID: 838944520
+Calo # 1 energy: 4.06072 nrh: 7 rawID: 838945548
+Calo # 2 energy: 0.344519 nrh: 1 rawID: 838945535
+Calo # 3 energy: 90.6488 nrh: 9 rawID: 872426567
+Calo # 4 energy: 1.55118 nrh: 2 rawID: 872425295
+Calo # 5 energy: 2.12026 nrh: 3 rawID: 872433083
+Processing New Event : 
+Calo # 0 energy: 78.1676 nrh: 25 rawID: 838966991
+Calo # 1 energy: 30.4527 nrh: 22 rawID: 838966482
+Calo # 2 energy: 25.6437 nrh: 23 rawID: 838966477
+Calo # 3 energy: 16.942 nrh: 21 rawID: 838966475
+Calo # 4 energy: 12.3812 nrh: 18 rawID: 838966982
+Calo # 5 energy: 8.22281 nrh: 20 rawID: 838966984
+Calo # 6 energy: 4.33802 nrh: 12 rawID: 838966996
+Calo # 7 energy: 2.76209 nrh: 2 rawID: 838966976
+Calo # 8 energy: 2.46993 nrh: 5 rawID: 838967000
+Calo # 9 energy: 0.990241 nrh: 2 rawID: 838969579
+Calo # 10 energy: 0.852914 nrh: 2 rawID: 838967520
+Calo # 11 energy: 3.52644 nrh: 5 rawID: 838932140
+Calo # 12 energy: 2.54494 nrh: 5 rawID: 838932650
+Calo # 13 energy: 2.08492 nrh: 3 rawID: 838968381
+Calo # 14 energy: 47.7078 nrh: 17 rawID: 838927204
+Calo # 15 energy: 7.00451 nrh: 14 rawID: 838927206
+Calo # 16 energy: 13.1813 nrh: 6 rawID: 872423746
+Calo # 17 energy: 7.57343 nrh: 7 rawID: 872424000
+Calo # 18 energy: 4.19696 nrh: 7 rawID: 872424002
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 34 pce: 23.2027
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 26 pce: 19.1787
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 9 pce: 5.62746
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 32 pce: 2.84659
+Match found at ph: 0 asc: 6 jet: 0/1 kid: 3 pce: 5.551
+Match found at ph: 0 asc: 7 jet: 0/1 kid: 8 pce: 25.6325
+Match found at ph: 0 asc: 8 jet: 0/1 kid: 7 pce: 39.455
+Match found at ph: 0 asc: 9 jet: 0/1 kid: 10 pce: 30.5005
+Match found at ph: 0 asc: 10 jet: 0/1 kid: 35 pce: 57.41
+Match found at ph: 0 asc: 11 jet: 0/1 kid: 33 pce: 13.5611
+Match found at ph: 0 asc: 12 jet: 0/1 kid: 4 pce: 4.75678
+Match found at ph: 0 asc: 14 jet: 0/1 kid: 31 pce: 1.03215
+ Match to photon SC with seedid: 838966991 nrh: 152 sce: 192.57 nClust: 11
+  SC Clust # 0 energy: 78.1676 nrh: 25 rawID: 838966991
+  SC Clust # 1 energy: 30.4527 nrh: 22 rawID: 838966482
+  SC Clust # 2 energy: 25.6437 nrh: 23 rawID: 838966477
+  SC Clust # 3 energy: 16.942 nrh: 21 rawID: 838966475
+  SC Clust # 4 energy: 12.3812 nrh: 18 rawID: 838966982
+  SC Clust # 5 energy: 8.22281 nrh: 20 rawID: 838966984
+  SC Clust # 6 energy: 4.33802 nrh: 12 rawID: 838966996
+  SC Clust # 7 energy: 2.76209 nrh: 2 rawID: 838966976
+  SC Clust # 8 energy: 2.46993 nrh: 5 rawID: 838967000
+  SC Clust # 9 energy: 0.990241 nrh: 2 rawID: 838969579
+  SC Clust # 10 energy: 0.852914 nrh: 2 rawID: 838967520
+Processing New Event : 
+Calo # 0 energy: 105.578 nrh: 10 rawID: 872419123
+Calo # 1 energy: 11.967 nrh: 8 rawID: 872418869
+Calo # 2 energy: 71.307 nrh: 12 rawID: 838967842
+Calo # 3 energy: 0.435852 nrh: 1 rawID: 838967832
+Calo # 4 energy: 0.331604 nrh: 1 rawID: 838968375
+Calo # 5 energy: 0.317206 nrh: 1 rawID: 838967837
+Calo # 6 energy: 0.300607 nrh: 1 rawID: 838968346
+Processing New Event : 
+Calo # 0 energy: 54.2769 nrh: 15 rawID: 838887214
+Calo # 1 energy: 9.6983 nrh: 8 rawID: 838887221
+Calo # 2 energy: 5.91435 nrh: 12 rawID: 838887212
+Calo # 3 energy: 2.95207 nrh: 14 rawID: 838887217
+Processing New Event : 
+Calo # 0 energy: 37.7709 nrh: 15 rawID: 838879016
+Calo # 1 energy: 7.05017 nrh: 13 rawID: 838879013
+Calo # 2 energy: 3.59771 nrh: 4 rawID: 838879020
+Calo # 3 energy: 0.691633 nrh: 1 rawID: 838879535
+Processing New Event : 
+Calo # 0 energy: 18.3819 nrh: 14 rawID: 838964548
+Calo # 1 energy: 2.86128 nrh: 2 rawID: 838964535
+Calo # 2 energy: 2.10344 nrh: 5 rawID: 838964530
+Calo # 3 energy: 0.858254 nrh: 1 rawID: 838965072
+Calo # 4 energy: 0.702267 nrh: 2 rawID: 838967652
+Calo # 5 energy: 0.370419 nrh: 1 rawID: 838965038
+Calo # 6 energy: 557.76 nrh: 16 rawID: 872436416
+Calo # 7 energy: 38.3353 nrh: 18 rawID: 838965564
+Calo # 8 energy: 8.20976 nrh: 16 rawID: 838965561
+Calo # 9 energy: 7.11689 nrh: 7 rawID: 838965554
+Calo # 10 energy: 5.85518 nrh: 8 rawID: 838965573
+Calo # 11 energy: 1.62575 nrh: 2 rawID: 838966601
+Calo # 12 energy: 0.374509 nrh: 1 rawID: 838965056
+Calo # 13 energy: 1.80718 nrh: 3 rawID: 838957673
+Processing New Event : 
+Calo # 0 energy: 129.499 nrh: 9 rawID: 872435994
+Calo # 1 energy: 4.44259 nrh: 2 rawID: 872436504
+Calo # 2 energy: 19.5044 nrh: 6 rawID: 838943286
+Processing New Event : 
+Calo # 0 energy: 29.8148 nrh: 18 rawID: 838889091
+Calo # 1 energy: 84.8376 nrh: 16 rawID: 838877376
+Calo # 2 energy: 0.472629 nrh: 1 rawID: 838877344
+Calo # 3 energy: 0.464903 nrh: 1 rawID: 838877372
+Calo # 4 energy: 1.46543 nrh: 6 rawID: 838888572
+Processing New Event : 
+Calo # 0 energy: 49.0433 nrh: 12 rawID: 838961732
+Calo # 1 energy: 7.97947 nrh: 4 rawID: 838961738
+Calo # 2 energy: 1.56757 nrh: 7 rawID: 838961729
+Calo # 3 energy: 1.05735 nrh: 1 rawID: 838962238
+Processing New Event : 
+Calo # 0 energy: 127.514 nrh: 10 rawID: 872440138
+Calo # 1 energy: 1.10021 nrh: 1 rawID: 872440519
+Calo # 2 energy: 8.10721 nrh: 4 rawID: 838952150
+Calo # 3 energy: 0.856859 nrh: 2 rawID: 838952691
+Calo # 4 energy: 0.558317 nrh: 1 rawID: 838952679
+Processing New Event : 
+Calo # 0 energy: 33.9911 nrh: 15 rawID: 838954131
+Calo # 1 energy: 13.0031 nrh: 15 rawID: 838954133
+Calo # 2 energy: 5.42816 nrh: 4 rawID: 838954137
+Calo # 3 energy: 0.318095 nrh: 1 rawID: 838955173
+Calo # 4 energy: 10.9641 nrh: 2 rawID: 872424227
+Processing New Event : 
+Calo # 0 energy: 32.9461 nrh: 9 rawID: 838941879
+Calo # 1 energy: 0.701202 nrh: 1 rawID: 838941859
+Calo # 2 energy: 24.4178 nrh: 13 rawID: 838946485
+Calo # 3 energy: 14.2469 nrh: 12 rawID: 838946488
+Calo # 4 energy: 22.3979 nrh: 7 rawID: 838943931
+Processing New Event : 
+Calo # 0 energy: 375.678 nrh: 53 rawID: 838887033
+Calo # 1 energy: 28.7472 nrh: 25 rawID: 838887028
+Calo # 2 energy: 12.0628 nrh: 19 rawID: 838887026
+Calo # 3 energy: 2.58303 nrh: 7 rawID: 838887023
+Calo # 4 energy: 1.80867 nrh: 4 rawID: 838887555
+Calo # 5 energy: 1.16471 nrh: 2 rawID: 838887567
+Calo # 6 energy: 1.13786 nrh: 4 rawID: 838887045
+Calo # 7 energy: 0.464755 nrh: 1 rawID: 838887531
+Calo # 8 energy: 18.7611 nrh: 11 rawID: 838878843
+Match found at ph: 0 asc: 0 jet: 0/2 kid: 4 pce: 6.90727
+Match found at ph: 0 asc: 1 jet: 0/2 kid: 44 pce: 12.9842
+Match found at ph: 0 asc: 2 jet: 0/2 kid: 21 pce: 24.8487
+Match found at ph: 0 asc: 3 jet: 0/2 kid: 45 pce: 1.28632
+Match found at ph: 0 asc: 4 jet: 0/2 kid: 20 pce: 30.1264
+Match found at ph: 0 asc: 5 jet: 0/2 kid: 19 pce: 44.6158
+Match found at ph: 0 asc: 6 jet: 0/2 kid: 43 pce: 348.26
+Match found at ph: 0 asc: 7 jet: 0/2 kid: 46 pce: 1.39432
+Match found at ph: 0 asc: 8 jet: 0/2 kid: 47 pce: 0.592684
+ Match to photon SC with seedid: 838887033 nrh: 115 sce: 428.615 nClust: 8
+  SC Clust # 0 energy: 375.678 nrh: 53 rawID: 838887033
+  SC Clust # 1 energy: 28.7472 nrh: 25 rawID: 838887028
+  SC Clust # 2 energy: 12.0628 nrh: 19 rawID: 838887026
+  SC Clust # 3 energy: 2.58303 nrh: 7 rawID: 838887023
+  SC Clust # 4 energy: 1.80867 nrh: 4 rawID: 838887555
+  SC Clust # 5 energy: 1.16471 nrh: 2 rawID: 838887567
+  SC Clust # 6 energy: 1.13786 nrh: 4 rawID: 838887045
+  SC Clust # 7 energy: 0.464755 nrh: 1 rawID: 838887531
+Match found at ph: 1 asc: 0 jet: 0/2 kid: 6 pce: 4.95342
+Match found at ph: 1 asc: 1 jet: 0/2 kid: 32 pce: 1.42058
+Match found at ph: 1 asc: 2 jet: 0/2 kid: 33 pce: 13.8409
+Match found at ph: 1 asc: 3 jet: 0/2 kid: 30 pce: 19.8263
+Match found at ph: 1 asc: 6 jet: 0/2 kid: 31 pce: 0.594845
+ Match to photon SC with seedid: 838878843 nrh: 0 sce: 38.4028 nClust: 7
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 53.2998 nrh: 12 rawID: 838952987
+Calo # 1 energy: 0.341111 nrh: 1 rawID: 838952998
+Processing New Event : 
+Calo # 0 energy: 108.141 nrh: 11 rawID: 872418627
+Processing New Event : 
+Calo # 0 energy: 135.571 nrh: 18 rawID: 838958228
+Calo # 1 energy: 1.02246 nrh: 8 rawID: 838958743
+Calo # 2 energy: 0.300481 nrh: 1 rawID: 838890785
+Calo # 3 energy: 7.75871 nrh: 3 rawID: 872425243
+Processing New Event : 
+Calo # 0 energy: 96.7967 nrh: 13 rawID: 872417070
+Processing New Event : 
+Calo # 0 energy: 189.596 nrh: 25 rawID: 838938424
+Calo # 1 energy: 3.61032 nrh: 10 rawID: 838938931
+Calo # 2 energy: 6.85152 nrh: 6 rawID: 838896668
+Calo # 3 energy: 3.53394 nrh: 3 rawID: 838897174
+Calo # 4 energy: 3.11182 nrh: 2 rawID: 838897178
+Calo # 5 energy: 1.88246 nrh: 2 rawID: 838897681
+Calo # 6 energy: 0.291829 nrh: 1 rawID: 838897701
+Calo # 7 energy: 7.32801 nrh: 3 rawID: 838889221
+Calo # 8 energy: 6.22799 nrh: 3 rawID: 838900248
+Calo # 9 energy: 66.5249 nrh: 10 rawID: 872418861
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 2 pce: 1.31598
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 9 pce: 76.5101
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 8 pce: 14.0563
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 17 pce: 132.071
+ Match to photon SC with seedid: 838938424 nrh: 35 sce: 194.186 nClust: 2
+  SC Clust # 0 energy: 189.596 nrh: 25 rawID: 838938424
+  SC Clust # 1 energy: 3.61032 nrh: 10 rawID: 838938931
+Processing New Event : 
+Calo # 0 energy: 288.254 nrh: 14 rawID: 872422595
+Calo # 1 energy: 47.3625 nrh: 9 rawID: 838929660
+Processing New Event : 
+Calo # 0 energy: 374.478 nrh: 7 rawID: 872423103
+Calo # 1 energy: 4.01186 nrh: 1 rawID: 872422593
+Calo # 2 energy: 488.751 nrh: 19 rawID: 872422725
+Calo # 3 energy: 65.0425 nrh: 24 rawID: 838942961
+Calo # 4 energy: 10.6078 nrh: 13 rawID: 838942446
+Calo # 5 energy: 5.551 nrh: 12 rawID: 838942966
+Calo # 6 energy: 2.59857 nrh: 4 rawID: 838943459
+Calo # 7 energy: 0.5397 nrh: 1 rawID: 838943491
+Calo # 8 energy: 0.269092 nrh: 1 rawID: 838942440
+Processing New Event : 
+Calo # 0 energy: 116.801 nrh: 7 rawID: 872418974
+Calo # 1 energy: 1.38354 nrh: 1 rawID: 872420506
+Calo # 2 energy: 23.8884 nrh: 12 rawID: 838928447
+Calo # 3 energy: 3.52456 nrh: 3 rawID: 838928456
+Calo # 4 energy: 14.9119 nrh: 12 rawID: 838928449
+Calo # 5 energy: 0.859843 nrh: 1 rawID: 838966901
+Processing New Event : 
+Calo # 0 energy: 65.0686 nrh: 3 rawID: 872422590
+Calo # 1 energy: 34.9676 nrh: 10 rawID: 838877403
+Calo # 2 energy: 43.4699 nrh: 13 rawID: 838873960
+Calo # 3 energy: 1.37149 nrh: 1 rawID: 838874116
+Calo # 4 energy: 0.254445 nrh: 1 rawID: 838873621
+Processing New Event : 
+Calo # 0 energy: 155.993 nrh: 7 rawID: 872424239
+Calo # 1 energy: 4.55095 nrh: 5 rawID: 872424242
+Processing New Event : 
+Calo # 0 energy: 142.782 nrh: 19 rawID: 872420179
+Calo # 1 energy: 0.955068 nrh: 1 rawID: 872419150
+Calo # 2 energy: 245.449 nrh: 20 rawID: 838957284
+Calo # 3 energy: 0.261726 nrh: 1 rawID: 838958799
+Calo # 4 energy: 0.26036 nrh: 1 rawID: 838958847
+Processing New Event : 
+Calo # 0 energy: 232.988 nrh: 25 rawID: 872442665
+Calo # 1 energy: 58.507 nrh: 20 rawID: 872442663
+Processing New Event : 
+Calo # 0 energy: 115.166 nrh: 16 rawID: 872433987
+Calo # 1 energy: 2.451 nrh: 2 rawID: 872434633
+Calo # 2 energy: 0.888686 nrh: 1 rawID: 872433974
+Calo # 3 energy: 0.731865 nrh: 1 rawID: 872433853
+Processing New Event : 
+Calo # 0 energy: 211.394 nrh: 29 rawID: 872417614
+Calo # 1 energy: 0.795708 nrh: 1 rawID: 872416831
+Calo # 2 energy: 30.1235 nrh: 11 rawID: 838932315
+Calo # 3 energy: 3.10908 nrh: 2 rawID: 838962375
+Calo # 4 energy: 0.516418 nrh: 1 rawID: 838938937
+Processing New Event : 
+Calo # 0 energy: 42.1344 nrh: 15 rawID: 838889579
+Calo # 1 energy: 22.9223 nrh: 13 rawID: 838890086
+Calo # 2 energy: 5.80117 nrh: 7 rawID: 838890101
+Calo # 3 energy: 1.68633 nrh: 5 rawID: 838890098
+Calo # 4 energy: 0.462279 nrh: 1 rawID: 838892111
+Processing New Event : 
+Calo # 0 energy: 1412.94 nrh: 14 rawID: 872423595
+Processing New Event : 
+Calo # 0 energy: 384.641 nrh: 16 rawID: 872419494
+Calo # 1 energy: 8.26372 nrh: 2 rawID: 872420004
+Processing New Event : 
+Calo # 0 energy: 41.9678 nrh: 11 rawID: 838940991
+Processing New Event : 
+Calo # 0 energy: 35.8763 nrh: 16 rawID: 838884705
+Calo # 1 energy: 14.9141 nrh: 13 rawID: 838884708
+Calo # 2 energy: 8.11915 nrh: 11 rawID: 838884703
+Calo # 3 energy: 1.30621 nrh: 2 rawID: 838885206
+Processing New Event : 
+Calo # 0 energy: 260.626 nrh: 12 rawID: 872420418
+Calo # 1 energy: 66.3313 nrh: 16 rawID: 838949190
+Calo # 2 energy: 1.24156 nrh: 1 rawID: 838949715
+Processing New Event : 
+Calo # 0 energy: 246.177 nrh: 32 rawID: 872425227
+Calo # 1 energy: 11.3397 nrh: 15 rawID: 872424457
+Calo # 2 energy: 9.92558 nrh: 6 rawID: 872425872
+Calo # 3 energy: 0.86858 nrh: 1 rawID: 872422408
+Calo # 4 energy: 0.692125 nrh: 1 rawID: 872423048
+Processing New Event : 
+Calo # 0 energy: 124.308 nrh: 11 rawID: 872423498
+Calo # 1 energy: 16.2375 nrh: 7 rawID: 872423881
+Processing New Event : 
+Calo # 0 energy: 183.564 nrh: 10 rawID: 872434998
+Calo # 1 energy: 10.1002 nrh: 2 rawID: 872434467
+Processing New Event : 
+Calo # 0 energy: 531.39 nrh: 16 rawID: 872439843
+Calo # 1 energy: 48.6465 nrh: 12 rawID: 838877860
+Calo # 2 energy: 0.885527 nrh: 1 rawID: 838877851
+Calo # 3 energy: 24.4296 nrh: 11 rawID: 838932615
+Calo # 4 energy: 2.01885 nrh: 10 rawID: 838933124
+Processing New Event : 
+Calo # 0 energy: 128.351 nrh: 18 rawID: 838942332
+Calo # 1 energy: 17.2736 nrh: 6 rawID: 838962987
+Calo # 2 energy: 1.8857 nrh: 1 rawID: 838963495
+Calo # 3 energy: 1.47034 nrh: 2 rawID: 838963476
+Calo # 4 energy: 0.557672 nrh: 1 rawID: 838962974
+Calo # 5 energy: 24.6292 nrh: 8 rawID: 872435517
+Calo # 6 energy: 7.81728 nrh: 6 rawID: 872435513
+Calo # 7 energy: 3.72779 nrh: 3 rawID: 872435647
+Calo # 8 energy: 1.25282 nrh: 1 rawID: 872435905
+Processing New Event : 
+Calo # 0 energy: 189.565 nrh: 16 rawID: 872424616
+Calo # 1 energy: 3.7698 nrh: 2 rawID: 872423972
+Processing New Event : 
+Calo # 0 energy: 46.4326 nrh: 11 rawID: 838882928
+Calo # 1 energy: 45.8647 nrh: 10 rawID: 838864183
+Calo # 2 energy: 1.47222 nrh: 1 rawID: 838871773
+Processing New Event : 
+Calo # 0 energy: 25.8737 nrh: 11 rawID: 838900899
+Calo # 1 energy: 2.69352 nrh: 5 rawID: 838900914
+Calo # 2 energy: 1.57836 nrh: 4 rawID: 838901938
+Calo # 3 energy: 1.53416 nrh: 3 rawID: 838900890
+Calo # 4 energy: 0.827426 nrh: 1 rawID: 838904509
+Calo # 5 energy: 91.0864 nrh: 17 rawID: 838894937
+Calo # 6 energy: 5.37738 nrh: 11 rawID: 838894429
+Calo # 7 energy: 0.854886 nrh: 2 rawID: 838895622
+Calo # 8 energy: 0.781401 nrh: 2 rawID: 838895458
+Processing New Event : 
+Calo # 0 energy: 391.623 nrh: 22 rawID: 872421318
+Calo # 1 energy: 34.4621 nrh: 13 rawID: 872421703
+Calo # 2 energy: 86.2868 nrh: 20 rawID: 872423757
+Calo # 3 energy: 16.7751 nrh: 9 rawID: 872424266
+Calo # 4 energy: 1.26489 nrh: 1 rawID: 872422990
+Calo # 5 energy: 256.514 nrh: 48 rawID: 838962977
+Calo # 6 energy: 43.4297 nrh: 33 rawID: 838962979
+Calo # 7 energy: 1.99158 nrh: 3 rawID: 838963504
+Calo # 8 energy: 0.325624 nrh: 1 rawID: 838966591
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 1 pce: 41.6627
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 14 pce: 27.5341
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 0 pce: 66.9131
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 15 pce: 194.109
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 2 pce: 5.75257
+ Match to photon SC with seedid: 838962977 nrh: 85 sce: 305.36 nClust: 4
+  SC Clust # 0 energy: 256.514 nrh: 48 rawID: 838962977
+  SC Clust # 1 energy: 43.4297 nrh: 33 rawID: 838962979
+  SC Clust # 2 energy: 1.99158 nrh: 3 rawID: 838963504
+  SC Clust # 3 energy: 0.325624 nrh: 1 rawID: 838966591
+Processing New Event : 
+Calo # 0 energy: 39.7021 nrh: 12 rawID: 872418620
+Calo # 1 energy: 178.644 nrh: 16 rawID: 872418746
+Calo # 2 energy: 12.35 nrh: 8 rawID: 872418743
+Calo # 3 energy: 0.963039 nrh: 1 rawID: 872418741
+Calo # 4 energy: 37.5624 nrh: 11 rawID: 838949216
+Calo # 5 energy: 5.41873 nrh: 3 rawID: 838949222
+Calo # 6 energy: 1.37438 nrh: 3 rawID: 838949736
+Calo # 7 energy: 0.387408 nrh: 1 rawID: 838951230
+Calo # 8 energy: 0.374114 nrh: 1 rawID: 838949909
+Calo # 9 energy: 1.91527 nrh: 2 rawID: 838938129
+Processing New Event : 
+Calo # 0 energy: 36.4254 nrh: 9 rawID: 838933204
+Calo # 1 energy: 10.4034 nrh: 2 rawID: 872436810
+Processing New Event : 
+Calo # 0 energy: 193.899 nrh: 16 rawID: 872420064
+Calo # 1 energy: 0.605716 nrh: 1 rawID: 872419293
+Processing New Event : 
+Calo # 0 energy: 160.127 nrh: 11 rawID: 872424626
+Calo # 1 energy: 8.75597 nrh: 5 rawID: 872424501
+Processing New Event : 
+Calo # 0 energy: 49.6448 nrh: 12 rawID: 838947984
+Calo # 1 energy: 0.333014 nrh: 1 rawID: 838948516
+Calo # 2 energy: 8.26761 nrh: 2 rawID: 872423968
+Processing New Event : 
+Calo # 0 energy: 398.123 nrh: 16 rawID: 872418336
+Calo # 1 energy: 1.19628 nrh: 1 rawID: 872418717
+Calo # 2 energy: 1.02899 nrh: 1 rawID: 872418091
+Calo # 3 energy: 34.2746 nrh: 9 rawID: 838889001
+Calo # 4 energy: 2.2908 nrh: 3 rawID: 838888997
+Calo # 5 energy: 1.60956 nrh: 2 rawID: 838891073
+Calo # 6 energy: 0.266793 nrh: 1 rawID: 838889999
+Processing New Event : 
+Calo # 0 energy: 170.913 nrh: 18 rawID: 872424481
+Calo # 1 energy: 38.1033 nrh: 6 rawID: 872421921
+Calo # 2 energy: 14.65 nrh: 4 rawID: 872421538
+Calo # 3 energy: 5.7532 nrh: 1 rawID: 872440484
+Processing New Event : 
+Calo # 0 energy: 777.474 nrh: 19 rawID: 872418880
+Processing New Event : 
+Calo # 0 energy: 45.8958 nrh: 14 rawID: 838875788
+Calo # 1 energy: 69.0345 nrh: 21 rawID: 838881118
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 9 pce: 2.76585
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 4 pce: 41.874
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 10 pce: 11.2865
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 41 pce: 57.0301
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 12 pce: 7.20282
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 43 pce: 0.682352
+Match found at ph: 0 asc: 6 jet: 0/1 kid: 44 pce: 0.321583
+Match found at ph: 0 asc: 9 jet: 0/1 kid: 46 pce: 0.794503
+ Match to photon SC with seedid: 838881118 nrh: 0 sce: 93.0991 nClust: 10
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 33.1504 nrh: 13 rawID: 838891536
+Calo # 1 energy: 19.3892 nrh: 13 rawID: 838891538
+Calo # 2 energy: 1.29961 nrh: 2 rawID: 838891544
+Calo # 3 energy: 0.765646 nrh: 1 rawID: 838891531
+Processing New Event : 
+Calo # 0 energy: 162.961 nrh: 9 rawID: 872423975
+Calo # 1 energy: 8.00125 nrh: 2 rawID: 872418881
+Processing New Event : 
+Calo # 0 energy: 140.975 nrh: 7 rawID: 872418858
+Calo # 1 energy: 41.994 nrh: 14 rawID: 838950438
+Processing New Event : 
+Calo # 0 energy: 119.137 nrh: 17 rawID: 872425770
+Calo # 1 energy: 1.235 nrh: 1 rawID: 872425779
+Calo # 2 energy: 8.12467 nrh: 4 rawID: 872427210
+Processing New Event : 
+Calo # 0 energy: 22.1246 nrh: 7 rawID: 838929420
+Calo # 1 energy: 1.86825 nrh: 3 rawID: 838928903
+Calo # 2 energy: 21.8049 nrh: 5 rawID: 838969515
+Calo # 3 energy: 0.446017 nrh: 1 rawID: 838969523
+Calo # 4 energy: 59.1754 nrh: 12 rawID: 838895381
+Calo # 5 energy: 2.44369 nrh: 2 rawID: 838895403
+Processing New Event : 
+Calo # 0 energy: 119.745 nrh: 29 rawID: 838879813
+Calo # 1 energy: 31.1868 nrh: 32 rawID: 838879815
+Calo # 2 energy: 3.69322 nrh: 15 rawID: 838880329
+Calo # 3 energy: 1.39573 nrh: 3 rawID: 838889514
+Calo # 4 energy: 53.4608 nrh: 18 rawID: 872435211
+Calo # 5 energy: 30.0262 nrh: 17 rawID: 872435722
+Calo # 6 energy: 6.09503 nrh: 10 rawID: 872434573
+Calo # 7 energy: 4.35134 nrh: 4 rawID: 872434576
+Calo # 8 energy: 2.65061 nrh: 2 rawID: 872433945
+Calo # 9 energy: 2.45084 nrh: 1 rawID: 872433940
+Calo # 10 energy: 1.42143 nrh: 2 rawID: 872437639
+Calo # 11 energy: 2.955 nrh: 3 rawID: 838892321
+Processing New Event : 
+Calo # 0 energy: 71.1655 nrh: 24 rawID: 872418201
+Calo # 1 energy: 10.6842 nrh: 14 rawID: 872417948
+Processing New Event : 
+Calo # 0 energy: 214.968 nrh: 18 rawID: 872421525
+Calo # 1 energy: 19.3513 nrh: 12 rawID: 872421909
+Calo # 2 energy: 17.5325 nrh: 7 rawID: 872418698
+Calo # 3 energy: 2.29667 nrh: 3 rawID: 872419591
+Calo # 4 energy: 1.80863 nrh: 3 rawID: 872419975
+Calo # 5 energy: 25.6683 nrh: 10 rawID: 838964846
+Calo # 6 energy: 6.93529 nrh: 3 rawID: 838964841
+Calo # 7 energy: 6.47132 nrh: 9 rawID: 838964844
+Calo # 8 energy: 0.343676 nrh: 1 rawID: 838965367
+Calo # 9 energy: 6.48742 nrh: 4 rawID: 838943327
+Calo # 10 energy: 0.293939 nrh: 1 rawID: 838944379
+Calo # 11 energy: 2.52922 nrh: 3 rawID: 838873255
+Calo # 12 energy: 2.10025 nrh: 2 rawID: 838862552
+Processing New Event : 
+Calo # 0 energy: 479.974 nrh: 8 rawID: 872435887
+Calo # 1 energy: 4.52519 nrh: 2 rawID: 872418477
+Processing New Event : 
+Calo # 0 energy: 72.2291 nrh: 21 rawID: 872423433
+Calo # 1 energy: 62.4734 nrh: 17 rawID: 872423177
+Calo # 2 energy: 1.03127 nrh: 1 rawID: 872424591
+Calo # 3 energy: 1.08074 nrh: 1 rawID: 872421769
+Calo # 4 energy: 0.905078 nrh: 1 rawID: 872422024
+Processing New Event : 
+Calo # 0 energy: 633.893 nrh: 25 rawID: 872436130
+Processing New Event : 
+Calo # 0 energy: 49.9723 nrh: 10 rawID: 838885174
+Processing New Event : 
+Calo # 0 energy: 312.126 nrh: 31 rawID: 838939252
+Calo # 1 energy: 93.0716 nrh: 23 rawID: 838879493
+Calo # 2 energy: 6.21013 nrh: 19 rawID: 838881031
+Calo # 3 energy: 2.21645 nrh: 2 rawID: 838879989
+Calo # 4 energy: 0.819895 nrh: 1 rawID: 838879485
+Calo # 5 energy: 0.812039 nrh: 3 rawID: 838879992
+Processing New Event : 
+Calo # 0 energy: 307.27 nrh: 22 rawID: 872419037
+Calo # 1 energy: 8.18195 nrh: 10 rawID: 872419550
+Calo # 2 energy: 0.79176 nrh: 1 rawID: 872418006
+Calo # 3 energy: 16.0556 nrh: 10 rawID: 838895400
+Calo # 4 energy: 2.81773 nrh: 10 rawID: 838894891
+Calo # 5 energy: 2.04337 nrh: 1 rawID: 838895393
+Calo # 6 energy: 1.40254 nrh: 2 rawID: 838895415
+Calo # 7 energy: 0.330541 nrh: 1 rawID: 838896412
+Calo # 8 energy: 0.293256 nrh: 1 rawID: 838896447
+Calo # 9 energy: 19.7408 nrh: 9 rawID: 838903088
+Calo # 10 energy: 14.7123 nrh: 8 rawID: 838903091
+Calo # 11 energy: 13.1128 nrh: 7 rawID: 838902064
+Calo # 12 energy: 6.55688 nrh: 6 rawID: 838902058
+Calo # 13 energy: 3.38039 nrh: 3 rawID: 838903591
+Calo # 14 energy: 0.589779 nrh: 1 rawID: 838903085
+Calo # 15 energy: 0.516576 nrh: 1 rawID: 838902055
+Calo # 16 energy: 0.460308 nrh: 1 rawID: 838902586
+Calo # 17 energy: 0.326866 nrh: 1 rawID: 838902593
+Calo # 18 energy: 0.300764 nrh: 1 rawID: 838904098
+Processing New Event : 
+Calo # 0 energy: 257.05 nrh: 36 rawID: 872434769
+Calo # 1 energy: 27.6406 nrh: 16 rawID: 872434382
+Calo # 2 energy: 2.28221 nrh: 6 rawID: 872436568
+Calo # 3 energy: 1.99422 nrh: 6 rawID: 872436055
+Calo # 4 energy: 1.84314 nrh: 2 rawID: 872433734
+Calo # 5 energy: 1.62982 nrh: 2 rawID: 872433601
+Calo # 6 energy: 1.43073 nrh: 6 rawID: 872436309
+Calo # 7 energy: 0.846163 nrh: 1 rawID: 872433986
+Calo # 8 energy: 0.722992 nrh: 6 rawID: 872434380
+Calo # 9 energy: 14.3573 nrh: 10 rawID: 838954562
+Calo # 10 energy: 3.76674 nrh: 9 rawID: 838955077
+Calo # 11 energy: 3.19912 nrh: 4 rawID: 838955573
+Calo # 12 energy: 0.613597 nrh: 2 rawID: 838955071
+Calo # 13 energy: 0.483082 nrh: 1 rawID: 838955090
+Calo # 14 energy: 0.471719 nrh: 1 rawID: 838955094
+Calo # 15 energy: 31.5305 nrh: 24 rawID: 872434772
+Processing New Event : 
+Calo # 0 energy: 99.9731 nrh: 12 rawID: 872434721
+Calo # 1 energy: 3.70661 nrh: 3 rawID: 872435228
+Calo # 2 energy: 1.33178 nrh: 1 rawID: 872435610
+Calo # 3 energy: 0.733371 nrh: 1 rawID: 872434596
+Processing New Event : 
+Calo # 0 energy: 429.079 nrh: 25 rawID: 838969948
+Calo # 1 energy: 71.229 nrh: 20 rawID: 838969944
+Calo # 2 energy: 9.34949 nrh: 9 rawID: 838969954
+Calo # 3 energy: 2.73526 nrh: 6 rawID: 838969956
+Calo # 4 energy: 1.01334 nrh: 1 rawID: 838969933
+Calo # 5 energy: 0.668182 nrh: 1 rawID: 838969938
+Calo # 6 energy: 0.534222 nrh: 1 rawID: 838969961
+Calo # 7 energy: 0.463056 nrh: 1 rawID: 838969964
+Calo # 8 energy: 0.45281 nrh: 1 rawID: 838969931
+Processing New Event : 
+Calo # 0 energy: 186.011 nrh: 5 rawID: 872422304
+Processing New Event : 
+Calo # 0 energy: 388.306 nrh: 7 rawID: 872420279
+Calo # 1 energy: 274.276 nrh: 13 rawID: 872424111
+Processing New Event : 
+Calo # 0 energy: 78.316 nrh: 15 rawID: 838901545
+Calo # 1 energy: 3.33193 nrh: 4 rawID: 838902050
+Calo # 2 energy: 2.77877 nrh: 5 rawID: 838902062
+Calo # 3 energy: 2.43926 nrh: 4 rawID: 838902048
+Calo # 4 energy: 1.81383 nrh: 10 rawID: 838902060
+Calo # 5 energy: 26.0651 nrh: 9 rawID: 838936137
+Processing New Event : 
+Calo # 0 energy: 45.2404 nrh: 7 rawID: 838883479
+Calo # 1 energy: 0.348284 nrh: 1 rawID: 838884023
+Processing New Event : 
+Calo # 0 energy: 89.5961 nrh: 9 rawID: 872421151
+Calo # 1 energy: 99.7929 nrh: 11 rawID: 872423244
+Calo # 2 energy: 1.38984 nrh: 1 rawID: 872423880
+Calo # 3 energy: 15.6731 nrh: 3 rawID: 872420640
+Processing New Event : 
+Calo # 0 energy: 60.6501 nrh: 15 rawID: 838962980
+Calo # 1 energy: 6.48676 nrh: 12 rawID: 838962976
+Calo # 2 energy: 5.6363 nrh: 8 rawID: 838962974
+Calo # 3 energy: 1.97256 nrh: 2 rawID: 838962969
+Calo # 4 energy: 1.04431 nrh: 2 rawID: 838964498
+Calo # 5 energy: 0.434717 nrh: 1 rawID: 838963984
+Calo # 6 energy: 1.46596 nrh: 2 rawID: 838872847
+Processing New Event : 
+Calo # 0 energy: 56.4907 nrh: 13 rawID: 872438872
+Calo # 1 energy: 0.625365 nrh: 1 rawID: 872436949
+Calo # 2 energy: 49.9466 nrh: 12 rawID: 872433602
+Calo # 3 energy: 38.0651 nrh: 11 rawID: 872433983
+Calo # 4 energy: 14.2782 nrh: 4 rawID: 872434500
+Calo # 5 energy: 1.48589 nrh: 2 rawID: 872434887
+Calo # 6 energy: 133.024 nrh: 22 rawID: 872442037
+Calo # 7 energy: 1.63204 nrh: 1 rawID: 872441640
+Calo # 8 energy: 26.4129 nrh: 10 rawID: 838961919
+Calo # 9 energy: 4.74876 nrh: 9 rawID: 838962418
+Calo # 10 energy: 4.34722 nrh: 12 rawID: 838961908
+Calo # 11 energy: 4.10506 nrh: 9 rawID: 838961913
+Calo # 12 energy: 3.15363 nrh: 1 rawID: 838961926
+Calo # 13 energy: 1.97795 nrh: 7 rawID: 838961917
+Calo # 14 energy: 1.52995 nrh: 2 rawID: 838962436
+Calo # 15 energy: 0.828809 nrh: 1 rawID: 838963934
+Calo # 16 energy: 0.805549 nrh: 1 rawID: 838962463
+Calo # 17 energy: 0.636161 nrh: 2 rawID: 838961938
+Calo # 18 energy: 18.7659 nrh: 13 rawID: 838961399
+Calo # 19 energy: 0.352397 nrh: 1 rawID: 838963468
+Calo # 20 energy: 0.325855 nrh: 1 rawID: 838964440
+Calo # 21 energy: 0.30625 nrh: 1 rawID: 838963978
+Processing New Event : 
+Calo # 0 energy: 23.8965 nrh: 14 rawID: 872415932
+Calo # 1 energy: 14.5047 nrh: 12 rawID: 872415417
+Calo # 2 energy: 9.1155 nrh: 6 rawID: 872415934
+Calo # 3 energy: 8.56928 nrh: 5 rawID: 872415797
+Calo # 4 energy: 1.60085 nrh: 2 rawID: 872416973
+Calo # 5 energy: 0.671426 nrh: 1 rawID: 872416710
+Calo # 6 energy: 0.628381 nrh: 1 rawID: 872416934
+Calo # 7 energy: 18.5263 nrh: 6 rawID: 838865939
+Calo # 8 energy: 4.25827 nrh: 1 rawID: 872427324
+Calo # 9 energy: 4.82789 nrh: 2 rawID: 872432690
+Processing New Event : 
+Calo # 0 energy: 50.5668 nrh: 14 rawID: 838895818
+Calo # 1 energy: 10.409 nrh: 11 rawID: 838895821
+Calo # 2 energy: 0.619072 nrh: 1 rawID: 838896338
+Processing New Event : 
+Calo # 0 energy: 35.0704 nrh: 9 rawID: 838931596
+Calo # 1 energy: 1.29913 nrh: 2 rawID: 838883890
+Processing New Event : 
+Calo # 0 energy: 162.949 nrh: 17 rawID: 872440743
+Calo # 1 energy: 17.3213 nrh: 9 rawID: 872440356
+Calo # 2 energy: 28.9439 nrh: 10 rawID: 838895297
+Calo # 3 energy: 17.0233 nrh: 9 rawID: 838895292
+Calo # 4 energy: 1.04352 nrh: 1 rawID: 838895819
+Calo # 5 energy: 0.931318 nrh: 1 rawID: 838895814
+Calo # 6 energy: 0.524497 nrh: 1 rawID: 838895284
+Calo # 7 energy: 0.331361 nrh: 1 rawID: 838898909
+Calo # 8 energy: 14.6018 nrh: 16 rawID: 872416175
+Calo # 9 energy: 7.38706 nrh: 10 rawID: 872416432
+Calo # 10 energy: 1.33627 nrh: 9 rawID: 872416177
+Calo # 11 energy: 0.839563 nrh: 1 rawID: 872416574
+Calo # 12 energy: 0.695236 nrh: 1 rawID: 872416297
+Processing New Event : 
+Calo # 0 energy: 101.187 nrh: 27 rawID: 838896385
+Calo # 1 energy: 32.3104 nrh: 18 rawID: 838896383
+Calo # 2 energy: 27.5415 nrh: 20 rawID: 838896387
+Calo # 3 energy: 3.01903 nrh: 2 rawID: 838896918
+Calo # 4 energy: 2.4574 nrh: 5 rawID: 838896905
+Calo # 5 energy: 47.8881 nrh: 5 rawID: 872423333
+Processing New Event : 
+Calo # 0 energy: 98.5786 nrh: 6 rawID: 872438045
+Calo # 1 energy: 11.4653 nrh: 8 rawID: 838873696
+Calo # 2 energy: 9.20097 nrh: 7 rawID: 838873699
+Calo # 3 energy: 19.2224 nrh: 4 rawID: 872437151
+Processing New Event : 
+Calo # 0 energy: 71.4233 nrh: 7 rawID: 872422823
+Calo # 1 energy: 169.155 nrh: 10 rawID: 872420032
+Calo # 2 energy: 14.8198 nrh: 6 rawID: 872420416
+Calo # 3 energy: 32.0796 nrh: 10 rawID: 838954241
+Calo # 4 energy: 1.02209 nrh: 1 rawID: 838954245
+Processing New Event : 
+Calo # 0 energy: 40.5982 nrh: 14 rawID: 872416040
+Calo # 1 energy: 21.163 nrh: 8 rawID: 872416037
+Calo # 2 energy: 12.1059 nrh: 11 rawID: 872415914
+Calo # 3 energy: 0.616739 nrh: 1 rawID: 872416925
+Calo # 4 energy: 9.05337 nrh: 7 rawID: 872441306
+Processing New Event : 
+Calo # 0 energy: 340.64 nrh: 25 rawID: 838961857
+Calo # 1 energy: 0.420631 nrh: 1 rawID: 838963880
+Processing New Event : 
+Calo # 0 energy: 192.089 nrh: 6 rawID: 872439601
+Calo # 1 energy: 266.229 nrh: 8 rawID: 872435896
+Calo # 2 energy: 12.4623 nrh: 1 rawID: 872435891
+Processing New Event : 
+Calo # 0 energy: 292.364 nrh: 29 rawID: 872426432
+Calo # 1 energy: 15.7391 nrh: 14 rawID: 872426427
+Calo # 2 energy: 14.9128 nrh: 13 rawID: 872425923
+Calo # 3 energy: 13.6067 nrh: 20 rawID: 872426301
+Calo # 4 energy: 1.72216 nrh: 2 rawID: 872426550
+Calo # 5 energy: 1.71635 nrh: 2 rawID: 872424911
+Processing New Event : 
+Calo # 0 energy: 82.4236 nrh: 9 rawID: 872437407
+Calo # 1 energy: 19.2323 nrh: 20 rawID: 838967907
+Calo # 2 energy: 12.3674 nrh: 20 rawID: 838967910
+Calo # 3 energy: 11.2892 nrh: 12 rawID: 838969447
+Calo # 4 energy: 2.9119 nrh: 9 rawID: 838968425
+Calo # 5 energy: 2.71687 nrh: 8 rawID: 838968416
+Calo # 6 energy: 1.51288 nrh: 7 rawID: 838969449
+Calo # 7 energy: 0.871838 nrh: 2 rawID: 838968408
+Calo # 8 energy: 0.377715 nrh: 1 rawID: 838969476
+Calo # 9 energy: 0.324813 nrh: 1 rawID: 838968915
+Calo # 10 energy: 40.3277 nrh: 17 rawID: 838961458
+Calo # 11 energy: 25.4872 nrh: 19 rawID: 838961972
+Calo # 12 energy: 1.26676 nrh: 2 rawID: 838961451
+Calo # 13 energy: 0.673119 nrh: 2 rawID: 838961453
+Calo # 14 energy: 1.19864 nrh: 2 rawID: 838939435
+Calo # 15 energy: 2.27112 nrh: 3 rawID: 838955307
+Processing New Event : 
+Calo # 0 energy: 581.007 nrh: 13 rawID: 872419901
+Processing New Event : 
+Calo # 0 energy: 118.526 nrh: 14 rawID: 872434894
+Calo # 1 energy: 4.53684 nrh: 4 rawID: 872436305
+Calo # 2 energy: 0.660732 nrh: 1 rawID: 872435921
+Calo # 3 energy: 0.644995 nrh: 1 rawID: 872434245
+Calo # 4 energy: 394.356 nrh: 12 rawID: 872439849
+Calo # 5 energy: 6.35734 nrh: 3 rawID: 838949100
+Processing New Event : 
+Calo # 0 energy: 38.3249 nrh: 10 rawID: 838943299
+Calo # 1 energy: 3.24211 nrh: 2 rawID: 838943304
+Calo # 2 energy: 1.65387 nrh: 4 rawID: 838943804
+Calo # 3 energy: 17.6657 nrh: 8 rawID: 838935304
+Processing New Event : 
+Calo # 0 energy: 216.319 nrh: 19 rawID: 872435519
+Calo # 1 energy: 63.6624 nrh: 13 rawID: 838939979
+Calo # 2 energy: 0.432034 nrh: 1 rawID: 838939958
+Calo # 3 energy: 0.391888 nrh: 1 rawID: 838939970
+Calo # 4 energy: 0.384939 nrh: 1 rawID: 838939973
+Calo # 5 energy: 0.823566 nrh: 2 rawID: 838961434
+Processing New Event : 
+Calo # 0 energy: 27.7946 nrh: 12 rawID: 838894619
+Calo # 1 energy: 12.6696 nrh: 10 rawID: 838894615
+Calo # 2 energy: 11.9319 nrh: 13 rawID: 838894617
+Calo # 3 energy: 1.14867 nrh: 2 rawID: 838895657
+Calo # 4 energy: 1.06338 nrh: 1 rawID: 838895138
+Calo # 5 energy: 0.302826 nrh: 1 rawID: 838895121
+Calo # 6 energy: 2.56516 nrh: 4 rawID: 838941422
+Calo # 7 energy: 0.336546 nrh: 1 rawID: 838926976
+Processing New Event : 
+Calo # 0 energy: 113.754 nrh: 16 rawID: 872432707
+Calo # 1 energy: 14.6705 nrh: 9 rawID: 872432837
+Calo # 2 energy: 1.74329 nrh: 2 rawID: 872432439
+Processing New Event : 
+Calo # 0 energy: 110.128 nrh: 13 rawID: 872423980
+Calo # 1 energy: 104.15 nrh: 14 rawID: 872416824
+Calo # 2 energy: 3.04793 nrh: 3 rawID: 872417070
+Calo # 3 energy: 0.678925 nrh: 1 rawID: 872417192
+Calo # 4 energy: 28.5766 nrh: 8 rawID: 838947012
+Calo # 5 energy: 0.774495 nrh: 1 rawID: 838948517
+Calo # 6 energy: 0.368355 nrh: 1 rawID: 838948009
+Calo # 7 energy: 0.29138 nrh: 1 rawID: 838947505
+Processing New Event : 
+Calo # 0 energy: 1422.89 nrh: 18 rawID: 872420672
+Processing New Event : 
+Processing New Event : 
+Calo # 0 energy: 63.6995 nrh: 10 rawID: 872440724
+Calo # 1 energy: 1.448 nrh: 2 rawID: 872441628
+Calo # 2 energy: 0.966205 nrh: 6 rawID: 872440339
+Calo # 3 energy: 0.842613 nrh: 1 rawID: 872439059
+Calo # 4 energy: 230.35 nrh: 8 rawID: 872436417
+Calo # 5 energy: 2.16398 nrh: 3 rawID: 838948157
+Processing New Event : 
+Calo # 0 energy: 49.9977 nrh: 7 rawID: 838892875
+Calo # 1 energy: 55.005 nrh: 10 rawID: 838939200
+Calo # 2 energy: 3.72729 nrh: 3 rawID: 838898877
+Calo # 3 energy: 15.6989 nrh: 5 rawID: 872420950
+Calo # 4 energy: 0.908174 nrh: 3 rawID: 872421205
+Processing New Event : 
+Calo # 0 energy: 182.832 nrh: 10 rawID: 872441525
+Calo # 1 energy: 0.988512 nrh: 1 rawID: 872441391
+Calo # 2 energy: 0.821541 nrh: 1 rawID: 872441393
+Processing New Event : 
+Calo # 0 energy: 71.6219 nrh: 17 rawID: 872433433
+Calo # 1 energy: 28.1077 nrh: 13 rawID: 872433180
+Calo # 2 energy: 6.01751 nrh: 7 rawID: 872433055
+Calo # 3 energy: 4.17506 nrh: 3 rawID: 872432803
+Calo # 4 energy: 1.06573 nrh: 1 rawID: 872434831
+Processing New Event : 
+Calo # 0 energy: 44.1691 nrh: 12 rawID: 838938894
+Calo # 1 energy: 0.944448 nrh: 6 rawID: 838938890
+Calo # 2 energy: 0.562369 nrh: 1 rawID: 838939398
+Calo # 3 energy: 0.410213 nrh: 1 rawID: 838938921
+Calo # 4 energy: 11.0733 nrh: 6 rawID: 872441883
+Processing New Event : 
+Calo # 0 energy: 926.73 nrh: 33 rawID: 872438478
+Calo # 1 energy: 7.76024 nrh: 11 rawID: 872437966
+Calo # 2 energy: 6.43952 nrh: 7 rawID: 838943514
+Calo # 3 energy: 2.86303 nrh: 7 rawID: 838943512
+Calo # 4 energy: 0.479665 nrh: 1 rawID: 838944045
+Calo # 5 energy: 0.253709 nrh: 1 rawID: 838944003
+Calo # 6 energy: 0.495832 nrh: 1 rawID: 838931281
+Processing New Event : 
+Calo # 0 energy: 172.724 nrh: 14 rawID: 872441563
+Calo # 1 energy: 15.4013 nrh: 12 rawID: 872441561
+Calo # 2 energy: 212.01 nrh: 30 rawID: 838864123
+Calo # 3 energy: 10.6414 nrh: 22 rawID: 838864126
+Calo # 4 energy: 1.07565 nrh: 10 rawID: 838865664
+Processing New Event : 
+Calo # 0 energy: 39.9991 nrh: 8 rawID: 838927951
+Calo # 1 energy: 17.7976 nrh: 4 rawID: 872423070
+Processing New Event : 
+Calo # 0 energy: 118.332 nrh: 19 rawID: 838967547
+Calo # 1 energy: 91.3948 nrh: 19 rawID: 838967544
+Calo # 2 energy: 9.50028 nrh: 16 rawID: 838967540
+Calo # 3 energy: 3.10524 nrh: 9 rawID: 838968049
+Calo # 4 energy: 1.3681 nrh: 9 rawID: 838967550
+Calo # 5 energy: 1.17233 nrh: 2 rawID: 838968553
+Calo # 6 energy: 1.06649 nrh: 1 rawID: 838969613
+Calo # 7 energy: 0.728299 nrh: 2 rawID: 838968070
+Calo # 8 energy: 0.258053 nrh: 1 rawID: 838969097
+Calo # 9 energy: 6.31787 nrh: 4 rawID: 872438362
+Processing New Event : 
+Calo # 0 energy: 255.188 nrh: 15 rawID: 872421277
+Calo # 1 energy: 158.516 nrh: 12 rawID: 872438981
+Calo # 2 energy: 26.2951 nrh: 9 rawID: 838893158
+Calo # 3 energy: 3.00408 nrh: 5 rawID: 838894710
+Calo # 4 energy: 1.3 nrh: 1 rawID: 838893675
+Calo # 5 energy: 1.19992 nrh: 2 rawID: 838893659
+Calo # 6 energy: 0.64177 nrh: 1 rawID: 838893153
+Calo # 7 energy: 0.359058 nrh: 1 rawID: 838894214
+Calo # 8 energy: 0.327482 nrh: 1 rawID: 838893690
+Calo # 9 energy: 0.297774 nrh: 1 rawID: 838893161
+Calo # 10 energy: 1.21632 nrh: 1 rawID: 838887044
+Processing New Event : 
+Calo # 0 energy: 35.7019 nrh: 14 rawID: 838964844
+Calo # 1 energy: 16.5643 nrh: 11 rawID: 838964839
+Calo # 2 energy: 6.72224 nrh: 11 rawID: 838964334
+Calo # 3 energy: 0.409292 nrh: 1 rawID: 838965347
+Calo # 4 energy: 0.384713 nrh: 1 rawID: 838966358
+Calo # 5 energy: 0.292169 nrh: 1 rawID: 838965339
+Calo # 6 energy: 23.7719 nrh: 7 rawID: 838932819
+Calo # 7 energy: 20.7152 nrh: 13 rawID: 838946612
+Calo # 8 energy: 8.10189 nrh: 11 rawID: 838946615
+Calo # 9 energy: 0.369832 nrh: 1 rawID: 838947612
+Calo # 10 energy: 10.3131 nrh: 2 rawID: 872436769
+Processing New Event : 
+Calo # 0 energy: 26.8569 nrh: 12 rawID: 838882001
+Calo # 1 energy: 16.4428 nrh: 12 rawID: 838882003
+Calo # 2 energy: 0.581663 nrh: 1 rawID: 838881973
+Processing New Event : 
+Calo # 0 energy: 240.742 nrh: 22 rawID: 872434756
+Calo # 1 energy: 1.27934 nrh: 1 rawID: 872435787
+Calo # 2 energy: 45.553 nrh: 8 rawID: 872437072
+Calo # 3 energy: 12.0801 nrh: 5 rawID: 872437456
+Calo # 4 energy: 1.40776 nrh: 1 rawID: 872436558
+Calo # 5 energy: 1.2038 nrh: 1 rawID: 872435912
+Calo # 6 energy: 0.895476 nrh: 1 rawID: 872436299
+Processing New Event : 
+Calo # 0 energy: 2071.35 nrh: 23 rawID: 872422050
+Calo # 1 energy: 69.1111 nrh: 12 rawID: 838904538
+Calo # 2 energy: 6.17124 nrh: 5 rawID: 838904041
+Calo # 3 energy: 4.2744 nrh: 4 rawID: 838904544
+Calo # 4 energy: 4.20771 nrh: 8 rawID: 838904016
+Calo # 5 energy: 3.87903 nrh: 4 rawID: 838903005
+Calo # 6 energy: 3.71705 nrh: 8 rawID: 838904019
+Calo # 7 energy: 3.49227 nrh: 2 rawID: 838904522
+Calo # 8 energy: 1.34907 nrh: 1 rawID: 838904524
+Calo # 9 energy: 9.40557 nrh: 7 rawID: 838876746
+Calo # 10 energy: 12.4777 nrh: 12 rawID: 838894952
+Calo # 11 energy: 0.595104 nrh: 1 rawID: 838894941
+Calo # 12 energy: 0.377381 nrh: 1 rawID: 838894604
+Processing New Event : 
+Calo # 0 energy: 125.96 nrh: 15 rawID: 872419528
+Processing New Event : 
+Calo # 0 energy: 110.951 nrh: 10 rawID: 872438562
+Calo # 1 energy: 45.8152 nrh: 9 rawID: 838883922
+Calo # 2 energy: 7.78522 nrh: 3 rawID: 838901923
+Calo # 3 energy: 11.1409 nrh: 4 rawID: 872423993
+Processing New Event : 
+Calo # 0 energy: 5.06984 nrh: 9 rawID: 838940480
+Calo # 1 energy: 220.593 nrh: 19 rawID: 872417456
+Calo # 2 energy: 0.600264 nrh: 1 rawID: 872417829
+Processing New Event : 
+Calo # 0 energy: 145.925 nrh: 14 rawID: 872440228
+Calo # 1 energy: 8.24833 nrh: 7 rawID: 872439842
+Processing New Event : 
+Calo # 0 energy: 713.326 nrh: 23 rawID: 872437703
+Calo # 1 energy: 28.6477 nrh: 18 rawID: 872435994
+Calo # 2 energy: 68.8868 nrh: 26 rawID: 838943570
+Calo # 3 energy: 2.68921 nrh: 8 rawID: 838943052
+Calo # 4 energy: 0.27146 nrh: 1 rawID: 838944563
+Calo # 5 energy: 0.395397 nrh: 1 rawID: 838958624
+Processing New Event : 
+Calo # 0 energy: 608.064 nrh: 11 rawID: 872438951
+Calo # 1 energy: 84.5055 nrh: 18 rawID: 872417972
+Calo # 2 energy: 14.2134 nrh: 4 rawID: 872418233
+Calo # 3 energy: 3.50725 nrh: 6 rawID: 872418097
+Calo # 4 energy: 41.824 nrh: 12 rawID: 838966833
+Calo # 5 energy: 12.7241 nrh: 3 rawID: 872419371
+Calo # 6 energy: 10.0011 nrh: 2 rawID: 872439623
+Processing New Event : 
+Calo # 0 energy: 30.4644 nrh: 16 rawID: 872441777
+Calo # 1 energy: 0.91769 nrh: 1 rawID: 872441529
+Calo # 2 energy: 77.5055 nrh: 17 rawID: 872441393
+Calo # 3 energy: 1.38373 nrh: 1 rawID: 872441143
+Calo # 4 energy: 10.7905 nrh: 25 rawID: 838866114
+Calo # 5 energy: 193.205 nrh: 31 rawID: 838865093
+Calo # 6 energy: 38.4298 nrh: 33 rawID: 838865091
+Calo # 7 energy: 8.13477 nrh: 10 rawID: 838866124
+Calo # 8 energy: 5.58486 nrh: 17 rawID: 838864069
+Calo # 9 energy: 0.350362 nrh: 1 rawID: 838952600
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 1 pce: 4.61905
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 2 pce: 6.98311
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 3 pce: 32.5152
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 21 pce: 18.906
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 20 pce: 193.871
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 17 pce: 6.18987
+ Match to photon SC with seedid: 838865093 nrh: 91 sce: 248.428 nClust: 4
+  SC Clust # 0 energy: 193.205 nrh: 31 rawID: 838865093
+  SC Clust # 1 energy: 38.4298 nrh: 33 rawID: 838865091
+  SC Clust # 2 energy: 8.13477 nrh: 10 rawID: 838866124
+  SC Clust # 3 energy: 5.58486 nrh: 17 rawID: 838864069
+Match found at ph: 2 asc: 0 jet: 0/1 kid: 5 pce: 21.6903
+Match found at ph: 2 asc: 1 jet: 0/1 kid: 22 pce: 4.82064
+ Match to photon SC with seedid: 838866114 nrh: 0 sce: 16.3998 nClust: 2
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 12.1863 nrh: 10 rawID: 838945475
+Calo # 1 energy: 5.69521 nrh: 9 rawID: 838945477
+Calo # 2 energy: 4.41241 nrh: 5 rawID: 838944972
+Calo # 3 energy: 1.39744 nrh: 7 rawID: 838944449
+Calo # 4 energy: 0.4991 nrh: 1 rawID: 838946002
+Calo # 5 energy: 66.966 nrh: 10 rawID: 838969880
+Processing New Event : 
+Calo # 0 energy: 159.324 nrh: 16 rawID: 872425506
+Calo # 1 energy: 7.92126 nrh: 4 rawID: 872425895
+Calo # 2 energy: 7.74281 nrh: 8 rawID: 872425376
+Calo # 3 energy: 2.28854 nrh: 2 rawID: 872425772
+Calo # 4 energy: 0.90754 nrh: 1 rawID: 872425902
+Calo # 5 energy: 38.1218 nrh: 12 rawID: 838955663
+Calo # 6 energy: 0.369954 nrh: 1 rawID: 838955649
+Processing New Event : 
+Calo # 0 energy: 48.1563 nrh: 14 rawID: 838935359
+Calo # 1 energy: 91.1851 nrh: 15 rawID: 838957212
+Calo # 2 energy: 6.34153 nrh: 3 rawID: 872426058
+Processing New Event : 
+Calo # 0 energy: 21.7269 nrh: 11 rawID: 838873337
+Calo # 1 energy: 12.3131 nrh: 11 rawID: 838873335
+Calo # 2 energy: 3.15463 nrh: 5 rawID: 838873340
+Calo # 3 energy: 0.713068 nrh: 2 rawID: 838873331
+Calo # 4 energy: 0.558624 nrh: 1 rawID: 838873824
+Processing New Event : 
+Calo # 0 energy: 77.5869 nrh: 15 rawID: 838899870
+Calo # 1 energy: 4.68772 nrh: 14 rawID: 838899872
+Calo # 2 energy: 2.22699 nrh: 10 rawID: 838900891
+Calo # 3 energy: 1.27952 nrh: 2 rawID: 838900372
+Calo # 4 energy: 1.16889 nrh: 2 rawID: 838899862
+Calo # 5 energy: 0.699028 nrh: 1 rawID: 838900913
+Calo # 6 energy: 0.651718 nrh: 1 rawID: 838900904
+Calo # 7 energy: 0.635825 nrh: 1 rawID: 838899865
+Calo # 8 energy: 0.499454 nrh: 1 rawID: 838901947
+Calo # 9 energy: 0.42353 nrh: 1 rawID: 838901433
+Calo # 10 energy: 0.315171 nrh: 1 rawID: 838902974
+Calo # 11 energy: 20.7642 nrh: 4 rawID: 872423330
+Processing New Event : 
+Calo # 0 energy: 219.322 nrh: 10 rawID: 872420279
+Calo # 1 energy: 176.212 nrh: 16 rawID: 872424486
+Calo # 2 energy: 12.7174 nrh: 8 rawID: 872424227
+Processing New Event : 
+Calo # 0 energy: 251.648 nrh: 27 rawID: 838899342
+Calo # 1 energy: 0.869742 nrh: 1 rawID: 838900383
+Calo # 2 energy: 0.412304 nrh: 1 rawID: 838898822
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 6 pce: 262.286
+ Match to photon SC with seedid: 838899342 nrh: 29 sce: 254.923 nClust: 3
+  SC Clust # 0 energy: 251.648 nrh: 27 rawID: 838899342
+  SC Clust # 1 energy: 0.869742 nrh: 1 rawID: 838900383
+  SC Clust # 2 energy: 0.412304 nrh: 1 rawID: 838898822
+Processing New Event : 
+Calo # 0 energy: 121.765 nrh: 12 rawID: 872440093
+Calo # 1 energy: 2.3035 nrh: 1 rawID: 872440611
+Processing New Event : 
+Calo # 0 energy: 172.803 nrh: 11 rawID: 872422858
+Calo # 1 energy: 7.14403 nrh: 5 rawID: 872423368
+Calo # 2 energy: 5.00509 nrh: 6 rawID: 838951178
+Processing New Event : 
+Calo # 0 energy: 173.269 nrh: 17 rawID: 838894314
+Processing New Event : 
+Calo # 0 energy: 9.20705 nrh: 2 rawID: 838935692
+Calo # 1 energy: 12.4646 nrh: 13 rawID: 838938767
+Calo # 2 energy: 7.66415 nrh: 5 rawID: 838932205
+Calo # 3 energy: 7.06668 nrh: 10 rawID: 838940807
+Processing New Event : 
+Calo # 0 energy: 86.4553 nrh: 11 rawID: 872440327
+Calo # 1 energy: 12.5204 nrh: 9 rawID: 872439942
+Processing New Event : 
+Calo # 0 energy: 41.1763 nrh: 12 rawID: 838938305
+Processing New Event : 
+Calo # 0 energy: 17.306 nrh: 12 rawID: 838961763
+Calo # 1 energy: 17.4409 nrh: 13 rawID: 838960736
+Calo # 2 energy: 1.49949 nrh: 9 rawID: 838960226
+Calo # 3 energy: 0.86703 nrh: 2 rawID: 838960230
+Calo # 4 energy: 0.543871 nrh: 1 rawID: 838960759
+Calo # 5 energy: 0.5187 nrh: 1 rawID: 838960722
+Calo # 6 energy: 0.407025 nrh: 1 rawID: 838961242
+Calo # 7 energy: 0.28224 nrh: 1 rawID: 838961740
+Calo # 8 energy: 0.281892 nrh: 1 rawID: 838961236
+Calo # 9 energy: 81.3038 nrh: 24 rawID: 838963271
+Calo # 10 energy: 72.3703 nrh: 24 rawID: 838962755
+Calo # 11 energy: 11.7585 nrh: 18 rawID: 838963264
+Calo # 12 energy: 10.279 nrh: 12 rawID: 838962762
+Calo # 13 energy: 8.64747 nrh: 12 rawID: 838963261
+Calo # 14 energy: 1.96658 nrh: 6 rawID: 838963276
+Calo # 15 energy: 1.77104 nrh: 2 rawID: 838963800
+Calo # 16 energy: 1.29264 nrh: 8 rawID: 838964282
+Calo # 17 energy: 0.82647 nrh: 1 rawID: 838963252
+Calo # 18 energy: 0.442776 nrh: 1 rawID: 838963282
+Calo # 19 energy: 10.2774 nrh: 6 rawID: 838958177
+Calo # 20 energy: 9.7975 nrh: 7 rawID: 838867219
+Processing New Event : 
+Calo # 0 energy: 78.4696 nrh: 30 rawID: 838965376
+Calo # 1 energy: 48.9981 nrh: 29 rawID: 838965374
+Calo # 2 energy: 9.45083 nrh: 13 rawID: 838964859
+Calo # 3 energy: 8.9737 nrh: 18 rawID: 838965382
+Calo # 4 energy: 7.3572 nrh: 12 rawID: 838964872
+Calo # 5 energy: 0.512309 nrh: 1 rawID: 838966893
+Calo # 6 energy: 730.5 nrh: 11 rawID: 872421798
+Processing New Event : 
+Calo # 0 energy: 215.933 nrh: 17 rawID: 872441637
+Calo # 1 energy: 3.9088 nrh: 2 rawID: 872441249
+Processing New Event : 
+Calo # 0 energy: 22.8118 nrh: 11 rawID: 838935101
+Calo # 1 energy: 4.63623 nrh: 8 rawID: 838935104
+Calo # 2 energy: 2.8987 nrh: 4 rawID: 838934577
+Calo # 3 energy: 1.20753 nrh: 3 rawID: 838934606
+Calo # 4 energy: 0.79756 nrh: 2 rawID: 838934600
+Calo # 5 energy: 0.295995 nrh: 1 rawID: 838935081
+Calo # 6 energy: 0.23641 nrh: 1 rawID: 838935074
+Calo # 7 energy: 48.5055 nrh: 12 rawID: 838930148
+Processing New Event : 
+Calo # 0 energy: 65.9328 nrh: 13 rawID: 838868318
+Processing New Event : 
+Calo # 0 energy: 63.7877 nrh: 19 rawID: 872417749
+Calo # 1 energy: 5.94085 nrh: 8 rawID: 872416974
+Calo # 2 energy: 1.23624 nrh: 4 rawID: 872417233
+Calo # 3 energy: 104.388 nrh: 15 rawID: 872417745
+Calo # 4 energy: 0.613753 nrh: 1 rawID: 872417099
+Calo # 5 energy: 4.41805 nrh: 11 rawID: 872426002
+Calo # 6 energy: 14.33 nrh: 16 rawID: 872417492
+Calo # 7 energy: 2.62748 nrh: 4 rawID: 838955044
+Calo # 8 energy: 1.49525 nrh: 4 rawID: 838955554
+Calo # 9 energy: 0.845653 nrh: 2 rawID: 838956052
+Calo # 10 energy: 0.271127 nrh: 1 rawID: 838955550
+Processing New Event : 
+Calo # 0 energy: 156.842 nrh: 13 rawID: 872435881
+Calo # 1 energy: 15.2329 nrh: 9 rawID: 872435627
+Calo # 2 energy: 25.0125 nrh: 9 rawID: 838870561
+Calo # 3 energy: 4.09834 nrh: 5 rawID: 838870567
+Calo # 4 energy: 0.366898 nrh: 1 rawID: 838871085
+Processing New Event : 
+Calo # 0 energy: 165.769 nrh: 9 rawID: 872419368
+Processing New Event : 
+Calo # 0 energy: 71.9403 nrh: 10 rawID: 872419518
+Calo # 1 energy: 23.3401 nrh: 16 rawID: 838868634
+Calo # 2 energy: 0.369231 nrh: 1 rawID: 838868643
+Calo # 3 energy: 61.5865 nrh: 11 rawID: 838933853
+Calo # 4 energy: 7.08375 nrh: 16 rawID: 838867610
+Calo # 5 energy: 0.364333 nrh: 1 rawID: 838867580
+Calo # 6 energy: 0.248551 nrh: 1 rawID: 838867614
+Processing New Event : 
+Calo # 0 energy: 36.4943 nrh: 14 rawID: 838901349
+Calo # 1 energy: 17.7803 nrh: 12 rawID: 838901353
+Calo # 2 energy: 3.8183 nrh: 4 rawID: 838901853
+Calo # 3 energy: 2.59605 nrh: 6 rawID: 838901345
+Calo # 4 energy: 0.871709 nrh: 2 rawID: 838901358
+Processing New Event : 
+Calo # 0 energy: 187.892 nrh: 11 rawID: 872419257
+Processing New Event : 
+Calo # 0 energy: 204.866 nrh: 12 rawID: 872435898
+Processing New Event : 
+Calo # 0 energy: 169.899 nrh: 13 rawID: 872437836
+Calo # 1 energy: 381.166 nrh: 12 rawID: 872438432
+Processing New Event : 
+Calo # 0 energy: 300.012 nrh: 14 rawID: 872419376
+Calo # 1 energy: 43.9144 nrh: 6 rawID: 872426428
+Calo # 2 energy: 10.5706 nrh: 1 rawID: 872425794
+Calo # 3 energy: 3.34586 nrh: 4 rawID: 872426039
+Calo # 4 energy: 2.36406 nrh: 3 rawID: 872426042
+Calo # 5 energy: 1.68033 nrh: 1 rawID: 872425413
+Processing New Event : 
+Calo # 0 energy: 190.607 nrh: 22 rawID: 838892904
+Calo # 1 energy: 16.4755 nrh: 4 rawID: 872420813
+Processing New Event : 
+Calo # 0 energy: 162.803 nrh: 18 rawID: 872417828
+Processing New Event : 
+Calo # 0 energy: 86.1037 nrh: 11 rawID: 872419854
+Calo # 1 energy: 0.615343 nrh: 1 rawID: 872422033
+Processing New Event : 
+Calo # 0 energy: 49.9394 nrh: 10 rawID: 838960469
+Calo # 1 energy: 5.33315 nrh: 10 rawID: 838960472
+Calo # 2 energy: 2.00934 nrh: 2 rawID: 838960461
+Calo # 3 energy: 0.895461 nrh: 1 rawID: 838960465
+Calo # 4 energy: 0.298887 nrh: 1 rawID: 838964019
+Processing New Event : 
+Calo # 0 energy: 225.388 nrh: 19 rawID: 872417082
+Processing New Event : 
+Calo # 0 energy: 67.8097 nrh: 9 rawID: 838902597
+Calo # 1 energy: 0.670325 nrh: 1 rawID: 838903636
+Calo # 2 energy: 0.400864 nrh: 1 rawID: 838903114
+Calo # 3 energy: 0.349449 nrh: 1 rawID: 838904672
+Calo # 4 energy: 4.46005 nrh: 2 rawID: 838943916
+Calo # 5 energy: 0.327813 nrh: 1 rawID: 838944395
+Calo # 6 energy: 0.313237 nrh: 1 rawID: 838943901
+Calo # 7 energy: 0.274823 nrh: 1 rawID: 838943908
+Calo # 8 energy: 0.256113 nrh: 1 rawID: 838943398
+Calo # 9 energy: 2.43559 nrh: 2 rawID: 838944408
+Processing New Event : 
+Calo # 0 energy: 241.522 nrh: 26 rawID: 872442906
+Calo # 1 energy: 29.707 nrh: 16 rawID: 872442776
+Calo # 2 energy: 7.11035 nrh: 10 rawID: 872442520
+Calo # 3 energy: 2.96246 nrh: 1 rawID: 872441746
+Calo # 4 energy: 1.26116 nrh: 1 rawID: 872442132
+Calo # 5 energy: 14.8177 nrh: 4 rawID: 838946908
+Calo # 6 energy: 1.86914 nrh: 3 rawID: 838947433
+Calo # 7 energy: 107.603 nrh: 14 rawID: 872441305
+Calo # 8 energy: 2.46035 nrh: 1 rawID: 872440795
+Calo # 9 energy: 1.55334 nrh: 2 rawID: 872438745
+Calo # 10 energy: 0.922302 nrh: 1 rawID: 872440155
+Calo # 11 energy: 1.54917 nrh: 1 rawID: 872434611
+Processing New Event : 
+Calo # 0 energy: 212.842 nrh: 22 rawID: 838899425
+Calo # 1 energy: 4.93583 nrh: 14 rawID: 838899422
+Calo # 2 energy: 3.85288 nrh: 2 rawID: 838899929
+Calo # 3 energy: 3.03598 nrh: 2 rawID: 838899941
+Calo # 4 energy: 0.694535 nrh: 1 rawID: 838900946
+Calo # 5 energy: 0.677651 nrh: 1 rawID: 838899958
+Calo # 6 energy: 0.460957 nrh: 1 rawID: 838899944
+Calo # 7 energy: 38.5282 nrh: 11 rawID: 872420548
+Processing New Event : 
+Calo # 0 energy: 74.0689 nrh: 22 rawID: 838934300
+Calo # 1 energy: 53.4202 nrh: 11 rawID: 838954101
+Processing New Event : 
+Calo # 0 energy: 44.7245 nrh: 13 rawID: 838939779
+Processing New Event : 
+Calo # 0 energy: 149.623 nrh: 17 rawID: 838965922
+Calo # 1 energy: 0.451232 nrh: 1 rawID: 838967950
+Calo # 2 energy: 0.385996 nrh: 1 rawID: 838967941
+Calo # 3 energy: 2.64433 nrh: 4 rawID: 838935338
+Processing New Event : 
+Calo # 0 energy: 1213.28 nrh: 21 rawID: 872419243
+Calo # 1 energy: 4.22976 nrh: 14 rawID: 838900582
+Calo # 2 energy: 4.14137 nrh: 11 rawID: 838901091
+Processing New Event : 
+Calo # 0 energy: 131.306 nrh: 11 rawID: 872441255
+Processing New Event : 
+Calo # 0 energy: 74.9505 nrh: 29 rawID: 838929497
+Calo # 1 energy: 8.02326 nrh: 20 rawID: 838930525
+Calo # 2 energy: 3.15772 nrh: 3 rawID: 838930531
+Calo # 3 energy: 2.61107 nrh: 14 rawID: 838930527
+Calo # 4 energy: 2.41404 nrh: 9 rawID: 838930001
+Calo # 5 energy: 0.276069 nrh: 1 rawID: 838929992
+Calo # 6 energy: 188.487 nrh: 24 rawID: 838881595
+Calo # 7 energy: 10.2117 nrh: 13 rawID: 838881591
+Calo # 8 energy: 0.378096 nrh: 1 rawID: 838882130
+Calo # 9 energy: 12.3272 nrh: 11 rawID: 838899280
+Calo # 10 energy: 8.49795 nrh: 12 rawID: 838899285
+Calo # 11 energy: 5.28429 nrh: 12 rawID: 838899799
+Calo # 12 energy: 2.76244 nrh: 2 rawID: 838899275
+Calo # 13 energy: 0.640887 nrh: 1 rawID: 838901357
+Calo # 14 energy: 0.608186 nrh: 1 rawID: 838900783
+Calo # 15 energy: 0.458748 nrh: 1 rawID: 838903347
+Calo # 16 energy: 0.308943 nrh: 1 rawID: 838898780
+Calo # 17 energy: 0.289547 nrh: 1 rawID: 838899804
+Processing New Event : 
+Calo # 0 energy: 41.8839 nrh: 13 rawID: 838938938
+Calo # 1 energy: 3.49044 nrh: 10 rawID: 838938936
+Calo # 2 energy: 2.55823 nrh: 2 rawID: 838881482
+Processing New Event : 
+Calo # 0 energy: 211.034 nrh: 12 rawID: 872435378
+Calo # 1 energy: 29.7363 nrh: 7 rawID: 838930627
+Processing New Event : 
+Calo # 0 energy: 17.039 nrh: 18 rawID: 838872187
+Calo # 1 energy: 9.52043 nrh: 12 rawID: 838872701
+Calo # 2 energy: 5.68509 nrh: 14 rawID: 838872185
+Calo # 3 energy: 24.5741 nrh: 7 rawID: 838862113
+Calo # 4 energy: 0.475183 nrh: 1 rawID: 838862653
+Calo # 5 energy: 0.262272 nrh: 1 rawID: 838864694
+Processing New Event : 
+Calo # 0 energy: 255.7 nrh: 26 rawID: 838964855
+Calo # 1 energy: 10.0897 nrh: 14 rawID: 838965371
+Calo # 2 energy: 8.15226 nrh: 14 rawID: 838964851
+Calo # 3 energy: 2.12881 nrh: 2 rawID: 838965375
+Calo # 4 energy: 0.905068 nrh: 2 rawID: 838968408
+Calo # 5 energy: 14.0076 nrh: 16 rawID: 838879526
+Processing New Event : 
+Calo # 0 energy: 163.552 nrh: 14 rawID: 872425515
+Calo # 1 energy: 18.2074 nrh: 12 rawID: 838928044
+Calo # 2 energy: 2.09905 nrh: 4 rawID: 838927028
+Processing New Event : 
+Calo # 0 energy: 67.0867 nrh: 15 rawID: 838966336
+Calo # 1 energy: 22.7393 nrh: 13 rawID: 838966333
+Calo # 2 energy: 0.956605 nrh: 2 rawID: 838969376
+Calo # 3 energy: 0.802794 nrh: 1 rawID: 838966825
+Calo # 4 energy: 0.619557 nrh: 1 rawID: 838966858
+Calo # 5 energy: 0.328452 nrh: 1 rawID: 838965816
+Calo # 6 energy: 0.325908 nrh: 1 rawID: 838967852
+Calo # 7 energy: 0.302825 nrh: 1 rawID: 838967898
+Calo # 8 energy: 8.25863 nrh: 5 rawID: 838969606
+Processing New Event : 
+Calo # 0 energy: 121.606 nrh: 18 rawID: 838936292
+Calo # 1 energy: 15.8266 nrh: 9 rawID: 838948712
+Calo # 2 energy: 9.16521 nrh: 9 rawID: 838948354
+Calo # 3 energy: 5.72357 nrh: 7 rawID: 838948870
+Calo # 4 energy: 3.11802 nrh: 3 rawID: 838948363
+Calo # 5 energy: 0.787001 nrh: 3 rawID: 838948884
+Calo # 6 energy: 0.691577 nrh: 5 rawID: 838948360
+Calo # 7 energy: 6.5841 nrh: 2 rawID: 872435373
+Processing New Event : 
+Calo # 0 energy: 116.092 nrh: 17 rawID: 872425153
+Calo # 1 energy: 5.93144 nrh: 9 rawID: 872425149
+Calo # 2 energy: 6.77061 nrh: 1 rawID: 872424102
+Processing New Event : 
+Calo # 0 energy: 231.861 nrh: 19 rawID: 872420878
+Calo # 1 energy: 1.97108 nrh: 2 rawID: 838872724
+Processing New Event : 
+Calo # 0 energy: 62.0876 nrh: 7 rawID: 872419903
+Calo # 1 energy: 13.9543 nrh: 2 rawID: 872420288
+Calo # 2 energy: 171.645 nrh: 12 rawID: 872423112
+Calo # 3 energy: 2.53524 nrh: 1 rawID: 872423747
+Calo # 4 energy: 79.3043 nrh: 19 rawID: 838903107
+Calo # 5 energy: 0.773887 nrh: 1 rawID: 838904148
+Calo # 6 energy: 0.728955 nrh: 2 rawID: 838903119
+Calo # 7 energy: 0.505578 nrh: 1 rawID: 838903634
+Calo # 8 energy: 179.818 nrh: 16 rawID: 872419633
+Processing New Event : 
+Calo # 0 energy: 50.3748 nrh: 20 rawID: 838877803
+Calo # 1 energy: 25.6664 nrh: 15 rawID: 838877800
+Calo # 2 energy: 4.23561 nrh: 3 rawID: 838943517
+Calo # 3 energy: 1.03438 nrh: 1 rawID: 838943513
+Calo # 4 energy: 0.786338 nrh: 2 rawID: 838943494
+Calo # 5 energy: 0.726518 nrh: 2 rawID: 838943532
+Processing New Event : 
+Calo # 0 energy: 107.869 nrh: 11 rawID: 838904488
+Calo # 1 energy: 6.22787 nrh: 8 rawID: 838904490
+Processing New Event : 
+Calo # 0 energy: 85.2306 nrh: 21 rawID: 872417604
+Calo # 1 energy: 16.0068 nrh: 15 rawID: 872417472
+Calo # 2 energy: 3.39932 nrh: 7 rawID: 872416960
+Calo # 3 energy: 2.79257 nrh: 3 rawID: 872417993
+Processing New Event : 
+Calo # 0 energy: 36.149 nrh: 12 rawID: 838961477
+Calo # 1 energy: 15.1382 nrh: 9 rawID: 838961473
+Calo # 2 energy: 0.560207 nrh: 1 rawID: 838961980
+Calo # 3 energy: 0.476484 nrh: 1 rawID: 838961994
+Calo # 4 energy: 41.9397 nrh: 12 rawID: 838885614
+Processing New Event : 
+Calo # 0 energy: 42.902 nrh: 9 rawID: 838862011
+Processing New Event : 
+Calo # 0 energy: 59.2478 nrh: 12 rawID: 838861903
+Calo # 1 energy: 3.43291 nrh: 3 rawID: 838946075
+Processing New Event : 
+Calo # 0 energy: 32.0739 nrh: 12 rawID: 838868232
+Calo # 1 energy: 7.481 nrh: 11 rawID: 838867723
+Calo # 2 energy: 0.310569 nrh: 1 rawID: 838868224
+Calo # 3 energy: 0.24413 nrh: 1 rawID: 838867707
+Processing New Event : 
+Calo # 0 energy: 366.254 nrh: 42 rawID: 838936579
+Calo # 1 energy: 0.836107 nrh: 2 rawID: 838936604
+Calo # 2 energy: 0.270611 nrh: 1 rawID: 838936921
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 0 pce: 2.19354
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 3 pce: 59.4374
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 4 pce: 32.4047
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 10 pce: 298.241
+ Match to photon SC with seedid: 838936579 nrh: 45 sce: 367.497 nClust: 3
+  SC Clust # 0 energy: 366.254 nrh: 42 rawID: 838936579
+  SC Clust # 1 energy: 0.836107 nrh: 2 rawID: 838936604
+  SC Clust # 2 energy: 0.270611 nrh: 1 rawID: 838936921
+Processing New Event : 
+Calo # 0 energy: 87.7817 nrh: 14 rawID: 838957340
+Calo # 1 energy: 2.47033 nrh: 2 rawID: 872423519
+Calo # 2 energy: 12.31 nrh: 5 rawID: 838899461
+Calo # 3 energy: 3.99745 nrh: 3 rawID: 838899982
+Calo # 4 energy: 0.677889 nrh: 1 rawID: 838900508
+Calo # 5 energy: 0.492434 nrh: 1 rawID: 838899980
+Calo # 6 energy: 5.94379 nrh: 5 rawID: 838897911
+Calo # 7 energy: 1.87172 nrh: 4 rawID: 838897412
+Calo # 8 energy: 1.43454 nrh: 2 rawID: 838897901
+Calo # 9 energy: 0.590115 nrh: 1 rawID: 838897406
+Calo # 10 energy: 0.387812 nrh: 1 rawID: 838897906
+Calo # 11 energy: 0.340822 nrh: 1 rawID: 838897916
+Calo # 12 energy: 0.315572 nrh: 1 rawID: 838897928
+Calo # 13 energy: 0.264867 nrh: 1 rawID: 838897932
+Processing New Event : 
+Calo # 0 energy: 65.5076 nrh: 18 rawID: 838897442
+Calo # 1 energy: 4.17662 nrh: 5 rawID: 838897434
+Calo # 2 energy: 3.82699 nrh: 13 rawID: 838897440
+Calo # 3 energy: 2.14891 nrh: 2 rawID: 838897451
+Calo # 4 energy: 2.14107 nrh: 7 rawID: 838897437
+Calo # 5 energy: 1.454 nrh: 2 rawID: 838897447
+Calo # 6 energy: 1.19788 nrh: 2 rawID: 838897941
+Calo # 7 energy: 0.627589 nrh: 1 rawID: 838899974
+Calo # 8 energy: 0.281706 nrh: 1 rawID: 838897426
+Processing New Event : 
+Calo # 0 energy: 49.6915 nrh: 15 rawID: 838898816
+Calo # 1 energy: 20.3578 nrh: 12 rawID: 838898820
+Calo # 2 energy: 2.28769 nrh: 5 rawID: 838899318
+Calo # 3 energy: 2.16684 nrh: 5 rawID: 838899828
+Calo # 4 energy: 0.632828 nrh: 2 rawID: 838899341
+Calo # 5 energy: 0.440304 nrh: 1 rawID: 838902429
+Calo # 6 energy: 31.1628 nrh: 10 rawID: 838885181
+Calo # 7 energy: 14.6411 nrh: 10 rawID: 838885179
+Calo # 8 energy: 4.89387 nrh: 1 rawID: 838885176
+Calo # 9 energy: 1.36985 nrh: 3 rawID: 838885684
+Calo # 10 energy: 0.963721 nrh: 2 rawID: 838885698
+Calo # 11 energy: 0.482031 nrh: 1 rawID: 838885726
+Calo # 12 energy: 0.421229 nrh: 1 rawID: 838885670
+Calo # 13 energy: 0.295128 nrh: 1 rawID: 838885196
+Calo # 14 energy: 0.281649 nrh: 1 rawID: 838885184
+Calo # 15 energy: 3.60486 nrh: 1 rawID: 872424643
+Processing New Event : 
+Calo # 0 energy: 55.5349 nrh: 14 rawID: 838964551
+Calo # 1 energy: 17.3279 nrh: 12 rawID: 838964548
+Calo # 2 energy: 0.441463 nrh: 1 rawID: 838964555
+Processing New Event : 
+Calo # 0 energy: 115.54 nrh: 15 rawID: 872442298
+Calo # 1 energy: 57.7844 nrh: 14 rawID: 872442938
+Calo # 2 energy: 4.13807 nrh: 3 rawID: 872442802
+Calo # 3 energy: 2.99535 nrh: 1 rawID: 872442678
+Calo # 4 energy: 2.72188 nrh: 1 rawID: 872441670
+Calo # 5 energy: 1.41802 nrh: 1 rawID: 872442159
+Calo # 6 energy: 1.40133 nrh: 1 rawID: 872442046
+Calo # 7 energy: 31.1349 nrh: 8 rawID: 838930602
+Calo # 8 energy: 0.325455 nrh: 1 rawID: 838930611
+Processing New Event : 
+Calo # 0 energy: 154.016 nrh: 9 rawID: 872435662
+Calo # 1 energy: 1.07738 nrh: 1 rawID: 872436688
+Calo # 2 energy: 6.46372 nrh: 7 rawID: 838958102
+Calo # 3 energy: 6.46085 nrh: 10 rawID: 838958089
+Calo # 4 energy: 1.83564 nrh: 3 rawID: 838958595
+Calo # 5 energy: 28.7259 nrh: 12 rawID: 838956562
+Calo # 6 energy: 2.91519 nrh: 9 rawID: 838957069
+Calo # 7 energy: 1.38386 nrh: 10 rawID: 838956559
+Calo # 8 energy: 0.320446 nrh: 1 rawID: 838959661
+Calo # 9 energy: 11.4829 nrh: 6 rawID: 872436049
+Processing New Event : 
+Calo # 0 energy: 83.0818 nrh: 14 rawID: 872436364
+Calo # 1 energy: 1.88086 nrh: 2 rawID: 872435726
+Calo # 2 energy: 22.345 nrh: 11 rawID: 838936152
+Calo # 3 energy: 11.3148 nrh: 10 rawID: 838936659
+Calo # 4 energy: 2.63571 nrh: 2 rawID: 838936156
+Calo # 5 energy: 0.860285 nrh: 2 rawID: 838936179
+Calo # 6 energy: 0.287698 nrh: 1 rawID: 838936167
+Processing New Event : 
+Calo # 0 energy: 316.888 nrh: 13 rawID: 872418853
+Calo # 1 energy: 2.37867 nrh: 1 rawID: 872418602
+Processing New Event : 
+Calo # 0 energy: 222.109 nrh: 12 rawID: 872422564
+Calo # 1 energy: 4.58762 nrh: 1 rawID: 872423079
+Calo # 2 energy: 49.2654 nrh: 15 rawID: 838926982
+Calo # 3 energy: 3.54945 nrh: 6 rawID: 838927499
+Calo # 4 energy: 12.381 nrh: 5 rawID: 838968504
+Calo # 5 energy: 1.46741 nrh: 1 rawID: 838969020
+Calo # 6 energy: 0.75129 nrh: 1 rawID: 838970069
+Calo # 7 energy: 0.341861 nrh: 1 rawID: 838969519
+Processing New Event : 
+Calo # 0 energy: 171.334 nrh: 7 rawID: 872436645
+Calo # 1 energy: 14.9808 nrh: 6 rawID: 838933309
+Calo # 2 energy: 7.64456 nrh: 4 rawID: 838933305
+Processing New Event : 
+Calo # 0 energy: 43.8075 nrh: 11 rawID: 838886060
+Calo # 1 energy: 1.74052 nrh: 2 rawID: 838886071
+Calo # 2 energy: 0.539267 nrh: 1 rawID: 838886066
+Calo # 3 energy: 21.4582 nrh: 9 rawID: 838944578
+Calo # 4 energy: 0.560693 nrh: 1 rawID: 838944590
+Processing New Event : 
+Calo # 0 energy: 45.6578 nrh: 10 rawID: 838881981
+Processing New Event : 
+Calo # 0 energy: 38.1479 nrh: 9 rawID: 838903027
+Calo # 1 energy: 1.20735 nrh: 2 rawID: 838904077
+Calo # 2 energy: 0.565162 nrh: 1 rawID: 838904587
+Calo # 3 energy: 0.532528 nrh: 1 rawID: 838904084
+Calo # 4 energy: 144.252 nrh: 9 rawID: 872440766
+Calo # 5 energy: 3.59346 nrh: 4 rawID: 872440891
+Calo # 6 energy: 3.10707 nrh: 4 rawID: 838874320
+Calo # 7 energy: 1.93694 nrh: 3 rawID: 838874838
+Calo # 8 energy: 0.695783 nrh: 1 rawID: 838874302
+Calo # 9 energy: 0.328256 nrh: 1 rawID: 838874835
+Processing New Event : 
+Calo # 0 energy: 163.154 nrh: 12 rawID: 872423720
+Calo # 1 energy: 63.6232 nrh: 13 rawID: 838952522
+Calo # 2 energy: 1.41176 nrh: 2 rawID: 838953012
+Calo # 3 energy: 0.727293 nrh: 1 rawID: 838952508
+Calo # 4 energy: 4.53261 nrh: 4 rawID: 838958411
+Processing New Event : 
+Calo # 0 energy: 68.2775 nrh: 5 rawID: 872440507
+Calo # 1 energy: 3.59493 nrh: 1 rawID: 872440253
+Calo # 2 energy: 38.8696 nrh: 10 rawID: 838948607
+Calo # 3 energy: 3.01981 nrh: 4 rawID: 838949129
+Calo # 4 energy: 1.46087 nrh: 2 rawID: 838948588
+Calo # 5 energy: 0.546066 nrh: 2 rawID: 838950175
+Processing New Event : 
+Calo # 0 energy: 125.531 nrh: 23 rawID: 872439559
+Calo # 1 energy: 54.5767 nrh: 20 rawID: 872439817
+Calo # 2 energy: 12.5335 nrh: 17 rawID: 872440073
+Calo # 3 energy: 4.19649 nrh: 1 rawID: 872440844
+Calo # 4 energy: 1.84779 nrh: 7 rawID: 872440330
+Calo # 5 energy: 1.74544 nrh: 1 rawID: 872438791
+Calo # 6 energy: 1.171 nrh: 1 rawID: 872437258
+Calo # 7 energy: 0.89696 nrh: 1 rawID: 872440977
+Calo # 8 energy: 0.881732 nrh: 1 rawID: 872438152
+Calo # 9 energy: 196.57 nrh: 22 rawID: 838947992
+Processing New Event : 
+Calo # 0 energy: 26.7927 nrh: 7 rawID: 872441557
+Calo # 1 energy: 1.75723 nrh: 1 rawID: 872442561
+Calo # 2 energy: 106.576 nrh: 22 rawID: 872434453
+Calo # 3 energy: 4.72998 nrh: 11 rawID: 872434071
+Processing New Event : 
+Calo # 0 energy: 281.898 nrh: 27 rawID: 838965427
+Calo # 1 energy: 32.3547 nrh: 15 rawID: 838965431
+Calo # 2 energy: 0.779091 nrh: 1 rawID: 838965910
+Calo # 3 energy: 0.734678 nrh: 1 rawID: 838965925
+Calo # 4 energy: 0.31087 nrh: 1 rawID: 838965962
+Calo # 5 energy: 0.275318 nrh: 1 rawID: 838966471
+Calo # 6 energy: 4.88714 nrh: 5 rawID: 838936412
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 8 pce: 3.02108
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 6 pce: 6.11665
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 7 pce: 51.6688
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 20 pce: 15.1421
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 19 pce: 283.646
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 18 pce: 0.384633
+Match found at ph: 0 asc: 6 jet: 0/1 kid: 17 pce: 0.340577
+ Match to photon SC with seedid: 838965427 nrh: 46 sce: 320.074 nClust: 6
+  SC Clust # 0 energy: 281.898 nrh: 27 rawID: 838965427
+  SC Clust # 1 energy: 32.3547 nrh: 15 rawID: 838965431
+  SC Clust # 2 energy: 0.779091 nrh: 1 rawID: 838965910
+  SC Clust # 3 energy: 0.734678 nrh: 1 rawID: 838965925
+  SC Clust # 4 energy: 0.31087 nrh: 1 rawID: 838965962
+  SC Clust # 5 energy: 0.275318 nrh: 1 rawID: 838966471
+Processing New Event : 
+Calo # 0 energy: 167.349 nrh: 27 rawID: 838873170
+Calo # 1 energy: 7.75596 nrh: 10 rawID: 838872653
+Calo # 2 energy: 1.8241 nrh: 3 rawID: 838873184
+Calo # 3 energy: 43.9918 nrh: 31 rawID: 838867198
+Calo # 4 energy: 25.0025 nrh: 24 rawID: 838866688
+Calo # 5 energy: 3.39013 nrh: 3 rawID: 838867207
+Calo # 6 energy: 0.310526 nrh: 1 rawID: 838867211
+Calo # 7 energy: 12.773 nrh: 14 rawID: 838869247
+Calo # 8 energy: 7.06889 nrh: 4 rawID: 872416026
+Calo # 9 energy: 3.70362 nrh: 5 rawID: 838865147
+Calo # 10 energy: 1.41742 nrh: 5 rawID: 838864633
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 4 pce: 35.0331
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 3 pce: 6.86366
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 14 pce: 152.939
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 13 pce: 2.10266
+ Match to photon SC with seedid: 838873170 nrh: 40 sce: 178.868 nClust: 3
+  SC Clust # 0 energy: 167.349 nrh: 27 rawID: 838873170
+  SC Clust # 1 energy: 7.75596 nrh: 10 rawID: 838872653
+  SC Clust # 2 energy: 1.8241 nrh: 3 rawID: 838873184
+Processing New Event : 
+Calo # 0 energy: 59.4688 nrh: 11 rawID: 838963252
+Calo # 1 energy: 1.12828 nrh: 2 rawID: 838963754
+Processing New Event : 
+Calo # 0 energy: 27.7441 nrh: 11 rawID: 838869031
+Calo # 1 energy: 1.72145 nrh: 10 rawID: 838869034
+Processing New Event : 
+Calo # 0 energy: 97.1598 nrh: 24 rawID: 872433570
+Calo # 1 energy: 20.4989 nrh: 15 rawID: 872433445
+Calo # 2 energy: 4.23408 nrh: 5 rawID: 872433448
+Processing New Event : 
+Calo # 0 energy: 14.9058 nrh: 7 rawID: 838889521
+Calo # 1 energy: 2.59799 nrh: 2 rawID: 838890028
+Calo # 2 energy: 1.12784 nrh: 2 rawID: 838889016
+Calo # 3 energy: 0.347522 nrh: 1 rawID: 838889496
+Calo # 4 energy: 133.988 nrh: 16 rawID: 872424637
+Calo # 5 energy: 24.7247 nrh: 9 rawID: 872424890
+Calo # 6 energy: 12.7054 nrh: 9 rawID: 872424513
+Calo # 7 energy: 12.9832 nrh: 7 rawID: 838876907
+Calo # 8 energy: 1.6838 nrh: 4 rawID: 838877950
+Calo # 9 energy: 52.6558 nrh: 12 rawID: 838940896
+Calo # 10 energy: 5.62997 nrh: 9 rawID: 838933744
+Calo # 11 energy: 1.52978 nrh: 7 rawID: 838934766
+Calo # 12 energy: 0.687387 nrh: 2 rawID: 838934249
+Processing New Event : 
+Calo # 0 energy: 17.8487 nrh: 13 rawID: 838957894
+Calo # 1 energy: 5.42963 nrh: 13 rawID: 838957899
+Calo # 2 energy: 3.04699 nrh: 2 rawID: 838957890
+Calo # 3 energy: 0.361998 nrh: 1 rawID: 838960998
+Calo # 4 energy: 235.879 nrh: 32 rawID: 838968496
+Calo # 5 energy: 39.74 nrh: 22 rawID: 838968494
+Calo # 6 energy: 28.5808 nrh: 21 rawID: 838967477
+Calo # 7 energy: 13.4257 nrh: 13 rawID: 838967992
+Calo # 8 energy: 1.91908 nrh: 2 rawID: 838969504
+Calo # 9 energy: 1.67268 nrh: 9 rawID: 838969003
+Calo # 10 energy: 0.921084 nrh: 2 rawID: 838968483
+Calo # 11 energy: 0.337035 nrh: 1 rawID: 838969540
+Calo # 12 energy: 33.1762 nrh: 15 rawID: 838888471
+Calo # 13 energy: 2.34621 nrh: 8 rawID: 838887446
+Calo # 14 energy: 1.79023 nrh: 8 rawID: 838890518
+Calo # 15 energy: 0.954773 nrh: 1 rawID: 838889521
+Calo # 16 energy: 0.395376 nrh: 1 rawID: 838888987
+Calo # 17 energy: 0.324688 nrh: 1 rawID: 838888998
+Calo # 18 energy: 23.3774 nrh: 12 rawID: 838956875
+Calo # 19 energy: 2.13589 nrh: 4 rawID: 838957399
+Calo # 20 energy: 0.941693 nrh: 1 rawID: 838957394
+Calo # 21 energy: 0.422305 nrh: 1 rawID: 838956861
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 4 pce: 17.9651
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 20 pce: 29.9496
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 17 pce: 7.44865
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 2 pce: 35.3671
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 15 pce: 215.799
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 3 pce: 41.6694
+Match found at ph: 0 asc: 6 jet: 0/1 kid: 18 pce: 9.48593
+Match found at ph: 0 asc: 7 jet: 0/1 kid: 14 pce: 1.89096
+Match found at ph: 0 asc: 8 jet: 0/1 kid: 12 pce: 0.417081
+Match found at ph: 0 asc: 9 jet: 0/1 kid: 16 pce: 1.11431
+Match found at ph: 0 asc: 10 jet: 0/1 kid: 11 pce: 2.29926
+ Match to photon SC with seedid: 838968496 nrh: 102 sce: 328.935 nClust: 8
+  SC Clust # 0 energy: 235.879 nrh: 32 rawID: 838968496
+  SC Clust # 1 energy: 39.74 nrh: 22 rawID: 838968494
+  SC Clust # 2 energy: 28.5808 nrh: 21 rawID: 838967477
+  SC Clust # 3 energy: 13.4257 nrh: 13 rawID: 838967992
+  SC Clust # 4 energy: 1.91908 nrh: 2 rawID: 838969504
+  SC Clust # 5 energy: 1.67268 nrh: 9 rawID: 838969003
+  SC Clust # 6 energy: 0.921084 nrh: 2 rawID: 838968483
+  SC Clust # 7 energy: 0.337035 nrh: 1 rawID: 838969540
+Processing New Event : 
+Calo # 0 energy: 15.5231 nrh: 9 rawID: 838948409
+Calo # 1 energy: 6.57306 nrh: 7 rawID: 838947891
+Calo # 2 energy: 5.72219 nrh: 11 rawID: 838948416
+Calo # 3 energy: 3.08806 nrh: 2 rawID: 838947900
+Calo # 4 energy: 2.74204 nrh: 7 rawID: 838947391
+Calo # 5 energy: 1.23981 nrh: 7 rawID: 838947888
+Calo # 6 energy: 10.7918 nrh: 10 rawID: 838944496
+Calo # 7 energy: 7.97658 nrh: 8 rawID: 838943473
+Calo # 8 energy: 6.45781 nrh: 11 rawID: 838945012
+Calo # 9 energy: 2.66541 nrh: 11 rawID: 838945015
+Calo # 10 energy: 1.29676 nrh: 2 rawID: 838945033
+Calo # 11 energy: 1.37896 nrh: 3 rawID: 838944491
+Calo # 12 energy: 0.334618 nrh: 1 rawID: 838944998
+Calo # 13 energy: 15.5496 nrh: 5 rawID: 838946546
+Calo # 14 energy: 0.61433 nrh: 1 rawID: 838947075
+Calo # 15 energy: 0.464566 nrh: 1 rawID: 838947070
+Calo # 16 energy: 0.357949 nrh: 1 rawID: 838948112
+Calo # 17 energy: 53.9694 nrh: 11 rawID: 838951740
+Calo # 18 energy: 19.2761 nrh: 5 rawID: 838899836
+Calo # 19 energy: 5.42275 nrh: 6 rawID: 838940429
+Calo # 20 energy: 0.345442 nrh: 1 rawID: 838894203
+Processing New Event : 
+Calo # 0 energy: 120.813 nrh: 17 rawID: 872441158
+Calo # 1 energy: 7.20449 nrh: 1 rawID: 872440904
+Calo # 2 energy: 2.07409 nrh: 1 rawID: 872441410
+Processing New Event : 
+Calo # 0 energy: 284.61 nrh: 30 rawID: 838870156
+Calo # 1 energy: 265.043 nrh: 37 rawID: 838955322
+Calo # 2 energy: 31.1379 nrh: 23 rawID: 838954297
+Calo # 3 energy: 6.62312 nrh: 12 rawID: 838955315
+Calo # 4 energy: 5.3998 nrh: 11 rawID: 838955327
+Calo # 5 energy: 2.24791 nrh: 3 rawID: 838955331
+Calo # 6 energy: 0.439784 nrh: 1 rawID: 838955848
+Calo # 7 energy: 0.321592 nrh: 1 rawID: 838955823
+Match found at ph: 1 asc: 0 jet: 0/1 kid: 2 pce: 15.2332
+Match found at ph: 1 asc: 1 jet: 0/1 kid: 6 pce: 85.7932
+Match found at ph: 1 asc: 2 jet: 0/1 kid: 4 pce: 14.9883
+Match found at ph: 1 asc: 4 jet: 0/1 kid: 16 pce: 287.04
+Match found at ph: 1 asc: 5 jet: 0/1 kid: 15 pce: 0.410118
+Match found at ph: 1 asc: 6 jet: 0/1 kid: 17 pce: 2.53692
+Match found at ph: 1 asc: 7 jet: 0/1 kid: 14 pce: 0.546803
+ Match to photon SC with seedid: 838955322 nrh: 88 sce: 314.705 nClust: 7
+  SC Clust # 0 energy: 265.043 nrh: 37 rawID: 838955322
+  SC Clust # 1 energy: 31.1379 nrh: 23 rawID: 838954297
+  SC Clust # 2 energy: 6.62312 nrh: 12 rawID: 838955315
+  SC Clust # 3 energy: 5.3998 nrh: 11 rawID: 838955327
+  SC Clust # 4 energy: 2.24791 nrh: 3 rawID: 838955331
+  SC Clust # 5 energy: 0.439784 nrh: 1 rawID: 838955848
+  SC Clust # 6 energy: 0.321592 nrh: 1 rawID: 838955823
+Processing New Event : 
+Calo # 0 energy: 93.4826 nrh: 20 rawID: 838903518
+Calo # 1 energy: 28.7033 nrh: 19 rawID: 838903521
+Calo # 2 energy: 1.67308 nrh: 7 rawID: 838904548
+Calo # 3 energy: 440.592 nrh: 16 rawID: 872424761
+Calo # 4 energy: 10.4136 nrh: 11 rawID: 872424886
+Processing New Event : 
+Calo # 0 energy: 20.8733 nrh: 7 rawID: 838944294
+Calo # 1 energy: 15.0862 nrh: 8 rawID: 872439371
+Calo # 2 energy: 15.2688 nrh: 11 rawID: 872439627
+Calo # 3 energy: 10.8448 nrh: 9 rawID: 872439625
+Calo # 4 energy: 173.953 nrh: 11 rawID: 872437914
+Calo # 5 energy: 6.83305 nrh: 6 rawID: 838963312
+Calo # 6 energy: 5.34333 nrh: 6 rawID: 838963822
+Calo # 7 energy: 2.05654 nrh: 5 rawID: 838963820
+Calo # 8 energy: 1.30524 nrh: 1 rawID: 838962290
+Calo # 9 energy: 1.02505 nrh: 1 rawID: 838967376
+Calo # 10 energy: 0.642288 nrh: 2 rawID: 838963816
+Calo # 11 energy: 0.508628 nrh: 1 rawID: 838963315
+Calo # 12 energy: 0.318382 nrh: 1 rawID: 838965390
+Calo # 13 energy: 0.79107 nrh: 1 rawID: 872440979
+Processing New Event : 
+Calo # 0 energy: 26.3345 nrh: 14 rawID: 838886745
+Calo # 1 energy: 12.7864 nrh: 8 rawID: 838886739
+Calo # 2 energy: 2.48487 nrh: 8 rawID: 838887265
+Calo # 3 energy: 0.639039 nrh: 1 rawID: 838887269
+Calo # 4 energy: 33.6534 nrh: 17 rawID: 838943385
+Calo # 5 energy: 7.75894 nrh: 14 rawID: 838943383
+Calo # 6 energy: 3.77615 nrh: 3 rawID: 838943376
+Calo # 7 energy: 0.428792 nrh: 1 rawID: 838943413
+Calo # 8 energy: 0.378337 nrh: 1 rawID: 838943401
+Calo # 9 energy: 83.576 nrh: 12 rawID: 872419030
+Calo # 10 energy: 25.4516 nrh: 18 rawID: 838887769
+Calo # 11 energy: 27.9925 nrh: 1 rawID: 872439870
+Processing New Event : 
+Calo # 0 energy: 33.4467 nrh: 7 rawID: 838952637
+Calo # 1 energy: 0.462232 nrh: 1 rawID: 838952640
+Calo # 2 energy: 0.37162 nrh: 1 rawID: 838954154
+Calo # 3 energy: 44.552 nrh: 13 rawID: 872427182
+Calo # 4 energy: 2.10165 nrh: 4 rawID: 872427046
+Calo # 5 energy: 1.53417 nrh: 5 rawID: 872427187
+Calo # 6 energy: 0.681234 nrh: 1 rawID: 872426809
+Calo # 7 energy: 6.33926 nrh: 5 rawID: 838950073
+Calo # 8 energy: 5.82146 nrh: 3 rawID: 838950080
+Calo # 9 energy: 3.10226 nrh: 3 rawID: 838950078
+Calo # 10 energy: 1.20916 nrh: 2 rawID: 838950061
+Calo # 11 energy: 1.11865 nrh: 2 rawID: 838950575
+Calo # 12 energy: 0.26699 nrh: 1 rawID: 838950076
+Calo # 13 energy: 64.7456 nrh: 11 rawID: 872427825
+Calo # 14 energy: 2.24944 nrh: 8 rawID: 872427566
+Calo # 15 energy: 0.969478 nrh: 1 rawID: 872426142
+Processing New Event : 
+Calo # 0 energy: 49.939 nrh: 12 rawID: 838956839
+Calo # 1 energy: 1.21022 nrh: 1 rawID: 838956830
+Calo # 2 energy: 1.00974 nrh: 2 rawID: 838956834
+Processing New Event : 
+Calo # 0 energy: 41.3121 nrh: 19 rawID: 838868784
+Calo # 1 energy: 11.9415 nrh: 14 rawID: 838868269
+Calo # 2 energy: 8.64583 nrh: 8 rawID: 838868277
+Calo # 3 energy: 1.60421 nrh: 2 rawID: 838868262
+Calo # 4 energy: 1.36094 nrh: 3 rawID: 838868283
+Calo # 5 energy: 0.944104 nrh: 8 rawID: 838869292
+Calo # 6 energy: 44.2818 nrh: 10 rawID: 838938240
+Calo # 7 energy: 1.94094 nrh: 1 rawID: 838891253
+Processing New Event : 
+Calo # 0 energy: 145.656 nrh: 10 rawID: 872420170
+Calo # 1 energy: 9.51078 nrh: 5 rawID: 872419785
+Processing New Event : 
+Calo # 0 energy: 97.8759 nrh: 35 rawID: 838879960
+Calo # 1 energy: 327.674 nrh: 37 rawID: 838892073
+Calo # 2 energy: 31.9172 nrh: 26 rawID: 838892590
+Calo # 3 energy: 2.01436 nrh: 2 rawID: 838893588
+Calo # 4 energy: 1.0558 nrh: 3 rawID: 838894140
+Calo # 5 energy: 0.352268 nrh: 1 rawID: 838893106
+Calo # 6 energy: 32.0625 nrh: 7 rawID: 872438739
+Match found at ph: 0 asc: 0 jet: 0/2 kid: 4 pce: 179.988
+Match found at ph: 0 asc: 1 jet: 0/2 kid: 18 pce: 201.061
+Match found at ph: 0 asc: 2 jet: 0/2 kid: 19 pce: 33.1534
+Match found at ph: 0 asc: 3 jet: 0/2 kid: 7 pce: 4.21294
+Match found at ph: 0 asc: 4 jet: 0/2 kid: 22 pce: 1.23083
+Match found at ph: 0 asc: 5 jet: 0/2 kid: 21 pce: 0.44937
+ Match to photon SC with seedid: 838892073 nrh: 69 sce: 366.61 nClust: 5
+  SC Clust # 0 energy: 327.674 nrh: 37 rawID: 838892073
+  SC Clust # 1 energy: 31.9172 nrh: 26 rawID: 838892590
+  SC Clust # 2 energy: 2.01436 nrh: 2 rawID: 838893588
+  SC Clust # 3 energy: 1.0558 nrh: 3 rawID: 838894140
+  SC Clust # 4 energy: 0.352268 nrh: 1 rawID: 838893106
+Match found at ph: 1 asc: 0 jet: 1/2 kid: 13 pce: 2.86255
+Match found at ph: 1 asc: 1 jet: 1/2 kid: 12 pce: 3.28082
+Match found at ph: 1 asc: 2 jet: 1/2 kid: 33 pce: 48.9251
+Match found at ph: 1 asc: 3 jet: 1/2 kid: 6 pce: 12.4992
+Match found at ph: 1 asc: 4 jet: 1/2 kid: 11 pce: 72.9097
+Match found at ph: 1 asc: 5 jet: 1/2 kid: 9 pce: 12.2328
+Match found at ph: 1 asc: 6 jet: 1/2 kid: 28 pce: 59.3648
+Match found at ph: 1 asc: 7 jet: 1/2 kid: 31 pce: 0.42239
+Match found at ph: 1 asc: 8 jet: 1/2 kid: 34 pce: 1.37171
+Match found at ph: 1 asc: 9 jet: 1/2 kid: 30 pce: 2.13167
+Match found at ph: 1 asc: 10 jet: 1/2 kid: 32 pce: 0.840248
+Match found at ph: 1 asc: 11 jet: 1/2 kid: 27 pce: 6.6348
+ Match to photon SC with seedid: 838879960 nrh: 0 sce: 178.966 nClust: 10
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 35.2242 nrh: 8 rawID: 838868505
+Calo # 1 energy: 39.6667 nrh: 6 rawID: 872434062
+Calo # 2 energy: 2.04901 nrh: 6 rawID: 872434316
+Calo # 3 energy: 1.63442 nrh: 1 rawID: 872433058
+Processing New Event : 
+Calo # 0 energy: 72.4861 nrh: 14 rawID: 838879518
+Processing New Event : 
+Calo # 0 energy: 143.925 nrh: 13 rawID: 872435007
+Calo # 1 energy: 1.0037 nrh: 1 rawID: 872435394
+Calo # 2 energy: 4.27482 nrh: 5 rawID: 872442697
+Processing New Event : 
+Calo # 0 energy: 111.643 nrh: 14 rawID: 872425891
+Processing New Event : 
+Calo # 0 energy: 243.886 nrh: 10 rawID: 872423367
+Calo # 1 energy: 0.966332 nrh: 1 rawID: 872424003
+Calo # 2 energy: 36.2527 nrh: 14 rawID: 872419596
+Calo # 3 energy: 15.2151 nrh: 10 rawID: 872419213
+Calo # 4 energy: 5.40339 nrh: 5 rawID: 872420235
+Calo # 5 energy: 1.77475 nrh: 1 rawID: 872418959
+Processing New Event : 
+Calo # 0 energy: 51.491 nrh: 12 rawID: 838965373
+Calo # 1 energy: 2.20805 nrh: 7 rawID: 838964854
+Calo # 2 energy: 1.74386 nrh: 4 rawID: 838968418
+Calo # 3 energy: 0.776801 nrh: 2 rawID: 838965389
+Calo # 4 energy: 0.579642 nrh: 1 rawID: 838966888
+Calo # 5 energy: 0.492721 nrh: 1 rawID: 838965370
+Calo # 6 energy: 0.335867 nrh: 1 rawID: 838967961
+Calo # 7 energy: 43.3928 nrh: 11 rawID: 838878481
+Processing New Event : 
+Calo # 0 energy: 65.3247 nrh: 14 rawID: 838902928
+Calo # 1 energy: 19.3112 nrh: 13 rawID: 838902420
+Calo # 2 energy: 2.8334 nrh: 2 rawID: 838902922
+Calo # 3 energy: 1.11851 nrh: 1 rawID: 838902939
+Calo # 4 energy: 1.12287 nrh: 2 rawID: 838902945
+Calo # 5 energy: 0.519126 nrh: 1 rawID: 838902429
+Processing New Event : 
+Calo # 0 energy: 354.99 nrh: 17 rawID: 872435518
+Calo # 1 energy: 33.7374 nrh: 11 rawID: 838886201
+Calo # 2 energy: 0.686535 nrh: 1 rawID: 838886186
+Calo # 3 energy: 0.447187 nrh: 1 rawID: 838886694
+Calo # 4 energy: 15.1529 nrh: 5 rawID: 872440613
+Processing New Event : 
+Calo # 0 energy: 289.891 nrh: 13 rawID: 872435250
+Processing New Event : 
+Calo # 0 energy: 97.6751 nrh: 6 rawID: 872436532
+Calo # 1 energy: 38.1216 nrh: 17 rawID: 838890843
+Calo # 2 energy: 9.16884 nrh: 9 rawID: 838890838
+Calo # 3 energy: 3.83199 nrh: 13 rawID: 838890840
+Calo # 4 energy: 18.2056 nrh: 6 rawID: 838927692
+Calo # 5 energy: 27.5251 nrh: 5 rawID: 872439621
+Processing New Event : 
+Calo # 0 energy: 153.328 nrh: 8 rawID: 872421321
+Calo # 1 energy: 25.0117 nrh: 7 rawID: 838862627
+Processing New Event : 
+Calo # 0 energy: 368.456 nrh: 21 rawID: 872419246
+Calo # 1 energy: 334.259 nrh: 42 rawID: 838896146
+Calo # 2 energy: 5.73461 nrh: 16 rawID: 838896140
+Calo # 3 energy: 1.1997 nrh: 1 rawID: 838896644
+Calo # 4 energy: 1.26681 nrh: 5 rawID: 838896136
+Calo # 5 energy: 1.20244 nrh: 10 rawID: 838896650
+Calo # 6 energy: 0.549398 nrh: 2 rawID: 838896153
+Calo # 7 energy: 18.1948 nrh: 6 rawID: 872425031
+Calo # 8 energy: 2.18981 nrh: 2 rawID: 872425283
+Calo # 9 energy: 0.999647 nrh: 1 rawID: 872424141
+Processing New Event : 
+Calo # 0 energy: 122.296 nrh: 5 rawID: 872422053
+Calo # 1 energy: 91.3333 nrh: 16 rawID: 838876493
+Calo # 2 energy: 0.500849 nrh: 1 rawID: 838877188
+Processing New Event : 
+Calo # 0 energy: 73.754 nrh: 13 rawID: 872417855
+Calo # 1 energy: 37.9627 nrh: 13 rawID: 872417985
+Processing New Event : 
+Calo # 0 energy: 65.8888 nrh: 16 rawID: 872425166
+Calo # 1 energy: 25.6658 nrh: 12 rawID: 872425420
+Calo # 2 energy: 1.26485 nrh: 2 rawID: 872424147
+Calo # 3 energy: 33.3809 nrh: 16 rawID: 838888675
+Calo # 4 energy: 16.8408 nrh: 16 rawID: 838888672
+Calo # 5 energy: 8.36108 nrh: 9 rawID: 838888670
+Calo # 6 energy: 0.280663 nrh: 1 rawID: 838889204
+Processing New Event : 
+Calo # 0 energy: 33.1398 nrh: 8 rawID: 838934237
+Calo # 1 energy: 0.236116 nrh: 1 rawID: 838934719
+Processing New Event : 
+Calo # 0 energy: 48.5921 nrh: 11 rawID: 872422792
+Calo # 1 energy: 14.5555 nrh: 10 rawID: 872423048
+Calo # 2 energy: 4.21286 nrh: 5 rawID: 872423562
+Calo # 3 energy: 4.08647 nrh: 6 rawID: 872423947
+Calo # 4 energy: 2.14798 nrh: 2 rawID: 872421257
+Processing New Event : 
+Calo # 0 energy: 511.236 nrh: 27 rawID: 838904650
+Calo # 1 energy: 79.8552 nrh: 21 rawID: 838904652
+Calo # 2 energy: 10.3469 nrh: 9 rawID: 838904655
+Calo # 3 energy: 0.826159 nrh: 1 rawID: 838904665
+Calo # 4 energy: 0.404746 nrh: 1 rawID: 838904641
+Calo # 5 energy: 0.318799 nrh: 1 rawID: 838904661
+Calo # 6 energy: 403.397 nrh: 40 rawID: 838958794
+Calo # 7 energy: 8.08199 nrh: 13 rawID: 838958802
+Calo # 8 energy: 2.91226 nrh: 3 rawID: 838958788
+Calo # 9 energy: 1.38404 nrh: 3 rawID: 838959322
+Calo # 10 energy: 0.929086 nrh: 3 rawID: 838959318
+Calo # 11 energy: 0.739693 nrh: 2 rawID: 838960313
+Calo # 12 energy: 0.479192 nrh: 1 rawID: 838958804
+Calo # 13 energy: 0.431776 nrh: 2 rawID: 838959803
+Calo # 14 energy: 0.340912 nrh: 1 rawID: 838959797
+Match found at ph: 0 asc: 0 jet: 1/3 kid: 1 pce: 3.87133
+Match found at ph: 0 asc: 1 jet: 1/3 kid: 17 pce: 0.517009
+Match found at ph: 0 asc: 2 jet: 1/3 kid: 5 pce: 117.42
+Match found at ph: 0 asc: 4 jet: 1/3 kid: 22 pce: 379.697
+Match found at ph: 0 asc: 5 jet: 1/3 kid: 20 pce: 3.28715
+Match found at ph: 0 asc: 6 jet: 1/3 kid: 19 pce: 1.05075
+Match found at ph: 0 asc: 7 jet: 1/3 kid: 16 pce: 0.421797
+Match found at ph: 0 asc: 8 jet: 1/3 kid: 18 pce: 1.59553
+Match found at ph: 0 asc: 9 jet: 1/3 kid: 21 pce: 0.610926
+ Match to photon SC with seedid: 838958794 nrh: 68 sce: 421.191 nClust: 9
+  SC Clust # 0 energy: 403.397 nrh: 40 rawID: 838958794
+  SC Clust # 1 energy: 8.08199 nrh: 13 rawID: 838958802
+  SC Clust # 2 energy: 2.91226 nrh: 3 rawID: 838958788
+  SC Clust # 3 energy: 1.38404 nrh: 3 rawID: 838959322
+  SC Clust # 4 energy: 0.929086 nrh: 3 rawID: 838959318
+  SC Clust # 5 energy: 0.739693 nrh: 2 rawID: 838960313
+  SC Clust # 6 energy: 0.479192 nrh: 1 rawID: 838958804
+  SC Clust # 7 energy: 0.431776 nrh: 2 rawID: 838959803
+  SC Clust # 8 energy: 0.340912 nrh: 1 rawID: 838959797
+Match found at ph: 1 asc: 0 jet: 0/3 kid: 5 pce: 46.4379
+Match found at ph: 1 asc: 1 jet: 0/3 kid: 9 pce: 72.1452
+Match found at ph: 1 asc: 2 jet: 0/3 kid: 12 pce: 49.6213
+Match found at ph: 1 asc: 3 jet: 0/3 kid: 11 pce: 45.3349
+Match found at ph: 1 asc: 4 jet: 0/3 kid: 22 pce: 388.344
+Match found at ph: 1 asc: 5 jet: 0/3 kid: 21 pce: 59.9794
+Match found at ph: 1 asc: 6 jet: 0/3 kid: 25 pce: 0.394378
+Match found at ph: 1 asc: 7 jet: 0/3 kid: 24 pce: 1.06767
+Match found at ph: 1 asc: 8 jet: 0/3 kid: 23 pce: 0.516114
+ Match to photon SC with seedid: 838904650 nrh: 60 sce: 641.779 nClust: 6
+  SC Clust # 0 energy: 511.236 nrh: 27 rawID: 838904650
+  SC Clust # 1 energy: 79.8552 nrh: 21 rawID: 838904652
+  SC Clust # 2 energy: 10.3469 nrh: 9 rawID: 838904655
+  SC Clust # 3 energy: 0.826159 nrh: 1 rawID: 838904665
+  SC Clust # 4 energy: 0.404746 nrh: 1 rawID: 838904641
+  SC Clust # 5 energy: 0.318799 nrh: 1 rawID: 838904661
+Processing New Event : 
+Calo # 0 energy: 101.496 nrh: 9 rawID: 872437144
+Calo # 1 energy: 105.389 nrh: 21 rawID: 872433190
+Calo # 2 energy: 19.4888 nrh: 15 rawID: 872433315
+Calo # 3 energy: 18.5422 nrh: 12 rawID: 872433065
+Calo # 4 energy: 4.62973 nrh: 6 rawID: 872433071
+Calo # 5 energy: 1.72523 nrh: 5 rawID: 872433073
+Calo # 6 energy: 1.46477 nrh: 1 rawID: 872433821
+Calo # 7 energy: 1.50066 nrh: 1 rawID: 872433068
+Calo # 8 energy: 23.2416 nrh: 5 rawID: 838950172
+Processing New Event : 
+Calo # 0 energy: 101.12 nrh: 21 rawID: 872432955
+Calo # 1 energy: 86.3818 nrh: 23 rawID: 872432952
+Calo # 2 energy: 12.8651 nrh: 11 rawID: 872433087
+Calo # 3 energy: 12.645 nrh: 14 rawID: 872432696
+Calo # 4 energy: 2.44534 nrh: 2 rawID: 872433606
+Calo # 5 energy: 59.2706 nrh: 23 rawID: 838937091
+Calo # 6 energy: 14.4951 nrh: 18 rawID: 838937094
+Calo # 7 energy: 0.527121 nrh: 1 rawID: 838937610
+Calo # 8 energy: 0.496062 nrh: 1 rawID: 838937958
+Calo # 9 energy: 0.259314 nrh: 1 rawID: 838937624
+Processing New Event : 
+Calo # 0 energy: 38.0484 nrh: 14 rawID: 838873715
+Calo # 1 energy: 0.517013 nrh: 2 rawID: 838874219
+Calo # 2 energy: 21.1537 nrh: 10 rawID: 838876464
+Processing New Event : 
+Calo # 0 energy: 98.935 nrh: 11 rawID: 872422355
+Calo # 1 energy: 80.3459 nrh: 16 rawID: 838903598
+Calo # 2 energy: 15.0556 nrh: 12 rawID: 838903600
+Calo # 3 energy: 13.2093 nrh: 13 rawID: 838903596
+Calo # 4 energy: 2.36912 nrh: 8 rawID: 838903594
+Calo # 5 energy: 0.969345 nrh: 1 rawID: 838904607
+Calo # 6 energy: 0.495825 nrh: 1 rawID: 838904645
+Calo # 7 energy: 0.491399 nrh: 1 rawID: 838904603
+Calo # 8 energy: 4.27677 nrh: 1 rawID: 838944878
+Calo # 9 energy: 0.79373 nrh: 1 rawID: 838944873
+Processing New Event : 
+Calo # 0 energy: 171.883 nrh: 16 rawID: 872441910
+Calo # 1 energy: 12.6987 nrh: 11 rawID: 838861479
+Calo # 2 energy: 3.93208 nrh: 7 rawID: 838861988
+Calo # 3 energy: 2.06896 nrh: 6 rawID: 838861483
+Calo # 4 energy: 1.26273 nrh: 9 rawID: 838861481
+Calo # 5 energy: 0.378919 nrh: 1 rawID: 838861449
+Calo # 6 energy: 0.818718 nrh: 1 rawID: 838866091
+Processing New Event : 
+Calo # 0 energy: 22.8996 nrh: 11 rawID: 838899513
+Calo # 1 energy: 20.3406 nrh: 18 rawID: 838900021
+Calo # 2 energy: 17.2159 nrh: 18 rawID: 838899506
+Calo # 3 energy: 8.7461 nrh: 13 rawID: 838900016
+Calo # 4 energy: 2.06416 nrh: 4 rawID: 838900548
+Calo # 5 energy: 0.637036 nrh: 1 rawID: 838902051
+Calo # 6 energy: 0.406833 nrh: 1 rawID: 838902093
+Calo # 7 energy: 0.379852 nrh: 1 rawID: 838900554
+Calo # 8 energy: 0.281768 nrh: 1 rawID: 838899524
+Calo # 9 energy: 22.7942 nrh: 9 rawID: 838947963
+Calo # 10 energy: 0.338361 nrh: 5 rawID: 838948990
+Calo # 11 energy: 0.848738 nrh: 1 rawID: 838942290
+Processing New Event : 
+Calo # 0 energy: 169.658 nrh: 7 rawID: 872423982
+Calo # 1 energy: 2.6761 nrh: 1 rawID: 872423986
+Processing New Event : 
+Calo # 0 energy: 29.9437 nrh: 19 rawID: 838961321
+Calo # 1 energy: 13.1892 nrh: 16 rawID: 838961318
+Calo # 2 energy: 9.81556 nrh: 12 rawID: 838961324
+Calo # 3 energy: 2.36621 nrh: 7 rawID: 838961315
+Calo # 4 energy: 0.326899 nrh: 1 rawID: 838962368
+Processing New Event : 
+Calo # 0 energy: 53.9457 nrh: 9 rawID: 838895824
+Calo # 1 energy: 4.32307 nrh: 3 rawID: 838944531
+Processing New Event : 
+Calo # 0 energy: 1344.19 nrh: 19 rawID: 872437921
+Calo # 1 energy: 5.62212 nrh: 7 rawID: 838948922
+Calo # 2 energy: 2.81446 nrh: 2 rawID: 838948917
+Calo # 3 energy: 2.82624 nrh: 7 rawID: 838949436
+Calo # 4 energy: 1.11994 nrh: 2 rawID: 838948919
+Calo # 5 energy: 0.434275 nrh: 1 rawID: 838948926
+Processing New Event : 
+Calo # 0 energy: 88.5521 nrh: 30 rawID: 838946660
+Calo # 1 energy: 69.7281 nrh: 23 rawID: 838946663
+Calo # 2 energy: 1.45554 nrh: 5 rawID: 838946313
+Calo # 3 energy: 1.29556 nrh: 2 rawID: 838946308
+Calo # 4 energy: 0.707953 nrh: 2 rawID: 838947157
+Calo # 5 energy: 0.67553 nrh: 2 rawID: 838947358
+Calo # 6 energy: 0.617957 nrh: 1 rawID: 838946822
+Calo # 7 energy: 1.88019 nrh: 2 rawID: 838943070
+Calo # 8 energy: 0.450684 nrh: 1 rawID: 838951775
+Match found at ph: 0 asc: 0 jet: 0/2 kid: 8 pce: 207.598
+ Match to photon SC with seedid: 838946660 nrh: 65 sce: 166.212 nClust: 7
+  SC Clust # 0 energy: 88.5521 nrh: 30 rawID: 838946660
+  SC Clust # 1 energy: 69.7281 nrh: 23 rawID: 838946663
+  SC Clust # 2 energy: 1.45554 nrh: 5 rawID: 838946313
+  SC Clust # 3 energy: 1.29556 nrh: 2 rawID: 838946308
+  SC Clust # 4 energy: 0.707953 nrh: 2 rawID: 838947157
+  SC Clust # 5 energy: 0.67553 nrh: 2 rawID: 838947358
+  SC Clust # 6 energy: 0.617957 nrh: 1 rawID: 838946822
+Processing New Event : 
+Calo # 0 energy: 134.459 nrh: 4 rawID: 872423225
+Calo # 1 energy: 20.4591 nrh: 9 rawID: 838930716
+Calo # 2 energy: 5.27917 nrh: 6 rawID: 838930722
+Calo # 3 energy: 3.20918 nrh: 6 rawID: 838930214
+Calo # 4 energy: 38.5634 nrh: 16 rawID: 838870125
+Calo # 5 energy: 24.3286 nrh: 16 rawID: 838870123
+Calo # 6 energy: 5.3236 nrh: 6 rawID: 838870113
+Calo # 7 energy: 0.762589 nrh: 2 rawID: 838870618
+Calo # 8 energy: 0.560979 nrh: 1 rawID: 838870117
+Calo # 9 energy: 0.327243 nrh: 1 rawID: 838870157
+Calo # 10 energy: 12.1296 nrh: 4 rawID: 838884596
+Calo # 11 energy: 2.61253 nrh: 3 rawID: 838884601
+Calo # 12 energy: 1.20165 nrh: 3 rawID: 838884603
+Calo # 13 energy: 5.81778 nrh: 2 rawID: 872440022
+Processing New Event : 
+Calo # 0 energy: 49.2013 nrh: 10 rawID: 838892901
+Calo # 1 energy: 2.28652 nrh: 4 rawID: 838893397
+Calo # 2 energy: 53.0016 nrh: 9 rawID: 872417731
+Calo # 3 energy: 1.3429 nrh: 2 rawID: 872418120
+Calo # 4 energy: 0.783615 nrh: 1 rawID: 872419023
+Processing New Event : 
+Calo # 0 energy: 46.0281 nrh: 13 rawID: 838899901
+Calo # 1 energy: 0.511602 nrh: 1 rawID: 838899917
+Calo # 2 energy: 17.0552 nrh: 11 rawID: 838934539
+Calo # 3 energy: 1.70681 nrh: 2 rawID: 838934888
+Processing New Event : 
+Calo # 0 energy: 18.2985 nrh: 9 rawID: 838867776
+Calo # 1 energy: 17.4977 nrh: 11 rawID: 838867778
+Calo # 2 energy: 0.906649 nrh: 6 rawID: 838868293
+Calo # 3 energy: 0.248138 nrh: 1 rawID: 838867790
+Calo # 4 energy: 75.2526 nrh: 15 rawID: 838861461
+Calo # 5 energy: 1.7883 nrh: 3 rawID: 838861967
+Processing New Event : 
+Calo # 0 energy: 79.1412 nrh: 12 rawID: 872432694
+Calo # 1 energy: 23.5681 nrh: 11 rawID: 838935050
+Calo # 2 energy: 6.179 nrh: 9 rawID: 838934534
+Calo # 3 energy: 3.616 nrh: 5 rawID: 838935054
+Calo # 4 energy: 0.920202 nrh: 2 rawID: 838935397
+Calo # 5 energy: 20.4202 nrh: 3 rawID: 872422210
+Processing New Event : 
+Calo # 0 energy: 31.5017 nrh: 10 rawID: 838891852
+Calo # 1 energy: 23.0108 nrh: 10 rawID: 838891854
+Processing New Event : 
+Calo # 0 energy: 344.723 nrh: 30 rawID: 872443444
+Calo # 1 energy: 54.9604 nrh: 18 rawID: 872443446
+Calo # 2 energy: 28.6222 nrh: 18 rawID: 872443184
+Calo # 3 energy: 6.80989 nrh: 10 rawID: 872443309
+Calo # 4 energy: 6.76256 nrh: 6 rawID: 872443323
+Calo # 5 energy: 2.08531 nrh: 5 rawID: 872443193
+Calo # 6 energy: 195.772 nrh: 24 rawID: 872418249
+Calo # 7 energy: 7.40568 nrh: 15 rawID: 872418116
+Calo # 8 energy: 2.73015 nrh: 1 rawID: 872417854
+Calo # 9 energy: 1.20342 nrh: 1 rawID: 872417851
+Calo # 10 energy: 16.1293 nrh: 7 rawID: 838903991
+Calo # 11 energy: 5.32889 nrh: 4 rawID: 838903997
+Processing New Event : 
+Calo # 0 energy: 658.691 nrh: 26 rawID: 872441519
+Calo # 1 energy: 3.22571 nrh: 2 rawID: 872441258
+Calo # 2 energy: 27.6883 nrh: 9 rawID: 838876363
+Calo # 3 energy: 0.470879 nrh: 1 rawID: 838876850
+Calo # 4 energy: 0.249575 nrh: 1 rawID: 838876909
+Processing New Event : 
+Calo # 0 energy: 32.1514 nrh: 12 rawID: 838866595
+Calo # 1 energy: 2.85322 nrh: 4 rawID: 838893133
+Processing New Event : 
+Calo # 0 energy: 11.1275 nrh: 6 rawID: 838934572
+Calo # 1 energy: 4.33287 nrh: 6 rawID: 838934570
+Calo # 2 energy: 156.929 nrh: 12 rawID: 872417968
+Calo # 3 energy: 3.30629 nrh: 3 rawID: 838868993
+Calo # 4 energy: 2.18893 nrh: 2 rawID: 838869340
+Calo # 5 energy: 2.09092 nrh: 4 rawID: 838869350
+Processing New Event : 
+Calo # 0 energy: 174.736 nrh: 13 rawID: 872441006
+Calo # 1 energy: 9.64239 nrh: 8 rawID: 872440747
+Calo # 2 energy: 1.08728 nrh: 2 rawID: 872436957
+Calo # 3 energy: 10.6836 nrh: 1 rawID: 872439455
+Processing New Event : 
+Calo # 0 energy: 199.562 nrh: 4 rawID: 872438718
+Calo # 1 energy: 32.9395 nrh: 15 rawID: 872421634
+Calo # 2 energy: 6.05354 nrh: 10 rawID: 872421890
+Calo # 3 energy: 3.76779 nrh: 9 rawID: 872421250
+Calo # 4 energy: 2.05499 nrh: 6 rawID: 872420995
+Calo # 5 energy: 1.3317 nrh: 1 rawID: 872420483
+Calo # 6 energy: 0.849573 nrh: 1 rawID: 872420228
+Calo # 7 energy: 0.7066 nrh: 1 rawID: 872418953
+Calo # 8 energy: 36.2555 nrh: 12 rawID: 838887634
+Calo # 9 energy: 1.50517 nrh: 2 rawID: 838888669
+Processing New Event : 
+Calo # 0 energy: 27.2444 nrh: 8 rawID: 838951762
+Calo # 1 energy: 0.265374 nrh: 1 rawID: 838953480
+Calo # 2 energy: 225.563 nrh: 15 rawID: 872419524
+Calo # 3 energy: 9.52647 nrh: 7 rawID: 872420037
+Processing New Event : 
+Calo # 0 energy: 170.893 nrh: 4 rawID: 872435887
+Calo # 1 energy: 36.6713 nrh: 10 rawID: 838878739
+Calo # 2 energy: 3.85825 nrh: 10 rawID: 838878737
+Calo # 3 energy: 1.09825 nrh: 1 rawID: 838878750
+Processing New Event : 
+Calo # 0 energy: 34.2896 nrh: 8 rawID: 838935062
+Calo # 1 energy: 0.264218 nrh: 1 rawID: 838935568
+Calo # 2 energy: 20.2778 nrh: 8 rawID: 838866971
+Calo # 3 energy: 0.231722 nrh: 1 rawID: 838866976
+Processing New Event : 
+Calo # 0 energy: 136.84 nrh: 20 rawID: 872434214
+Calo # 1 energy: 25.5784 nrh: 17 rawID: 838865956
+Calo # 2 energy: 5.31986 nrh: 14 rawID: 838865442
+Calo # 3 energy: 2.47241 nrh: 9 rawID: 838863912
+Calo # 4 energy: 1.64515 nrh: 12 rawID: 838864936
+Calo # 5 energy: 1.44019 nrh: 3 rawID: 838864414
+Calo # 6 energy: 0.860593 nrh: 2 rawID: 838864911
+Calo # 7 energy: 0.259289 nrh: 1 rawID: 838865965
+Calo # 8 energy: 2.67601 nrh: 2 rawID: 838958190
+Calo # 9 energy: 2.48863 nrh: 4 rawID: 838872745
+Calo # 10 energy: 4.8205 nrh: 1 rawID: 872441030
+Processing New Event : 
+Calo # 0 energy: 192.721 nrh: 7 rawID: 872421280
+Calo # 1 energy: 6.70747 nrh: 5 rawID: 872415542
+Processing New Event : 
+Calo # 0 energy: 89.8898 nrh: 12 rawID: 872436748
+Calo # 1 energy: 0.668825 nrh: 1 rawID: 872437513
+Calo # 2 energy: 18.3042 nrh: 8 rawID: 838934579
+Calo # 3 energy: 0.777535 nrh: 1 rawID: 838934600
+Calo # 4 energy: 3.40092 nrh: 1 rawID: 872424382
+Processing New Event : 
+Calo # 0 energy: 130.802 nrh: 8 rawID: 872423599
+Calo # 1 energy: 4.60541 nrh: 1 rawID: 872423340
+Calo # 2 energy: 59.9095 nrh: 30 rawID: 838959830
+Calo # 3 energy: 118.548 nrh: 18 rawID: 838957603
+Calo # 4 energy: 4.28031 nrh: 4 rawID: 838958621
+Calo # 5 energy: 0.73796 nrh: 1 rawID: 838966499
+Processing New Event : 
+Calo # 0 energy: 26.0496 nrh: 16 rawID: 838966471
+Calo # 1 energy: 17.4311 nrh: 18 rawID: 838966469
+Calo # 2 energy: 17.1758 nrh: 13 rawID: 838966467
+Calo # 3 energy: 5.4584 nrh: 7 rawID: 838966987
+Calo # 4 energy: 0.536529 nrh: 1 rawID: 838967472
+Calo # 5 energy: 0.437095 nrh: 1 rawID: 838967503
+Processing New Event : 
+Calo # 0 energy: 80.9873 nrh: 15 rawID: 838903582
+Calo # 1 energy: 10.092 nrh: 11 rawID: 838903586
+Calo # 2 energy: 3.51502 nrh: 3 rawID: 838903592
+Calo # 3 energy: 0.682033 nrh: 1 rawID: 838904074
+Calo # 4 energy: 6.74952 nrh: 5 rawID: 872440783
+Processing New Event : 
+Calo # 0 energy: 161.038 nrh: 16 rawID: 872423456
+Calo # 1 energy: 13.8784 nrh: 9 rawID: 872423073
+Calo # 2 energy: 5.89015 nrh: 6 rawID: 872423587
+Processing New Event : 
+Calo # 0 energy: 247.84 nrh: 21 rawID: 872435084
+Calo # 1 energy: 16.3425 nrh: 10 rawID: 872434701
+Calo # 2 energy: 74.196 nrh: 17 rawID: 872423883
+Calo # 3 energy: 10.1842 nrh: 11 rawID: 872423501
+Processing New Event : 
+Calo # 0 energy: 37.8565 nrh: 15 rawID: 838887993
+Calo # 1 energy: 1.9519 nrh: 1 rawID: 838888501
+Calo # 2 energy: 0.843521 nrh: 1 rawID: 838889044
+Calo # 3 energy: 107.701 nrh: 29 rawID: 838934746
+Calo # 4 energy: 28.2395 nrh: 26 rawID: 838935256
+Calo # 5 energy: 7.92748 nrh: 14 rawID: 838934749
+Calo # 6 energy: 1.71579 nrh: 1 rawID: 838934737
+Calo # 7 energy: 1.42738 nrh: 9 rawID: 838934740
+Calo # 8 energy: 1.51338 nrh: 2 rawID: 838927380
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 5 pce: 4.36148
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 9 pce: 15.4231
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 6 pce: 32.8918
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 14 pce: 15.3396
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 15 pce: 108.666
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 16 pce: 2.18828
+ Match to photon SC with seedid: 838934746 nrh: 79 sce: 150.63 nClust: 5
+  SC Clust # 0 energy: 107.701 nrh: 29 rawID: 838934746
+  SC Clust # 1 energy: 28.2395 nrh: 26 rawID: 838935256
+  SC Clust # 2 energy: 7.92748 nrh: 14 rawID: 838934749
+  SC Clust # 3 energy: 1.71579 nrh: 1 rawID: 838934737
+  SC Clust # 4 energy: 1.42738 nrh: 9 rawID: 838934740
+Processing New Event : 
+Calo # 0 energy: 387.27 nrh: 5 rawID: 872439739
+Calo # 1 energy: 201.583 nrh: 10 rawID: 872436127
+Calo # 2 energy: 0.761988 nrh: 2 rawID: 838882342
+Processing New Event : 
+Calo # 0 energy: 36.9022 nrh: 6 rawID: 872418338
+Calo # 1 energy: 67.0554 nrh: 11 rawID: 838957808
+Calo # 2 energy: 0.26349 nrh: 1 rawID: 838958328
+Calo # 3 energy: 0.255943 nrh: 1 rawID: 838958847
+Processing New Event : 
+Calo # 0 energy: 54.4979 nrh: 12 rawID: 838957336
+Calo # 1 energy: 0.333735 nrh: 1 rawID: 838958338
+Calo # 2 energy: 0.28571 nrh: 1 rawID: 838957839
+Calo # 3 energy: 0.264211 nrh: 1 rawID: 838958370
+Calo # 4 energy: 1.84178 nrh: 1 rawID: 838890600
+Processing New Event : 
+Calo # 0 energy: 124.001 nrh: 10 rawID: 872435268
+Processing New Event : 
+Calo # 0 energy: 53.4636 nrh: 12 rawID: 838877268
+Calo # 1 energy: 14.8838 nrh: 8 rawID: 872435095
+Calo # 2 energy: 0.601115 nrh: 1 rawID: 872434342
+Processing New Event : 
+Calo # 0 energy: 174.308 nrh: 10 rawID: 872421075
+Processing New Event : 
+Calo # 0 energy: 17.8061 nrh: 12 rawID: 838957206
+Calo # 1 energy: 16.1542 nrh: 12 rawID: 838957202
+Calo # 2 energy: 6.2572 nrh: 16 rawID: 838957204
+Calo # 3 energy: 5.67535 nrh: 8 rawID: 838957209
+Calo # 4 energy: 0.940075 nrh: 2 rawID: 838957727
+Processing New Event : 
+Calo # 0 energy: 203.433 nrh: 11 rawID: 872421781
+Calo # 1 energy: 27.1895 nrh: 20 rawID: 838933088
+Calo # 2 energy: 7.78099 nrh: 17 rawID: 838932578
+Calo # 3 energy: 1.07266 nrh: 8 rawID: 838932060
+Calo # 4 energy: 0.278525 nrh: 1 rawID: 838933109
+Calo # 5 energy: 2.10635 nrh: 1 rawID: 872437535
+Calo # 6 energy: 2.53492 nrh: 1 rawID: 872436898
+Processing New Event : 
+Calo # 0 energy: 89.1754 nrh: 15 rawID: 872416819
+Calo # 1 energy: 4.49499 nrh: 2 rawID: 872421769
+Processing New Event : 
+Calo # 0 energy: 77.2476 nrh: 5 rawID: 872438566
+Calo # 1 energy: 86.9898 nrh: 2 rawID: 872437437
+Calo # 2 energy: 56.4933 nrh: 5 rawID: 872437657
+Calo # 3 energy: 45.4499 nrh: 16 rawID: 838955702
+Calo # 4 energy: 6.53765 nrh: 14 rawID: 838955704
+Calo # 5 energy: 2.6371 nrh: 6 rawID: 838955698
+Processing New Event : 
+Calo # 0 energy: 164.887 nrh: 18 rawID: 838884876
+Calo # 1 energy: 0.244347 nrh: 1 rawID: 838887468
+Calo # 2 energy: 1.16885 nrh: 1 rawID: 838871270
+Processing New Event : 
+Calo # 0 energy: 21.6676 nrh: 15 rawID: 838934045
+Calo # 1 energy: 31.4072 nrh: 14 rawID: 838939322
+Calo # 2 energy: 9.15819 nrh: 13 rawID: 838939325
+Calo # 3 energy: 1.85144 nrh: 3 rawID: 838939317
+Calo # 4 energy: 0.276779 nrh: 1 rawID: 838939332
+Calo # 5 energy: 21.1534 nrh: 6 rawID: 872424005
+Calo # 6 energy: 1.96564 nrh: 1 rawID: 872424001
+Processing New Event : 
+Calo # 0 energy: 24.2597 nrh: 7 rawID: 838902376
+Calo # 1 energy: 0.300983 nrh: 1 rawID: 838901867
+Calo # 2 energy: 32.1816 nrh: 9 rawID: 838969697
+Calo # 3 energy: 0.403211 nrh: 1 rawID: 838969869
+Calo # 4 energy: 26.3329 nrh: 17 rawID: 838964443
+Calo # 5 energy: 4.8099 nrh: 13 rawID: 838964445
+Calo # 6 energy: 1.59491 nrh: 1 rawID: 838965454
+Calo # 7 energy: 0.299774 nrh: 1 rawID: 838966523
+Calo # 8 energy: 62.9282 nrh: 21 rawID: 838966486
+Calo # 9 energy: 36.6247 nrh: 20 rawID: 838965972
+Calo # 10 energy: 25.0614 nrh: 21 rawID: 838965464
+Calo # 11 energy: 23.0355 nrh: 18 rawID: 838966489
+Calo # 12 energy: 17.5116 nrh: 18 rawID: 838967004
+Calo # 13 energy: 15.0805 nrh: 17 rawID: 838965471
+Calo # 14 energy: 9.46242 nrh: 20 rawID: 838965979
+Calo # 15 energy: 5.15979 nrh: 13 rawID: 838966993
+Calo # 16 energy: 3.26529 nrh: 12 rawID: 838965969
+Calo # 17 energy: 2.51254 nrh: 2 rawID: 838965963
+Calo # 18 energy: 0.405996 nrh: 1 rawID: 838970095
+Calo # 19 energy: 7.30349 nrh: 4 rawID: 872418477
+Calo # 20 energy: 5.60724 nrh: 4 rawID: 872418603
+Calo # 21 energy: 3.37321 nrh: 3 rawID: 872418351
+Calo # 22 energy: 1.52913 nrh: 1 rawID: 872418854
+Calo # 23 energy: 7.12199 nrh: 5 rawID: 838959118
+Calo # 24 energy: 1.92276 nrh: 3 rawID: 838959110
+Calo # 25 energy: 0.882084 nrh: 1 rawID: 838959113
+Calo # 26 energy: 0.297411 nrh: 1 rawID: 838959975
+Calo # 27 energy: 0.301184 nrh: 2 rawID: 838959115
+Calo # 28 energy: 14.6325 nrh: 12 rawID: 838968674
+Processing New Event : 
+Calo # 0 energy: 9.65747 nrh: 13 rawID: 838933310
+Calo # 1 energy: 301.961 nrh: 23 rawID: 872418757
+Calo # 2 energy: 6.63192 nrh: 4 rawID: 872419400
+Calo # 3 energy: 5.23411 nrh: 4 rawID: 872419144
+Calo # 4 energy: 25.308 nrh: 4 rawID: 872421127
+Calo # 5 energy: 25.1081 nrh: 15 rawID: 838931777
+Calo # 6 energy: 1.23547 nrh: 1 rawID: 838932292
+Calo # 7 energy: 10.037 nrh: 6 rawID: 838967592
+Processing New Event : 
+Calo # 0 energy: 51.7061 nrh: 18 rawID: 838968588
+Calo # 1 energy: 4.9573 nrh: 2 rawID: 838968582
+Calo # 2 energy: 3.10424 nrh: 4 rawID: 838968602
+Calo # 3 energy: 2.35127 nrh: 9 rawID: 838968081
+Calo # 4 energy: 2.17624 nrh: 2 rawID: 838969624
+Calo # 5 energy: 0.835737 nrh: 1 rawID: 838969082
+Calo # 6 energy: 0.498026 nrh: 1 rawID: 838969117
+Calo # 7 energy: 0.363547 nrh: 1 rawID: 838969089
+Calo # 8 energy: 0.329779 nrh: 1 rawID: 838969127
+Calo # 9 energy: 0.305803 nrh: 1 rawID: 838969637
+Calo # 10 energy: 60.2505 nrh: 11 rawID: 838898271
+Calo # 11 energy: 5.3911 nrh: 5 rawID: 838898790
+Calo # 12 energy: 1.34507 nrh: 1 rawID: 838901881
+Calo # 13 energy: 1.42887 nrh: 2 rawID: 838898283
+Calo # 14 energy: 0.566679 nrh: 1 rawID: 838898806
+Calo # 15 energy: 5.09703 nrh: 6 rawID: 838880329
+Calo # 16 energy: 2.15153 nrh: 3 rawID: 838880340
+Calo # 17 energy: 0.344751 nrh: 1 rawID: 838880320
+Processing New Event : 
+Calo # 0 energy: 60.8711 nrh: 16 rawID: 838966484
+Calo # 1 energy: 9.1181 nrh: 15 rawID: 838966481
+Calo # 2 energy: 6.73343 nrh: 10 rawID: 838966479
+Calo # 3 energy: 2.45651 nrh: 3 rawID: 838967005
+Calo # 4 energy: 1.31326 nrh: 3 rawID: 838967019
+Calo # 5 energy: 1.33017 nrh: 6 rawID: 838966476
+Calo # 6 energy: 1.05546 nrh: 2 rawID: 838966489
+Calo # 7 energy: 0.927619 nrh: 2 rawID: 838966986
+Calo # 8 energy: 0.681513 nrh: 2 rawID: 838968036
+Calo # 9 energy: 0.539444 nrh: 1 rawID: 838969074
+Calo # 10 energy: 2.22121 nrh: 3 rawID: 838865443
+Calo # 11 energy: 4.10511 nrh: 7 rawID: 838865467
+Calo # 12 energy: 8.917 nrh: 3 rawID: 872441900
+Processing New Event : 
+Calo # 0 energy: 40.9183 nrh: 15 rawID: 838963818
+Calo # 1 energy: 21.9365 nrh: 15 rawID: 838963815
+Calo # 2 energy: 10.8283 nrh: 13 rawID: 838963813
+Calo # 3 energy: 4.71268 nrh: 11 rawID: 838963822
+Calo # 4 energy: 1.97562 nrh: 6 rawID: 838963824
+Calo # 5 energy: 1.79469 nrh: 6 rawID: 838963810
+Calo # 6 energy: 0.675248 nrh: 1 rawID: 838965324
+Calo # 7 energy: 0.592959 nrh: 1 rawID: 838965378
+Calo # 8 energy: 0.383695 nrh: 1 rawID: 838965383
+Calo # 9 energy: 0.337644 nrh: 1 rawID: 838965339
+Calo # 10 energy: 14.4232 nrh: 8 rawID: 872427947
+Calo # 11 energy: 6.86841 nrh: 8 rawID: 872427817
+Processing New Event : 
+Calo # 0 energy: 279.672 nrh: 8 rawID: 872423465
+Calo # 1 energy: 53.5129 nrh: 11 rawID: 838897302
+Calo # 2 energy: 1.66168 nrh: 2 rawID: 838897307
+Calo # 3 energy: 0.781529 nrh: 2 rawID: 838897821
+Processing New Event : 
+Calo # 0 energy: 100.97 nrh: 14 rawID: 872416950
+Calo # 1 energy: 0.892296 nrh: 1 rawID: 872417324
+Processing New Event : 
+Calo # 0 energy: 164.679 nrh: 13 rawID: 872423880
+Calo # 1 energy: 2.52695 nrh: 7 rawID: 872424133
+Calo # 2 energy: 29.9444 nrh: 15 rawID: 838931693
+Calo # 3 energy: 6.40444 nrh: 11 rawID: 838930160
+Processing New Event : 
+Calo # 0 energy: 72.5549 nrh: 16 rawID: 872440358
+Calo # 1 energy: 110.309 nrh: 9 rawID: 872419644
+Calo # 2 energy: 37.8464 nrh: 13 rawID: 838942861
+Calo # 3 energy: 9.30871 nrh: 3 rawID: 872434479
+Calo # 4 energy: 4.42541 nrh: 3 rawID: 872419028
+Processing New Event : 
+Calo # 0 energy: 392.396 nrh: 14 rawID: 872423374
+Calo # 1 energy: 4.61322 nrh: 4 rawID: 838894196
+Processing New Event : 
+Calo # 0 energy: 46.9039 nrh: 14 rawID: 838889503
+Calo # 1 energy: 52.0925 nrh: 11 rawID: 838867149
+Calo # 2 energy: 0.441752 nrh: 1 rawID: 838867141
+Calo # 3 energy: 19.04 nrh: 2 rawID: 872425276
+Processing New Event : 
+Calo # 0 energy: 20.9279 nrh: 7 rawID: 838869787
+Calo # 1 energy: 0.77557 nrh: 2 rawID: 838870311
+Calo # 2 energy: 35.6309 nrh: 10 rawID: 838874721
+Calo # 3 energy: 0.831135 nrh: 2 rawID: 838875211
+Calo # 4 energy: 0.634957 nrh: 2 rawID: 838874707
+Processing New Event : 
+Calo # 0 energy: 26.1203 nrh: 13 rawID: 838963044
+Calo # 1 energy: 2.81175 nrh: 9 rawID: 838962528
+Calo # 2 energy: 0.636614 nrh: 1 rawID: 838963540
+Calo # 3 energy: 0.540682 nrh: 1 rawID: 838963208
+Calo # 4 energy: 22.7947 nrh: 11 rawID: 838940751
+Calo # 5 energy: 3.38479 nrh: 11 rawID: 838940748
+Calo # 6 energy: 0.350881 nrh: 1 rawID: 838940762
+Calo # 7 energy: 107.312 nrh: 15 rawID: 838962904
+Calo # 8 energy: 7.53124 nrh: 8 rawID: 838962908
+Calo # 9 energy: 4.5799 nrh: 9 rawID: 838962389
+Calo # 10 energy: 1.82322 nrh: 3 rawID: 838962884
+Calo # 11 energy: 0.413783 nrh: 1 rawID: 838964458
+Calo # 12 energy: 0.37379 nrh: 1 rawID: 838962386
+Calo # 13 energy: 0.363006 nrh: 1 rawID: 838962384
+Calo # 14 energy: 1.41435 nrh: 2 rawID: 872426044
+Processing New Event : 
+Calo # 0 energy: 133.618 nrh: 10 rawID: 872435259
+Processing New Event : 
+Calo # 0 energy: 172.168 nrh: 14 rawID: 872441369
+Calo # 1 energy: 4.80253 nrh: 5 rawID: 872416957
+Processing New Event : 
+Calo # 0 energy: 200.043 nrh: 13 rawID: 872420896
+Calo # 1 energy: 13.0061 nrh: 8 rawID: 838868559
+Calo # 2 energy: 29.4346 nrh: 6 rawID: 872420384
+Calo # 3 energy: 3.37168 nrh: 3 rawID: 838933117
+Processing New Event : 
+Calo # 0 energy: 42.3361 nrh: 5 rawID: 872423494
+Calo # 1 energy: 3.94078 nrh: 1 rawID: 872422728
+Calo # 2 energy: 60.2906 nrh: 8 rawID: 838960906
+Calo # 3 energy: 0.356885 nrh: 1 rawID: 838963432
+Processing New Event : 
+Calo # 0 energy: 55.4889 nrh: 11 rawID: 838869058
+Processing New Event : 
+Calo # 0 energy: 74.7936 nrh: 8 rawID: 872439871
+Calo # 1 energy: 4.53502 nrh: 1 rawID: 872439362
+Calo # 2 energy: 1.65216 nrh: 1 rawID: 872439618
+Calo # 3 energy: 41.9592 nrh: 10 rawID: 872435852
+Calo # 4 energy: 8.50224 nrh: 2 rawID: 872435470
+Calo # 5 energy: 8.70442 nrh: 5 rawID: 872436873
+Calo # 6 energy: 0.52079 nrh: 1 rawID: 838965444
+Processing New Event : 
+Calo # 0 energy: 286.801 nrh: 25 rawID: 838937603
+Processing New Event : 
+Calo # 0 energy: 99.6995 nrh: 19 rawID: 838902360
+Calo # 1 energy: 5.78774 nrh: 9 rawID: 838902357
+Calo # 2 energy: 0.955421 nrh: 1 rawID: 838903910
+Calo # 3 energy: 0.553615 nrh: 1 rawID: 838902864
+Calo # 4 energy: 0.529674 nrh: 1 rawID: 838902878
+Processing New Event : 
+Calo # 0 energy: 64.9546 nrh: 9 rawID: 838964525
+Calo # 1 energy: 0.650672 nrh: 1 rawID: 838967058
+Calo # 2 energy: 0.534968 nrh: 1 rawID: 838966552
+Processing New Event : 
+Calo # 0 energy: 171.8 nrh: 12 rawID: 872438040
+Calo # 1 energy: 1.05726 nrh: 1 rawID: 872438424
+Processing New Event : 
+Calo # 0 energy: 75.3658 nrh: 20 rawID: 838969082
+Calo # 1 energy: 7.15866 nrh: 15 rawID: 838969084
+Calo # 2 energy: 4.81507 nrh: 7 rawID: 838969589
+Calo # 3 energy: 2.99585 nrh: 4 rawID: 838969604
+Calo # 4 energy: 2.58161 nrh: 2 rawID: 838969601
+Calo # 5 energy: 0.643947 nrh: 1 rawID: 838970090
+Calo # 6 energy: 0.664416 nrh: 2 rawID: 838969097
+Processing New Event : 
+Calo # 0 energy: 212.454 nrh: 10 rawID: 872435766
+Calo # 1 energy: 24.0281 nrh: 10 rawID: 838872594
+Calo # 2 energy: 0.81937 nrh: 9 rawID: 838873108
+Calo # 3 energy: 0.415963 nrh: 1 rawID: 838873129
+Calo # 4 energy: 0.248781 nrh: 1 rawID: 838872599
+Calo # 5 energy: 0.432972 nrh: 1 rawID: 838959698
+Processing New Event : 
+Calo # 0 energy: 64.4017 nrh: 8 rawID: 872437957
+Calo # 1 energy: 5.05578 nrh: 1 rawID: 872438596
+Calo # 2 energy: 1.68697 nrh: 1 rawID: 872438470
+Calo # 3 energy: 101.571 nrh: 6 rawID: 872438212
+Calo # 4 energy: 29.2862 nrh: 10 rawID: 838927169
+Calo # 5 energy: 10.1448 nrh: 2 rawID: 872434987
+Processing New Event : 
+Calo # 0 energy: 273.523 nrh: 33 rawID: 872435550
+Calo # 1 energy: 2.58069 nrh: 1 rawID: 872436576
+Calo # 2 energy: 1.07892 nrh: 1 rawID: 872434133
+Calo # 3 energy: 562.714 nrh: 19 rawID: 872438428
+Calo # 4 energy: 23.2503 nrh: 12 rawID: 872439194
+Calo # 5 energy: 16.1433 nrh: 11 rawID: 872438687
+Calo # 6 energy: 6.13278 nrh: 14 rawID: 872438431
+Calo # 7 energy: 2.4676 nrh: 3 rawID: 838869671
+Processing New Event : 
+Calo # 0 energy: 27.0575 nrh: 9 rawID: 838948575
+Calo # 1 energy: 2.91966 nrh: 2 rawID: 838948581
+Calo # 2 energy: 0.803072 nrh: 1 rawID: 838949098
+Calo # 3 energy: 0.538929 nrh: 1 rawID: 838949066
+Calo # 4 energy: 0.481411 nrh: 1 rawID: 838950087
+Calo # 5 energy: 0.26871 nrh: 1 rawID: 838949069
+Calo # 6 energy: 31.2352 nrh: 9 rawID: 838936120
+Calo # 7 energy: 1.07613 nrh: 7 rawID: 838936118
+Calo # 8 energy: 0.485914 nrh: 1 rawID: 838936624
+Calo # 9 energy: 3.00517 nrh: 3 rawID: 838943976
+Processing New Event : 
+Calo # 0 energy: 576.169 nrh: 14 rawID: 872441395
+Calo # 1 energy: 2.62055 nrh: 2 rawID: 872441133
+Processing New Event : 
+Calo # 0 energy: 79.973 nrh: 18 rawID: 838947144
+Calo # 1 energy: 7.07368 nrh: 16 rawID: 838947141
+Calo # 2 energy: 1.54738 nrh: 2 rawID: 838947152
+Calo # 3 energy: 0.715908 nrh: 1 rawID: 838948655
+Calo # 4 energy: 0.261739 nrh: 1 rawID: 838947138
+Processing New Event : 
+Calo # 0 energy: 28.1664 nrh: 7 rawID: 872441182
+Calo # 1 energy: 6.79361 nrh: 2 rawID: 872437400
+Processing New Event : 
+Calo # 0 energy: 29.5736 nrh: 7 rawID: 838861644
+Calo # 1 energy: 0.323998 nrh: 1 rawID: 838862122
+Calo # 2 energy: 50.2913 nrh: 11 rawID: 838879372
+Processing New Event : 
+Calo # 0 energy: 42.847 nrh: 14 rawID: 838865410
+Calo # 1 energy: 3.45489 nrh: 3 rawID: 838866276
+Calo # 2 energy: 0.87694 nrh: 1 rawID: 838865414
+Calo # 3 energy: 42.646 nrh: 15 rawID: 838964415
+Calo # 4 energy: 8.76826 nrh: 15 rawID: 838963900
+Calo # 5 energy: 2.98133 nrh: 2 rawID: 838964424
+Calo # 6 energy: 2.46503 nrh: 4 rawID: 838964917
+Calo # 7 energy: 1.29379 nrh: 2 rawID: 838964420
+Calo # 8 energy: 0.615544 nrh: 2 rawID: 838964437
+Calo # 9 energy: 0.333309 nrh: 1 rawID: 838965467
+Calo # 10 energy: 10.3446 nrh: 3 rawID: 872421831
+Processing New Event : 
+Calo # 0 energy: 297.902 nrh: 14 rawID: 872423996
+Calo # 1 energy: 12.8906 nrh: 12 rawID: 838877925
+Calo # 2 energy: 66.3219 nrh: 17 rawID: 838878946
+Calo # 3 energy: 2.75377 nrh: 2 rawID: 838890562
+Calo # 4 energy: 45.4227 nrh: 10 rawID: 872423739
+Calo # 5 energy: 8.08041 nrh: 1 rawID: 872423863
+Calo # 6 energy: 3.95683 nrh: 2 rawID: 838891231
+Processing New Event : 
+Calo # 0 energy: 130.435 nrh: 16 rawID: 838894657
+Calo # 1 energy: 0.703025 nrh: 1 rawID: 838896169
+Calo # 2 energy: 0.360387 nrh: 1 rawID: 838896171
+Calo # 3 energy: 27.0979 nrh: 17 rawID: 838949112
+Calo # 4 energy: 27.9466 nrh: 17 rawID: 838950135
+Calo # 5 energy: 4.98266 nrh: 4 rawID: 838950140
+Calo # 6 energy: 4.10374 nrh: 11 rawID: 838950130
+Calo # 7 energy: 1.12266 nrh: 3 rawID: 838950657
+Calo # 8 energy: 0.297345 nrh: 1 rawID: 838950666
+Processing New Event : 
+Calo # 0 energy: 108.712 nrh: 14 rawID: 872441115
+Calo # 1 energy: 1.22157 nrh: 2 rawID: 872441631
+Calo # 2 energy: 32.9852 nrh: 12 rawID: 838951599
+Calo # 3 energy: 2.84654 nrh: 7 rawID: 838951602
+Calo # 4 energy: 1.27281 nrh: 3 rawID: 838951595
+Calo # 5 energy: 1.13252 nrh: 2 rawID: 838952099
+Calo # 6 energy: 0.76814 nrh: 1 rawID: 838951604
+Calo # 7 energy: 0.50462 nrh: 1 rawID: 838953158
+Calo # 8 energy: 0.254895 nrh: 1 rawID: 838932097
+Processing New Event : 
+Calo # 0 energy: 411.381 nrh: 14 rawID: 872435895
+Processing New Event : 
+Calo # 0 energy: 72.0008 nrh: 24 rawID: 838967321
+Calo # 1 energy: 8.6258 nrh: 9 rawID: 838967315
+Calo # 2 energy: 3.16682 nrh: 8 rawID: 838967326
+Calo # 3 energy: 0.345176 nrh: 1 rawID: 838969346
+Calo # 4 energy: 231.371 nrh: 25 rawID: 872433063
+Calo # 5 energy: 15.8803 nrh: 13 rawID: 872433189
+Calo # 6 energy: 4.45624 nrh: 9 rawID: 872432941
+Calo # 7 energy: 2.38029 nrh: 1 rawID: 872433441
+Calo # 8 energy: 2.01489 nrh: 4 rawID: 872432943
+Calo # 9 energy: 1.36714 nrh: 2 rawID: 872433212
+Calo # 10 energy: 28.1577 nrh: 12 rawID: 838965267
+Calo # 11 energy: 4.86602 nrh: 6 rawID: 838961500
+Match found at ph: 1 asc: 0 jet: 0/1 kid: 11 pce: 3.5775
+Match found at ph: 1 asc: 2 jet: 0/1 kid: 9 pce: 48.6202
+Match found at ph: 1 asc: 3 jet: 0/1 kid: 10 pce: 24.9278
+Match found at ph: 1 asc: 4 jet: 0/1 kid: 40 pce: 30.2367
+Match found at ph: 1 asc: 5 jet: 0/1 kid: 39 pce: 0.427107
+ Match to photon SC with seedid: 838967321 nrh: 42 sce: 87.0879 nClust: 4
+  SC Clust # 0 energy: 72.0008 nrh: 24 rawID: 838967321
+  SC Clust # 1 energy: 8.6258 nrh: 9 rawID: 838967315
+  SC Clust # 2 energy: 3.16682 nrh: 8 rawID: 838967326
+  SC Clust # 3 energy: 0.345176 nrh: 1 rawID: 838969346
+Match found at ph: 2 asc: 0 jet: 0/1 kid: 13 pce: 4.89843
+Match found at ph: 2 asc: 1 jet: 0/1 kid: 17 pce: 3.93093
+Match found at ph: 2 asc: 2 jet: 0/1 kid: 42 pce: 9.89636
+Match found at ph: 2 asc: 4 jet: 0/1 kid: 50 pce: 29.4404
+Match found at ph: 2 asc: 5 jet: 0/1 kid: 51 pce: 6.73876
+Match found at ph: 2 asc: 6 jet: 0/1 kid: 18 pce: 17.9603
+Match found at ph: 2 asc: 7 jet: 0/1 kid: 15 pce: 7.15883
+Match found at ph: 2 asc: 8 jet: 0/1 kid: 45 pce: 1.30703
+Match found at ph: 2 asc: 9 jet: 0/1 kid: 16 pce: 32.6239
+Match found at ph: 2 asc: 10 jet: 0/1 kid: 46 pce: 1.81782
+Match found at ph: 2 asc: 11 jet: 0/1 kid: 48 pce: 0.999246
+Match found at ph: 2 asc: 12 jet: 0/1 kid: 47 pce: 5.37621
+Match found at ph: 2 asc: 13 jet: 0/1 kid: 49 pce: 0.495864
+ Match to photon SC with seedid: 838965267 nrh: 0 sce: 74.8575 nClust: 14
+  Skipping SC Cluster - bad reffrence issue
+Processing New Event : 
+Calo # 0 energy: 100.914 nrh: 3 rawID: 872421822
+Calo # 1 energy: 47.5263 nrh: 13 rawID: 838904084
+Calo # 2 energy: 38.8423 nrh: 10 rawID: 838904600
+Calo # 3 energy: 5.78489 nrh: 3 rawID: 838904587
+Calo # 4 energy: 5.00999 nrh: 5 rawID: 838904603
+Calo # 5 energy: 1.393 nrh: 2 rawID: 838904584
+Calo # 6 energy: 0.351697 nrh: 1 rawID: 838904077
+Processing New Event : 
+Calo # 0 energy: 245.695 nrh: 20 rawID: 872435081
+Calo # 1 energy: 3.15683 nrh: 11 rawID: 872435464
+Calo # 2 energy: 2.00817 nrh: 3 rawID: 872436103
+Calo # 3 energy: 1.33509 nrh: 1 rawID: 872436487
+Calo # 4 energy: 1.40562 nrh: 1 rawID: 838963292
+Processing New Event : 
+Calo # 0 energy: 77.4353 nrh: 12 rawID: 838884474
+Calo # 1 energy: 0.27087 nrh: 1 rawID: 838884957
+Calo # 2 energy: 0.26362 nrh: 1 rawID: 838886038
+Calo # 3 energy: 0.253821 nrh: 1 rawID: 838885466
+Calo # 4 energy: 164.352 nrh: 14 rawID: 872421060
+Calo # 5 energy: 6.05167 nrh: 4 rawID: 872420418
+Calo # 6 energy: 31.5158 nrh: 9 rawID: 872437786
+Calo # 7 energy: 5.04671 nrh: 3 rawID: 872438941
+Calo # 8 energy: 1.64196 nrh: 1 rawID: 872437146
+Calo # 9 energy: 133.647 nrh: 19 rawID: 872439577
+Calo # 10 energy: 18.841 nrh: 13 rawID: 872439192
+Calo # 11 energy: 8.16754 nrh: 9 rawID: 872439963
+Calo # 12 energy: 2.91921 nrh: 7 rawID: 872438935
+Calo # 13 energy: 0.858883 nrh: 1 rawID: 838868119
+Calo # 14 energy: 4.79869 nrh: 2 rawID: 838938860
+Calo # 15 energy: 2.38324 nrh: 2 rawID: 838951140
+Processing New Event : 
+Calo # 0 energy: 105.591 nrh: 19 rawID: 838868767
+Calo # 1 energy: 15.364 nrh: 17 rawID: 838868769
+Processing New Event : 
+Calo # 0 energy: 48.0622 nrh: 16 rawID: 838901844
+Calo # 1 energy: 17.1824 nrh: 15 rawID: 838901334
+Calo # 2 energy: 3.63551 nrh: 3 rawID: 838901856
+Calo # 3 energy: 2.25538 nrh: 4 rawID: 838902366
+Calo # 4 energy: 2.0198 nrh: 3 rawID: 838903361
+Calo # 5 energy: 1.53879 nrh: 2 rawID: 838901340
+Calo # 6 energy: 0.787999 nrh: 3 rawID: 838902881
+Calo # 7 energy: 0.66747 nrh: 1 rawID: 838901338
+Calo # 8 energy: 111.309 nrh: 23 rawID: 838903073
+Calo # 9 energy: 5.66637 nrh: 8 rawID: 838903574
+Calo # 10 energy: 0.383512 nrh: 1 rawID: 838903057
+Calo # 11 energy: 2.48272 nrh: 2 rawID: 838934784
+Processing New Event : 
+Calo # 0 energy: 53.1886 nrh: 12 rawID: 872434601
+Calo # 1 energy: 8.37619 nrh: 7 rawID: 872434854
+Calo # 2 energy: 7.05986 nrh: 3 rawID: 872434609
+Calo # 3 energy: 2.00628 nrh: 1 rawID: 872434478
+Calo # 4 energy: 1.23928 nrh: 1 rawID: 872434611
+Processing New Event : 
+Calo # 0 energy: 61.3179 nrh: 18 rawID: 872424468
+Calo # 1 energy: 12.1018 nrh: 9 rawID: 872424211
+Calo # 2 energy: 0.893835 nrh: 1 rawID: 872423058
+Calo # 3 energy: 0.883783 nrh: 1 rawID: 872424986
+Calo # 4 energy: 0.675952 nrh: 1 rawID: 872425112
+Calo # 5 energy: 23.4082 nrh: 10 rawID: 838887547
+Calo # 6 energy: 4.12994 nrh: 8 rawID: 838887543
+Calo # 7 energy: 2.72466 nrh: 5 rawID: 838887538
+Calo # 8 energy: 0.279478 nrh: 1 rawID: 838887525
+Calo # 9 energy: 60.5678 nrh: 17 rawID: 838884978
+Calo # 10 energy: 0.273227 nrh: 1 rawID: 838884972
+Calo # 11 energy: 22.4704 nrh: 5 rawID: 838889083
+Calo # 12 energy: 0.324284 nrh: 1 rawID: 838890129
+Calo # 13 energy: 1.41754 nrh: 2 rawID: 838877358
+Processing New Event : 
+Calo # 0 energy: 71.4731 nrh: 14 rawID: 838899734
+Calo # 1 energy: 1.69278 nrh: 2 rawID: 838865056
+Calo # 2 energy: 3.81873 nrh: 5 rawID: 838956068
+Calo # 3 energy: 4.08265 nrh: 3 rawID: 838933129
+Processing New Event : 
+Calo # 0 energy: 227.328 nrh: 12 rawID: 872424374
+Calo # 1 energy: 16.5972 nrh: 8 rawID: 838882517
+Calo # 2 energy: 15.4506 nrh: 8 rawID: 838882515
+Calo # 3 energy: 1.18797 nrh: 3 rawID: 838883048
+Calo # 4 energy: 1.08482 nrh: 2 rawID: 838883016
+Calo # 5 energy: 0.867572 nrh: 1 rawID: 838882506
+Calo # 6 energy: 0.401583 nrh: 1 rawID: 838882521
+Calo # 7 energy: 1.47243 nrh: 4 rawID: 838934827
+Processing New Event : 
+Calo # 0 energy: 174.325 nrh: 10 rawID: 872435513
+Processing New Event : 
+Calo # 0 energy: 7.41872 nrh: 6 rawID: 838954128
+Calo # 1 energy: 2.16219 nrh: 2 rawID: 838954112
+Calo # 2 energy: 1.98178 nrh: 2 rawID: 838954646
+Calo # 3 energy: 1.86481 nrh: 6 rawID: 838954126
+Calo # 4 energy: 1.28094 nrh: 3 rawID: 838955123
+Calo # 5 energy: 1.01861 nrh: 2 rawID: 838954122
+Calo # 6 energy: 0.528305 nrh: 1 rawID: 838954119
+Calo # 7 energy: 0.434266 nrh: 1 rawID: 838954643
+Calo # 8 energy: 0.323028 nrh: 1 rawID: 838954117
+Calo # 9 energy: 80.1348 nrh: 16 rawID: 838959182
+Calo # 10 energy: 1.03222 nrh: 2 rawID: 838961716
+Calo # 11 energy: 0.577583 nrh: 1 rawID: 838959668
+Calo # 12 energy: 0.435248 nrh: 1 rawID: 838960183
+Calo # 13 energy: 3.22554 nrh: 2 rawID: 872422940
+Processing New Event : 
+Calo # 0 energy: 40.437 nrh: 23 rawID: 838957787
+Calo # 1 energy: 14.6527 nrh: 21 rawID: 838957277
+Calo # 2 energy: 5.92045 nrh: 14 rawID: 838957793
+Calo # 3 energy: 2.2821 nrh: 1 rawID: 838959343
+Calo # 4 energy: 0.970114 nrh: 1 rawID: 838958791
+Calo # 5 energy: 0.621902 nrh: 1 rawID: 838957776
+Calo # 6 energy: 0.303082 nrh: 1 rawID: 838957778
+Calo # 7 energy: 112.278 nrh: 26 rawID: 838944821
+Calo # 8 energy: 10.7113 nrh: 20 rawID: 838944817
+Calo # 9 energy: 9.66169 nrh: 13 rawID: 838944825
+Calo # 10 energy: 3.15268 nrh: 14 rawID: 838946867
+Calo # 11 energy: 0.761212 nrh: 10 rawID: 838944814
+Calo # 12 energy: 61.3688 nrh: 13 rawID: 838954727
+Calo # 13 energy: 2.49782 nrh: 3 rawID: 838954718
+Calo # 14 energy: 1.69138 nrh: 2 rawID: 838954743
+Calo # 15 energy: 6.95208 nrh: 3 rawID: 872436894
+Processing New Event : 
+Calo # 0 energy: 136.922 nrh: 17 rawID: 872440387
+Calo # 1 energy: 73.1713 nrh: 9 rawID: 872437024
+Calo # 2 energy: 1.4226 nrh: 1 rawID: 838954518
+Calo # 3 energy: 0.312204 nrh: 1 rawID: 838876409
+Calo # 4 energy: 1.21574 nrh: 2 rawID: 838967418
+Processing New Event : 
+Calo # 0 energy: 44.7763 nrh: 13 rawID: 838898341
+Calo # 1 energy: 5.59403 nrh: 7 rawID: 838898334
+Calo # 2 energy: 2.9596 nrh: 5 rawID: 838898840
+Calo # 3 energy: 2.86494 nrh: 7 rawID: 838898337
+Calo # 4 energy: 1.98656 nrh: 5 rawID: 838899360
+Calo # 5 energy: 1.61383 nrh: 2 rawID: 838899356
+Calo # 6 energy: 0.928018 nrh: 2 rawID: 838899900
+Calo # 7 energy: 31.3786 nrh: 14 rawID: 838869345
+Calo # 8 energy: 3.04424 nrh: 2 rawID: 872421782
+Processing New Event : 
+Calo # 0 energy: 123.182 nrh: 23 rawID: 838875952
+Calo # 1 energy: 8.92354 nrh: 18 rawID: 838875437
+Calo # 2 energy: 0.416168 nrh: 1 rawID: 838955521
+Processing New Event : 
+Calo # 0 energy: 468.461 nrh: 13 rawID: 872436893
+Calo # 1 energy: 2.94848 nrh: 3 rawID: 838890039
+Processing New Event : 
+Calo # 0 energy: 38.5048 nrh: 12 rawID: 838937770
+Calo # 1 energy: 0.95416 nrh: 1 rawID: 838937784
+Processing New Event : 
+Calo # 0 energy: 68.6589 nrh: 6 rawID: 872424638
+Calo # 1 energy: 23.1707 nrh: 11 rawID: 838886193
+Calo # 2 energy: 9.24711 nrh: 6 rawID: 838886186
+Calo # 3 energy: 7.41501 nrh: 11 rawID: 838886702
+Calo # 4 energy: 14.4339 nrh: 3 rawID: 872420000
+Processing New Event : 
+Calo # 0 energy: 5.07214 nrh: 4 rawID: 838933209
+Processing New Event : 
+Calo # 0 energy: 15.0031 nrh: 6 rawID: 838893324
+Calo # 1 energy: 11.4813 nrh: 6 rawID: 838893322
+Calo # 2 energy: 1.35156 nrh: 5 rawID: 838893320
+Calo # 3 energy: 1.03555 nrh: 3 rawID: 838892804
+Calo # 4 energy: 0.60999 nrh: 1 rawID: 838894882
+Calo # 5 energy: 0.394039 nrh: 1 rawID: 838894365
+Calo # 6 energy: 0.336912 nrh: 1 rawID: 838893330
+Calo # 7 energy: 37.7445 nrh: 11 rawID: 838958178
+Calo # 8 energy: 15.8379 nrh: 11 rawID: 838958176
+Calo # 9 energy: 0.440805 nrh: 1 rawID: 838959697
+Calo # 10 energy: 0.301828 nrh: 1 rawID: 838958170
+Calo # 11 energy: 32.9902 nrh: 5 rawID: 872423370
+Calo # 12 energy: 3.26971 nrh: 2 rawID: 838875952
+Calo # 13 energy: 2.85978 nrh: 3 rawID: 838872832
+Processing New Event : 
+Calo # 0 energy: 109.33 nrh: 15 rawID: 872441412
+Calo # 1 energy: 0.835619 nrh: 1 rawID: 872440521
+Calo # 2 energy: 0.797753 nrh: 1 rawID: 872440137
+Calo # 3 energy: 100.739 nrh: 16 rawID: 838962883
+Calo # 4 energy: 1.12102 nrh: 1 rawID: 838963891
+Calo # 5 energy: 0.478555 nrh: 1 rawID: 838965417
+Calo # 6 energy: 0.346376 nrh: 1 rawID: 838964956
+Calo # 7 energy: 0.303885 nrh: 1 rawID: 838963789
+Processing New Event : 
+Calo # 0 energy: 103.088 nrh: 10 rawID: 872423995
+Calo # 1 energy: 6.92266 nrh: 6 rawID: 872423997
+Calo # 2 energy: 56.5904 nrh: 13 rawID: 838931141
+Processing New Event : 
+Calo # 0 energy: 15.5782 nrh: 4 rawID: 872437404
+Calo # 1 energy: 8.00953 nrh: 3 rawID: 872437149
+Calo # 2 energy: 6.9391 nrh: 3 rawID: 872437788
+Calo # 3 energy: 2.66155 nrh: 1 rawID: 872436892
+Calo # 4 energy: 931.475 nrh: 12 rawID: 872420150
+Calo # 5 energy: 16.6206 nrh: 22 rawID: 838937934
+Calo # 6 energy: 66.0158 nrh: 33 rawID: 838936908
+Calo # 7 energy: 20.3109 nrh: 26 rawID: 838936910
+Calo # 8 energy: 16.8322 nrh: 20 rawID: 838936904
+Calo # 9 energy: 2.88397 nrh: 4 rawID: 838936917
+Calo # 10 energy: 0.34343 nrh: 1 rawID: 838936920
+Calo # 11 energy: 1.97351 nrh: 2 rawID: 838929177
+Processing New Event : 
+Calo # 0 energy: 28.9781 nrh: 13 rawID: 838943339
+Calo # 1 energy: 15.4669 nrh: 13 rawID: 838943337
+Calo # 2 energy: 0.292648 nrh: 1 rawID: 838943318
+Calo # 3 energy: 0.268117 nrh: 1 rawID: 838943833
+Calo # 4 energy: 31.8554 nrh: 13 rawID: 838949155
+Calo # 5 energy: 3.59834 nrh: 11 rawID: 838949159
+Calo # 6 energy: 0.582723 nrh: 1 rawID: 838950660
+Calo # 7 energy: 0.476652 nrh: 1 rawID: 838950150
+Calo # 8 energy: 0.31535 nrh: 1 rawID: 838950198
+Processing New Event : 
+Calo # 0 energy: 359.699 nrh: 17 rawID: 872435123
+Calo # 1 energy: 3.39705 nrh: 2 rawID: 872435127
+Calo # 2 energy: 2.09066 nrh: 1 rawID: 872433325
+Processing New Event : 
+Calo # 0 energy: 87.2125 nrh: 9 rawID: 838904603
+Calo # 1 energy: 0.377029 nrh: 1 rawID: 838904595
+Calo # 2 energy: 0.326937 nrh: 1 rawID: 838904607
+Processing New Event : 
+Calo # 0 energy: 382.084 nrh: 9 rawID: 872435635
+Calo # 1 energy: 2.83221 nrh: 1 rawID: 872435759
+Calo # 2 energy: 2.39066 nrh: 1 rawID: 872435766
+Calo # 3 energy: 50.9212 nrh: 17 rawID: 872443573
+Calo # 4 energy: 6.63999 nrh: 10 rawID: 872443435
+Calo # 5 energy: 1.90199 nrh: 3 rawID: 872443194
+Calo # 6 energy: 0.73152 nrh: 1 rawID: 872442917
+Calo # 7 energy: 0.749745 nrh: 1 rawID: 872443196
+Calo # 8 energy: 4.22272 nrh: 3 rawID: 838927526
+Processing New Event : 
+Calo # 0 energy: 230.036 nrh: 25 rawID: 872417614
+Calo # 1 energy: 21.4361 nrh: 20 rawID: 872417872
+Calo # 2 energy: 11.6735 nrh: 10 rawID: 872417096
+Calo # 3 energy: 4.50463 nrh: 10 rawID: 872418130
+Processing New Event : 
+Calo # 0 energy: 75.935 nrh: 17 rawID: 838961752
+Calo # 1 energy: 8.71508 nrh: 13 rawID: 838961749
+Calo # 2 energy: 0.453508 nrh: 1 rawID: 838966327
+Calo # 3 energy: 0.422437 nrh: 1 rawID: 838965363
+Calo # 4 energy: 0.403784 nrh: 1 rawID: 838963834
+Calo # 5 energy: 41.2464 nrh: 8 rawID: 838965577
+Calo # 6 energy: 1.24291 nrh: 1 rawID: 838966611
+Calo # 7 energy: 0.945977 nrh: 1 rawID: 838937392
+Calo # 8 energy: 17.7538 nrh: 3 rawID: 872440638
+Calo # 9 energy: 2.42076 nrh: 3 rawID: 838943336
+Processing New Event : 
+Calo # 0 energy: 251.374 nrh: 25 rawID: 838964992
+Calo # 1 energy: 1.80174 nrh: 1 rawID: 838965514
+Calo # 2 energy: 1.00719 nrh: 1 rawID: 838966001
+Calo # 3 energy: 0.521452 nrh: 1 rawID: 838968096
+Calo # 4 energy: 0.278143 nrh: 1 rawID: 838965000
+Calo # 5 energy: 330.366 nrh: 34 rawID: 872440647
+Calo # 6 energy: 1.52929 nrh: 1 rawID: 872439754
+Calo # 7 energy: 5.25543 nrh: 4 rawID: 872422109
+Processing New Event : 
+Calo # 0 energy: 96.8282 nrh: 13 rawID: 838941971
+Calo # 1 energy: 0.964196 nrh: 1 rawID: 838942493
+Calo # 2 energy: 0.336344 nrh: 1 rawID: 838942453
+Calo # 3 energy: 1.76564 nrh: 3 rawID: 838874291
+Calo # 4 energy: 6.98907 nrh: 5 rawID: 838871128
+Processing New Event : 
+Calo # 0 energy: 80.4837 nrh: 12 rawID: 872435468
+Calo # 1 energy: 1.8949 nrh: 2 rawID: 872437773
+Processing New Event : 
+Calo # 0 energy: 25.0892 nrh: 7 rawID: 872433587
+Calo # 1 energy: 3.31794 nrh: 2 rawID: 872433706
+Calo # 2 energy: 1.2069 nrh: 2 rawID: 872433723
+Calo # 3 energy: 113.947 nrh: 13 rawID: 872424514
+Calo # 4 energy: 15.6795 nrh: 10 rawID: 872424640
+Calo # 5 energy: 7.07646 nrh: 4 rawID: 838952542
+Calo # 6 energy: 1.38622 nrh: 1 rawID: 838952549
+Calo # 7 energy: 0.399543 nrh: 1 rawID: 838954050
+Calo # 8 energy: 0.284937 nrh: 1 rawID: 838952538
+Processing New Event : 
+Calo # 0 energy: 28.4915 nrh: 9 rawID: 838878367
+Calo # 1 energy: 7.2098 nrh: 9 rawID: 838878370
+Calo # 2 energy: 3.38669 nrh: 3 rawID: 838878377
+Calo # 3 energy: 3.61481 nrh: 5 rawID: 838886705
+Calo # 4 energy: 0.847027 nrh: 1 rawID: 838887233
+Calo # 5 energy: 0.772057 nrh: 2 rawID: 838886187
+Calo # 6 energy: 2.95418 nrh: 3 rawID: 838896162
+Processing New Event : 
+Calo # 0 energy: 30.3301 nrh: 21 rawID: 838933269
+Calo # 1 energy: 17.1261 nrh: 19 rawID: 838932754
+Calo # 2 energy: 70.4497 nrh: 14 rawID: 838868567
+Calo # 3 energy: 0.446187 nrh: 1 rawID: 838868047
+Calo # 4 energy: 0.300319 nrh: 1 rawID: 838868049
+Calo # 5 energy: 1.17075 nrh: 1 rawID: 838877406
+Calo # 6 energy: 1.6902 nrh: 2 rawID: 838940969
+Processing New Event : 
+Processing New Event : 
+Calo # 0 energy: 154.342 nrh: 10 rawID: 872424506
+Calo # 1 energy: 13.3277 nrh: 6 rawID: 872424376
+Calo # 2 energy: 1.77747 nrh: 3 rawID: 838959817
+Processing New Event : 
+Calo # 0 energy: 123.858 nrh: 21 rawID: 872441500
+Calo # 1 energy: 0.719679 nrh: 1 rawID: 872439829
+Calo # 2 energy: 0.317514 nrh: 1 rawID: 838944838
+Processing New Event : 
+Calo # 0 energy: 115.501 nrh: 8 rawID: 872440508
+Calo # 1 energy: 29.2435 nrh: 5 rawID: 838863036
+Processing New Event : 
+Calo # 0 energy: 347.986 nrh: 19 rawID: 872434478
+Calo # 1 energy: 5.31779 nrh: 8 rawID: 872434481
+Calo # 2 energy: 3.44242 nrh: 2 rawID: 872434983
+Calo # 3 energy: 1.05621 nrh: 1 rawID: 872434613
+Processing New Event : 
+Calo # 0 energy: 11.4427 nrh: 6 rawID: 838896184
+Calo # 1 energy: 482.755 nrh: 18 rawID: 872420000
+Calo # 2 energy: 1.37349 nrh: 2 rawID: 838892174
+Processing New Event : 
+Calo # 0 energy: 139.055 nrh: 7 rawID: 872419130
+Calo # 1 energy: 9.40043 nrh: 1 rawID: 872419127
+Calo # 2 energy: 3.95012 nrh: 1 rawID: 872419123
+Calo # 3 energy: 2.9583 nrh: 2 rawID: 872418997
+Calo # 4 energy: 42.3521 nrh: 6 rawID: 872418619
+Calo # 5 energy: 30.5489 nrh: 7 rawID: 838870363
+Calo # 6 energy: 1.20848 nrh: 2 rawID: 838870856
+Calo # 7 energy: 1.07205 nrh: 2 rawID: 838870529
+Processing New Event : 
+Calo # 0 energy: 45.0654 nrh: 5 rawID: 872434739
+Calo # 1 energy: 50.4843 nrh: 15 rawID: 838964250
+Calo # 2 energy: 13.9655 nrh: 15 rawID: 838964252
+Calo # 3 energy: 3.55754 nrh: 6 rawID: 838964771
+Calo # 4 energy: 2.516 nrh: 6 rawID: 838964774
+Calo # 5 energy: 1.98774 nrh: 3 rawID: 838965258
+Calo # 6 energy: 1.77424 nrh: 7 rawID: 838964766
+Calo # 7 energy: 0.592215 nrh: 1 rawID: 838964781
+Calo # 8 energy: 0.640584 nrh: 3 rawID: 838964748
+Calo # 9 energy: 0.536213 nrh: 1 rawID: 838964786
+Calo # 10 energy: 0.523641 nrh: 1 rawID: 838964783
+Calo # 11 energy: 0.409414 nrh: 1 rawID: 838966279
+Calo # 12 energy: 0.309748 nrh: 1 rawID: 838967353
+Calo # 13 energy: 2.5385 nrh: 3 rawID: 838945964
+Processing New Event : 
+Calo # 0 energy: 105.791 nrh: 17 rawID: 872418623
+Calo # 1 energy: 12.5239 nrh: 10 rawID: 872418362
+Calo # 2 energy: 2.81803 nrh: 2 rawID: 872418882
+Processing New Event : 
+Calo # 0 energy: 160.467 nrh: 20 rawID: 838954834
+Calo # 1 energy: 4.13031 nrh: 16 rawID: 838954836
+Calo # 2 energy: 1.21974 nrh: 12 rawID: 838954830
+Processing New Event : 
+Calo # 0 energy: 98.0371 nrh: 16 rawID: 872425376
+Calo # 1 energy: 2.17529 nrh: 2 rawID: 872424345
+Calo # 2 energy: 2.6749 nrh: 2 rawID: 838951243
+Processing New Event : 
+Calo # 0 energy: 29.8977 nrh: 16 rawID: 872418907
+Calo # 1 energy: 40.089 nrh: 14 rawID: 838936376
+Calo # 2 energy: 0.334164 nrh: 1 rawID: 838936386
+Calo # 3 energy: 8.83353 nrh: 1 rawID: 872437319
+Processing New Event : 
+Calo # 0 energy: 121 nrh: 23 rawID: 838884514
+Calo # 1 energy: 1.3263 nrh: 2 rawID: 838885041
+Calo # 2 energy: 0.617501 nrh: 1 rawID: 838886017
+Calo # 3 energy: 0.487654 nrh: 1 rawID: 838885039
+Calo # 4 energy: 0.265698 nrh: 1 rawID: 838885563
+Calo # 5 energy: 68.2814 nrh: 25 rawID: 838937920
+Calo # 6 energy: 6.59967 nrh: 3 rawID: 838948199
+Calo # 7 energy: 3.20008 nrh: 8 rawID: 838947684
+Calo # 8 energy: 0.748165 nrh: 1 rawID: 838947849
+Calo # 9 energy: 0.584824 nrh: 3 rawID: 838947680
+Calo # 10 energy: 3.51406 nrh: 4 rawID: 838876243
+Processing New Event : 
+Calo # 0 energy: 142.421 nrh: 23 rawID: 872442154
+Calo # 1 energy: 13.603 nrh: 10 rawID: 838934694
+Calo # 2 energy: 0.966124 nrh: 12 rawID: 838934696
+Calo # 3 energy: 0.27731 nrh: 1 rawID: 838934680
+Calo # 4 energy: 49.1548 nrh: 13 rawID: 838933674
+Calo # 5 energy: 0.472769 nrh: 1 rawID: 838934164
+Processing New Event : 
+Calo # 0 energy: 222.161 nrh: 9 rawID: 872424493
+Calo # 1 energy: 27.1663 nrh: 7 rawID: 838964337
+Calo # 2 energy: 2.58029 nrh: 3 rawID: 838964343
+Calo # 3 energy: 1.33649 nrh: 2 rawID: 838964332
+Calo # 4 energy: 0.505718 nrh: 1 rawID: 838965380
+Calo # 5 energy: 0.318642 nrh: 1 rawID: 838964839
+Calo # 6 energy: 0.276701 nrh: 1 rawID: 838966872
+Calo # 7 energy: 10.1038 nrh: 8 rawID: 838871838
+Calo # 8 energy: 0.571437 nrh: 1 rawID: 838894600
+Processing New Event : 
+Calo # 0 energy: 81.5003 nrh: 14 rawID: 872416306
+Calo # 1 energy: 1.21408 nrh: 1 rawID: 872417216
+Processing New Event : 
+Calo # 0 energy: 43.6989 nrh: 11 rawID: 872433711
+Calo # 1 energy: 5.0449 nrh: 6 rawID: 872433962
+Calo # 2 energy: 2.19544 nrh: 2 rawID: 872434084
+Calo # 3 energy: 1.79062 nrh: 1 rawID: 872434723
+Calo # 4 energy: 1.10184 nrh: 1 rawID: 872434466
+Calo # 5 energy: 528.336 nrh: 12 rawID: 872440360
+Calo # 6 energy: 5.26882 nrh: 3 rawID: 872433073
+Processing New Event : 
+Calo # 0 energy: 56.1805 nrh: 16 rawID: 838898720
+Calo # 1 energy: 10.8187 nrh: 4 rawID: 838898715
+Calo # 2 energy: 10.868 nrh: 5 rawID: 838953266
+Calo # 3 energy: 1.9253 nrh: 1 rawID: 838953772
+Processing New Event : 
+Calo # 0 energy: 54.8649 nrh: 20 rawID: 838930733
+Calo # 1 energy: 1.68338 nrh: 10 rawID: 838931248
+Calo # 2 energy: 51.9943 nrh: 17 rawID: 838893137
+Calo # 3 energy: 7.42344 nrh: 12 rawID: 838893135
+Calo # 4 energy: 0.51722 nrh: 1 rawID: 838894655
+Processing New Event : 
+Calo # 0 energy: 47.7441 nrh: 18 rawID: 838929433
+Calo # 1 energy: 9.22885 nrh: 11 rawID: 838928924
+Calo # 2 energy: 0.387545 nrh: 1 rawID: 838929411
+Calo # 3 energy: 44.7489 nrh: 9 rawID: 838956726
+Calo # 4 energy: 4.14386 nrh: 2 rawID: 838957232
+Calo # 5 energy: 2.1582 nrh: 2 rawID: 838956715
+Calo # 6 energy: 0.374953 nrh: 1 rawID: 838956723
+Calo # 7 energy: 0.287228 nrh: 1 rawID: 838957736
+Calo # 8 energy: 0.470373 nrh: 1 rawID: 838904619
+Processing New Event : 
+Calo # 0 energy: 175.173 nrh: 22 rawID: 838893760
+Calo # 1 energy: 10.0001 nrh: 14 rawID: 838893756
+Calo # 2 energy: 2.86916 nrh: 2 rawID: 838894265
+Calo # 3 energy: 0.361341 nrh: 1 rawID: 838894280
+Processing New Event : 
+Calo # 0 energy: 113.515 nrh: 24 rawID: 872441127
+Calo # 1 energy: 11.5511 nrh: 11 rawID: 838929067
+Calo # 2 energy: 1.39528 nrh: 11 rawID: 838929064
+Calo # 3 energy: 0.502603 nrh: 1 rawID: 838929084
+Calo # 4 energy: 0.237715 nrh: 1 rawID: 838929598
+Processing New Event : 
+Calo # 0 energy: 65.0031 nrh: 15 rawID: 838902110
+Calo # 1 energy: 1.25077 nrh: 7 rawID: 838902114
+Calo # 2 energy: 1.08328 nrh: 2 rawID: 838902117
+Calo # 3 energy: 0.384966 nrh: 1 rawID: 838904129
+Calo # 4 energy: 0.302718 nrh: 1 rawID: 838902793
+Calo # 5 energy: 0.647782 nrh: 1 rawID: 838959441
+Calo # 6 energy: 3.57312 nrh: 2 rawID: 872435034
+Calo # 7 energy: 0.394973 nrh: 1 rawID: 838896721
+Calo # 8 energy: 2.69579 nrh: 3 rawID: 838868053
+Processing New Event : 
+Calo # 0 energy: 15.1286 nrh: 4 rawID: 838873358
+Calo # 1 energy: 21.8518 nrh: 21 rawID: 838886950
+Processing New Event : 
+Calo # 0 energy: 654.138 nrh: 22 rawID: 872420132
+Processing New Event : 
+Calo # 0 energy: 226.585 nrh: 7 rawID: 872436516
+Calo # 1 energy: 5.46338 nrh: 3 rawID: 872436131
+Processing New Event : 
+Calo # 0 energy: 207.56 nrh: 11 rawID: 872418747
+Calo # 1 energy: 41.1203 nrh: 9 rawID: 872424883
+Calo # 2 energy: 16.432 nrh: 3 rawID: 872424879
+Calo # 3 energy: 1.79074 nrh: 8 rawID: 872425266
+Processing New Event : 
+Calo # 0 energy: 99.385 nrh: 13 rawID: 872433715
+Calo # 1 energy: 25.8969 nrh: 11 rawID: 872433719
+Calo # 2 energy: 1.96038 nrh: 1 rawID: 872433839
+Calo # 3 energy: 0.670661 nrh: 1 rawID: 872434236
+Processing New Event : 
+Calo # 0 energy: 567.475 nrh: 22 rawID: 872424503
+Calo # 1 energy: 20.3286 nrh: 11 rawID: 838895302
+Calo # 2 energy: 20.0084 nrh: 10 rawID: 838894784
+Calo # 3 energy: 9.16293 nrh: 11 rawID: 838895292
+Calo # 4 energy: 5.49694 nrh: 8 rawID: 838895289
+Calo # 5 energy: 3.96362 nrh: 8 rawID: 838895309
+Calo # 6 energy: 2.47913 nrh: 12 rawID: 838894266
+Calo # 7 energy: 1.79531 nrh: 8 rawID: 838894795
+Calo # 8 energy: 1.67498 nrh: 2 rawID: 838895313
+Calo # 9 energy: 1.1241 nrh: 1 rawID: 838895798
+Calo # 10 energy: 0.898755 nrh: 1 rawID: 838899429
+Calo # 11 energy: 0.424263 nrh: 1 rawID: 838897372
+Calo # 12 energy: 0.277958 nrh: 1 rawID: 838896862
+Processing New Event : 
+Calo # 0 energy: 341.884 nrh: 35 rawID: 838900340
+Calo # 1 energy: 4.10671 nrh: 9 rawID: 838900347
+Calo # 2 energy: 0.858684 nrh: 1 rawID: 838900873
+Calo # 3 energy: 0.595747 nrh: 1 rawID: 838901899
+Calo # 4 energy: 0.412445 nrh: 1 rawID: 838900354
+Calo # 5 energy: 0.409349 nrh: 1 rawID: 838900878
+Calo # 6 energy: 10.6525 nrh: 12 rawID: 838874385
+Calo # 7 energy: 0.613786 nrh: 1 rawID: 838874367
+Calo # 8 energy: 16.022 nrh: 5 rawID: 838966475
+Calo # 9 energy: 4.20414 nrh: 1 rawID: 838966994
+Calo # 10 energy: 2.07601 nrh: 3 rawID: 838966980
+Calo # 11 energy: 0.481296 nrh: 1 rawID: 838966974
+Processing New Event : 
+Calo # 0 energy: 43.7816 nrh: 10 rawID: 838939651
+Processing New Event : 
+Calo # 0 energy: 131.126 nrh: 17 rawID: 872416568
+Processing New Event : 
+Calo # 0 energy: 30.5897 nrh: 11 rawID: 838883353
+Calo # 1 energy: 3.80016 nrh: 2 rawID: 838883860
+Calo # 2 energy: 0.808077 nrh: 2 rawID: 838883872
+Calo # 3 energy: 0.267364 nrh: 1 rawID: 838883892
+Calo # 4 energy: 54.3286 nrh: 10 rawID: 838950558
+Calo # 5 energy: 2.80673 nrh: 2 rawID: 838950566
+Calo # 6 energy: 4.5527 nrh: 2 rawID: 838888619
+Calo # 7 energy: 12.7419 nrh: 2 rawID: 872440635
+Calo # 8 energy: 7.9587 nrh: 2 rawID: 872419787
+Processing New Event : 
+Calo # 0 energy: 55.6564 nrh: 10 rawID: 838869781
+Calo # 1 energy: 1.06327 nrh: 2 rawID: 838869784
+Calo # 2 energy: 0.953966 nrh: 7 rawID: 838869778
+Calo # 3 energy: 16.1917 nrh: 6 rawID: 872422817
+Processing New Event : 
+Calo # 0 energy: 25.6644 nrh: 16 rawID: 838928056
+Calo # 1 energy: 2.82734 nrh: 9 rawID: 838927540
+Calo # 2 energy: 39.052 nrh: 8 rawID: 838870335
+Calo # 3 energy: 7.32347 nrh: 5 rawID: 872422923
+Calo # 4 energy: 6.59881 nrh: 4 rawID: 872423951
+Processing New Event : 
+Calo # 0 energy: 41.4195 nrh: 15 rawID: 872419088
+Calo # 1 energy: 23.0844 nrh: 21 rawID: 872419473
+Calo # 2 energy: 7.5393 nrh: 10 rawID: 872419982
+Calo # 3 energy: 1.06515 nrh: 1 rawID: 872420367
+Calo # 4 energy: 142.45 nrh: 11 rawID: 872422680
+Calo # 5 energy: 2.10141 nrh: 1 rawID: 872422040
+Calo # 6 energy: 1.24766 nrh: 1 rawID: 872422296
+Calo # 7 energy: 21.2782 nrh: 11 rawID: 838864451
+Calo # 8 energy: 0.408883 nrh: 1 rawID: 838864440
+Processing New Event : 
+Calo # 0 energy: 51.7139 nrh: 11 rawID: 838950448
+Calo # 1 energy: 35.8516 nrh: 11 rawID: 838874838
+Calo # 2 energy: 2.70484 nrh: 2 rawID: 838870670
+Processing New Event : 
+Calo # 0 energy: 96.8225 nrh: 7 rawID: 872436143
+Calo # 1 energy: 54.9871 nrh: 15 rawID: 838903842
+Calo # 2 energy: 12.55 nrh: 13 rawID: 838903844
+Calo # 3 energy: 8.68661 nrh: 9 rawID: 838904361
+Calo # 4 energy: 2.47445 nrh: 3 rawID: 838904346
+Calo # 5 energy: 7.04911 nrh: 4 rawID: 838900766
+Processing New Event : 
+Calo # 0 energy: 60.2062 nrh: 18 rawID: 838903453
+Calo # 1 energy: 14.3291 nrh: 11 rawID: 838903457
+Calo # 2 energy: 4.91926 nrh: 11 rawID: 838902938
+Calo # 3 energy: 0.883053 nrh: 2 rawID: 838903460
+Calo # 4 energy: 40.1999 nrh: 12 rawID: 838957875
+Processing New Event : 
+Calo # 0 energy: 35.2518 nrh: 9 rawID: 838951732
+Calo # 1 energy: 4.60479 nrh: 2 rawID: 838951737
+Calo # 2 energy: 2.62551 nrh: 2 rawID: 872437902
+Processing New Event : 
+Calo # 0 energy: 165.332 nrh: 10 rawID: 872421444
+Calo # 1 energy: 12.4434 nrh: 4 rawID: 838928647
+Calo # 2 energy: 11.5739 nrh: 3 rawID: 872420257
+Processing New Event : 
+Calo # 0 energy: 43.7467 nrh: 15 rawID: 838927655
+Calo # 1 energy: 10.806 nrh: 13 rawID: 838927652
+Processing New Event : 
+Calo # 0 energy: 67.8711 nrh: 20 rawID: 838879051
+Calo # 1 energy: 11.8693 nrh: 18 rawID: 838878537
+Calo # 2 energy: 5.07672 nrh: 5 rawID: 838878546
+Calo # 3 energy: 31.225 nrh: 21 rawID: 838943378
+Calo # 4 energy: 10.5069 nrh: 21 rawID: 838941841
+Calo # 5 energy: 12.0162 nrh: 3 rawID: 872424768
+Processing New Event : 
+Calo # 0 energy: 82.9682 nrh: 16 rawID: 838902600
+Calo # 1 energy: 20.3358 nrh: 14 rawID: 838902605
+Calo # 2 energy: 5.03148 nrh: 8 rawID: 838902607
+Calo # 3 energy: 3.97519 nrh: 4 rawID: 838904149
+Calo # 4 energy: 1.88099 nrh: 3 rawID: 838903606
+Calo # 5 energy: 0.774456 nrh: 1 rawID: 838904112
+Calo # 6 energy: 0.416882 nrh: 1 rawID: 838902595
+Calo # 7 energy: 1.09741 nrh: 2 rawID: 838878854
+Processing New Event : 
+Calo # 0 energy: 46.3723 nrh: 12 rawID: 838880059
+Calo # 1 energy: 6.73492 nrh: 4 rawID: 838880054
+Calo # 2 energy: 0.408735 nrh: 1 rawID: 838881627
+Calo # 3 energy: 45.9868 nrh: 13 rawID: 838951555
+Calo # 4 energy: 8.21532 nrh: 12 rawID: 838951557
+Calo # 5 energy: 0.42078 nrh: 1 rawID: 838952063
+Calo # 6 energy: 0.387784 nrh: 1 rawID: 838953059
+Calo # 7 energy: 0.291577 nrh: 1 rawID: 838953112
+Calo # 8 energy: 0.24303 nrh: 1 rawID: 838954149
+Calo # 9 energy: 0.921251 nrh: 2 rawID: 838945097
+Calo # 10 energy: 4.77097 nrh: 2 rawID: 872424107
+Processing New Event : 
+Calo # 0 energy: 192.452 nrh: 30 rawID: 838964870
+Calo # 1 energy: 25.289 nrh: 18 rawID: 838964864
+Calo # 2 energy: 3.79976 nrh: 9 rawID: 838965900
+Calo # 3 energy: 2.33522 nrh: 15 rawID: 838965373
+Calo # 4 energy: 1.45521 nrh: 7 rawID: 838965390
+Calo # 5 energy: 1.25468 nrh: 1 rawID: 838965906
+Calo # 6 energy: 0.764747 nrh: 1 rawID: 838969956
+Calo # 7 energy: 0.748141 nrh: 1 rawID: 838965392
+Calo # 8 energy: 0.289397 nrh: 1 rawID: 838965911
+Match found at ph: 0 asc: 0 jet: 0/1 kid: 3 pce: 6.2693
+Match found at ph: 0 asc: 1 jet: 0/1 kid: 7 pce: 24.754
+Match found at ph: 0 asc: 2 jet: 0/1 kid: 23 pce: 10.1298
+Match found at ph: 0 asc: 3 jet: 0/1 kid: 4 pce: 66.2313
+Match found at ph: 0 asc: 4 jet: 0/1 kid: 6 pce: 15.6757
+Match found at ph: 0 asc: 5 jet: 0/1 kid: 28 pce: 149.943
+Match found at ph: 0 asc: 6 jet: 0/1 kid: 27 pce: 1.64593
+Match found at ph: 0 asc: 7 jet: 0/1 kid: 25 pce: 0.954003
+Match found at ph: 0 asc: 9 jet: 0/1 kid: 24 pce: 2.63593
+Match found at ph: 0 asc: 10 jet: 0/1 kid: 22 pce: 0.358102
+ Match to photon SC with seedid: 838964870 nrh: 83 sce: 233.051 nClust: 9
+  SC Clust # 0 energy: 192.452 nrh: 30 rawID: 838964870
+  SC Clust # 1 energy: 25.289 nrh: 18 rawID: 838964864
+  SC Clust # 2 energy: 3.79976 nrh: 9 rawID: 838965900
+  SC Clust # 3 energy: 2.33522 nrh: 15 rawID: 838965373
+  SC Clust # 4 energy: 1.45521 nrh: 7 rawID: 838965390
+  SC Clust # 5 energy: 1.25468 nrh: 1 rawID: 838965906
+  SC Clust # 6 energy: 0.764747 nrh: 1 rawID: 838969956
+  SC Clust # 7 energy: 0.748141 nrh: 1 rawID: 838965392
+  SC Clust # 8 energy: 0.289397 nrh: 1 rawID: 838965911
+Processing New Event : 
+Calo # 0 energy: 54.6122 nrh: 6 rawID: 872423608
+Calo # 1 energy: 9.92827 nrh: 15 rawID: 838939908
+Calo # 2 energy: 56.329 nrh: 15 rawID: 838872794
+Calo # 3 energy: 8.21782 nrh: 13 rawID: 838941445
+Processing New Event : 
+Calo # 0 energy: 160.712 nrh: 26 rawID: 872433996
+Processing New Event : 
+Calo # 0 energy: 706.119 nrh: 29 rawID: 872440738
+Calo # 1 energy: 48.6674 nrh: 15 rawID: 872440868
+Calo # 2 energy: 0.894511 nrh: 1 rawID: 872440093
+Processing New Event : 
+Calo # 0 energy: 117.673 nrh: 8 rawID: 872436803
+Calo # 1 energy: 28.6893 nrh: 23 rawID: 838887223
+Calo # 2 energy: 19.333 nrh: 18 rawID: 838886708
+Calo # 3 energy: 0.388947 nrh: 1 rawID: 838889815
+Calo # 4 energy: 0.334039 nrh: 1 rawID: 838887728
+Calo # 5 energy: 0.273456 nrh: 1 rawID: 838887707
+Calo # 6 energy: 6.87192 nrh: 8 rawID: 838874752
+Calo # 7 energy: 61.8754 nrh: 14 rawID: 838881096
+Calo # 8 energy: 0.657975 nrh: 1 rawID: 838881091
+Processing New Event : 
+Calo # 0 energy: 72.9036 nrh: 10 rawID: 872422026
+Calo # 1 energy: 16.6255 nrh: 6 rawID: 872421642
+Calo # 2 energy: 1.95459 nrh: 1 rawID: 872419982
+Calo # 3 energy: 1.47896 nrh: 2 rawID: 872419729
+Calo # 4 energy: 2.77481 nrh: 2 rawID: 838885206
+Calo # 5 energy: 0.499828 nrh: 1 rawID: 838964323
+Processing New Event : 
+Calo # 0 energy: 98.4652 nrh: 15 rawID: 872442175
+Calo # 1 energy: 6.22102 nrh: 3 rawID: 872441796
+Processing New Event : 
+Calo # 0 energy: 136.625 nrh: 12 rawID: 872434862
+Calo # 1 energy: 1.31644 nrh: 1 rawID: 872434984
+Processing New Event : 
+Calo # 0 energy: 77.9728 nrh: 19 rawID: 838948171
+Calo # 1 energy: 37.4372 nrh: 17 rawID: 838942870
+Calo # 2 energy: 9.263 nrh: 19 rawID: 838943379
+Calo # 3 energy: 0.41514 nrh: 1 rawID: 838943398
+Calo # 4 energy: 0.34391 nrh: 7 rawID: 838944403
+Calo # 5 energy: 1.99789 nrh: 2 rawID: 838894636
+Processing New Event : 
+Calo # 0 energy: 41.9403 nrh: 10 rawID: 838944361
+Processing New Event : 
+Calo # 0 energy: 9.8024 nrh: 4 rawID: 838869085
+Calo # 1 energy: 32.2426 nrh: 8 rawID: 838866049
+Processing New Event : 
+Calo # 0 energy: 301.71 nrh: 19 rawID: 872435903
+Calo # 1 energy: 18.0777 nrh: 9 rawID: 872435644
+Calo # 2 energy: 2.8459 nrh: 1 rawID: 872436419
+Calo # 3 energy: 28.0056 nrh: 17 rawID: 838939965
+Calo # 4 energy: 8.06006 nrh: 14 rawID: 838938943
+Calo # 5 energy: 2.08426 nrh: 4 rawID: 838939441
+Calo # 6 energy: 0.434443 nrh: 1 rawID: 838939947
+Calo # 7 energy: 0.292489 nrh: 4 rawID: 838939439
+Processing New Event : 
+Calo # 0 energy: 92.983 nrh: 13 rawID: 872423308
+Calo # 1 energy: 3.69499 nrh: 3 rawID: 872422540
+Calo # 2 energy: 1.92821 nrh: 1 rawID: 872421006
+Calo # 3 energy: 1.91778 nrh: 2 rawID: 872424079
+Calo # 4 energy: 1.17585 nrh: 2 rawID: 872421516
+Calo # 5 energy: 1.89077 nrh: 6 rawID: 838948171
+Processing New Event : 
+Calo # 0 energy: 144.776 nrh: 6 rawID: 872421828
+Calo # 1 energy: 74.9009 nrh: 14 rawID: 838894319
+Calo # 2 energy: 4.51652 nrh: 7 rawID: 838894323
+Calo # 3 energy: 4.50945 nrh: 11 rawID: 838894828
+Processing New Event : 
+Calo # 0 energy: 84.8365 nrh: 15 rawID: 838884920
+Calo # 1 energy: 0.718751 nrh: 2 rawID: 838885424
+Calo # 2 energy: 0.572254 nrh: 1 rawID: 838884923
+Calo # 3 energy: 0.309803 nrh: 1 rawID: 838885440
+Calo # 4 energy: 0.28378 nrh: 1 rawID: 838885909
+Calo # 5 energy: 12.0031 nrh: 9 rawID: 838878457
+Calo # 6 energy: 3.62478 nrh: 2 rawID: 838871796
+Calo # 7 energy: 2.06732 nrh: 2 rawID: 838941355
+Calo # 8 energy: 7.41113 nrh: 1 rawID: 872441396
+Processing New Event : 
+Calo # 0 energy: 92.2575 nrh: 23 rawID: 838950423
+Calo # 1 energy: 6.03861 nrh: 3 rawID: 838950417
+Calo # 2 energy: 1.75598 nrh: 3 rawID: 838950432
+Calo # 3 energy: 0.858353 nrh: 2 rawID: 838951987
+Calo # 4 energy: 0.604785 nrh: 1 rawID: 838952804
+Calo # 5 energy: 0.315886 nrh: 1 rawID: 838950925
+Calo # 6 energy: 0.313566 nrh: 1 rawID: 838950941
+Calo # 7 energy: 61.6077 nrh: 5 rawID: 872421534
+Calo # 8 energy: 32.7799 nrh: 12 rawID: 838878918
+Calo # 9 energy: 9.23205 nrh: 8 rawID: 838878923
+Calo # 10 energy: 7.63055 nrh: 14 rawID: 838878921
+Calo # 11 energy: 1.31462 nrh: 1 rawID: 838878911
+Calo # 12 energy: 0.478148 nrh: 1 rawID: 838878892
+Calo # 13 energy: 3.30213 nrh: 3 rawID: 838952995
+Processing New Event : 
+Calo # 0 energy: 52.51 nrh: 10 rawID: 838891806
+Calo # 1 energy: 0.973446 nrh: 2 rawID: 838891801
+Calo # 2 energy: 0.845486 nrh: 1 rawID: 838891811
+Processing New Event : 
+Calo # 0 energy: 169.353 nrh: 8 rawID: 872422216
+Calo # 1 energy: 27.5707 nrh: 13 rawID: 838872376
+Calo # 2 energy: 6.08996 nrh: 11 rawID: 838871868
+Calo # 3 energy: 1.94769 nrh: 14 rawID: 838873401
+Processing New Event : 
+Calo # 0 energy: 40.1432 nrh: 9 rawID: 838881055
+Processing New Event : 
+Calo # 0 energy: 61.3017 nrh: 6 rawID: 872421831
+Calo # 1 energy: 48.6893 nrh: 12 rawID: 838956368
+Calo # 2 energy: 0.490128 nrh: 1 rawID: 838956868
+Calo # 3 energy: 13.7904 nrh: 8 rawID: 838902482
+Calo # 4 energy: 11.5478 nrh: 8 rawID: 838902486
+Calo # 5 energy: 2.59639 nrh: 5 rawID: 838903503
+Calo # 6 energy: 1.07454 nrh: 2 rawID: 838903007
+Calo # 7 energy: 0.486763 nrh: 1 rawID: 838902476
+Processing New Event : 
+Calo # 0 energy: 62.0497 nrh: 22 rawID: 838890322
+Calo # 1 energy: 8.26227 nrh: 15 rawID: 838890319
+Calo # 2 energy: 0.637895 nrh: 1 rawID: 838891531
+Calo # 3 energy: 0.561678 nrh: 1 rawID: 838892546
+Calo # 4 energy: 32.6455 nrh: 6 rawID: 838954659
+Calo # 5 energy: 16.7371 nrh: 14 rawID: 838889297
+Calo # 6 energy: 8.77035 nrh: 4 rawID: 838952605
+Processing New Event : 
+Calo # 0 energy: 247.358 nrh: 7 rawID: 872421280
+Processing New Event : 
+Calo # 0 energy: 111.564 nrh: 13 rawID: 872422034
+Calo # 1 energy: 29.4462 nrh: 14 rawID: 872421778
+Calo # 2 energy: 7.42409 nrh: 7 rawID: 872421522
+Calo # 3 energy: 0.744052 nrh: 1 rawID: 872422676
+Processing New Event : 
+Calo # 0 energy: 621.086 nrh: 18 rawID: 872420420
+Calo # 1 energy: 3.92705 nrh: 5 rawID: 838895973
+Processing New Event : 
+Calo # 0 energy: 70.6562 nrh: 13 rawID: 872423388
+Calo # 1 energy: 12.4105 nrh: 9 rawID: 872423004
+Calo # 2 energy: 8.00175 nrh: 10 rawID: 872423771
+Calo # 3 energy: 6.98158 nrh: 8 rawID: 872424153
+Calo # 4 energy: 0.737585 nrh: 1 rawID: 872421081
+Calo # 5 energy: 0.741476 nrh: 1 rawID: 872425167
+Processing New Event : 
+Calo # 0 energy: 609.996 nrh: 23 rawID: 872422815
+Calo # 1 energy: 5.97114 nrh: 4 rawID: 838933615
+Processing New Event : 
+Calo # 0 energy: 362.893 nrh: 19 rawID: 872434612
+Calo # 1 energy: 14.7866 nrh: 11 rawID: 872434615
+Calo # 2 energy: 6.74389 nrh: 7 rawID: 872434608
+Calo # 3 energy: 1.57277 nrh: 1 rawID: 872434745
+Calo # 4 energy: 5.62253 nrh: 6 rawID: 838884866
+Calo # 5 energy: 1.53247 nrh: 2 rawID: 838875488
+Processing New Event : 
+Calo # 0 energy: 30.4113 nrh: 8 rawID: 838863552
+Calo # 1 energy: 0.627709 nrh: 1 rawID: 838903451
+Calo # 2 energy: 6.14174 nrh: 5 rawID: 838888207
+Processing New Event : 
+Calo # 0 energy: 120.466 nrh: 14 rawID: 872424352
+Calo # 1 energy: 21.9656 nrh: 8 rawID: 838937803
+Calo # 2 energy: 0.345886 nrh: 1 rawID: 838937806
+Processing New Event : 
+Calo # 0 energy: 211.658 nrh: 10 rawID: 872438723
+Calo # 1 energy: 1.82616 nrh: 1 rawID: 872438598
+Calo # 2 energy: 55.5833 nrh: 8 rawID: 872418825
+Processing New Event : 
+Calo # 0 energy: 205.626 nrh: 27 rawID: 872417092
+Calo # 1 energy: 4.68543 nrh: 10 rawID: 872417352
+Calo # 2 energy: 2.78495 nrh: 3 rawID: 872417867
+Calo # 3 energy: 1.84361 nrh: 1 rawID: 872416951
+Processing New Event : 
+Calo # 0 energy: 150.461 nrh: 10 rawID: 872421707
+Processing New Event : 
+Calo # 0 energy: 265.401 nrh: 6 rawID: 872420144
+Calo # 1 energy: 35.8624 nrh: 9 rawID: 838927698
+Processing New Event : 
+Calo # 0 energy: 55.756 nrh: 12 rawID: 838942279
+Processing New Event : 
+Calo # 0 energy: 71.8508 nrh: 12 rawID: 838903478
+Calo # 1 energy: 5.7739 nrh: 4 rawID: 872424141
+Processing New Event : 
+Calo # 0 energy: 176.512 nrh: 21 rawID: 838958419
+Calo # 1 energy: 7.39185 nrh: 15 rawID: 838958421
+Calo # 2 energy: 2.24987 nrh: 4 rawID: 838958413
+Calo # 3 energy: 0.948524 nrh: 1 rawID: 838958424
+Calo # 4 energy: 0.403299 nrh: 1 rawID: 838958904
+Calo # 5 energy: 83.6933 nrh: 9 rawID: 872420545
+Processing New Event : 
+Calo # 0 energy: 245.883 nrh: 10 rawID: 872437026
+Calo # 1 energy: 37.3395 nrh: 8 rawID: 838945860
+Processing New Event : 
+Calo # 0 energy: 134.286 nrh: 10 rawID: 872435785
+Calo # 1 energy: 1.07872 nrh: 1 rawID: 872435394
+Processing New Event : 
+Calo # 0 energy: 67.8543 nrh: 22 rawID: 838870180
+Calo # 1 energy: 10.8704 nrh: 17 rawID: 838869159
+Calo # 2 energy: 2.25321 nrh: 1 rawID: 838869658
+Calo # 3 energy: 14.0743 nrh: 13 rawID: 838891858
+Calo # 4 energy: 143.211 nrh: 25 rawID: 838893393
+Calo # 5 energy: 6.1529 nrh: 20 rawID: 838893395
+Calo # 6 energy: 2.80111 nrh: 3 rawID: 838894411
+Calo # 7 energy: 2.59507 nrh: 8 rawID: 838893389
+Calo # 8 energy: 1.74453 nrh: 7 rawID: 838893910
+Calo # 9 energy: 0.799348 nrh: 1 rawID: 838895109
+Calo # 10 energy: 0.462363 nrh: 1 rawID: 838893889
+Processing New Event : 
+Calo # 0 energy: 188.891 nrh: 14 rawID: 872441001
+Calo # 1 energy: 10.1028 nrh: 8 rawID: 872440871
+Calo # 2 energy: 5.10889 nrh: 5 rawID: 838870612
+Calo # 3 energy: 4.15756 nrh: 2 rawID: 838870606
+Processing New Event : 
+Calo # 0 energy: 706.932 nrh: 32 rawID: 872434467
+Calo # 1 energy: 57.48 nrh: 21 rawID: 872434850
+Calo # 2 energy: 15.5604 nrh: 10 rawID: 872434217
+Calo # 3 energy: 8.06043 nrh: 8 rawID: 872434974
+Processing New Event : 
+Calo # 0 energy: 221.463 nrh: 28 rawID: 838954630
+Calo # 1 energy: 3.98603 nrh: 8 rawID: 838954626
+Calo # 2 energy: 3.04803 nrh: 7 rawID: 838954622
+Calo # 3 energy: 2.38408 nrh: 2 rawID: 838954647
+Calo # 4 energy: 2.39938 nrh: 8 rawID: 838954624
+Calo # 5 energy: 0.641932 nrh: 1 rawID: 838956141
+Calo # 6 energy: 1.66312 nrh: 1 rawID: 872425299
+Calo # 7 energy: 2.67391 nrh: 4 rawID: 838862886
+Processing New Event : 
+Calo # 0 energy: 35.5004 nrh: 10 rawID: 838929759
+Calo # 1 energy: 6.501 nrh: 5 rawID: 872433073
+Calo # 2 energy: 3.68385 nrh: 5 rawID: 872433075
+Calo # 3 energy: 1.76639 nrh: 2 rawID: 872433320

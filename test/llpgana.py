@@ -26,7 +26,7 @@ options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singlet
 options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsing.varType.string,'process name to be considered');
 
 ## outputFile Name
-options.register('outputFileName','llpgana_output_t12_id3pt200rh32eta15.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
+options.register('outputFileName','llpgana_output_t17_id3pt200rh32eta15.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
 options.parseArguments()
@@ -76,7 +76,11 @@ process.source = cms.Source("PoolSource",
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
@@ -115,10 +119,11 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## ecal recHits
    recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
    recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
-
 	## superclusters
    superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
    ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
+	## caloclusters
+	caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
 )
 
 
