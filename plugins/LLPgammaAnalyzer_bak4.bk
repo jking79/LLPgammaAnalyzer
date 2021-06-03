@@ -220,7 +220,6 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const recHitCol rheb, const recHitCol rhee
 
     for (const auto recHit : rheb ){
 
-       if( recHit.checkFlag(EcalRecHit::kHasSwitchToGain6) ) continue;
        auto enr = recHit.energy();
        if( enr <= minenr ) continue;
        const auto recHitId(recHit.detid());
@@ -232,7 +231,6 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const recHitCol rheb, const recHitCol rhee
 
     for (const auto recHit : rhee ){
 
-       if( recHit.checkFlag(EcalRecHit::kHasSwitchToGain6) ) continue;
        auto enr = recHit.energy();
        if( enr <= minenr ) continue;
        const auto recHitId(recHit.detid());
@@ -359,6 +357,16 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times ){
 
 	vector<float> results;
 
+	if( times.size() < 5 ){
+		results.push_back(-9.75);
+      results.push_back(99.9);
+      results.push_back(-9.75);
+      results.push_back(99.9);
+      results.push_back(99.9);
+      results.push_back(9.9);
+		return results;
+	}	
+
    TH1D timeDist( "temp", "temp", 500, -25, 25 );
    for( const auto time : times ) timeDist.Fill(time);
    double medtime(0.0), quant(0.5);
@@ -371,21 +379,6 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times ){
    results.push_back(1.2533*error);// valid for noraml distibutions
    results.push_back(timeDist.GetRMS());
    results.push_back(timeDist.GetSkewness());
-
-	auto size = times.size();
-   auto rmu = mean(times);
-   results.push_back(rmu);//6 mean
-   auto rsd = stdev(times, rmu);
-   results.push_back(rsd);//7 stdev
-   results.push_back(rms(times));//8 rms
-   auto err = rsd/std::sqrt(size);
-   results.push_back(err);//9 error of mean
-
-   std::sort(times.begin(),times.end());
-   if( size%2 == 0 ) results.push_back((times[(size/2)-1] + times[(size/2)])/2);//10
-   else results.push_back(times[size/2]);//10 median
-   results.push_back(1.2533*err);//11 error of median
-
 	return results;
 
 }
@@ -395,6 +388,17 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, rhGroup r
    vector<float> results;
    auto size = times.size();
 
+   if( size < 5 ){
+      results.push_back(-9.75);
+      results.push_back(99.9);
+      results.push_back(-9.75);
+      results.push_back(99.9);
+      results.push_back(99.9);
+      results.push_back(9.9);
+      return results;
+   }
+
+   TH1D timeDist( "temp", "temp", 500, -25, 25 );
 	if( size != rechits.size() ){ 
 		std::cout << "Time & rechit groups not same" << std::endl; 
 		results.push_back(-9.25);
@@ -406,50 +410,27 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, rhGroup r
 		return results; 
 	}
 
-   TH1D timeDist( "temp", "temp", 500, -10, 10 );
-   vector<float> wtimes;
-   vector<float> wts;
-	float wtot(0.0);
-
-	// N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
-	float N(3.64);
-	float C(0.3000);
-   for( unsigned int it(0); it < size; it++ ){
-		//auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-      auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C)); 
-		timeDist.Fill(times[it], wt);
-		wtimes.push_back(times[it]*wt);
-		wtot += wt;
-		wts.push_back(wt);
-	}
-
-   double hmedtime(0.0), quant(0.5);
+   for( unsigned int it(0); it < size; it++ ) timeDist.Fill( times[it], rechits[it].energy() );
+   double medtime(0.0), quant(0.5);
    timeDist.ComputeIntegral();
-   timeDist.GetQuantiles(1, &hmedtime, &quant);
-   auto herror = timeDist.GetMeanError();
-	auto hmutime = timeDist.GetMean();
-	auto hrms = timeDist.GetRMS();
-   results.push_back(hmutime);//0
-   results.push_back(herror);//1
-   results.push_back(hmedtime);//2
-   results.push_back(1.2533*herror);//3 - valid for noraml distibutions
-   results.push_back(hrms);//4
+   timeDist.GetQuantiles(1, &medtime, &quant);
+   auto error = timeDist.GetMeanError();
+	auto mutime = timeDist.GetMean();
+	auto rms = timeDist.GetRMS();
+   results.push_back(mutime);//0
+   results.push_back(error);//1
+   results.push_back(medtime);//2
+   results.push_back(1.2533*error);//3 - valid for noraml distibutions
+   results.push_back(rms);//4
    results.push_back(timeDist.GetSkewness());//5
 
-	auto rmu = mean(wtimes,wtot);
-	results.push_back(rmu);//6 mean
-	auto rsd = stdev(times, rmu, wts, wtot);
-	results.push_back(rsd);//7 stdev
-	results.push_back(rms(wtimes));//8 rms
-	auto err = rsd/std::sqrt(size);
-	results.push_back(err);//9 error of mean
+   //auto form = TFormula("guasform","[0]*exp(-0.5*((x-[1])/[2])**2)");
+   //auto fit = TF1("guasfit","guasform",mutime-2*rms,mutime+2*rms);
+   //timeDist.Fit("guasfit","RBQ0");
 
-	std::sort(times.begin(),times.end());
-	if( size%2 == 0 ) results.push_back((times[(size/2)-1]+times[(size/2)])/2);//10
-	else results.push_back(times[size/2]);//10 median
-	results.push_back(1.2533*err);//11 error of median
-
-	results.push_back(wtot);//12 tot e of all rechits
+   //results.push_back(6.25);//fit.GetParameter(0));//6 - norm
+   //results.push_back(6.25);//fit.GetParameter(1));//7 - mu
+   //results.push_back(99.9);//fit.GetParameter(2)); //8 - sigma
 
    return results;
 
@@ -579,16 +560,12 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
    jetMUF.clear();
    jetNHM.clear();
    jetCHM.clear();
-   jetMuTime.clear();
+   jetTime.clear();
    jetTimeError.clear();
    jetTimeRMS.clear();
    jetMedTime.clear();
    jetSCMuTime.clear();
    jetSCMedTime.clear();
-   jetCMuTime.clear();
-   jetCMedTime.clear();
-   jetCSCMuTime.clear();
-   jetCSCMedTime.clear();
 	jetPHM.clear();
 	jetELM.clear();
 	jetC.clear();
@@ -698,75 +675,70 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		   //  make jettime varible
          for( auto t : tofTimes ) hist1d[5]->Fill(t);
 		   auto jetTimeStats = getTimeDistStats( tofTimes, jetDrRhGroup ); 
-		   auto jmutime = jetTimeStats[0];
+		   auto jtime = jetTimeStats[0];
 	      auto jterr = jetTimeStats[1];
 	      auto jtrms = jetTimeStats[4];
-			auto jmedtime = jetTimeStats[2];
+			auto medtime = jetTimeStats[2];
          //auto mederr = jetTimeStats[3];
-			auto jcmutime = jetTimeStats[6];
-         auto jcmedtime = jetTimeStats[10];
+			//auto jfittime = jetTimeStats[7];
 
 	      njetRecHits.push_back(rhCount);
-	      jetMuTime.push_back(jmutime);
+	      jetTime.push_back(jtime);
 	      jetTimeError.push_back(jterr);
 	      jetTimeRMS.push_back(jtrms);
-	      jetMedTime.push_back(jmedtime);
-         jetCMuTime.push_back(jcmutime);	
-         jetCMedTime.push_back(jcmedtime);
+	      jetMedTime.push_back(medtime);
+         //jetFitTime.push_back(jfittime);	
 
-	      jetTimeHist->Fill(jmutime);
+	      jetTimeHist->Fill(jtime);
 	      hist1d[1]->Fill(rhCount);
 	      hist1d[2]->Fill(jterr);
 	      hist1d[3]->Fill(jtrms);
-	      hist1d[4]->Fill(jmedtime);
-         hist1d[6]->Fill(jcmutime);
-         hist1d[7]->Fill(jcmedtime);
-
+	      hist1d[4]->Fill(medtime);
+         //hist1d[6]->Fill(jfittime);
+	
 	      //std::cout << "Filling 2D Histos" << std::endl;
 	
-	      hist2d[1]->Fill(jmutime,jet.pt());
-	      hist2d[2]->Fill(jmutime,jet.userInt("jetID"));
-	      hist2d[3]->Fill(jmutime,jet.neutralHadronEnergyFraction());
-	      hist2d[4]->Fill(jmutime,jet.chargedHadronEnergyFraction());
-	      hist2d[5]->Fill(jmutime,jet.neutralEmEnergyFraction());
-	      hist2d[6]->Fill(jmutime,jet.chargedEmEnergyFraction());
-	      hist2d[7]->Fill(jmutime,jet.muonEnergyFraction());
-	      hist2d[8]->Fill(jmutime,jet.neutralMultiplicity());
-	      hist2d[9]->Fill(jmutime,jet.chargedMultiplicity());
+	      hist2d[1]->Fill(jtime,jet.pt());
+	      hist2d[2]->Fill(jtime,jet.userInt("jetID"));
+	      hist2d[3]->Fill(jtime,jet.neutralHadronEnergyFraction());
+	      hist2d[4]->Fill(jtime,jet.chargedHadronEnergyFraction());
+	      hist2d[5]->Fill(jtime,jet.neutralEmEnergyFraction());
+	      hist2d[6]->Fill(jtime,jet.chargedEmEnergyFraction());
+	      hist2d[7]->Fill(jtime,jet.muonEnergyFraction());
+	      hist2d[8]->Fill(jtime,jet.neutralMultiplicity());
+	      hist2d[9]->Fill(jtime,jet.chargedMultiplicity());
 	
-	      hist2d[10]->Fill(jmutime,jmedtime);
-	      hist2d[24]->Fill(jmutime,rhCount);
-	      hist2d[25]->Fill(jmedtime,rhCount);
-	      hist2d[11]->Fill(jmutime,jtrms);
-	      hist2d[12]->Fill(jmutime,jterr);
+	      hist2d[10]->Fill(jtime,medtime);
+	      hist2d[24]->Fill(jtime,rhCount);
+	      hist2d[25]->Fill(medtime,rhCount);
+	      hist2d[11]->Fill(jtime,jtrms);
+	      hist2d[12]->Fill(jtime,jterr);
 	
-	      hist2d[32]->Fill(jmutime,sc_eta);
-	      hist2d[33]->Fill(jmutime,sc_phi);
-	      hist2d[34]->Fill(jmutime,sc_enr);
-	      hist2d[35]->Fill(jmedtime,sc_eta);
-	      hist2d[36]->Fill(jmedtime,sc_phi);
-	      hist2d[37]->Fill(jmedtime,sc_enr);
+	      hist2d[32]->Fill(jtime,sc_eta);
+	      hist2d[33]->Fill(jtime,sc_phi);
+	      hist2d[34]->Fill(jtime,sc_enr);
+	      hist2d[35]->Fill(medtime,sc_eta);
+	      hist2d[36]->Fill(medtime,sc_phi);
+	      hist2d[37]->Fill(medtime,sc_enr);
 	
 	
-	      hist2d[13]->Fill(jmedtime,jet.pt());
-	      hist2d[14]->Fill(jmedtime,jet.userInt("jetID"));
-	      hist2d[15]->Fill(jmedtime,jet.neutralHadronEnergyFraction());
-	      hist2d[16]->Fill(jmedtime,jet.chargedHadronEnergyFraction());
-	      hist2d[17]->Fill(jmedtime,jet.neutralEmEnergyFraction());
-	      hist2d[18]->Fill(jmedtime,jet.chargedEmEnergyFraction());
-	      hist2d[19]->Fill(jmedtime,jet.muonEnergyFraction());
-	      hist2d[20]->Fill(jmedtime,jet.neutralMultiplicity());
-	      hist2d[21]->Fill(jmedtime,jet.chargedMultiplicity());
+	      hist2d[13]->Fill(medtime,jet.pt());
+	      hist2d[14]->Fill(medtime,jet.userInt("jetID"));
+	      hist2d[15]->Fill(medtime,jet.neutralHadronEnergyFraction());
+	      hist2d[16]->Fill(medtime,jet.chargedHadronEnergyFraction());
+	      hist2d[17]->Fill(medtime,jet.neutralEmEnergyFraction());
+	      hist2d[18]->Fill(medtime,jet.chargedEmEnergyFraction());
+	      hist2d[19]->Fill(medtime,jet.muonEnergyFraction());
+	      hist2d[20]->Fill(medtime,jet.neutralMultiplicity());
+	      hist2d[21]->Fill(medtime,jet.chargedMultiplicity());
 
       } else {
 
          njetRecHits.push_back(0);
-         jetMuTime.push_back(-9.25);
+         jetTime.push_back(-9.25);
          jetTimeError.push_back(99.9);
          jetTimeRMS.push_back(99.9);
          jetMedTime.push_back(-9.25);
-         jetCMuTime.push_back(-9.25);
-         jetCMedTime.push_back(-9.25);
 		
 		}//<<>>if( rhCount > minRHcnt)
 
@@ -944,8 +916,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 		hist1d[6]->Fill(nKids);
 */
-
-		// Super Cluster group  -----------------------------------------------
+		
+		// SC rh count -----------------------------------------------
 
       //std::cout << "Get jet SC Group " << std::endl;
       int iph(0);
@@ -955,7 +927,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
       float sum_sce(0.0);
       float sum_phe(0.0);
 		scGroup jetSCGroup;
-		bcGroup jetBCGroup;
       for( const auto photon : *gedPhotons_ ){
          //std::cout << "Proccesssing New Photon :" << std::endl;
          edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
@@ -984,18 +955,10 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				iph++;
 				nMatched++;
             const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
-				const auto scptr = phosc.get();
-				jetSCGroup.push_back(*scptr);
-				const auto clusters = phosc->clusters();
-         	//const auto nBClusts = phosc->clustersSize();
+				const auto schandle = phosc.get();
+				jetSCGroup.push_back(*schandle);
             const auto &hitsAndFractions = phosc->hitsAndFractions();
             const auto nrh = hitsAndFractions.size();
-				if( nrh != 0 ){
-					for( const auto &clustptr : clusters ){
-            		const auto clust = clustptr.get();
-						jetBCGroup.push_back(*clust);
-					}
-				}
             const auto sce = phosc->energy();
 				sum_nrh += nrh;
 				sum_sce += sce;
@@ -1033,21 +996,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 				bool found(false);
             const auto &elesc = electron.superCluster().isNonnull() ? electron.superCluster() : electron.parentSuperCluster();
-            const auto scptr = elesc.get();
-				for( const auto scit : jetSCGroup ){ if( scit == *scptr ) found = true; }
+            const auto schandle = elesc.get();
+				for( const auto scit : jetSCGroup ){ if( scit == *schandle ) found = true; }
 				if( not found ){
 					iel++;
-            	jetSCGroup.push_back(*scptr);
-					const auto clusters = elesc->clusters();
-               const auto &hitsAndFractions = elesc->hitsAndFractions();
-					const auto nrh = hitsAndFractions.size();
- 					//const auto nBClusts = elesc->clustersSize();
-					if( nrh != 0 ){ 
-            		for( const auto &clustptr : clusters ){
-               		const auto clust = clustptr.get();
-               		jetBCGroup.push_back(*clust);
-               	}
-					}
+            	jetSCGroup.push_back(*schandle);
+            	const auto &hitsAndFractions = elesc->hitsAndFractions();
+            	const auto nrh = hitsAndFractions.size();
             	const auto sce = elesc->energy();
             	nMatched++;
             	sum_nrh += nrh;
@@ -1069,9 +1024,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 			jetSCMuTime.push_back(-9.0);
          jetSCMedTime.push_back(-9.0); 
-         jetCSCMuTime.push_back(-9.0);
-         jetCSCMedTime.push_back(-9.0);
-
+         jetSCFitTime.push_back(-9.0);
 			//std::cout<< " - jetSCGroup is empty" << std::endl;
 
 		} else {
@@ -1100,22 +1053,21 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
          	hist1d[45]->Fill(jetSCTimeStats[0]);//mean
          	hist1d[46]->Fill(jetSCTimeStats[4]);//rms
             hist1d[50]->Fill(jetSCTimeStats[5]);//skew
-            hist1d[8]->Fill(jetSCTimeStats[6]);//c mean
-            hist1d[9]->Fill(jetSCTimeStats[10]);//c med   
-
+            //hist1d[42]->Fill(jetSCTimeStats[7]);//fit mean
+   
 				//std::cout<< " - fill vars " << std::endl;
    			jetSCMedTime.push_back(jetSCTimeStats[2]);
             jetSCMuTime.push_back(jetSCTimeStats[0]);
-            jetCSCMuTime.push_back(jetSCTimeStats[6]);
-            jetCSCMedTime.push_back(jetSCTimeStats[10]);
+            jetSCFitTime.push_back(jetSCTimeStats[7]);
 
       	} else {
 
 				//std::cout<< " - jetScRhGroup is < minRHcnt " << std::endl;
-            jetSCMuTime.push_back(-9.25);
-      	   jetCSCMuTime.push_back(-9.25);
-      	   jetSCMedTime.push_back(-9.25);
-            jetCSCMedTime.push_back(-9.25);
+      	   njetRecHits.push_back(0);
+      	   jetTime.push_back(-9.25);
+      	   jetTimeError.push_back(99.9);
+      	   jetTimeRMS.push_back(99.9);
+      	   jetMedTime.push_back(-9.25);
 
       	}//<<>>if( jetSCGroup.size() > minRHcnt)			
 		}
@@ -1161,14 +1113,12 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
          if( dPhi < dPhiLmt ) continue;
 
 			//std::cout << " - get jet pair dt" << std::endl;
-			auto dTmu = getdt( jetMuTime[q], jetMuTime[p] );
+			auto dTmu = getdt( jetTime[q], jetTime[p] );
          auto dTmed = getdt( jetMedTime[q], jetMedTime[p] );
          auto dTmusc = getdt( jetSCMuTime[q], jetSCMuTime[p] );
          auto dTmedsc = getdt( jetSCMedTime[q], jetSCMedTime[p] );
-         auto dTcmu = getdt( jetCMuTime[q], jetCMuTime[p] );
-         auto dTcmed = getdt( jetCMedTime[q], jetCMedTime[p] );
-         auto dTcmusc = getdt( jetCSCMuTime[q], jetCSCMuTime[p] );
-         auto dTcmedsc = getdt( jetCSCMedTime[q], jetCSCMedTime[p] );
+         //auto dTfit = getdt( jetFitTime[q], jetFitTime[p] );
+         //auto dTfitsc = getdt( jetSCFitTime[q], jetSCFitTime[p] );
          //std::cout << "dT Mu : " << dTmu <<  " " << jetTime[q] << " " << jetTime[p] << std::endl;
          //std::cout << "dT Med : " << dTmed <<  " " << jetMedTime[q] << " " << jetMedTime[p] << std::endl;
          //std::cout << "dT SC : " << dTmusc <<  " " << jetSCMuTime[q] << " " << jetSCMuTime[p] << std::endl;
@@ -1186,14 +1136,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
          hist2d[31]->Fill(dTmu,dPhi);
          hist1d[48]->Fill(dTmedsc);
          hist1d[49]->Fill(dTmusc);
-         hist1d[39]->Fill(dTcmu);
-         hist1d[40]->Fill(dTcmed);
-         hist1d[41]->Fill(dTcmusc);
-         hist1d[42]->Fill(dTcmedsc);
+         //hist1d[40]->Fill(dTfit);
+         //hist1d[41]->Fill(dTfitsc);
 
 			//std::cout << " - fill dt vs eff e hists" << std::endl;
-			//auto effje = (jetPHE[p]*jetPHE[q])/sqrt(pow(jetPHE[p],2)+pow(jetPHE[q],2));
-         auto effje = (jetPHE[p]*jetPHE[q])/sqrt(sq2(jetPHE[p])+sq2(jetPHE[q]));
+			auto effje = (jetE[p]*jetE[q])/sqrt(pow(jetE[p],2)+pow(jetE[q],2));;
          hist2d[43]->Fill(dTmusc,effje);
          hist2d[44]->Fill(dTmu,effje);
 
@@ -1222,31 +1169,25 @@ void LLPgammaAnalyzer::beginJob()
   outTree = fs->make<TTree>("llpgtree","llpgtree");
 
   // Book histograms
-  
-  int jtdiv(400);
-  float jtran(8);
-  int jdtdiv(200);
-  float jdtran(4);
-
   jetRHTimeHist = fs->make<TH1D>("jetRHTime" , "jetRHTime" , 2000 , -100 , 100 );
-  jetTimeHist = fs->make<TH1D>("jetMuTime" , "jetMuTime" , jtdiv , -1*jtran , jtran );
+  jetTimeHist = fs->make<TH1D>("jetMuTime" , "jetMuTime" , 200 , -10 , 10 );
   hist1d[1] = fs->make<TH1D>("jetRHMulti" , "jetRHMulti" , 250 , 0 , 250 );
   hist1d[2] = fs->make<TH1D>("jetTimeError" , "jetTimeError" , 300 , 0 , 3 );
   hist1d[3] = fs->make<TH1D>("jetTimeRMS" , "jetTimeRMS" , 200 , 0 , 20 );
-  hist1d[4] = fs->make<TH1D>("jetMedTime" , "jetMedTime" , jtdiv , -1*jtran , jtran );
-  hist1d[5] = fs->make<TH1D>("jetRawTime" , "jetRawTime" , jtdiv , -1*jtran , jtran );
-  hist1d[6] = fs->make<TH1D>("jetCMuTime" , "jetCMuTime" , jtdiv , -1*jtran , jtran );
-  hist1d[7] = fs->make<TH1D>("jetCMedTime" , "jetCMedTime" , jtdiv , -1*jtran , jtran );
-  hist1d[8] = fs->make<TH1D>("jetCSCMuTime" , "jetCSCMuTime" , jtdiv, -1*jtran , jtran );
-  hist1d[9] = fs->make<TH1D>("jetCSCMedTime" , "jetCSCMedTime" , jtdiv , -1*jtran , jtran );
+  hist1d[4] = fs->make<TH1D>("jetMedTime" , "jetMedTime" , 200 , -10 , 10 );
+  hist1d[5] = fs->make<TH1D>("jetRawTime" , "jetRawTime" , 200 , -10 , 10 );
+  hist1d[6] = fs->make<TH1D>("jetFitTime" , "jetFitTime" , 200 , -10 , 10 );
+  //hist1d[7] = fs->make<TH1D>("kidE" , "kidE" , 500 , 0 , 500 );
+  //hist1d[8] = fs->make<TH1D>("kidPt" , "kidPt" , 500, 0 , 500 );
+  //hist1d[9] = fs->make<TH1D>("kidEta" , "kidEta" , 700 , -3.5 , 3.5 );
   //hist1d[10] = fs->make<TH1D>("kidPhi" , "kidPhi" , 700 , -3.5 , 3.5 );
   //hist1d[11] = fs->make<TH1D>("t0jetRHMulti" , "t0jetRHMulti" , 250 , 0 , 250 );
 
   hist1d[12] = fs->make<TH1D>("jetPt" , "jetPt" , 500, 0 , 500 );
   hist1d[13] = fs->make<TH1D>("jetPhi" , "jetPhi" , 700 , -3.5 , 3.5 );
   hist1d[14] = fs->make<TH1D>("jetEta" , "jetEta" , 700 , -3.5 , 3.5 );
-  hist1d[15] = fs->make<TH1D>("jetdtmu" , "jetdtmu" , jdtdiv , -1*jdtran , jdtran );
-  hist1d[16] = fs->make<TH1D>("jetdtmed" , "jetdtmed" , jdtdiv , -1*jdtran , jdtran );
+  hist1d[15] = fs->make<TH1D>("jetdtmu" , "jetdtmu" , 800 , -4 , 4 );
+  hist1d[16] = fs->make<TH1D>("jetdtmed" , "jetdtmed" , 800 , -4 , 4 );
   hist1d[17] = fs->make<TH1D>("jetHt" , "jetHt" , 1000 , 0 , 1000 );
   hist1d[18] = fs->make<TH1D>("nJet" , "nJets" , 20 , 0 , 20 );
   //hist1d[19] = fs->make<TH1D>("kidMass" , "kidMass" , 20, -1.0 , 1.0 );
@@ -1271,22 +1212,17 @@ void LLPgammaAnalyzer::beginJob()
   //hist1d[36] = fs->make<TH1D>("nEGMatches", "nEGMatches", 100 , 0 , 100 ); //]->Fill(nMatches);
   //hist1d[37] = fs->make<TH1D>("nEpfPhoton", "nEpfPhoton", 100 , 0 , 100 ); //]->Fill(nPhoMatches);
   //hist1d[38] = fs->make<TH1D>("nPPfcands", "nPPfcands", 100 , 0 , 100 ); //]->Fill(passociated.size());
-
-  hist1d[39] = fs->make<TH1D>("jetcmudt", "jetcmudt", jdtdiv , -1*jdtran , jdtran );
-  hist1d[40] = fs->make<TH1D>("jetcmeddt" , "jetcmeddt" , jdtdiv , -1*jdtran , jdtran );
-  hist1d[41] = fs->make<TH1D>("jetcmudtsc" , "jetcmudtsc" , jdtdiv , -1*jdtran , jdtran );
-  hist1d[42] = fs->make<TH1D>("jetcmeddtsc" , "jetcmeddtsc" , jdtdiv , -1*jdtran , jdtran );
-
+  //hist1d[39] = fs->make<TH1D>("nEPfcands", "nEPfcands", 100 , 0 , 100 );//]->Fill(eassociated.size());
+  //hist1d[40] = fs->make<TH1D>("jetfitdt" , "jetfitdt" , 120 , -6 , 6 );
+  //hist1d[41] = fs->make<TH1D>("jetfitdtsc" , "jetfitdtsc" , 120 , -6 , 6 );
+  //hist1d[42] = fs->make<TH1D>("jetSCfitTime" , "jetSCfitTime" , 200 , -10 , 10 );
   hist1d[43] = fs->make<TH1D>("nPhotonsPerJet","nPhotonsPerJet", 20 , 0 , 20 );
-
-  hist1d[44] = fs->make<TH1D>("jetSCmedTime" , "jetSCmedTime" , jtdiv , -1*jtran , jtran );
-  hist1d[45] = fs->make<TH1D>("jetSCmuTime" , "jetSCmuTime" , jtdiv , -1*jtran , jtran );
+  hist1d[44] = fs->make<TH1D>("jetSCmedTime" , "jetSCmedTime" , 200 , -10 , 10 );
+  hist1d[45] = fs->make<TH1D>("jetSCmuTime" , "jetSCmuTime" , 200 , -10 , 10 );
   hist1d[46] = fs->make<TH1D>("jetSCTimeRms" , "jetSCTimeRms" , 200 , 0 , 20 );
-  hist1d[47] = fs->make<TH1D>("jetSCrawTime" , "jetSCrawTime" , jtdiv , -1*jtran , jtran );
-
-  hist1d[48] = fs->make<TH1D>("jetmeddtsc" , "jetmeddtsc" , jdtdiv , -1*jdtran , jdtran );
-  hist1d[49] = fs->make<TH1D>("jetmudtsc" , "jetmudtsc" , jdtdiv , -1*jdtran , jdtran );
-
+  hist1d[47] = fs->make<TH1D>("jetSCrawTime" , "jetSCrawTime" , 200 , -10 , 10 );
+  hist1d[48] = fs->make<TH1D>("jetmeddtsc" , "jetmeddtsc" , 800 , -4 , 4 );
+  hist1d[49] = fs->make<TH1D>("jetmudtsc" , "jetmudtsc" , 800 , -4 , 4 );
   hist1d[50] = fs->make<TH1D>("jetSCTimeSkew" , "jetSCTimeSkew" , 40 , -2.0 , 2.0 );
   hist1d[51] = fs->make<TH1D>("jetPhotons" , "jetPhotons" , 20, 0 , 20 );
   hist1d[52] = fs->make<TH1D>("jetElectrons" , "jetElectrons" , 20, 0 , 20 );
@@ -1339,12 +1275,12 @@ void LLPgammaAnalyzer::beginJob()
 
   hist2d[38] = fs->make<TH2D>("rht_rhe" , "rht_rhe", 200 , -10 , 10 , 1000 , 0 , 1000 );
 
-  hist2d[39] = fs->make<TH2D>("njrh_nscrh" , "njrh_nscrh" , 80 , 0 , 80 , 80 , 0 , 80 );
+  hist2d[39] = fs->make<TH2D>("njrh_nscrh" , "njrh_nscrh" , 200 , 0 , 200 , 200 , 0 , 200 );
   hist2d[40] = fs->make<TH2D>("je_sce" , "je_sce" , 500 , 0 , 500 , 500 , 0 , 500 );
   hist2d[41] = fs->make<TH2D>("je_ege" , "je_ege" , 500 , 0 , 500 , 500 , 0 , 500 );
   hist2d[42] = fs->make<TH2D>("ege_sce" , "ege_sce" , 500 , 0 , 500 , 500 , 0 , 500 );
-  hist2d[43] = fs->make<TH2D>("scdt_effje" , "scdt_effje" , 50 , -5 , 5 , 250 , 0 , 500 );
-  hist2d[44] = fs->make<TH2D>("jdt_effje" , "jdt_effje" , 50 , -5 , 5 , 250 , 0 , 500 );
+  hist2d[43] = fs->make<TH2D>("scdt_effje" , "scdt_effje" , 200 , -10 , 10 , 1000 , 0 , 1000 );
+  hist2d[44] = fs->make<TH2D>("jdt_effje" , "jdt_effje" , 200 , -10 , 10 , 1000 , 0 , 1000 );
 
   std::cout << "Histograms Booked" << std::endl;
 
@@ -1375,7 +1311,7 @@ void LLPgammaAnalyzer::beginJob()
   outTree->Branch("jetELE", &jetELE);
   outTree->Branch("jetELEF", &jetELEF);
   outTree->Branch("jetMUE", &jetMUE);
-  outTree->Branch("jetMuTime", &jetMuTime);
+  outTree->Branch("jetTime", &jetTime);
   outTree->Branch("jetTimeError", &jetTimeError);
   outTree->Branch("jetTimeRMS", &jetTimeRMS);
   outTree->Branch("jetMedTime", &jetMedTime);
@@ -1427,4 +1363,4 @@ void LLPgammaAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descript
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(LLPgammaAnalyzer);
+DEFINE_FWK_MODULE(LLPgammaAnalyzer_bak4);

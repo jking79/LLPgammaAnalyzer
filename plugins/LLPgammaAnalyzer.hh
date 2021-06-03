@@ -146,6 +146,8 @@
 // ROOT
 #include "TH1.h"
 #include "TH2.h"
+#include "TFormula.h"
+#include "TF1.h"
 #include "TTree.h"
 #include "Math/PositionVector3D.h"
 
@@ -165,8 +167,8 @@ using reco::TrackCollection;
 
 typedef edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>> recHitCol;
 typedef vector<EcalRecHit> rhGroup;
-typedef vector< reco::SuperCluster> scGroup;
-
+typedef vector<reco::SuperCluster> scGroup;
+typedef vector<reco::CaloCluster> bcGroup;
 
 class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
@@ -179,11 +181,14 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       int getPFJetID(const pat::Jet & jet);
 		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, float eta, float phi, float drmin, float minenr );
-      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, DetId detid );
+      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, const scGroup superClusterGroup, float minenr );
+      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, unsigned int detid );
 		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee );
 		EcalRecHit getLeadRh( rhGroup recHits );
       vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
-		vector<float> getRecHitdRMatchedTime( const recHitCol* rheb, const recHitCol* rhee, float eta, float phi, float drmin );
+		vector<float> getTimeDistStats( vector<float> input );
+      vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
+		float getdt( float t1, float t2 );
 
    private:
       virtual void beginJob() override;
@@ -244,7 +249,9 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       edm::Handle<std::vector<pat::Jet> > jets_;
 
       int nJets;
-      std::vector<float> jetE, jetPt, jetPhi, jetEta, jetTime, jetTimeError, jetTimeRMS, jetMedTime;
+      std::vector<float> jetE, jetPt, jetPhi, jetEta; 
+      std::vector<float> jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
+      std::vector<float> jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime;
       std::vector<int>   jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
       std::vector<int>   jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
       std::vector<unsigned int> jetRecHitId;
@@ -311,11 +318,18 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       const auto sortByPt = [](const auto & obj1, const auto & obj2) {return obj1.pt() > obj2.pt();};
 
+		float sq2	(const float x){return x*x;}
       float rad2  (const float x, const float y, const float z = 0.f){return x*x + y*y + z*z;}
       float hypo  (const float x, const float y, const float z = 0.f){return std::sqrt(rad2(x,y,z));}
       float phi   (const float x, const float y){return std::atan2(y,x);}
       float theta (const float r, const float z){return std::atan2(r,z);}
       float eta   (const float x, const float y, const float z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
+		float mean	(const vector<float> x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
+      float mean  (const vector<float> x, const float w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
+		float stdev	(const vector<float> x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/x.size());}	
+      float stdev (const vector<float> x, float m, const vector<float> wv, const float w)
+				{float sum(0.0); int it(0); for( auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
+      float rms 	(const vector<float> x){float sum(0.0); for( auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
 
 		const float sol = 29.9792458; // speed of light in cm/ns
 
