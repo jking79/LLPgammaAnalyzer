@@ -26,6 +26,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <cstdlib>
 #include <vector>
 #include <utility>
 #include <map>
@@ -33,9 +35,9 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#include <memory>
 #include <tuple>
 #include <random>
+#include <sys/stat.h>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -155,20 +157,48 @@ using namespace std;
 using namespace edm;
 
 //
-// class declaration
-//
+// In class declaration :
 // If the analyzer does not use TFileService, please remove
 // the template argument to the base class so the class inherits
 // from  edm::one::EDAnalyzer<>
 // This will improve performance in multithreaded jobs.
+//
 
 
 using reco::TrackCollection;
 
+//
+//  constants, enums and typedefs
+//
+
+typedef edm::View<reco::Candidate> CandidateView;
 typedef edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>> recHitCol;
 typedef vector<EcalRecHit> rhGroup;
 typedef vector<reco::SuperCluster> scGroup;
 typedef vector<reco::CaloCluster> bcGroup;
+typedef unsigned int uInt;
+
+#define nEBEEMaps 32
+#define nHists 64
+//const float sol = 29.9792458; // speed of light in cm/ns
+#define SOL 29.9792458 // speed of light in cm/ns
+#define PI 3.1415926535 // pie ...   
+
+enum class ECAL {EB, EM, EP, EE, NONE};
+#define ecal_config_path "/home/t3-ku/jaking/ecaltiming/CMSSW_10_2_5/src/Timing/TimingAnalyzer/macros/ecal_config/"
+struct DetIDStruct{
+   DetIDStruct() {}
+   DetIDStruct(const int inI1, const int inI2, const int inTT, const ECAL & inEcal) : i1(inI1), i2(inI2), TT(inTT), ecal(inEcal)  {}
+   int i1; // EB: iphi, EE: ix
+   int i2; // EB: ieta, EE: iy
+   int TT; // trigger tower
+   ECAL ecal; // EB, EM, EP
+};//>>>>struct DetIDStruct Def
+typedef std::map<UInt_t,DetIDStruct> detIdMap;
+
+//
+//  Class Declaration
+//
 
 class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
@@ -179,16 +209,22 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
+		detIdMap SetupDetIDs();
       int getPFJetID(const pat::Jet & jet);
-		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, float eta, float phi, float drmin, float minenr );
-      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, const scGroup superClusterGroup, float minenr );
-      rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee, unsigned int detid );
-		rhGroup getRHGroup( const recHitCol rheb, const recHitCol rhee );
+		rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
+      rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
+      rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
+      rhGroup getRHGroup( uInt detid );
+		rhGroup getRHGroup();
 		EcalRecHit getLeadRh( rhGroup recHits );
       vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
+		vector<float> getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
 		vector<float> getTimeDistStats( vector<float> input );
+		vector<float> getTimeDistStats( vector<float> times, vector<float> wts );
       vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
 		float getdt( float t1, float t2 );
+		void mrgRhGrp( rhGroup & x, rhGroup & y);
+		bool reduceRhGrps( vector<rhGroup> & x);
 
    private:
       virtual void beginJob() override;
@@ -200,12 +236,22 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       TTree *outTree;
 
       TH1D *jetTimeHist, *jetRHTimeHist;
-		TH1D *hist1d[64];
-      TH2D *hist2d[64];
+		TH1D *hist1d[nHists];
+      TH2D *hist2d[nHists];
+
+		TH2D *ebeeMapSc[nEBEEMaps];
+      TH2D *ebeeMapBc[nEBEEMaps];
+      TH2D *ebeeMapDr[nEBEEMaps];
+
+      TH2D *ebeeMapT[nEBEEMaps];
+      TH2D *ebeeMapE[nEBEEMaps];
+
+		uInt nGoodJetEvents;
+		detIdMap DetIDMap;
 
       // Event
       unsigned long int event; // technically unsigned long long in Event.h...
-      unsigned int run, lumi; 
+      uInt run, lumi; 
 
       // Tracks
       const edm::InputTag tracksTag;
@@ -248,13 +294,13 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       edm::EDGetTokenT<std::vector<pat::Jet> > jetsToken_;
       edm::Handle<std::vector<pat::Jet> > jets_;
 
-      int nJets;
+      uInt nJets;
       std::vector<float> jetE, jetPt, jetPhi, jetEta; 
       std::vector<float> jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
-      std::vector<float> jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime;
+      std::vector<float> jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
       std::vector<int>   jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
       std::vector<int>   jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
-      std::vector<unsigned int> jetRecHitId;
+      std::vector<uInt> jetRecHitId;
 		std::vector<bool> jetKidLLP;
       std::vector<double> jetKidMass, jetKidVx, jetKidVy, jetKidVz;
       std::vector<float> jetKidE, jetKidPt, jetKidPhi, jetKidEta, jetKidTime, jetKidMedTime;
@@ -286,7 +332,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       int nRecHits;
       std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
-      std::vector<unsigned int> rhID;
+      std::vector<uInt> rhID;
       std::vector<bool> rhisOOT, rhisGS6, rhisGS1;
       std::vector<float> rhadcToGeV;
       std::vector<float> rhped12, rhped6, rhped1;
@@ -311,27 +357,43 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 };
 
 //
-// constants, enums and typedefs
+// Helper functions ( single line function defs, mostly )
 //
 
-		typedef edm::View<reco::Candidate> CandidateView;
+// sort functions
 
-      const auto sortByPt = [](const auto & obj1, const auto & obj2) {return obj1.pt() > obj2.pt();};
+#define CAuto const auto
+#define CFlt  const float
+#define CVFlt const vector<float>
 
-		float sq2	(const float x){return x*x;}
-      float rad2  (const float x, const float y, const float z = 0.f){return x*x + y*y + z*z;}
-      float hypo  (const float x, const float y, const float z = 0.f){return std::sqrt(rad2(x,y,z));}
-      float phi   (const float x, const float y){return std::atan2(y,x);}
-      float theta (const float r, const float z){return std::atan2(r,z);}
-      float eta   (const float x, const float y, const float z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
-		float mean	(const vector<float> x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
-      float mean  (const vector<float> x, const float w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
-		float stdev	(const vector<float> x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/x.size());}	
-      float stdev (const vector<float> x, float m, const vector<float> wv, const float w)
-				{float sum(0.0); int it(0); for( auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
-      float rms 	(const vector<float> x){float sum(0.0); for( auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
+CAuto sortByPt = [](CAuto & obj1, CAuto & obj2) {return obj1.pt() > obj2.pt();};
 
-		const float sol = 29.9792458; // speed of light in cm/ns
+// math functions
+CAuto sq2			(CFlt x){return x*x;}
+CAuto rad2  		(CFlt x, CFlt y, CFlt z = 0.f){return x*x+y*y+z*z;}
+CAuto hypo  		(CFlt x, CFlt y, CFlt z = 0.f){return std::sqrt(rad2(x,y,z));}
+CAuto phi   		(CFlt x, CFlt y){return std::atan2(y,x);}
+CAuto theta 		(CFlt r, CFlt z){return std::atan2(r,z);}
+CAuto eta   		(CFlt x, CFlt y, CFlt z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
+CAuto effMean   	(CFlt x, CFlt y){return (x*y)/sqrt(x*x+y*y);}
+
+// stats functions
+CAuto mean			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
+CAuto mean  		(CVFlt x, CFlt w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
+CAuto mean			(CVFlt x, CVFlt wv){float sum(0.0), wt(0.0); int it(0); for( auto ix : x ){ sum+=ix*wv[it]; wt+=wv[it]; it++; } return sum/wt;}
+CAuto stdev			(CVFlt x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/x.size());}	
+CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w)
+							{float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
+CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
+CAuto sum         (CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
+
+// rh group functions
+CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}
+CAuto rhMatch		(const EcalRecHit rhx, const EcalRecHit rhy){ return getRawID(rhx) == getRawID(rhy);}
+CAuto dupRhFnd		(const rhGroup x, const rhGroup y){for(CAuto rhx : x ){for(CAuto rhy : y ){if(rhMatch(rhx,rhy)){ return true;}}} return false;}
+CAuto isRhGrpEx 	(const rhGroup x){int s=x.size();for( int i=0;i<s;i++){for( int j=i+1;j<s;j++){if(rhMatch(x[i],x[j])) return false;}} return true;}
+CAuto getRhGrpEnr	(const rhGroup x){float e(0.0);for( auto ix : x ){e+=ix.energy();} return e;}
+CAuto getDupCnt	(const vector<rhGroup> x){int c=0; int s=x.size();for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
 
 //
 // static data member definitions

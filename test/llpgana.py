@@ -26,7 +26,7 @@ options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singlet
 options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsing.varType.string,'process name to be considered');
 
 ## outputFile Name
-options.register('outputFileName','llpgana_t26_jetht_id2pt200nrh5eta15rhe2.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
+options.register('outputFileName','llpgana_t35a_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root',VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
 options.parseArguments()
@@ -127,11 +127,12 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
 from Configuration.AlCa.GlobalTag import GlobalTag
