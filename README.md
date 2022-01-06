@@ -1,2 +1,2 @@
 # LLPgammaAnalyzer
-Long Lived Particle Photon Analyzer
+Long Lived Particle to Photon Analyzer
