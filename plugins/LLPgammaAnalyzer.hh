@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
-// Package:    LLPgamma/LLPgammaAnalyzer
+// Package:    LLPgammaAnalyzer
 // Class:      LLPgammaAnalyzer
 //
-/**\class LLPgammaAnalyzer LLPgammaAnalyzer.cc LLPgamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.cc
+/**\class LLPgammaAnalyzer LLPgammaAnalyzer.cc LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.cc
 
  Description: [one line class summary]
 
