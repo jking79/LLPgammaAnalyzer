@@ -1695,4 +1695,4 @@ void LLPgammaAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descript
 
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(LLPgammaAnalyzer);
+DEFINE_FWK_MODULE(LLPgammaAnaMod);

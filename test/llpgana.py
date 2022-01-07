@@ -144,7 +144,8 @@ process.TFileService = cms.Service("TFileService",
 		                   fileName = cms.string(options.outputFileName))
 				   
 # Make the tree 
-process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
+#process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
+process.tree = cms.EDAnalyzer("LLPgammaAnaMod",
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),

@@ -1,0 +1,3 @@
+EB: cmsswId      dbID      hashedId     iphi      ieta   abs(ieta)    pos       FED        SM      TT(25)     iTT     strip(5)    Xtal     phiSM     etaSM
+EE: cmsswId	 dbID	   hashedId      side    ix      iy      SC      iSC     Fed     EE      TT/CCU  strip   Xtal    quadrant
+Full: cmsswId(detid) iphi/ix ieta/iy subdetector
