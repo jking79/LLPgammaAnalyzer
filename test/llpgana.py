@@ -125,13 +125,13 @@ process.source = cms.Source("PoolSource",
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
@@ -144,8 +144,7 @@ process.TFileService = cms.Service("TFileService",
 		                   fileName = cms.string(options.outputFileName))
 				   
 # Make the tree 
-#process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
-process.tree = cms.EDAnalyzer("LLPgammaAnaMod",
+process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),

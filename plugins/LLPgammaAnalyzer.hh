@@ -185,8 +185,7 @@ typedef unsigned int uInt;
 #define PI 3.1415926535 // pie ...   
 
 enum class ECAL {EB, EM, EP, EE, NONE};
-//#define ecal_config_path "/home/t3-ku/jaking/ecaltiming/CMSSW_10_2_5/src/Timing/TimingAnalyzer/macros/ecal_config/"
-#define ecal_config_path "/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPgammaAnalyzer/macros/ecal_config/"
+#define ecal_config_path "/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
 
 struct DetIDStruct{
    DetIDStruct() {}

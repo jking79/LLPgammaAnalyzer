@@ -19,7 +19,7 @@
 //----------------------------------------  cc file   --------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------
 
-#include "LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.hh"
+#include "LLPGamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.hh"
 using namespace std;
 
 //#define DEBUG true
@@ -1695,4 +1695,4 @@ void LLPgammaAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descript
 
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(LLPgammaAnaMod);
+DEFINE_FWK_MODULE(LLPgammaAnalyzer);
