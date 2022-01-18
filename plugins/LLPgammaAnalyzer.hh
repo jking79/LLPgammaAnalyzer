@@ -188,12 +188,12 @@ enum class ECAL {EB, EM, EP, EE, NONE};
 #define ecal_config_path "/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
 
 struct DetIDStruct{
-   DetIDStruct() {}
-   DetIDStruct(const int inI1, const int inI2, const int inTT, const ECAL & inEcal) : i1(inI1), i2(inI2), TT(inTT), ecal(inEcal)  {}
-   int i1; // EB: iphi, EE: ix
-   int i2; // EB: ieta, EE: iy
-   int TT; // trigger tower
-   ECAL ecal; // EB, EM, EP
+	DetIDStruct() {}
+   	DetIDStruct(const int inI1, const int inI2, const int inTT, const ECAL & inEcal) : i1(inI1), i2(inI2), TT(inTT), ecal(inEcal)  {}
+   	int i1; // EB: iphi, EE: ix
+   	int i2; // EB: ieta, EE: iy
+   	int TT; // trigger tower
+   	ECAL ecal; // EB, EM, EP
 };//>>>>struct DetIDStruct Def
 typedef std::map<UInt_t,DetIDStruct> detIdMap;
 
@@ -203,163 +203,237 @@ typedef std::map<UInt_t,DetIDStruct> detIdMap;
 
 class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
+	public:
 
-   public:
-      explicit LLPgammaAnalyzer(const edm::ParameterSet&);
-      ~LLPgammaAnalyzer();
+    	explicit LLPgammaAnalyzer(const edm::ParameterSet&);
+      	~LLPgammaAnalyzer();
 
-      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+      	static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 		detIdMap SetupDetIDs();
-      int getPFJetID(const pat::Jet & jet);
-		rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
-      rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
-      rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
-      rhGroup getRHGroup( uInt detid );
-		rhGroup getRHGroup();
-		EcalRecHit getLeadRh( rhGroup recHits );
-      vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
-		vector<float> getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
-		vector<float> getTimeDistStats( vector<float> input );
-		vector<float> getTimeDistStats( vector<float> times, vector<float> wts );
-      vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
-		float getdt( float t1, float t2 );
-		void mrgRhGrp( rhGroup & x, rhGroup & y);
-		bool reduceRhGrps( vector<rhGroup> & x);
+      	int getPFJetID(const pat::Jet & jet);
+      	rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
+      	rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
+		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax );
+      	rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
+      	rhGroup getRHGroup( uInt detid );
+      	rhGroup getRHGroup();
+      	EcalRecHit getLeadRh( rhGroup recHits );
+      	vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
+      	vector<float> getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
+      	vector<float> getTimeDistStats( vector<float> input );
+      	vector<float> getTimeDistStats( vector<float> times, vector<float> wts );
+      	vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
+      	float getdt( float t1, float t2 );
+      	void mrgRhGrp( rhGroup & x, rhGroup & y);
+      	bool reduceRhGrps( vector<rhGroup> & x);
 
-   private:
-      virtual void beginJob() override;
-      virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
-      virtual void endJob() override;
+	private:
 
-      // ----------member data ---------------------------
+    	virtual void beginJob() override;
+      	virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
+      	virtual void endJob() override;
 
-      TTree *outTree;
+      	// ----------member data ---------------------------
 
-      TH1D *jetTimeHist, *jetRHTimeHist;
+      	TTree *outTree;
+
+      	TH1D *jetTimeHist, *jetRHTimeHist;
 		TH1D *hist1d[nHists];
-      TH2D *hist2d[nHists];
+      	TH2D *hist2d[nHists];
 
-		TH2D *ebeeMapSc[nEBEEMaps];
-      TH2D *ebeeMapBc[nEBEEMaps];
-      TH2D *ebeeMapDr[nEBEEMaps];
+      	TH2D *ebeeMapSc[nEBEEMaps];
+      	TH2D *ebeeMapBc[nEBEEMaps];
+      	TH2D *ebeeMapDr[nEBEEMaps];
 
-      TH2D *ebeeMapT[nEBEEMaps];
-      TH2D *ebeeMapE[nEBEEMaps];
+      	TH2D *ebeeMapT[nEBEEMaps];
+      	TH2D *ebeeMapE[nEBEEMaps];
+		
+      	uInt nGoodJetEvents;
+      	detIdMap DetIDMap;
 
-		uInt nGoodJetEvents;
-		detIdMap DetIDMap;
+      	// Event
+      	unsigned long int event; // technically unsigned long long in Event.h...
+      	uInt run, lumi; 
 
-      // Event
-      unsigned long int event; // technically unsigned long long in Event.h...
-      uInt run, lumi; 
+      	// Tracks
+      	const edm::InputTag tracksTag;
+      	edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
+      	edm::Handle<std::vector<reco::Track>> tracks_;
 
-      // Tracks
-      const edm::InputTag tracksTag;
-      edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
-      edm::Handle<std::vector<reco::Track> > tracks_;
+      	// PF Candidates
+      	const edm::InputTag pfcandTag;
+      	edm::EDGetTokenT<edm::View<reco::Candidate>> pfcand_token_;
+      	edm::Handle<edm::View<reco::Candidate>> pfcands_;
 
-      // PF Candidates
-      const edm::InputTag pfcandTag;
-      edm::EDGetTokenT<edm::View<reco::Candidate>> pfcand_token_;
-      edm::Handle<edm::View<reco::Candidate>> pfcands_;
+      	// vertices
+      	const edm::InputTag verticesTag;
+      	edm::EDGetTokenT<std::vector<reco::Vertex>> verticesToken_;
+      	edm::Handle<std::vector<reco::Vertex>> vertices_;
+      	int nVtx;
+      	float vtxX, vtxY, vtxZ;
 
-      // vertices
-      const edm::InputTag verticesTag;
-      edm::EDGetTokenT<std::vector<reco::Vertex> > verticesToken_;
-      edm::Handle<std::vector<reco::Vertex> > vertices_;
-      int nVtx;
-      float vtxX, vtxY, vtxZ;
+      	// mets
+      	const edm::InputTag metsTag;
+      	edm::EDGetTokenT<std::vector<pat::MET>> metsToken_;
+      	edm::Handle<std::vector<pat::MET>> mets_;
 
-      // mets
-      const edm::InputTag metsTag;
-      edm::EDGetTokenT<std::vector<pat::MET> > metsToken_;
-      edm::Handle<std::vector<pat::MET> > mets_;
+	   	// supercluster
+      	const edm::InputTag superClusterCollectionTag;
+      	edm::EDGetTokenT<reco::SuperClusterCollection> scToken_;
+      	edm::Handle<reco::SuperClusterCollection> superCluster_;
 
-	   // supercluster
-	   const edm::InputTag superClusterCollectionTag;
-      edm::EDGetTokenT<reco::SuperClusterCollection> scToken_;
-      edm::Handle<reco::SuperClusterCollection> superCluster_;
-
-      const edm::InputTag ootSuperClusterCollectionTag;
-      edm::EDGetTokenT<reco::SuperClusterCollection> ootScToken_;
-		edm::Handle<reco::SuperClusterCollection> ootSuperCluster_;
+      	const edm::InputTag ootSuperClusterCollectionTag;
+     	edm::EDGetTokenT<reco::SuperClusterCollection> ootScToken_;
+      	edm::Handle<reco::SuperClusterCollection> ootSuperCluster_;
 
 		// calocluster
-      const edm::InputTag caloClusterTag;
-      edm::EDGetTokenT<vector<reco::CaloCluster>> ccToken_;
-      edm::Handle<vector<reco::CaloCluster>> caloCluster_;
+      	const edm::InputTag caloClusterTag;
+      	edm::EDGetTokenT<vector<reco::CaloCluster>> ccToken_;
+      	edm::Handle<vector<reco::CaloCluster>> caloCluster_;
 
-      // jets
-      const edm::InputTag jetsTag;
-      edm::EDGetTokenT<std::vector<pat::Jet> > jetsToken_;
-      edm::Handle<std::vector<pat::Jet> > jets_;
+      	// jets
+      	const edm::InputTag jetsTag;
+      	edm::EDGetTokenT<std::vector<pat::Jet>> jetsToken_;
+      	edm::Handle<std::vector<pat::Jet>> jets_;
 
-      uInt nJets;
-      std::vector<float> jetE, jetPt, jetPhi, jetEta; 
-      std::vector<float> jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
-      std::vector<float> jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
-      std::vector<int>   jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
-      std::vector<int>   jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
-      std::vector<uInt> jetRecHitId;
-		std::vector<bool> jetKidLLP;
-      std::vector<double> jetKidMass, jetKidVx, jetKidVy, jetKidVz;
-      std::vector<float> jetKidE, jetKidPt, jetKidPhi, jetKidEta, jetKidTime, jetKidMedTime;
-      std::vector<float> jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM, jetC, jetPHE, jetPHEF;
-      std::vector<float> jetELE, jetELEF, jetMUE, jetCharge;
+      	uInt nJets;
+      	std::vector<float>  jetE, jetPt, jetPhi, jetEta; 
+      	std::vector<float>  jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
+      	std::vector<float>  jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
+      	std::vector<float>  jetPhMuTime;
+      	std::vector<int>    jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
+      	std::vector<int>    jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
+      	std::vector<uInt>   jetRecHitId;
+      	std::vector<bool>   jetKidLLP;
+      	std::vector<double> jetKidMass, jetKidVx, jetKidVy, jetKidVz;
+      	std::vector<float>  jetKidE, jetKidPt, jetKidPhi, jetKidEta, jetKidTime, jetKidMedTime;
+      	std::vector<float>  jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM, jetC, jetPHE, jetPHEF;
+      	std::vector<float>  jetELE, jetELEF, jetMUE, jetCharge;
 
-      // electrons
-      const edm::InputTag electronsTag;
-      edm::EDGetTokenT<std::vector<pat::Electron> > electronsToken_;
-      edm::Handle<std::vector<pat::Electron> > electrons_;
-      std::vector<pat::Electron> electrons;
+      	// electrons
+      	const edm::InputTag electronsTag;
+      	edm::EDGetTokenT<std::vector<pat::Electron> > electronsToken_;
+      	edm::Handle<std::vector<pat::Electron> > electrons_;
+      	std::vector<pat::Electron> electrons;
       
-      // muons
-      const edm::InputTag muonsTag;
-      edm::EDGetTokenT<std::vector<pat::Muon> > muonsToken_;
-      edm::Handle<std::vector<pat::Muon> > muons_;
-      std::vector<pat::Muon> muons;
+      	// muons
+      	const edm::InputTag muonsTag;
+      	edm::EDGetTokenT<std::vector<pat::Muon> > muonsToken_;
+      	edm::Handle<std::vector<pat::Muon> > muons_;
+      	std::vector<pat::Muon> muons;
       
-      // RecHits
-      const edm::InputTag recHitsEBTag;
-      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEBToken_;
-      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEB_;
-      const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEB;
+      	// RecHits
+      	const edm::InputTag recHitsEBTag;
+      	edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEBToken_;
+      	edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEB_;
+      	const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEB;
 
-      const edm::InputTag recHitsEETag;
-      edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEEToken_;
-      edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEE_;
-      const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEE;
+      	const edm::InputTag recHitsEETag;
+      	edm::EDGetTokenT<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEEToken_;
+      	edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEE_;
+      	const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEE;
 
-      int nRecHits;
-      std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
-      std::vector<uInt> rhID;
-      std::vector<bool> rhisOOT, rhisGS6, rhisGS1;
-      std::vector<float> rhadcToGeV;
-      std::vector<float> rhped12, rhped6, rhped1;
-      std::vector<float> rhpedrms12, rhpedrms6, rhpedrms1;
+      	int nRecHits;
+      	std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
+      	std::vector<uInt> rhID;
+      	std::vector<bool> rhisOOT, rhisGS6, rhisGS1;
+      	std::vector<float> rhadcToGeV;
+      	std::vector<float> rhped12, rhped6, rhped1;
+      	std::vector<float> rhpedrms12, rhpedrms6, rhpedrms1;
 
-      // gedPhotons
-      const edm::InputTag gedPhotonsTag;
-      edm::EDGetTokenT<std::vector<pat::Photon> > gedPhotonsToken_;
-      edm::Handle<std::vector<pat::Photon> > gedPhotons_;
+      	// gedPhotons
+      	const edm::InputTag gedPhotonsTag;
+      	edm::EDGetTokenT<std::vector<pat::Photon> > gedPhotonsToken_;
+      	edm::Handle<std::vector<pat::Photon> > gedPhotons_;
 
-      // ootPhotons
-      const edm::InputTag ootPhotonsTag;
-      edm::EDGetTokenT<std::vector<pat::Photon> > ootPhotonsToken_;
-      edm::Handle<std::vector<pat::Photon> > ootPhotons_;
+      	// ootPhotons
+      	const edm::InputTag ootPhotonsTag;
+      	edm::EDGetTokenT<std::vector<pat::Photon> > ootPhotonsToken_;
+      	edm::Handle<std::vector<pat::Photon> > ootPhotons_;
 
      
-      // geometry CaloSubdetectorGeometry
-      edm::ESHandle<CaloGeometry> caloGeo_;
-      const CaloSubdetectorGeometry * barrelGeometry;
-      const CaloSubdetectorGeometry * endcapGeometry;  
+      	// geometry CaloSubdetectorGeometry
+      	edm::ESHandle<CaloGeometry> caloGeo_;
+      	const CaloSubdetectorGeometry * barrelGeometry;
+      	const CaloSubdetectorGeometry * endcapGeometry;  
 
-};
+};//<<>>class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 
 //
 // Helper functions ( single line function defs, mostly )
 //
+
+void fillTH1F( float val, TH1F* hist ){
+
+   	auto nBins = hist->GetNbinsX();
+   	auto low = hist->GetBinCenter(1);
+   	auto high = hist->GetBinCenter(nBins);
+   	if( val < low ) hist->Fill( low );
+   	else if ( val > high ) hist->Fill( high );
+   	else hist->Fill( val );
+
+}//<<>>void fillTH1F( float val, TH1F* hist )
+
+void fillTH1D( float val, TH1D* hist ){
+
+   	auto nBins = hist->GetNbinsX();
+   	auto low = hist->GetBinCenter(1);
+   	auto high = hist->GetBinCenter(nBins);
+   	if( val < low ) hist->Fill( low );
+   	else if ( val > high ) hist->Fill( high );
+   	else hist->Fill( val );
+
+}//<<>>void fillTH1D( float val, TH1D* hist )
+
+void normTH2D(TH2D* hist){
+
+    std::cout << "Normilizing " << " hist: " << hist->GetName() << std::endl;
+
+	const auto nXbins = hist->GetNbinsX();
+    const auto nYbins = hist->GetNbinsY();
+
+    for (auto ibinX = 1; ibinX <= nXbins; ibinX++){
+
+        const auto norm = hist->Integral(ibinX,ibinX,1,nYbins);
+        if( norm == 0.0 ) continue;
+        for (auto ibinY = 1; ibinY <= nYbins; ibinY++){
+
+            // get content/error
+            auto content = hist->GetBinContent(ibinX,ibinY);
+            auto error   = hist->GetBinError  (ibinX,ibinY);
+            // set new contents
+            content /= norm;
+            error /= norm;
+            hist->SetBinContent(ibinX,ibinY,content);
+            hist->SetBinError  (ibinX,ibinY,error);
+
+        }//<<>>for (auto ibinY = 1; ibinY <= nXbins; ibinY++){
+	}//<<>>for (auto ibinX = 1; ibinX <+ nYbins; ibinX++){
+
+}//<<>>void NormTH2D(TH2D* hist){
+
+void normTH1D(TH1D* hist){
+
+    std::cout << "Normilizing " << " hist: " << hist->GetName() << std::endl;
+
+    const auto nBins = hist->GetNbinsX();
+    const auto norm = hist->Integral();
+    for (auto ibinX = 1; ibinX <= nBins; ibinX++){
+
+        if( norm == 0.0 ) continue;
+		// get content/error
+		auto content = hist->GetBinContent(ibinX);
+		auto error   = hist->GetBinError(ibinX);
+		// set new contents
+        content /= norm;
+		error /= norm;
+		hist->SetBinContent(ibinX,content);
+		hist->SetBinError  (ibinX,error);
+
+	}//<<>>for (auto ibinX = 1; ibinX <= nBins; ibinX++)
+
+}//<<>>void NormTH1D(TH1D* hist)
 
 // sort functions
 
@@ -383,10 +457,10 @@ CAuto mean			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
 CAuto mean  		(CVFlt x, CFlt w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
 CAuto mean			(CVFlt x, CVFlt wv){float sum(0.0), wt(0.0); int it(0); for( auto ix : x ){ sum+=ix*wv[it]; wt+=wv[it]; it++; } return sum/wt;}
 CAuto stdev			(CVFlt x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/x.size());}	
-CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w)
-							{float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
+CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
-CAuto sum         (CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
+CAuto sum			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
+CAuto max			(CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
 
 // rh group functions
 CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}
@@ -394,7 +468,7 @@ CAuto rhMatch		(const EcalRecHit rhx, const EcalRecHit rhy){ return getRawID(rhx
 CAuto dupRhFnd		(const rhGroup x, const rhGroup y){for(CAuto rhx : x ){for(CAuto rhy : y ){if(rhMatch(rhx,rhy)){ return true;}}} return false;}
 CAuto isRhGrpEx 	(const rhGroup x){int s=x.size();for( int i=0;i<s;i++){for( int j=i+1;j<s;j++){if(rhMatch(x[i],x[j])) return false;}} return true;}
 CAuto getRhGrpEnr	(const rhGroup x){float e(0.0);for( auto ix : x ){e+=ix.energy();} return e;}
-CAuto getDupCnt	(const vector<rhGroup> x){int c=0; int s=x.size();for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
+CAuto getDupCnt		(const vector<rhGroup> x){int c=0; int s=x.size();for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
 
 //
 // static data member definitions
