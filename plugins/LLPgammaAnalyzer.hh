@@ -179,7 +179,7 @@ typedef vector<reco::CaloCluster> bcGroup;
 typedef unsigned int uInt;
 
 #define nEBEEMaps 32
-#define nHists 64
+#define nHists 128
 //const float sol = 29.9792458; // speed of light in cm/ns
 #define SOL 29.9792458 // speed of light in cm/ns
 #define PI 3.1415926535 // pie ...   
@@ -299,9 +299,11 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       	uInt nJets;
       	std::vector<float>  jetE, jetPt, jetPhi, jetEta; 
+        std::vector<float>  jetEtaetaMmt, jetPhiphiMnt, jetEtaphiMnt, jetMaxD, jetConPtDis, jetConEtaPhiSprd, jetArea;
+        std::vector<uInt>   jetNCarry, jetNConst; 
       	std::vector<float>  jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
       	std::vector<float>  jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
-      	std::vector<float>  jetPhMuTime;
+      	std::vector<float>  jetPhMuTime, jetEleMuTime;
       	std::vector<int>    jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
       	std::vector<int>    jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
       	std::vector<uInt>   jetRecHitId;
@@ -456,8 +458,8 @@ CAuto effMean   	(CFlt x, CFlt y){return (x*y)/sqrt(x*x+y*y);}
 CAuto mean			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
 CAuto mean  		(CVFlt x, CFlt w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
 CAuto mean			(CVFlt x, CVFlt wv){float sum(0.0), wt(0.0); int it(0); for( auto ix : x ){ sum+=ix*wv[it]; wt+=wv[it]; it++; } return sum/wt;}
-CAuto stdev			(CVFlt x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/x.size());}	
-CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)/it)*w));}
+CAuto stdev			(CVFlt x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/(x.size()-1));}	
+CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)*w)/it));}
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
 CAuto sum			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
 CAuto max			(CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}

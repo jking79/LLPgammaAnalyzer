@@ -1,4 +1,10 @@
+macros/trplots/trash/
+macros/trplots/makedisplayplots/downloads/
+macros/trplots/downloaded/
+test/myworkingArea/
 *.root
 *.pyc
 *.log
+*.png
+*.pdf
 __*
