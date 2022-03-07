@@ -152,6 +152,9 @@
 #include "TF1.h"
 #include "TTree.h"
 #include "Math/PositionVector3D.h"
+#include "TMatrixD.h"
+#include "TVectorD.h"
+#include "TMatrixDSymEigen.h"
 
 using namespace std;
 using namespace edm;
@@ -182,10 +185,12 @@ typedef unsigned int uInt;
 #define nHists 128
 //const float sol = 29.9792458; // speed of light in cm/ns
 #define SOL 29.9792458 // speed of light in cm/ns
-#define PI 3.1415926535 // pie ...   
+#define PI 3.1415926535 // pie ...  
+#define TWOPI 6.2831853071 // 2*pie ..... 
 
 enum class ECAL {EB, EM, EP, EE, NONE};
-#define ecal_config_path "/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
+#define ecal_config_path "/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
+//#define ecal_config_path "/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
 
 struct DetIDStruct{
 	DetIDStruct() {}
@@ -224,6 +229,14 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	vector<float> getTimeDistStats( vector<float> input );
       	vector<float> getTimeDistStats( vector<float> times, vector<float> wts );
       	vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
+		vector<float> getRhGrpEigen_xyz( vector<float> times, rhGroup rechits );
+        vector<float> getRhGrpEigen_ep( vector<float> times, rhGroup rechits );
+        vector<float> getRhGrpEigen_ieipt( vector<float> times, rhGroup rechits );
+		vector<float> getRhGrpEigen_sph( vector<float> times, rhGroup rechits );
+        vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts );
+        vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> wts );
+		vector<float> getRhGrpEigen( vector<float> xs, vector<float> wts );
+
       	float getdt( float t1, float t2 );
       	void mrgRhGrp( rhGroup & x, rhGroup & y);
       	bool reduceRhGrps( vector<rhGroup> & x);
@@ -241,6 +254,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	TH1D *jetTimeHist, *jetRHTimeHist;
 		TH1D *hist1d[nHists];
       	TH2D *hist2d[nHists];
+        TH3D *hist3d[nHists];
 
       	TH2D *ebeeMapSc[nEBEEMaps];
       	TH2D *ebeeMapBc[nEBEEMaps];
@@ -437,6 +451,21 @@ void normTH1D(TH1D* hist){
 
 }//<<>>void NormTH1D(TH1D* hist)
 
+const float getMyAngle ( const float x, const float y){
+
+	float rslt = -999.0;
+	if( x == 0 && y == 0 ) return rslt;
+	float m = std::sqrt(x*x+y*y); 
+	float a = std::asin(abs(y/m)); 
+	if( x < 0 && y < 0 ) rslt = PI+a; 
+	else if( x < 0 ) rslt = PI-a; 
+	else if( y < 0 ) rslt = TWOPI-a; 
+	return rslt;
+
+}//<<>> const float getAngle (CFlt x, CFlt y)
+
+const float getAngle ( const float x, const float y){ return std::atan2(y,x);}
+
 // sort functions
 
 #define CAuto const auto
@@ -453,16 +482,28 @@ CAuto phi   		(CFlt x, CFlt y){return std::atan2(y,x);}
 CAuto theta 		(CFlt r, CFlt z){return std::atan2(r,z);}
 CAuto eta   		(CFlt x, CFlt y, CFlt z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
 CAuto effMean   	(CFlt x, CFlt y){return (x*y)/sqrt(x*x+y*y);}
+CAuto dPhi			(CFlt x, CFlt y){auto dp = x-y; if( dp > 180 ){dp-=360.0;} else if( dp < -180 ){ dp+=360.0;} return dp;}
 
 // stats functions
 CAuto mean			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
 CAuto mean  		(CVFlt x, CFlt w){return std::accumulate(x.begin(),x.end(),0.0f)/w;}
 CAuto mean			(CVFlt x, CVFlt wv){float sum(0.0), wt(0.0); int it(0); for( auto ix : x ){ sum+=ix*wv[it]; wt+=wv[it]; it++; } return sum/wt;}
-CAuto stdev			(CVFlt x, float m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/(x.size()-1));}	
-CAuto stdev			(CVFlt x, float m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/(((it-1)*w)/it));}
+CAuto wnum			(CFlt it, CFlt w){return (((it-1)*w)/it);}
+CAuto stdev			(CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/(x.size()-1));}	
+CAuto var           (CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return sum/(x.size()-1);}
+CAuto stdev			(CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/wnum(it,w));}
+CAuto var           (CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return sum/wnum(it,w);}
+CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w)
+							 {float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*(ix-mx)*(y[it]-my); it++; } return sum/wnum(it,w);}
+CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my){float sum(0.0); int it(0); for( auto ix : x ){ sum += (ix-mx)*(y[it]-my); it++; } return sum/(x.size()-1);}
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
 CAuto sum			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
 CAuto max			(CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
+CAuto meanPhi		(CVFlt x){auto maxphi = max(x); float sum(0.0); for(auto ix : x ){ if( (maxphi - ix) > 180 ) sum+=(ix+360.0); else sum+=ix; } 
+							  auto rslt = sum/x.size(); if( rslt > 360 ) rslt-=360.0; return rslt;}
+CAuto wsin2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(sin(ix)); it++; } return sum/it;}
+CAuto wcos2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); it++; } return sum/it;}
+CAuto wsincos       (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); it++; } return sum/it;}
 
 // rh group functions
 CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}

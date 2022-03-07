@@ -169,15 +169,15 @@ detIdMap LLPgammaAnalyzer::SetupDetIDs(){
 
 int LLPgammaAnalyzer::getPFJetID(const pat::Jet & jet){ 
 	
-	const auto eta  = std::abs(jet.eta());
-	const auto NHF  = jet.neutralHadronEnergyFraction();
-	const auto NEMF = jet.neutralEmEnergyFraction();
-	const auto CHF  = jet.chargedHadronEnergyFraction();
-	const auto CEMF = jet.chargedEmEnergyFraction();
-	const auto NHM  = jet.neutralMultiplicity();
-	const auto CHM  = jet.chargedMultiplicity();
-	const auto SHM  = jet.chargedMultiplicity()+jet.neutralMultiplicity();
-	const auto MUF  = jet.muonEnergyFraction();
+	CAuto eta  = std::abs(jet.eta());
+	CAuto NHF  = jet.neutralHadronEnergyFraction();
+	CAuto NEMF = jet.neutralEmEnergyFraction();
+	CAuto CHF  = jet.chargedHadronEnergyFraction();
+	CAuto CEMF = jet.chargedEmEnergyFraction();
+	CAuto NHM  = jet.neutralMultiplicity();
+	CAuto CHM  = jet.chargedMultiplicity();
+	CAuto SHM  = jet.chargedMultiplicity()+jet.neutralMultiplicity();
+	CAuto MUF  = jet.muonEnergyFraction();
 
 	int tighter = 3;   
 	int tightLepVeto = 0;
@@ -233,26 +233,26 @@ int LLPgammaAnalyzer::getPFJetID(const pat::Jet & jet){
 rhGroup LLPgammaAnalyzer::getRHGroup( float eta, float phi, float drmin, float minenr = 0.0 ){
 
 	rhGroup result;
-	for (const auto recHit : *recHitsEB_ ){
+	for (CAuto recHit : *recHitsEB_ ){
 		if( recHit.checkFlag(EcalRecHit::kHasSwitchToGain6) ) continue;
 		auto enr = recHit.energy();
 		if( enr <= minenr ) continue;
-	   	const auto recHitId(recHit.detid());
-	   	const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-	   	const auto dr = std::sqrt(reco::deltaR2(eta, phi, recHitPos.eta(), recHitPos.phi()));
+	   	CAuto recHitId(recHit.detid());
+	   	CAuto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
+	   	CAuto dr = sqrt(reco::deltaR2(eta, phi, recHitPos.eta(), recHitPos.phi()));
 	   	if( dr > drmin ) continue;
 	   	result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEB_ )
-	for (const auto recHit : *recHitsEE_ ){
+	}//<<>>for (CAuto recHit : *recHitsEB_ )
+	for (CAuto recHit : *recHitsEE_ ){
 	   	if( recHit.checkFlag(EcalRecHit::kHasSwitchToGain6) ) continue;
 	   	auto enr = recHit.energy();
 	   	if( enr <= minenr ) continue;
-	   	const auto recHitId(recHit.detid());
-	   	const auto recHitPos = endcapGeometry->getGeometry(recHitId)->getPosition();
-	   	const auto dr = std::sqrt(reco::deltaR2(eta, phi, recHitPos.eta(), recHitPos.phi()));
+	   	CAuto recHitId(recHit.detid());
+	   	CAuto recHitPos = endcapGeometry->getGeometry(recHitId)->getPosition();
+	   	CAuto dr = sqrt(reco::deltaR2(eta, phi, recHitPos.eta(), recHitPos.phi()));
 	   	if( dr > drmin ) continue;
 	   	result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEE_ )
+	}//<<>>for (CAuto recHit : *recHitsEE_ )
 
 	return result;
 
@@ -261,18 +261,18 @@ rhGroup LLPgammaAnalyzer::getRHGroup( float eta, float phi, float drmin, float m
 rhGroup LLPgammaAnalyzer::getRHGroup( uInt detid ){
 
 	rhGroup result;
-	for (const auto recHit : *recHitsEB_ ){
-	   	const auto recHitId = recHit.detid();
-		const auto rawId = recHitId.rawId();
+	for (CAuto recHit : *recHitsEB_ ){
+	   	CAuto recHitId = recHit.detid();
+		CAuto rawId = recHitId.rawId();
 	   	if( detid != rawId ) continue;
 	   	result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEB_ )
-	for (const auto recHit : *recHitsEE_ ){
-	   	const auto recHitId = recHit.detid();
-	   	const auto rawId = recHitId.rawId();
+	}//<<>>for (CAuto recHit : *recHitsEB_ )
+	for (CAuto recHit : *recHitsEE_ ){
+	   	CAuto recHitId = recHit.detid();
+	   	CAuto rawId = recHitId.rawId();
 	   	if( detid != rawId ) continue;
 	   	result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEE_ )
+	}//<<>>for (CAuto recHit : *recHitsEE_ )
 
 	return result;
 }//>>>>rhGroup LLPgammaAnalyzer::getRHGroup( uInt detid )
@@ -280,8 +280,8 @@ rhGroup LLPgammaAnalyzer::getRHGroup( uInt detid ){
 rhGroup LLPgammaAnalyzer::getRHGroup(){
 
 	rhGroup result;
-	for (const auto recHit : *recHitsEB_ ) result.push_back(recHit);
-	for (const auto recHit : *recHitsEE_ ) result.push_back(recHit);
+	for (CAuto recHit : *recHitsEB_ ) result.push_back(recHit);
+	for (CAuto recHit : *recHitsEE_ ) result.push_back(recHit);
 
 	return result;
 
@@ -292,29 +292,29 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float min
 
 	rhGroup result;
 	vector<uInt> rawIds;
-	for ( const auto superCluster : superClusterGroup ){
+	for ( CAuto superCluster : superClusterGroup ){
 	 	auto & hitsAndFractions = superCluster.hitsAndFractions();
-	 	const auto nHAF = hitsAndFractions.size();
+	 	CAuto nHAF = hitsAndFractions.size();
 	 	for( uInt iHAF = 0; iHAF < nHAF; iHAF++ ){
-	    	const auto detId = hitsAndFractions[iHAF].first;
-	    	const auto rawId = detId.rawId();
+	    	CAuto detId = hitsAndFractions[iHAF].first;
+	    	CAuto rawId = detId.rawId();
 	    	if( std::find( rawIds.begin(), rawIds.end(), rawId ) == rawIds.end() ) rawIds.push_back(rawId);
 	 	}//<<>>for( uInt iHAF = 0; iHAF < nHAF; iHAF++ )
-	}//<<>>for ( const auto superCluster : superClusterGroup )	
-	for (const auto recHit : *recHitsEB_ ){
+	}//<<>>for ( CAuto superCluster : superClusterGroup )	
+	for (CAuto recHit : *recHitsEB_ ){
 	  	auto enr = recHit.energy();
 	  	if( enr <= minenr ) continue;
-	  	const auto recHitId = recHit.detid();
-	  	const auto rawId = recHitId.rawId();
+	  	CAuto recHitId = recHit.detid();
+	  	CAuto rawId = recHitId.rawId();
 	  	if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEB_ )
-	for (const auto recHit : *recHitsEE_ ){
+	}//<<>>for (CAuto recHit : *recHitsEB_ )
+	for (CAuto recHit : *recHitsEE_ ){
 	  	auto enr = recHit.energy();
 	  	if( enr <= minenr ) continue;
-	  	const auto recHitId = recHit.detid();
-	  	const auto rawId = recHitId.rawId();
+	  	CAuto recHitId = recHit.detid();
+	  	CAuto rawId = recHitId.rawId();
 	  	if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEE_ )
+	}//<<>>for (CAuto recHit : *recHitsEE_ )
 			
 	return result;
 
@@ -328,32 +328,32 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float min
 	float dRcut = 0.05;
 
     int iter = -1;
-    for ( const auto superCluster : superClusterGroup ){
+    for ( CAuto superCluster : superClusterGroup ){
 		iter++;
 		if( phDr[iter] > dRcut ) continue;
 		if( phEnergy[iter] != phEnMax ) continue; 
         auto & hitsAndFractions = superCluster.hitsAndFractions();
-        const auto nHAF = hitsAndFractions.size();
+        CAuto nHAF = hitsAndFractions.size();
         for( uInt iHAF = 0; iHAF < nHAF; iHAF++ ){
-            const auto detId = hitsAndFractions[iHAF].first;
-            const auto rawId = detId.rawId();
+            CAuto detId = hitsAndFractions[iHAF].first;
+            CAuto rawId = detId.rawId();
             if( std::find( rawIds.begin(), rawIds.end(), rawId ) == rawIds.end() ) rawIds.push_back(rawId);
         }//<<>>for( uInt iHAF = 0; iHAF < nHAF; iHAF++ )
-    }//<<>>for ( const auto superCluster : superClusterGroup )   
-    for (const auto recHit : *recHitsEB_ ){
+    }//<<>>for ( CAuto superCluster : superClusterGroup )   
+    for (CAuto recHit : *recHitsEB_ ){
         auto enr = recHit.energy();
         if( enr <= minenr ) continue;
-        const auto recHitId = recHit.detid();
-        const auto rawId = recHitId.rawId();
+        CAuto recHitId = recHit.detid();
+        CAuto rawId = recHitId.rawId();
         if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-    }//<<>>for (const auto recHit : *recHitsEB_ )
-    for (const auto recHit : *recHitsEE_ ){
+    }//<<>>for (CAuto recHit : *recHitsEB_ )
+    for (CAuto recHit : *recHitsEE_ ){
         auto enr = recHit.energy();
         if( enr <= minenr ) continue;
-        const auto recHitId = recHit.detid();
-        const auto rawId = recHitId.rawId();
+        CAuto recHitId = recHit.detid();
+        CAuto rawId = recHitId.rawId();
         if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-    }//<<>>for (const auto recHit : *recHitsEE_ )
+    }//<<>>for (CAuto recHit : *recHitsEE_ )
 
     return result;
 
@@ -364,27 +364,27 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const reco::CaloCluster basicCluster, floa
 	rhGroup result;
 	vector<uInt> rawIds;
 	auto & hitsAndFractions = basicCluster.hitsAndFractions();
-	const auto nHAF = hitsAndFractions.size();
+	CAuto nHAF = hitsAndFractions.size();
 	//std::cout << " --- getRHGroup for basic cluster with " << nHAF << " rechits " << std::endl;
 	for( uInt iHAF = 0; iHAF < nHAF; iHAF++ ){
-		const auto detId = hitsAndFractions[iHAF].first;
-		const auto rawId = detId.rawId();
+		CAuto detId = hitsAndFractions[iHAF].first;
+		CAuto rawId = detId.rawId();
 		if( std::find( rawIds.begin(), rawIds.end(), rawId ) == rawIds.end() ) rawIds.push_back(rawId);
 	}//<<>>for( uInt iHAF = 0; iHAF < nHAF; iHAF++ )
-	for (const auto recHit : *recHitsEB_ ){
+	for (CAuto recHit : *recHitsEB_ ){
 	  	auto enr = recHit.energy();
 	  	if( enr <= minenr ) continue;
-	  	const auto recHitId = recHit.detid();
-	  	const auto rawId = recHitId.rawId();
+	  	CAuto recHitId = recHit.detid();
+	  	CAuto rawId = recHitId.rawId();
 	  	if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEB_ )
-	for (const auto recHit : *recHitsEE_ ){
+	}//<<>>for (CAuto recHit : *recHitsEB_ )
+	for (CAuto recHit : *recHitsEE_ ){
 	  	auto enr = recHit.energy();
 	  	if( enr <= minenr ) continue;
-	  	const auto recHitId = recHit.detid();
-	  	const auto rawId = recHitId.rawId();
+	  	CAuto recHitId = recHit.detid();
+	  	CAuto rawId = recHitId.rawId();
 	  	if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ) result.push_back(recHit);
-	}//<<>>for (const auto recHit : *recHitsEE_ )		
+	}//<<>>for (CAuto recHit : *recHitsEE_ )		
 
 	return result;
 
@@ -394,21 +394,21 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const reco::CaloCluster basicCluster, floa
 vector<float>	LLPgammaAnalyzer::getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ ){
 
 	vector<float> result;
-	for (const auto recHit : recHits ){		
-		const auto rht = recHit.time();
+	for (CAuto recHit : recHits ){		
+		CAuto rht = recHit.time();
 		//std::cout << " ----- Get TOF Time rh time: " << rht << std::endl;
-	   	const auto recHitId(recHit.detid());
-	   	const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-	   	const auto rhPosX = recHitPos.x();
-	   	const auto rhPosY = recHitPos.y();
-	   	const auto rhPosZ = recHitPos.z();
+	   	CAuto recHitId(recHit.detid());
+	   	CAuto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
+	   	CAuto rhPosX = recHitPos.x();
+	   	CAuto rhPosY = recHitPos.y();
+	   	CAuto rhPosZ = recHitPos.z();
 		//std::cout << " ----- Get TOF Time rh POS: " << rhPosX << " " <<	rhPosY << " " << rhPosZ << std::endl;
-	   	const auto d_rh = hypo(rhPosX,rhPosY,rhPosZ);
-	   	const auto d_pv = hypo(rhPosX-vtxX,rhPosY-vtxY,rhPosZ-vtxZ);
-	   	const auto tof = (d_rh-d_pv)/SOL;
+	   	CAuto d_rh = hypo(rhPosX,rhPosY,rhPosZ);
+	   	CAuto d_pv = hypo(rhPosX-vtxX,rhPosY-vtxY,rhPosZ-vtxZ);
+	   	CAuto tof = (d_rh-d_pv)/SOL;
 	   	//std::cout << " ----- Get TOF Time rh tof: " << tof << std::endl;
 	   	result.push_back(rht-tof);
-	}//<<>>for (const auto recHit : recHits )	
+	}//<<>>for (CAuto recHit : recHits )	
 
 	return result;
 
@@ -419,12 +419,12 @@ EcalRecHit LLPgammaAnalyzer::getLeadRh( rhGroup recHits ){
 	
 	EcalRecHit result;
 	float enr(0.0);
-	for (const auto recHit : recHits ){
+	for (CAuto recHit : recHits ){
 		auto rhenr = recHit.energy();
 		if( rhenr < enr ) continue;
 		enr = rhenr;
 		result = recHit;
-	}//<<>>for (const auto recHit : recHits )
+	}//<<>>for (CAuto recHit : recHits )
 
 	return result;
 
@@ -435,18 +435,19 @@ vector<float>	LLPgammaAnalyzer::getLeadTofRhTime( rhGroup recHits, double vtxX, 
 
 	vector<float> result;
 	auto lrh = getLeadRh(recHits);
-	const auto recHitId(lrh.detid());
-	const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-	const auto rhPosX = recHitPos.x();
-	const auto rhPosY = recHitPos.y();
-	const auto rhPosZ = recHitPos.z();
-	const auto d_rh = hypo(rhPosX,rhPosY,rhPosZ);
-	const auto d_pv = hypo(rhPosX-vtxX,rhPosY-vtxY,rhPosZ-vtxZ);
-	const auto tof = (d_rh-d_pv)/SOL;
-	for (const auto recHit : recHits ){result.push_back(recHit.time()-tof);}
+	CAuto recHitId(lrh.detid());
+	CAuto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
+	CAuto rhPosX = recHitPos.x();
+	CAuto rhPosY = recHitPos.y();
+	CAuto rhPosZ = recHitPos.z();
+	CAuto d_rh = hypo(rhPosX,rhPosY,rhPosZ);
+	CAuto d_pv = hypo(rhPosX-vtxX,rhPosY-vtxY,rhPosZ-vtxZ);
+	CAuto tof = (d_rh-d_pv)/SOL;
+	for (CAuto recHit : recHits ){result.push_back(recHit.time()-tof);}
 	return result;
 
 }//>>>>vector<float>  LLPgammaAnalyzer::getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ )
+
 
 vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times ){
 
@@ -471,7 +472,7 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times ){
 	}//<<>>if( size == 0 )
 
 	TH1D timeDist( "temp", "temp", 500, -25, 25 );
-	for( const auto time : times ) timeDist.Fill(time);
+	for( CAuto time : times ) timeDist.Fill(time);
 	auto nEntries = timeDist.GetEntries();
 	double medtime(0.0);
 	if( nEntries > 0 ){	
@@ -572,6 +573,7 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, vector<fl
 	return results;
 }//>>>>vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, vector<float> weights )
 
+
 vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, rhGroup rechits ){
 
    	// N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
@@ -589,421 +591,6 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, rhGroup r
    	return getTimeDistStats( times, wts );
 }//>>>>vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, rhGroup rechits ){
 
-vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> xs, vector<float> wts ){
-
-    vector<float> results;
-
-    auto ts2 = wsin2( xs, wts );
-    auto tc2 = wcos2( xs, wts );
-    auto tsc = wsincos( xs, wts );
-	//std::cout << "Sin2 : " << ts2 << " Cos2 : " << tc2 << " SinCos : " << tsc << std::endl;
-    //std::cout << "Varencies and Means Calculated" << std::endl;
-
-    //TMatrixDSym mat(3,3);
-    double array[] = { tc2, tsc, tsc, ts2 };
-    //for( auto thing : array ) std::cout << thing;
-    //cout << std::endl;
-    //TArrayD data(9,array);
-    //mat.SetMatrixArray(data.GetArray());
-    //mat.SetMatrixArray(array);
-    TMatrixDSym mat(2,array);
-    //std::cout << "Input matrix created" << std::endl;
-    //mat.Print();
-
-    TMatrixDSymEigen eigen(mat);
-    const TVectorD& eginVal = eigen.GetEigenValues();
-    const TMatrixD& eginVec = eigen.GetEigenVectors();
-    TVectorD evaules(eginVal);
-    //evaules.ResizeTo(3);
-    //std::cout << "Eigin Values and Vectors Found " << std::endl;
-    //eginVal.Print();
-    //evaules.Print();
-    //eginVec.Print();
-
-    int index(1);
-    if( (eginVal(0) >= eginVal(1)) ){
-        index = 0;
-        //if( (eginVal(0) == eginVal(1)) ) std::cout << " -- rhGrp is Spherical" << std::endl;
-    }//<<>>if( (eginVal(0) >= eginVal(1)) )
-    //std::cout << "Largest Eigin Value Found" << std::endl;
-
-    auto ex = eginVec(index,0);
-    auto ey = eginVec(index,1);
-    auto ev = eginVal(index);
-    //std::cout << "Eigin Angles Found" << std::endl;
-
-    results.push_back(ex);
-    results.push_back(ey);
-    results.push_back(ev);
-
-    return results;
-}//<<>>vector<float> LLPgammaAnalyzer::getRhGrpEigen2D( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts )
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> wts ){
-
-    vector<float> results;
-
-    auto mean_x = mean( xs, wts );
-    auto mean_y = mean( ys, wts );
-    auto swts = sum( wts );
-    auto var_x = var( xs, mean_x, wts, swts );
-    auto var_y = var( ys, mean_y, wts, swts );
-    auto var_xy = cvar( xs, mean_x, ys, mean_y, wts, swts );
-    //std::cout << "Varencies and Means Calculated" << std::endl;
-
-    //TMatrixDSym mat(3,3);
-    double array[] = { var_x, var_xy, var_xy, var_y };
-    //for( auto thing : array ) std::cout << thing;
-    //cout << std::endl;
-    //TArrayD data(9,array);
-    //mat.SetMatrixArray(data.GetArray());
-    //mat.SetMatrixArray(array);
-    TMatrixDSym mat(2,array);
-    //std::cout << "Input matrix created" << std::endl;
-    //mat.Print();
-
-    TMatrixDSymEigen eigen(mat);
-    const TVectorD& eginVal = eigen.GetEigenValues();
-    const TMatrixD& eginVec = eigen.GetEigenVectors();
-    TVectorD evaules(eginVal);
-    //evaules.ResizeTo(3);
-    //std::cout << "Eigin Values and Vectors Found " << std::endl;
-    //eginVal.Print();
-    //evaules.Print();
-    //eginVec.Print();
-
-    int index(1);
-    if( (eginVal(0) >= eginVal(1)) ){
-        index = 0;
-        //if( (eginVal(0) == eginVal(1)) ) std::cout << " -- rhGrp is Spherical" << std::endl;
-    }//<<>>if( (eginVal(0) >= eginVal(1)) )
-    //std::cout << "Largest Eigin Value Found" << std::endl;
-
-    auto ex = eginVec(index,0);
-    auto ey = eginVec(index,1);
-    auto ev = eginVal(index);
-    //std::cout << "Eigin Angles Found" << std::endl;
-
-    results.push_back(ex);
-    results.push_back(ey);
-    results.push_back(ev);
-
-    return results;
-}//<<>>vector<float> LLPgammaAnalyzer::getRhGrpEigen2D( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts )
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts ){
-
-	vector<float> results;
-
-	auto mean_x = mean( xs, wts );
-    auto mean_y = mean( ys, wts );
-    auto mean_z = mean( zs, wts );
-    auto swts = sum( wts );
-    auto var_x = var( xs, mean_x, wts, swts );
-    auto var_y = var( ys, mean_y, wts, swts );
-    auto var_z = var( zs, mean_z, wts, swts );
-    auto var_xy = cvar( xs, mean_x, ys, mean_y, wts, swts );
-    auto var_xz = cvar( xs, mean_x, zs, mean_z, wts, swts );
-    auto var_yz = cvar( ys, mean_y, zs, mean_z, wts, swts );
-	//std::cout << "Varencies and Means Calculated" << std::endl;
-    //std::cout << " xx- " << var_x  << " xy- " << var_xy << " xz- " << var_xz << std::endl; 
-    //std::cout << " xy- " << var_xy << " yy- " << var_y  << " yz- " << var_yz << std::endl;
-    //std::cout << " xz- " << var_xz << " yz- " << var_yz << " zz- " << var_z  << std::endl;
-
-	//TMatrixDSym mat(3,3);
-	double array[] = { var_x, var_xy, var_xz, var_xy, var_y, var_yz, var_xz, var_yz, var_z };
-    //for( auto thing : array ) std::cout << thing;
-	//cout << std::endl;
-   	//TArrayD data(9,array);
-	//mat.SetMatrixArray(data.GetArray());
-    //mat.SetMatrixArray(array);
-    TMatrixDSym mat(3,array);
-    //std::cout << "Input matrix created" << std::endl;
-	//mat.Print();
-
-	TMatrixDSymEigen eigen(mat);
-	const TVectorD& eginVal = eigen.GetEigenValues();
-	const TMatrixD& eginVec = eigen.GetEigenVectors();
-	TVectorD evaules(eginVal);	
-    //evaules.ResizeTo(3);
-    //std::cout << "Eigin Values and Vectors Found " << std::endl;
-    //eginVal.Print();
-    //evaules.Print();
-    //eginVec.Print();
-
-	int index(2);
-	if( (eginVal(0) >= eginVal(1)) && (eginVal(0) >= eginVal(2)) ){ 
-		index = 0; 
-		if( (eginVal(0) == eginVal(1)) && (eginVal(0) == eginVal(2)) ) std::cout << " -- rhGrp is Spherical" << std::endl;
-    } else if( eginVal(1) >= eginVal(2) ) {
-		index = 1;
-		if( eginVal(1) == eginVal(2) ) std::cout << " -- rhGrp is a Flatend Sphere" << std::endl;
-	}//<<>>if( (eginVal(0) >= eginVal(1)) && (eginVal(0) >= eginVal(2)) )
-    //std::cout << "Largest Eigin Value Found" << std::endl;
-
-	auto ex = eginVec(index,0);
-    auto ey = eginVec(index,1);
-    auto ez = eginVec(index,2);
-    auto ev = eginVal(index);
-    //std::couhist2d[73]t << "Eigin Angles Found" << std::endl;
-
-	results.push_back(ex);
-    results.push_back(ey);
-    results.push_back(ez);
-    results.push_back(ev);
-
-	return results;
-}//<<>>vector<float> LLPgammaAnalyzer::getRhGrpEigen3D( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts )
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGroup rechits ){
-
-    // N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
-
-    float N(3.64);
-    float C(0.3000);
-    float tdis(2.2/SOL);
-
-    vector<float> wts;
-    vector<float> etas;
-    vector<float> phis;
-    vector<float> ebtimes;
-    vector<float> emepReturn(4,-999);
-
-    //bool ebp = false;
-    for( uInt it(0); it < rechits.size(); it++ ){
-
-		const auto recHitID = getRawID(rechits[it]);
-		const auto & idinfo = DetIDMap[recHitID];
-		if( idinfo.ecal == ECAL::EB ){
-    		//auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-        	auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
-        	wts.push_back(wt);
-        	//const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-        	const auto rhEtaPos = tdis*(idinfo.i2);//recHitPos.eta();
-			//if( rhEtaPos > 0 ) ebp = true;
-        	etas.push_back(rhEtaPos);
-            hist1d[66]->Fill(idinfo.i2);
-        	//const auto rhPhiPos = tdis*idinfo.i1;//recHitPos.phi();
-        	phis.push_back(idinfo.i1);
-            hist1d[67]->Fill(idinfo.i1);
-			ebtimes.push_back(times[it]);
-            hist1d[68]->Fill(times[it]);
-		} else { return emepReturn; //std::cout << "In getRhGrpEigen_sph : NOT EB !!!!!!" << std::endl; }
-		}//<<>>if( idinfo.ecal == ECAL::EB )
-
-    }//<<>>for( uInt it(0); it < rechits.size(); it++ )
-
-	vector<float> adjphis;
-	auto mphi = ceil(meanPhi(phis));
-	for( uInt it(0); it < phis.size(); it++ ){ 
-		auto dstphi = dPhi(phis[it],mphi);
-		adjphis.push_back(tdis*(mphi+dstphi));
-	}//<<>>for( auto it : phis )
-
-    auto eigens = getRhGrpEigen( etas, adjphis, ebtimes, wts );
-
-    vector<float> angles;
-    auto meta = mean(etas);
-    auto adjmphi = mean(adjphis);
-    auto mtime = mean(ebtimes);
-    //for( uInt it(0); it < ebtimes.size(); it++ ){
-    //    float leta = etas[it] - meta;
-    //    float lphi = adjphis[it] - amphi;
-    //    if( leta == 0 && lphi == 0 ) continue;
-    //    //float ltim = ebtimes[it]-mtime;
-    //    float angle = getAngle( leta, lphi );
-    //    angles.push_back(angle);
-    //}//<<>>for( uInt it(0); it < ebtimes.size(); it++ )
-
-    auto eprotangle = getAngle(eigens[0], eigens[1]);
-    //auto etrotangle = getAngle(eigens[0], eigens[2]);
-    //if( not ebp ){ rotangle += PI; if( rotangle > TWOPI ) rotangle -= TWOPI; }
-    float epeignsin = std::sin(eprotangle);
-    float epeigncos = std::cos(eprotangle);
-    //float eteignsin = std::sin(etrotangle);
-    //float eteigncos = std::cos(etrotangle);
-    for( uInt it(0); it < ebtimes.size(); it++ ){
-
-        float leta = etas[it] - meta;
-        float lphi = adjphis[it] - adjmphi;
-        float ltime = ebtimes[it] - mtime;
-		//if( not ebp ) leta *= -1;
-        hist1d[75]->Fill(leta);
-        hist1d[76]->Fill(lphi);
-        hist1d[77]->Fill(ltime);
-        auto epxcor = epeigncos*(leta) - epeignsin*(lphi);
-        auto epycor = epeignsin*(leta) + epeigncos*(lphi);
-        //auto etxcor = eteigncos*(leta) - eteignsin*(ltime);
-        //auto etycor = eteignsin*(leta) + eteigncos*(ltime);
-        //if( not ebp ) xcor *= -1;
-        //std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
-        //if( abs(wts[it]) < 8 )
-        hist2d[77]->Fill(epxcor,epycor,ltime);
-        hist2d[78]->Fill(epxcor,epycor);
-        hist2d[79]->Fill(epxcor,ltime);
-        hist2d[80]->Fill(leta,ltime);
-
-    }//<<>>for( uInt it(0); it < wts.size(); it++ )
-
-    return eigens;
-}//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> times, rhGroup rechits ){
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen_xyz( vector<float> times, rhGroup rechits ){
-
-    // N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
-
-    float N(3.64);
-    float C(0.3000);
-
-    vector<float> wts;
-    vector<float> etas;
-    vector<float> phis;
-    for( uInt it(0); it < rechits.size(); it++ ){
-    //auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-        auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
-        wts.push_back(wt);
-        const auto recHitId(rechits[it].detid());
-        const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-        const auto rhEtaPos = recHitPos.eta();
-        etas.push_back(rhEtaPos);
-        const auto rhPhiPos = recHitPos.phi();
-        phis.push_back(rhPhiPos);
-    }//<<>>for( uInt it(0); it < rechits.size(); it++ )
-
-    return getRhGrpEigen( etas, phis, times, wts );
-}//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> times, rhGroup rechits ){
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup rechits ){
-
-    // N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
-
-    //float N(3.64);
-    //float C(0.3000);
-    //float tdis(2.2/SOL);
-
-    vector<float> wts;
-    vector<float> etas;
-    vector<float> phis;
-    vector<float> ebtimes;
-    vector<float> angles;
-    vector<float> emepReturn(4,-999);
-
-	//bool ebp = false;
-    for( uInt it(0); it < rechits.size(); it++ ){
-
-        const auto recHitID = getRawID(rechits[it]);
-        const auto & idinfo = DetIDMap[recHitID];
-        if( idinfo.ecal == ECAL::EB ){ 
-        	//auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-        	//auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
-        	//wts.push_back(wt);
-        	//const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-        	const auto rhEtaPos = idinfo.i2;//recHitPos.eta();
-			//if( rhEtaPos >= 0 ) ebp = true; 
-        	etas.push_back(rhEtaPos);
-        	//hist1d[69]->Fill(rhEtaPos);
-        	const auto rhPhiPos = idinfo.i1;//recHitPos.phi();
-        	//hist1d[70]->Fill(rhPhiPos);
-        	phis.push_back(rhPhiPos);
-        	ebtimes.push_back(times[it]);	
-			//std::cout << "In getRhGrpEigen_sph w/ rheta " << rhEtaPos << " : rhphi " << rhPhiPos << " : rht " << times[it] << std::endl;		
-		} else { return emepReturn; //std::cout << "In getRhGrpEigen_sph : NOT EB !!!!!!" << std::endl; }
-		}//<<>>if( idinfo.ecal != ECAL::EB )
-    }//<<>>for( uInt it(0); it < rechits.size(); it++ )
-
-	auto meta = ceil(mean(etas));
-	auto mphi = ceil(meanPhi(phis));
-	auto mtime = mean(ebtimes);
-
-	//std::cout << "In getRhGrpEigen_sph w/ meta " << meta << " : mphi " << mphi << " : mt " << mtime << std::endl;
-
-	for( uInt it(0); it < ebtimes.size(); it++ ){
-
-		float leta = etas[it] - meta;
-        float lphi = dPhi(phis[it],mphi);
-		if( leta == 0 && lphi == 0 ) continue;
-        float ltim = ebtimes[it]-mtime;
-		//float mag = hypo( leta, lphi );
-		//if( not ebp ) leta *= -1;
-		float angle = getAngle( leta, lphi );
-		//float angle = 0;
-		//if( leta == 0 ) angle = PI/2.0;
-		//else if( lphi != 0 ) angle = atan( lphi/leta );
-		//if( leta < 0 && lphi < 0 ) angle+=PI;
-		//else if( leta < 0 || lphi < 0 ) angle+=(PI/2.0);
-		angles.push_back(angle);
-		//std::cout << "In getRhGrpEigen_sph w/1 leta " << leta << " : lphi " << lphi << " : ltim " << ltim << " : mag " << mag << " : angle " << angle << std::endl;
-		wts.push_back(ltim);
-        hist1d[69]->Fill(leta);
-        hist1d[70]->Fill(lphi);
-        hist1d[71]->Fill(ltim);
-        hist1d[72]->Fill(angle);
-	}//<<>>for( uInt it(0); it < ebtimes.size(); it++ )
-
-    auto eigens =  getRhGrpEigen( angles, wts );
-
-	//float eigncot = eigens[0]/eigens[1];
-    //float eignsin = 1/(std::sqrt(1+eigncot*eigncot));
-	//std::cout << "In getRhGrpEigen_sph eigen0 " << eigens[0] << " : eigen1 " << eigens[1] << " sin : " << eignsin << std::endl;
-    //float eigncos = std::qrt(1.0 - eignsin*eignsin);
-    auto rotangle = getAngle(eigens[0], eigens[1]);
-    hist1d[73]->Fill(rotangle);
-    //if( not ebp ){ rotangle += PI; if( rotangle > TWOPI ) rotangle -= TWOPI; }
-	hist1d[74]->Fill(rotangle);
-	float eignsin = std::sin(rotangle);
-	float eigncos = std::cos(rotangle);
-	for( uInt it(0); it < wts.size(); it++ ){
-
-        float leta = etas[it] - meta;
-        float lphi = dPhi(phis[it],mphi);
-		auto xcor = eigncos*(leta) - eignsin*(lphi);
-        auto ycor = eignsin*(leta) + eigncos*(lphi);
-		//if( not ebp ) xcor *= -1;
-		//std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
-		//if( abs(wts[it]) < 8 )
-		hist2d[73]->Fill(xcor,ycor,wts[it]);
-        hist2d[74]->Fill(xcor,ycor);
-        hist2d[75]->Fill(leta,lphi,wts[it]);
-        hist2d[76]->Fill(leta,lphi);
-	}//<<>>for( uInt it(0); it < wts.size(); it++ )
-
-	return eigens;
-}//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup rechits ){
-
-vector<float> LLPgammaAnalyzer::getRhGrpEigen_ep( vector<float> times, rhGroup rechits ){
-
-    // N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
-
-    float N(3.64);
-    float C(0.3000);
-    float tdis(2.2/SOL);
-
-    vector<float> wts;
-    vector<float> etas;
-    vector<float> phis;
-    vector<float> ebtimes;
-
-    for( uInt it(0); it < rechits.size(); it++ ){
-
-        const auto recHitID = getRawID(rechits[it]);
-        const auto & idinfo = DetIDMap[recHitID];
-        if( idinfo.ecal == ECAL::EB ){
-            //auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-            auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
-            wts.push_back(wt);
-            //const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
-            const auto rhEtaPos = tdis*idinfo.i2;//recHitPos.eta();
-            etas.push_back(rhEtaPos);
-			hist1d[69]->Fill(rhEtaPos);
-            const auto rhPhiPos = tdis*idinfo.i1;//recHitPos.phi();
-            hist1d[70]->Fill(rhPhiPos);
-            phis.push_back(rhPhiPos);
-            ebtimes.push_back(times[it]);
-        }//<<>>if( idinfo.ecal == ECAL::EB )
-    }//<<>>for( uInt it(0); it < rechits.size(); it++ )
-
-    return getRhGrpEigen( etas, phis, wts );
-}//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen_ep( vector<float> times, rhGroup rechits ){
 
 float LLPgammaAnalyzer::getdt( float t1, float t2 ){
 
@@ -1020,10 +607,10 @@ void LLPgammaAnalyzer::mrgRhGrp( rhGroup & x, rhGroup & y ){
 
 	//std::cout << " --- In mrgRhGrp " << std::endl;
 	bool matched(false);
-	for(const auto rhy : y ){ 
-		for(const auto rhx : x ){ if( rhMatch(rhx,rhy) ) matched = true; }
+	for(CAuto rhy : y ){ 
+		for(CAuto rhx : x ){ if( rhMatch(rhx,rhy) ) matched = true; }
 		if( not matched ) x.push_back(rhy);
-	}//<<>>for(const auto rhx : y )
+	}//<<>>for(CAuto rhx : y )
    //std::cout << " ---- Finished mrgRhGrp " << std::endl;
 
 	return;
@@ -1111,14 +698,14 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 // -- event information 
 
-   	const auto run   = iEvent.id().run();
-   	const auto lumi  = iEvent.luminosityBlock();
-   	const auto event = iEvent.id().event();
+   	CAuto run   = iEvent.id().run();
+   	CAuto lumi  = iEvent.luminosityBlock();
+   	CAuto event = iEvent.id().event();
     if( DEBUG ) std::cout << "******************************************************************************************************" << std::endl;
 	if( DEBUG ) std::cout << "Processing event: " << event << " in run: " << run << " and lumiblock: " << lumi << std::endl;
 
 // -- Process Prime Vertix
-	const auto & primevtx = vertices_->front();
+	CAuto & primevtx = vertices_->front();
 	
 	auto vtxX = primevtx.position().x();
 	auto vtxY = primevtx.position().y();
@@ -1149,12 +736,12 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	float 	minEmf			= 0.0;//0.2
 
 	if( DEBUG ) std::cout << "Filter Jets" << std::endl;
-	for(const auto& jet : *jets_ ){ // Filters jet collection & sorts by pt
+	for(CAuto& jet : *jets_ ){ // Filters jet collection & sorts by pt
 		
 		if (jet.pt() < jetPTmin) continue;
 	  	if (std::abs(jet.eta()) > jetETAmax) continue;
 	  
-	  	const auto jetID = getPFJetID(jet);
+	  	CAuto jetID = getPFJetID(jet);
 	  	if (jetID < jetIDmin) continue;
 
 	  	// save the jets, and then store the ID
@@ -1162,9 +749,9 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	  	fjets.back().addUserInt("jetID",jetID);
 	  
 	  	std::sort(fjets.begin(),fjets.end(),sortByPt);
-	}//<<>>for(const auto& jet : *jets_ )
+	}//<<>>for(CAuto& jet : *jets_ )
 	
-	for(const auto& bclust : *caloCluster_ ) fbclusts.push_back(bclust);
+	for(CAuto& bclust : *caloCluster_ ) fbclusts.push_back(bclust);
 
 	auto nUnJets = (*jets_).size();
 	nJets = fjets.size();
@@ -1259,7 +846,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		// places jet info in output tree
 		
 		//std::cout << "Processing with jet " << ijet << std::endl;
-	   	const auto & jet = fjets[ijet];
+	   	CAuto & jet = fjets[ijet];
 
 	   	// jetID in jet.h ?
 
@@ -1299,11 +886,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	   	if( DEBUG ) std::cout << "Fill jet pt/phi/eta Histograms" << std::endl;
  		
-      	const auto jetepafrac 	= jet.photonEnergyFraction() + jet.electronEnergyFraction();
-      	const auto jetepe 		= jet.photonEnergy() + jet.electronEnergy();
-		const auto jeteme 		= jet.chargedEmEnergy() + jet.neutralEmEnergy();
-      	const auto jetemfrac 	= jeteme/jet.energy();
-      	const auto jetepfrac 	= jetepe/jet.energy();
+      	CAuto jetepafrac 	= jet.photonEnergyFraction() + jet.electronEnergyFraction();
+      	CAuto jetepe 		= jet.photonEnergy() + jet.electronEnergy();
+		CAuto jeteme 		= jet.chargedEmEnergy() + jet.neutralEmEnergy();
+      	CAuto jetemfrac 	= jeteme/jet.energy();
+      	CAuto jetepfrac 	= jetepe/jet.energy();
 
 		hist2d[61]->Fill(jetepafrac,jetepfrac);
       	hist2d[62]->Fill(jetepfrac,jetemfrac);
@@ -1344,8 +931,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		      	hist2d[38]->Fill(rhtime, rhe);
 		   	}//<<>>for ( uInt irhg = 0; irhg < rhCount; irhg++)
 			
-		   	const auto leadJetRhId = leadJetRh.detid();
-		   	const auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
+		   	CAuto leadJetRhId = leadJetRh.detid();
+		   	CAuto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
 		   	auto sc_eta = leadJetRhIdPos.eta();
 		   	auto sc_phi = leadJetRhIdPos.phi();
 		   	auto sc_enr = leadJetRh.energy();
@@ -1453,21 +1040,21 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         vector<float> phDr;
         vector<float> eleEnergy;
         vector<float> eleDr;
-	   	for( const auto photon : *gedPhotons_ ){
+	   	for( CAuto photon : *gedPhotons_ ){
 	      	//std::cout << "Proccesssing New Photon :" << std::endl;
 	      	edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
 	      	for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
 	         	//std::cout << "Processing asc pfcand # " << ipcp << std::endl;
 	         	edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
-	         	const auto *ascpacked_cand = passociatedPtr.get();
+	         	CAuto *ascpacked_cand = passociatedPtr.get();
 	            //int ijk(0);
-	            for( const auto kid : jet.daughterPtrVector() ){
+	            for( CAuto kid : jet.daughterPtrVector() ){
 	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
 	               	auto kidcand = pfcands_->ptrAt(kid.key());
-	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+	               	CAuto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
 	            	if( ascpacked_cand == packed_cand ){
 
-	        			//const auto pce = ascpacked_cand->energy();
+	        			//CAuto pce = ascpacked_cand->energy();
 	                    //std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
 						//std::cout << ijet << "/" << nJets	<< " kid: " << ijk; // << std::endl;
 	                    //std::cout << " pce: " << pce << std::endl;
@@ -1475,34 +1062,34 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	                }//<<>>if( ascpacked_cand == packed_cand )
 	               	//ijk++;
-	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
+	        	}//<<>>for( CAuto kid : jet.daughterPtrVector() )
 			}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
-      	//<<<<for( const auto photon : *gedPhotons_ ){ 
+      	//<<<<for( CAuto photon : *gedPhotons_ ){ 
   
 	      	if( matched ){
 				iph++;
 				nMatched++;
-	         	const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
-				const auto scptr = phosc.get();
+	         	CAuto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
+				CAuto scptr = phosc.get();
 
 				jetSCGroup.push_back(*scptr);
-				const auto clusters = phosc->clusters();
-	      		//const auto nBClusts = phosc->clustersSize();
-	         	const auto &hitsAndFractions = phosc->hitsAndFractions();
-	         	const auto nrh = hitsAndFractions.size();
+				CAuto clusters = phosc->clusters();
+	      		//CAuto nBClusts = phosc->clustersSize();
+	         	CAuto &hitsAndFractions = phosc->hitsAndFractions();
+	         	CAuto nrh = hitsAndFractions.size();
 				//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 				//std::cout << " -- SC has nRecHits: " << nrh << std::endl;
 				if( nrh != 0 ){
-					for( const auto &clustptr : clusters ){
+					for( CAuto &clustptr : clusters ){
 						if( not clustptr.isAvailable() ) continue;
-	         			const auto clust = clustptr.get();
+	         			CAuto clust = clustptr.get();
 						jetBCGroup.push_back(*clust);
 						//std::cout << " --- Adding cluster " << std::endl;
-					}//<<>>for( const auto &clustptr : clusters ){
+					}//<<>>for( CAuto &clustptr : clusters ){
 				}//<<>>if( nrh != 0 ){
-	         	const auto sce = phosc->energy();
+	         	CAuto sce = phosc->energy();
 				sum_nrh += nrh;
 				sum_sce += sce;
 				sum_phe += photon.energy();
@@ -1513,25 +1100,25 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), photon.eta(), photon.phi())));
 
 	    	}//<<>>if( matched )
-		}//<<>>for( const auto photon : *gedPhotons_ ) 
+		}//<<>>for( CAuto photon : *gedPhotons_ ) 
 
 	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 		
 		int iel(0);
 		matched = false;
-	   	for( const auto electron : *electrons_ ){
+	   	for( CAuto electron : *electrons_ ){
 	    	edm::RefVector<pat::PackedCandidateCollection> eassociated = electron.associatedPackedPFCandidates();
 	      	for( uInt ipce = 0; ipce < eassociated.size(); ipce++ ) {
 	         	edm::Ptr<pat::PackedCandidate> eassociatedPtr = edm::refToPtr( eassociated[ipce] );
-	         	const auto *ascpacked_cand = eassociatedPtr.get();
+	         	CAuto *ascpacked_cand = eassociatedPtr.get();
 	            //int ijk(0);
-	            for( const auto kid : jet.daughterPtrVector() ){
+	            for( CAuto kid : jet.daughterPtrVector() ){
 	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
 	               	auto kidcand = pfcands_->ptrAt(kid.key());
-	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+	               	CAuto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
 	                if( ascpacked_cand == packed_cand ){
 
-	                	//const auto pce = ascpacked_cand->energy();
+	                	//CAuto pce = ascpacked_cand->energy();
 	                	//std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
 	                    //std::cout << ijet << "/" << nJets  << " kid: " << ijk; // << std::endl;
 	                    //std::cout << " pce: " << pce << std::endl;
@@ -1539,55 +1126,55 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 									
 	                }//<<>>if( ascpacked_cand == packed_cand )
 	               	//ijk++;
-	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
+	        	}//<<>>for( CAuto kid : jet.daughterPtrVector() )
 	    	}//<<>>for( uInt ipce = 0; ipce < eassociated.size(); ipce++ )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
-      	//<<<<for( const auto electron : *electrons_ ){
+      	//<<<<for( CAuto electron : *electrons_ ){
 
 	      	if( matched ){  //  modified to remove electrons from SC group instead of add them to it -  leaves BC groups unchanged
 				bool found(false);
-	         	const auto &elesc = electron.superCluster().isNonnull() ? electron.superCluster() : electron.parentSuperCluster();
-	         	const auto scptr = elesc.get();
+	         	CAuto &elesc = electron.superCluster().isNonnull() ? electron.superCluster() : electron.parentSuperCluster();
+	         	CAuto scptr = elesc.get();
 
                 jetEleSCGroup.push_back(*scptr);
 				eleEnergy.push_back(electron.energy());
 				eleDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), electron.eta(), electron.phi())));
 
-				for( const auto scit : jetSCGroup ){ 
+				for( CAuto scit : jetSCGroup ){ 
 					if( scit == *scptr ){ 
 						found = true;
 						break;
 					}//<<>>if( scit == *scptr ) 
-				}//<<>>for( const auto scit : jetSCGroup )
+				}//<<>>for( CAuto scit : jetSCGroup )
 				int nscit = 0;
-                for( const auto scit : jetPhSCGroup ){
+                for( CAuto scit : jetPhSCGroup ){
                     if( scit == *scptr ){
                         jetPhSCGroup.erase(jetPhSCGroup.begin()+nscit);
 						phEnergy.erase(phEnergy.begin()+nscit);
 						phDr.erase(phDr.begin()+nscit);
 						break;
-                    }//<<>>for( const auto scit : jetPhSCGroup )
+                    }//<<>>for( CAuto scit : jetPhSCGroup )
                     nscit++; 
-                }//<<>>for( const auto scit : jetSCGroup )
+                }//<<>>for( CAuto scit : jetSCGroup )
 				if( not found ){ // in list of SC already found
 					iel++;
 	         		jetSCGroup.push_back(*scptr);
-					const auto clusters = elesc->clusters();
-	            	const auto &hitsAndFractions = elesc->hitsAndFractions();
-					const auto nrh = hitsAndFractions.size();
- 					//const auto nBClusts = elesc->clustersSize();
+					CAuto clusters = elesc->clusters();
+	            	CAuto &hitsAndFractions = elesc->hitsAndFractions();
+					CAuto nrh = hitsAndFractions.size();
+ 					//CAuto nBClusts = elesc->clustersSize();
 	            	//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 	            	//std::cout << " -- SC has nRecHits: " << nrh << std::endl;
 					if( nrh != 0 ){ 
-	         			for( const auto &clustptr : clusters ){
+	         			for( CAuto &clustptr : clusters ){
 							if( not clustptr.isAvailable() ) continue;
-	            			const auto clust = clustptr.get();
+	            			CAuto clust = clustptr.get();
 	            			jetBCGroup.push_back(*clust);
 							//std::cout << " --- Adding cluster " << std::endl;
-	            		}//<<>>for( const auto &clustptr : clusters )
+	            		}//<<>>for( CAuto &clustptr : clusters )
 					}//<<>>if( nrh != 0 )
-	         		const auto sce = elesc->energy();
+	         		CAuto sce = elesc->energy();
 	         		nMatched++;
 	         		sum_nrh += nrh;
 	         		sum_sce += sce;
@@ -1596,11 +1183,22 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				}//<<>>if( not found )
 	         	matched = false;
 	    	}//<<>>if( matched )
-	   	}//<<>>for( const auto electron : *electrons_ )
+	   	}//<<>>for( CAuto electron : *electrons_ )
 		
 		// SC group creation finished <<<<< -----------------------------------------------
 
 	   	hist1d[43]->Fill(nMatched); // # of SC matched to a jet
+
+   	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
+
+		if( DEBUG ) std::cout << " - Get SC rhGroup times --------------------------- " << std::endl;
+		// *******	replace continue statmets if this section not last in jet loop *************************
+	   	if( jetSCGroup.size() != 0 ){
+
+	    	hist1d[51]->Fill(iph);
+	      	hist1d[52]->Fill(iel);
+
+	      	//hist2d[39]->Fill(rhCount,sum_nrh);
 	      	hist2d[40]->Fill(jet.energy(),sum_sce);
 	      	hist2d[41]->Fill(jet.energy(),sum_phe);
 	      	hist2d[42]->Fill(sum_phe,sum_sce);
@@ -1619,19 +1217,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				//std::cout << " --- get jetSCtofTimes " << std::endl;
 	 			auto jetSCtofTimes = getLeadTofRhTime( jetScRhGroup, vtxX, vtxY, vtxZ );
 	 			auto jetSCTimeStats = getTimeDistStats( jetSCtofTimes, jetScRhGroup );
-                auto jetSCEigen3D = getRhGrpEigen_ieipt( jetSCtofTimes, jetScRhGroup );
-                auto jetSCEigen2D = getRhGrpEigen_sph( jetSCtofTimes, jetScRhGroup );
-				
-				if( jetSCEigen3D[0] != -999 ){
-					auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
-                	hist1d[63]->Fill( epanlge );//etaphi angle
-                	auto etanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[2] );
-                	hist1d[64]->Fill( etanlge );//etatim angle
-				}//<<>>if( jetSCEigen3D[0] != -999 )
-				if( jetSCEigen2D[0] != -999 ){
-					auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
-		    		hist1d[65]->Fill(sphanlge);//eliptical angle
-                }//<<>>if( jetSCEigen2D[0] != -999 )
 
 				if( jetSCTimeStats[6] > -8.9 ) nGoodScJets++;
             	//std::cout << " - fill hists " << std::endl;
@@ -1661,17 +1246,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                 hist2d[72]->Fill(jet.nConstituents(), jetSCTimeStats[7] );
                 if( DEBUG ) std::cout << "JetDist Vars : " << jetSCTimeStats[7] << " " << jet.eta() << " " << jet.etaetaMoment() << " " << jet.phiphiMoment();
                 if( DEBUG ) std::cout << " " << jet.etaphiMoment() << " " << jet.maxDistance(); 
-				if( DEBUG ) std::cout << " " << jet.constituentPtDistribution() << " " << jet.constituentEtaPhiSpread();
-                if( DEBUG ) std::cout << " " << jet.jetArea() << " " << jet.nCarrying(0.1) << " " << jet.nConstituents() << std::endl; 
-
-            	if( DEBUG )std::cout << " - fill vars " << std::endl;
-            	jetSCMedTime.push_back(jetSCTimeStats[2]);
-            	jetSCMuTime.push_back(jetSCTimeStats[0]);
-                //std::cout << "fill phCSCMuTimeTemp : " << jetSCTimeStats[6] << std::endl;
-            	jetCSCMuTime.push_back(jetSCTimeStats[6]);
-            	jetCSCMedTime.push_back(jetSCTimeStats[10]);
-
-            	if( jetPhSCGroup.size() != 0 ){
 				if( DEBUG ) std::cout << " " << jet.constituentPtDistribution() << " " << jet.constituentEtaPhiSpread();
                 if( DEBUG ) std::cout << " " << jet.jetArea() << " " << jet.nCarrying(0.1) << " " << jet.nConstituents() << std::endl; 
 
@@ -1778,7 +1352,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 					bcRhGrpCnt.push_back(bcRhGrpSize);
 					if( bcRhGrpSize == 1 ) hist1d[54]->Fill(bcRhGrpEnr/jet.energy());
 					else if( bcRhGrpSize > 1 ) hist1d[56]->Fill(bcRhGrpEnr/jet.energy());
-					for(const auto rh : bcRhGroup ) hist2d[49]->Fill(rh.time(), rh.energy());
+					for(CAuto rh : bcRhGroup ) hist2d[49]->Fill(rh.time(), rh.energy());
             	}//<<>>for( auto bc : jetBCGroup )
 
   	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -1804,18 +1378,18 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				if( nGoodJetEvents < nEBEEMaps && nJets > 2 ){
 					goodJetEvent = true;
 					if( DEBUG ) std::cout << " --- fill SC ecal map" << std::endl;
-					for (const auto recHit : jetScRhGroup ){
-						const auto & idinfo = DetIDMap[getRawID(recHit)];
+					for (CAuto recHit : jetScRhGroup ){
+						CAuto & idinfo = DetIDMap[getRawID(recHit)];
 						if( idinfo.ecal == ECAL::EB ) ebeeMapSc[nGoodJetEvents]->Fill( idinfo.i2, idinfo.i1, (ijet+1)*10 );
-					}//<<>>for (const auto recHit : jetScRhGroup )
-               		for (const auto recHit : jetDrRhGroup ){
-                  		const auto & idinfo = DetIDMap[getRawID(recHit)];
+					}//<<>>for (CAuto recHit : jetScRhGroup )
+               		for (CAuto recHit : jetDrRhGroup ){
+                  		CAuto & idinfo = DetIDMap[getRawID(recHit)];
                   		if( idinfo.ecal == ECAL::EB ) ebeeMapDr[nGoodJetEvents]->Fill( idinfo.i2, idinfo.i1, (ijet+1)*10 );
-               		}//<<>>for (const auto recHit : jetDrRhGroup )
+               		}//<<>>for (CAuto recHit : jetDrRhGroup )
 					if( DEBUG ) std::cout << " --- fill BC/T/E ecal map" << std::endl;
 					for( uInt it = 0; it < bcRhGroups.size(); it++ ){
-						for (const auto recHit : bcRhGroups[it] ){
-							const auto & idinfo = DetIDMap[getRawID(recHit)];
+						for (CAuto recHit : bcRhGroups[it] ){
+							CAuto & idinfo = DetIDMap[getRawID(recHit)];
 							if( idinfo.ecal == ECAL::EB ){ 
 								//std::cout << "  --- Filling ebeb map with : " << ijet << std::endl;
                         		ebeeMapBc[nGoodJetEvents]->Fill( idinfo.i2, idinfo.i1, (it+1)*10 );
@@ -1951,8 +1525,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		for ( uInt p = q+1; p < nJets; p++ ){
 	
 			if( DEBUG ) std::cout << " - filter jet pairs" << std::endl;
-	      	const auto & qjet = fjets[q];
-	      	const auto & pjet = fjets[p];
+	      	CAuto & qjet = fjets[q];
+	      	CAuto & pjet = fjets[p];
 	      	if( qjet.pt() < dijetPtMin ) continue;
 	      	auto diffPt = pjet.pt()/qjet.pt();
 	      	hist1d[24]->Fill(diffPt);
@@ -2138,23 +1712,6 @@ void LLPgammaAnalyzer::beginJob(){
     hist1d[61] = fs->make<TH1D>("jetCEleMuTime", "jetCEleMuTime", jtdiv, -1*jtran, jtran);
     hist1d[62] = fs->make<TH1D>("jetCEleMedTime", "jetCEleMedTime", jtdiv, -1*jtran, jtran);
 
-    hist1d[63] = fs->make<TH1D>("scEtaPhiAngle3D", "scEtaPhiAngle3D", 256, 0, 6.4);
-    hist1d[64] = fs->make<TH1D>("scEtaTimAngle3D", "scEtaTimAngle3D", 256, 0, 6.4);
-    hist1d[65] = fs->make<TH1D>("scEtaPhiAngle2D", "scEtaTimAngle2D", 256, 0, 6.4);
-
-    hist1d[66] = fs->make<TH1D>("sciEta3D", "sciEta", 171, -85, 85);
-    hist1d[67] = fs->make<TH1D>("sciPhi3D", "sciPhi", 361, 0, 360);
-    hist1d[68] = fs->make<TH1D>("scTime3D", "scTime", 5000, -25, 25);
-    hist1d[69] = fs->make<TH1D>("sciEta2D", "sciEtaDiff", 201, -100, 100 );
-    hist1d[70] = fs->make<TH1D>("sciPhi2D", "sciPhiDiff", 201, -100, 100);
-    hist1d[71] = fs->make<TH1D>("sciTim2D", "sciTimDiff", 400, -10, 10);
-    hist1d[72] = fs->make<TH1D>("sciAngle2D", "sciAngleSph", 264, -0.2, 6.4);
-    hist1d[73] = fs->make<TH1D>("scRotAngle", "scRotAngle", 264, -0.2, 6.4);
-    hist1d[74] = fs->make<TH1D>("scAdjRotAngle", "scAdjRotAngle", 264, -0.2, 6.4);
-    hist1d[75] = fs->make<TH1D>("sciEta3Diff", "sciEta3Diff", 400, -10, 10 );
-    hist1d[76] = fs->make<TH1D>("sciPhi3Diff", "sciPhi3Diff", 400, -10, 10);
-    hist1d[77] = fs->make<TH1D>("sciTim3Diff", "sciTim3Diff", 400, -10, 10);
-
 	//------ 2D Hists --------------------------------------------------------------------------
 
    //hist2d[0] = fs->make<TH2D>("jt_pt", "jt", jtdiv, -1*jtran, jtran, 500, 0, 500);
@@ -2245,22 +1802,6 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[71] = fs->make<TH2D>("jetNCarry_stdSCt", "jetNCarry_stdSCt", 40, 0, 40, stddiv, 0, stdtran);
     hist2d[72] = fs->make<TH2D>("jetNConst_stdSCt", "jetNConst_stdSCt", 100, 0, 100, stddiv, 0, stdtran);
 
-	auto cldiv = 150;
-	auto cltrn = 75;
-	hist2d[73] = fs->make<TH2D>("cluster_tmap_rot", "Cluster Time Map Rotated", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[74] = fs->make<TH2D>("cluster_occmap_rot", "Cluster Occ Map Rotated", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[75] = fs->make<TH2D>("cluster_tmap", "Cluster Time Map", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[76] = fs->make<TH2D>("cluster_occmap", "Cluster Occ Map", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-
-    auto cl3ddiv = 320;
-    auto cl3dtrn = 8;
-    auto cl3ddiv1 = 120;
-    auto cl3dtrn1 = 3;
-    hist2d[77] = fs->make<TH2D>("cluster_3D_tmap", "Cluster Time Map 3D", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[78] = fs->make<TH2D>("cluster_3D_occmap", "Cluster Occ Map 3D", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[79] = fs->make<TH2D>("cluster_3D_etmap", "Cluster Eta(x)Time(y) Map 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[80] = fs->make<TH2D>("cluster_3D_etmap_nr", "Cluster Eta(x)Time(y) Map 3D NoRot", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-
    //------ ECAL Map Hists --------------------------------------------------------------------------
 
 	for(int it=0; it<nEBEEMaps; it++){
@@ -2306,6 +1847,20 @@ void LLPgammaAnalyzer::beginJob(){
 	outTree->Branch("jetPHEF", &jetPHEF);
 	outTree->Branch("jetELE", &jetELE);
 	outTree->Branch("jetELEF", &jetELEF);
+	outTree->Branch("jetMUE", &jetMUE);
+	outTree->Branch("jetMuTime", &jetMuTime);
+	outTree->Branch("jetTimeError", &jetTimeError);
+	outTree->Branch("jetTimeRMS", &jetTimeRMS);
+	outTree->Branch("jetMedTime", &jetMedTime);
+	outTree->Branch("jetSCMuTime", &jetSCMuTime);
+	outTree->Branch("jetSCMedTime", &jetSCMedTime);
+
+	outTree->Branch("njetRecHits", &njetRecHits);
+	outTree->Branch("jetRecHitOfJet", &jetRecHitOfJet);
+	outTree->Branch("jetRecHitId", &jetRecHitId);
+
+	outTree->Branch("njetKids", &njetKids);
+	outTree->Branch("jetKidOfJet", &jetKidOfJet);
 	outTree->Branch("jetKidE", &jetKidE);
 	outTree->Branch("jetKidPt", &jetKidPt);
 	outTree->Branch("jetKidPhi", &jetKidPhi);
@@ -2342,11 +1897,6 @@ void LLPgammaAnalyzer::endJob(){
     normTH1D(hist1d[28]);
 
     normTH1D(hist1d[59]);
-    normTH1D(hist1d[60]);
-
-	hist2d[73]->Divide(hist2d[74]);
-    hist2d[75]->Divide(hist2d[76]);
-    hist2d[77]->Divide(hist2d[78]);
 
 }//>>>>void LLPgammaAnalyzer::endJob()
 
