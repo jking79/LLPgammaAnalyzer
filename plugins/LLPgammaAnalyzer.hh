@@ -186,7 +186,6 @@ typedef unsigned int uInt;
 //const float sol = 29.9792458; // speed of light in cm/ns
 #define SOL 29.9792458 // speed of light in cm/ns
 #define PI 3.1415926535 // pie ...  
-#define TWOPI 6.2831853071 // 2*pie ..... 
 
 enum class ECAL {EB, EM, EP, EE, NONE};
 #define ecal_config_path "/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
@@ -451,20 +450,55 @@ void normTH1D(TH1D* hist){
 
 }//<<>>void NormTH1D(TH1D* hist)
 
+void thresDivTH2D(TH2D* numi, TH2D* denom, float thres){
+
+    std::cout << "Threshold Division - " << " hist: " << numi->GetName() << std::endl;
+
+    const auto nXbins = numi->GetNbinsX();
+    const auto nYbins = numi->GetNbinsY();
+
+    for (auto ibinX = 1; ibinX <= nXbins; ibinX++){
+        for (auto ibinY = 1; ibinY <= nYbins; ibinY++){
+ 
+            // get content/error
+            auto ncontent = numi->GetBinContent(ibinX,ibinY);
+            auto nerror   = numi->GetBinError  (ibinX,ibinY);
+            auto dcontent = denom->GetBinContent(ibinX,ibinY);
+            auto derror   = denom->GetBinError  (ibinX,ibinY);
+            // set new contents
+            auto content(0.0);
+            auto error(0.0);
+			if( dcontent > thres ){ content = ncontent/dcontent; error = nerror/derror; } 
+            numi->SetBinContent(ibinX,ibinY,content);
+            numi->SetBinError  (ibinX,ibinY,error);
+ 
+        }//<<>>for (auto ibinY = 1; ibinY <= nXbins; ibinY++){
+    }//<<>>for (auto ibinX = 1; ibinX <+ nYbins; ibinX++){
+ 
+}//<<>>void thresDivTH2D(TH2D* numi, TH2D* denom, float thres){
+
 const float getMyAngle ( const float x, const float y){
 
-	float rslt = -999.0;
-	if( x == 0 && y == 0 ) return rslt;
+	if( x == 0 && y == 0 ) return 6.39; //-999.0;
+	if( x == 0 ){ if( y > 0 ) return PI/2; else return 3*PI/2; } 
+    if( y == 0 ){ if( x > 0 ) return 0; else return PI; }
 	float m = std::sqrt(x*x+y*y); 
 	float a = std::asin(abs(y/m)); 
-	if( x < 0 && y < 0 ) rslt = PI+a; 
-	else if( x < 0 ) rslt = PI-a; 
-	else if( y < 0 ) rslt = TWOPI-a; 
-	return rslt;
+	if( x < 0 && y < 0 ) return PI+a; 
+	if( x < 0 ) return PI-a; 
+	if( y < 0 ) return 2*PI-a; 
+	return a;
 
 }//<<>> const float getAngle (CFlt x, CFlt y)
 
-const float getAngle ( const float x, const float y){ return std::atan2(y,x);}
+const float getAngle ( const float x, const float y){
+
+	if( x == 0 && y == 0) return 6.39;
+	auto a = std::atan2(y,x);
+	if( a < 0 ) a = 2*PI+a;
+	return a;
+
+}//<<>> const float getAngle (CFlt x, CFlt y) with atan2
 
 // sort functions
 
@@ -482,7 +516,9 @@ CAuto phi   		(CFlt x, CFlt y){return std::atan2(y,x);}
 CAuto theta 		(CFlt r, CFlt z){return std::atan2(r,z);}
 CAuto eta   		(CFlt x, CFlt y, CFlt z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
 CAuto effMean   	(CFlt x, CFlt y){return (x*y)/sqrt(x*x+y*y);}
-CAuto dPhi			(CFlt x, CFlt y){auto dp = x-y; if( dp > 180 ){dp-=360.0;} else if( dp < -180 ){ dp+=360.0;} return dp;}
+CAuto dPhi			(CFlt x, CFlt y){auto dp(x-y); if( dp > 180 ){dp-=360.0;} else if( dp < -180 ){ dp+=360.0;} return dp;}
+CAuto vfsum         (CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
+CAuto max           (CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
 
 // stats functions
 CAuto mean			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f)/x.size();}
@@ -497,13 +533,14 @@ CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w)
 							 {float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*(ix-mx)*(y[it]-my); it++; } return sum/wnum(it,w);}
 CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my){float sum(0.0); int it(0); for( auto ix : x ){ sum += (ix-mx)*(y[it]-my); it++; } return sum/(x.size()-1);}
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
-CAuto sum			(CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
-CAuto max			(CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
-CAuto meanPhi		(CVFlt x){auto maxphi = max(x); float sum(0.0); for(auto ix : x ){ if( (maxphi - ix) > 180 ) sum+=(ix+360.0); else sum+=ix; } 
-							  auto rslt = sum/x.size(); if( rslt > 360 ) rslt-=360.0; return rslt;}
-CAuto wsin2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(sin(ix)); it++; } return sum/it;}
-CAuto wcos2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); it++; } return sum/it;}
-CAuto wsincos       (CVFlt x, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); it++; } return sum/it;}
+CAuto meanPhi		(CVFlt x){auto maxphi = max(x); float sum(0.0); for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360); else sum+=ix; } 
+							  auto rslt = sum/x.size(); if( rslt > 360 ) rslt-=360; return rslt;}
+CAuto meanPhi       (CVFlt x, CVFlt wv){float wt(0.0); int it(0); auto maxphi = max(x); float sum(0.0); 
+										for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360)*wv[it]; else sum+=ix*wv[it]; wt+=wv[it]; it++; }
+                              			auto rslt = sum/wt; if( rslt > 360 ) rslt-=360; return rslt;}
+CAuto wsin2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sq2(sin(ix)); it++; wt+=wv[it];} return sum/wt;}
+CAuto wcos2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); it++; wt+=wv[it];} return sum/wt;}
+CAuto wsincos       (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); it++; wt+=wv[it];} return sum/wt;}
 
 // rh group functions
 CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}
