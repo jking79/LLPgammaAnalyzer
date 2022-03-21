@@ -5,6 +5,9 @@ import FWCore.ParameterSet.Config as cms
 from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing('python')
 
+## Flags
+options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.varType.bool,'flag to get pcalo in mc');
+
 ## object prep cuts
 #options.register('jetpTmin',15.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'jet pT minimum cut');
 #options.register('jetEtamax',3.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'jet eta maximum cut');
@@ -127,13 +130,13 @@ process.source = cms.Source("PoolSource",
         #'/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0DB2F6E9-9E2F-0B48-BC9A-75620901E60D.root',
         #'/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0E7EC6AF-3277-CE45-A609-B7186BC7FB7C.root',
 
-        ),
-)
+        ),##<<>>fileNames = cms.untracked.vstring
+)##<<>>process.source = cms.Source("PoolSource",
 
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
@@ -141,7 +144,7 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -154,6 +157,8 @@ process.TFileService = cms.Service("TFileService",
 				   
 # Make the tree 
 process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
+   ## flags
+   hasGenInfo = cms.bool(options.hasGenInfo),
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),
@@ -178,12 +183,12 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## ecal recHits
    recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
    recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
-	## superclusters
+   ## superclusters
    superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
    ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
-	## caloclusters
-	caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
-)
+   ## caloclusters
+   caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
+)##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer"
 
 
 # Set up the path

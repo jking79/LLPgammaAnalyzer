@@ -127,8 +127,8 @@ process.source = cms.Source("PoolSource",
         '/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0DB2F6E9-9E2F-0B48-BC9A-75620901E60D.root',
         '/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0E7EC6AF-3277-CE45-A609-B7186BC7FB7C.root',
 
-        ),
-)
+        ),##<<>>fileNames = cms.untracked.vstring
+)##<<>>process.source = cms.Source("PoolSource"
 
 
 ## How many events to process
@@ -149,11 +149,12 @@ process.GlobalTag.globaltag = options.globalTag
 
 ## Create output file
 ## Setup the service to make a ROOT TTree
-process.TFileService = cms.Service("TFileService", 
-		                   fileName = cms.string(options.outputFileName))
+process.TFileService = cms.Service("TFileService", fileName = cms.string(options.outputFileName))
 				   
 # Make the tree 
 process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
+   ## flags
+   hasGenInfo = cms.bool("False"),
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),
@@ -178,12 +179,12 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## ecal recHits
    recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
    recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
-	## superclusters
+   ## superclusters
    superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
    ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
-	## caloclusters
-	caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
-)
+   ## caloclusters
+   caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
+)##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer"
 
 
 # Set up the path

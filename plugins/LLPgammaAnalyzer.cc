@@ -32,6 +32,9 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig) :
 
 // -- declare tags ----------------------------------------------------------
 
+	// flags
+	hasGenInfo (iConfig.existsAs<bool>("hasGenInfo")  ? iConfig.getParameter<bool>("hasGenInfo")  : false),
+
 	// triggers
 	//triggerResultsTag(iConfig.getParameter<edm::InputTag>("triggerResults")),
 	//triggerObjectsTag(iConfig.getParameter<edm::InputTag>("triggerObjects")),
@@ -776,8 +779,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
 		const auto & idinfo = DetIDMap[recHitID];
 		if( idinfo.ecal == ECAL::EB ){
     		//auto wt = 1/std::sqrt(sq2(N/rechits[it].energy())+2*sq2(C)); 
-        	auto wt = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
-        	wts.push_back(wt);
+        	auto resolution = 1/(sq2(N/rechits[it].energy())+2*sq2(C));
+        	wts.push_back(resolution);
         	//const auto recHitPos = barrelGeometry->getGeometry(recHitId)->getPosition();
         	const auto rhEtaPos = tdis*(idinfo.i2);//recHitPos.eta();
 			//if( rhEtaPos > 0 ) ebp = true;
@@ -843,8 +846,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
         hist2d[77]->Fill(epxcor,epycor,fill);
         hist2d[78]->Fill(epxcor,epycor,wts[it]);
         //}//<<>>if( std::abs(fill) < 20 )
-        hist2d[79]->Fill(epxcor,ltime*1000);
-        hist2d[80]->Fill(leta,ltime*1000);
+        hist2d[79]->Fill(epxcor,ltime);
+        hist2d[80]->Fill(leta,ltime);
 
     }//<<>>for( uInt it(0); it < wts.size(); it++ )
 
@@ -882,14 +885,15 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 
     float N(3.64);
     float C(0.3000);
-    float twopi(2*PI);
+    //float twopi(2*PI);
 
     vector<float> wts;
     vector<float> etas;
     vector<float> phis;
     vector<float> ebtimes;
     vector<float> angles;
-    vector<float> resolution;
+    //vector<float> energies;
+    vector<float> resolutions;
     //float sumenergy = 0;
     vector<float> emepReturn(4,-999);
 
@@ -912,9 +916,9 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
         	phis.push_back(rhPhiPos);
         	ebtimes.push_back(times[it]);	
 			auto rhenergy = rechits[it].energy();
-			auto wt = 1/(sq2(N/rhenergy)+2*C*C);
-			//resolution.push_back(sq2(rhenergy));
-            resolution.push_back(wt);
+			auto resolution = 1/(sq2(N/rhenergy)+2*C*C);
+			//energies.push_back(sq2(rhenergy));
+            resolutions.push_back(resolution);
 			//sumenergy += rhenergy;
 			//std::cout << "In getRhGrpEigen_sph w/ rheta " << rhEtaPos << " : rhphi " << rhPhiPos << " : rht " << times[it] << std::endl;		
 		} else { return emepReturn; //std::cout << "In getRhGrpEigen_sph : NOT EB !!!!!!" << std::endl; }
@@ -922,14 +926,14 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
     }//<<>>for( uInt it(0); it < rechits.size(); it++ )
 
 	//auto meta = std::ceil(mean(etas,resolution));
-    auto meta = mean(etas,resolution);
+    auto meta = mean(etas,resolutions);
 	//auto mphi = std::ceil(meanPhi(phis));
     hist1d[84]->Fill(meta);
 	//auto mphi = std::ceil(meanPhi(phis,resolution));
-    auto mphi = meanPhi(phis,resolution);
+    auto mphi = meanPhi(phis,resolutions);
 	//vector<float> phiTest{25,50,255,240};
 	hist1d[83]->Fill(mphi);      //meanPhi(phiTest));
-	auto mtime = mean(ebtimes,resolution);
+	auto mtime = mean(ebtimes,resolutions);
     hist1d[85]->Fill(mtime);
 
 	//std::cout << "In getRhGrpEigen_sph w/ meta " << meta << " : mphi " << mphi << " : mt " << mtime << std::endl;
@@ -947,8 +951,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 		//if( angle > twopi ) angle-=twopi;
 		angles.push_back(angle);
 		//std::cout << "In getRhGrpEigen_sph w/1 leta " << leta << " : lphi " << lphi << " : ltim " << ltim << " : mag " << mag << " : angle " << angle << std::endl;
-		//wts.push_back(ltim*energy[it]/sumenergy);
-        wts.push_back(ltim*ltim*resolution[it]);
+		//wts.push_back(ltim*energies[it]/sumenergy);
+        wts.push_back(ltim*ltim*resolutions[it]);
         hist1d[69]->Fill(leta);
         hist1d[70]->Fill(lphi);
         hist1d[71]->Fill(ltim);
@@ -982,12 +986,12 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 		//if( not ebp ) xcor *= -1;
 		//std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
 		//if( abs(wts[it]) < 8 )
-		auto fill = ltime*resolution[it];
+		auto fill = ltime*resolutions[it];
 		//if( std::abs(fill) < 1 ){
 		hist2d[73]->Fill(xcor,ycor,fill);
-        hist2d[74]->Fill(xcor,ycor,resolution[it]);
+        hist2d[74]->Fill(xcor,ycor,resolutions[it]);
         hist2d[75]->Fill(leta,lphi,fill);
-        hist2d[76]->Fill(leta,lphi,resolution[it]);
+        hist2d[76]->Fill(leta,lphi,resolutions[it]);
 		//}//<<>>if( std::abs(fill) < 20 )
 	}//<<>>for( uInt it(0); it < wts.size(); it++ )
 
@@ -1335,6 +1339,26 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	hist1d[12]->Fill(jet.pt());
 	   	hist1d[13]->Fill(jet.phi());
 	   	hist1d[14]->Fill(jet.eta());
+
+		const reco::GenParticle * jetGenParton(0);
+		if( hasGenInfo ){
+
+			jetGenParton = jet.genParton();
+			// size_t numberOfDaughters() const override;
+			// size_t numberOfMothers() const override;
+			// const Candidate * daughter(size_type) const override;
+			// const Candidate * mother(size_type = 0) const override;
+			// Candidates :
+			//  virtual double vx() const  = 0;
+			//  virtual double vy() const  = 0;
+			//  virtual double vz() const  = 0;
+			//  virtual int pdgId() const  = 0;
+			//  + mass/energy/momentum info ....
+			auto nMother = jetGenParton->numberOfMothers();
+            auto nDaughter = jetGenParton->numberOfDaughters();
+			std::cout << " -- jetGenParton mothers : " << nMother << " daughters : " << nDaughter << std::endl;
+
+		}//<<>>if( hasGenInfo )
 
    //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 

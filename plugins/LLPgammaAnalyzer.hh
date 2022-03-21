@@ -248,8 +248,10 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       	// ----------member data ---------------------------
 
+		// oputput tree
       	TTree *outTree;
 
+		// histograms
       	TH1D *jetTimeHist, *jetRHTimeHist;
 		TH1D *hist1d[nHists];
       	TH2D *hist2d[nHists];
@@ -262,8 +264,8 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	TH2D *ebeeMapT[nEBEEMaps];
       	TH2D *ebeeMapE[nEBEEMaps];
 		
-      	uInt nGoodJetEvents;
-      	detIdMap DetIDMap;
+		// Flags
+		const bool hasGenInfo;
 
       	// Event
       	unsigned long int event; // technically unsigned long long in Event.h...
@@ -311,6 +313,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	edm::Handle<std::vector<pat::Jet>> jets_;
 
       	uInt nJets;
+        uInt nGoodJetEvents;
       	std::vector<float>  jetE, jetPt, jetPhi, jetEta; 
         std::vector<float>  jetEtaetaMmt, jetPhiphiMnt, jetEtaphiMnt, jetMaxD, jetConPtDis, jetConEtaPhiSprd, jetArea;
         std::vector<uInt>   jetNCarry, jetNConst; 
@@ -349,6 +352,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEE_;
       	const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEE;
 
+        detIdMap DetIDMap;
       	int nRecHits;
       	std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
       	std::vector<uInt> rhID;
