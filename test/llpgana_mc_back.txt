@@ -5,9 +5,6 @@ import FWCore.ParameterSet.Config as cms
 from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing('python')
 
-## Flags
-options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.varType.bool,'flag to get pcalo in mc');
-
 ## object prep cuts
 #options.register('jetpTmin',15.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'jet pT minimum cut');
 #options.register('jetEtamax',3.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'jet eta maximum cut');
@@ -23,7 +20,6 @@ options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.
 #options.register('muhighpTmin',50.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'muon high pT minimum cut');
 
 ## GT to be used
-#options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #112X_mcRun3_2021_realistic_v16
 
@@ -34,9 +30,7 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t35a_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root'
 #outfilename = 'llpgana_t36L_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
 #outfilename = 'llpgana_t36L_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
-#outfilename = 'llpgana_t37MC_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
-outfilename = 'llpgana_t66MC_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # adding genJet Parton info
-
+outfilename = 'llpgana_t37MC_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
@@ -134,13 +128,13 @@ process.source = cms.Source("PoolSource",
         #'/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0DB2F6E9-9E2F-0B48-BC9A-75620901E60D.root',
         #'/store/data/Run2018A/JetHT/MINIAOD/UL2018_MiniAODv2-v1/260000/0E7EC6AF-3277-CE45-A609-B7186BC7FB7C.root',
 
-        ),##<<>>fileNames = cms.untracked.vstring
-)##<<>>process.source = cms.Source("PoolSource",
+        ),
+)
 
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
@@ -148,7 +142,7 @@ process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -161,8 +155,6 @@ process.TFileService = cms.Service("TFileService",
 				   
 # Make the tree 
 process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
-   ## flags
-   hasGenInfo = cms.bool(options.hasGenInfo),
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),
@@ -187,12 +179,12 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## ecal recHits
    recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
    recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
-   ## superclusters
+	## superclusters
    superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
    ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
-   ## caloclusters
-   caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
-)##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer"
+	## caloclusters
+	caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
+)
 
 
 # Set up the path

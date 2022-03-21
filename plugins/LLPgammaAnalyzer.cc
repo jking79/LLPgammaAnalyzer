@@ -22,8 +22,8 @@
 #include "LLPGamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.hh"
 using namespace std;
 
-//#define DEBUG true
-#define DEBUG false
+#define DEBUG true
+//#define DEBUG false
 
 //
 // constructors and destructor
@@ -95,6 +95,9 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig) :
 
 	// tracks 
 	tracksToken_				= consumes<std::vector<reco::Track>>(tracksTag);
+
+	// genparticles
+	// genpart_token_              = consumes<std::vector<pat::PackedGenParticle>>(genpartTag);
 
 	// pfcandidates
 	pfcand_token_        		= consumes<CandidateView>(pfcandTag);
@@ -1099,6 +1102,9 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	// PFCANDIDATES
 	iEvent.getByToken(pfcand_token_, pfcands_);
 
+    //GEN PARTICLES
+	//if( hasGenInfo ) iEvent.getByToken(genpart_token_, genpart_);
+
 	// VERTICES
 	iEvent.getByToken(verticesToken_, vertices_);
 
@@ -1340,10 +1346,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	hist1d[13]->Fill(jet.phi());
 	   	hist1d[14]->Fill(jet.eta());
 
-		const reco::GenParticle * jetGenParton(0);
+        if( DEBUG ) std::cout << "Getting jetGenParton Information" << std::endl;
+		//const reco::GenParticle * jetGenParton(0);
 		if( hasGenInfo ){
-
-			jetGenParton = jet.genParton();
+			if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
+			auto jetGenParton = jet.genParton();
+			auto jetGenJet = jet.genJet();
+			if( DEBUG ) std::cout << " ---- jetGenParton : " << jetGenParton << " genJet : " << jetGenJet << std::endl;
 			// size_t numberOfDaughters() const override;
 			// size_t numberOfMothers() const override;
 			// const Candidate * daughter(size_type) const override;
@@ -1354,9 +1363,20 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			//  virtual double vz() const  = 0;
 			//  virtual int pdgId() const  = 0;
 			//  + mass/energy/momentum info ....
-			auto nMother = jetGenParton->numberOfMothers();
-            auto nDaughter = jetGenParton->numberOfDaughters();
-			std::cout << " -- jetGenParton mothers : " << nMother << " daughters : " << nDaughter << std::endl;
+
+			auto nMother = jetGenJet->numberOfMothers();
+            auto nDaughter = jetGenJet->numberOfDaughters();
+			auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
+			std::cout << " -- jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
+
+			auto kids = jetGenJet->daughterPtrVector();
+			for( auto kid : kids ){
+				auto kMother = kid->mother();
+				auto nKGMother = kMother->numberOfMothers(); 
+                std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt(); 
+				std::cout << " momID : " << kMother->pdgId() << " nGrandMothers " << kMother->numberOfMothers() << std::endl; 
+				for( long unsigned int gmit(0); gmit < nKGMother; gmit++ ){ std::cout << " ---- gMomID : " << kMother->mother(gmit)->pdgId() << std::endl; }				
+			}//<<>>for( auto kid : kids )
 
 		}//<<>>if( hasGenInfo )
 
