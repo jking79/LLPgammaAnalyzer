@@ -33,7 +33,7 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t47S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
 #outfilename = 'llpgana_t55S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 47 with eigins ( spherical and ieipt in units of time )
 #outfilename = 'llpgana_t56S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56+ eigns with wted spherical ( reso*dt*dt + angle+PI if dt negitive )
-outfilename = 'llpgana_t66L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56 with res wted 2d histo
+outfilename = 'llpgana_t67S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56 with res wted 2d histo
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
@@ -139,8 +139,8 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Set the global tag depending on the sample type
@@ -154,7 +154,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(options
 # Make the tree 
 process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## flags
-   hasGenInfo = cms.bool("False"),
+   #hasGenInfo = cms.bool("False"),
    ## additional collections
    ## tracks
    tracks = cms.InputTag("unpackedTracksAndVertices"),

@@ -22,8 +22,8 @@
 #include "LLPGamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer.hh"
 using namespace std;
 
-#define DEBUG true
-//#define DEBUG false
+//#define DEBUG true
+#define DEBUG false
 
 //
 // constructors and destructor
@@ -822,12 +822,13 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
     //}//<<>>for( uInt it(0); it < ebtimes.size(); it++ )
 
     auto eprotangle = getAngle(eigens[0], eigens[1]);
-    //auto etrotangle = getAngle(eigens[0], eigens[2]);
+	auto ephypo = hypo(eigens[0], eigens[1]);
+    auto etrotangle = getAngle(ephypo, eigens[2]);
     //if( not ebp ){ rotangle += PI; if( rotangle > TWOPI ) rotangle -= TWOPI; }
     float epeignsin = std::sin(eprotangle);
     float epeigncos = std::cos(eprotangle);
-    //float eteignsin = std::sin(etrotangle);
-    //float eteigncos = std::cos(etrotangle);
+    float eteignsin = std::sin(etrotangle);
+    float eteigncos = std::cos(etrotangle);
     for( uInt it(0); it < ebtimes.size(); it++ ){
 
         float leta = etas[it] - meta;
@@ -839,8 +840,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
         hist1d[77]->Fill(ltime);
         auto epxcor = epeigncos*(leta) - epeignsin*(lphi);
         auto epycor = epeignsin*(leta) + epeigncos*(lphi);
-        //auto etxcor = eteigncos*(leta) - eteignsin*(ltime);
-        //auto etycor = eteignsin*(leta) + eteigncos*(ltime);
+        auto etxcor = eteigncos*(epxcor) - eteignsin*(ltime);
+        auto etycor = eteignsin*(epxcor) + eteigncos*(ltime);
         //if( not ebp ) xcor *= -1;
         //std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         //if( abs(wts[it]) < 8 )
@@ -849,7 +850,7 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
         hist2d[77]->Fill(epxcor,epycor,fill);
         hist2d[78]->Fill(epxcor,epycor,wts[it]);
         //}//<<>>if( std::abs(fill) < 20 )
-        hist2d[79]->Fill(epxcor,ltime);
+        hist2d[79]->Fill(etxcor,etycor);
         hist2d[80]->Fill(leta,ltime);
 
     }//<<>>for( uInt it(0); it < wts.size(); it++ )
@@ -1693,7 +1694,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				if( jetSCEigen3D[0] != -999 ){
 					auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
                 	hist1d[63]->Fill(epanlge);//etaphi angle
-                	auto etanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[2] );
+					auto ephypo3D = hypo( jetSCEigen3D[0], jetSCEigen3D[1] );
+                	auto etanlge = getAngle( ephypo3D, jetSCEigen3D[2] );
                 	hist1d[64]->Fill(etanlge);//etatim angle
                 	hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
                 	hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
