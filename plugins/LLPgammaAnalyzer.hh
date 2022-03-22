@@ -504,6 +504,15 @@ const float getAngle ( const float x, const float y){
 
 }//<<>> const float getAngle (CFlt x, CFlt y) with atan2
 
+void motherChase( const reco::Candidate* kid, string depth ){
+
+	for( long unsigned int gmit(0); gmit < kid->numberOfMothers(); gmit++ ){
+        std::cout <<  depth  << " gMomID : " << kid->mother(gmit)->pdgId() << " nGMothers " << kid->mother(gmit)->numberOfMothers() << std::endl; 
+		if( kid->mother(gmit)->numberOfMothers() > 0 ) motherChase( kid->mother(gmit), depth+"-" );
+	}//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+
+}//<<>> void MotherChase( Candidate* kid, string depth  )
+
 // sort functions
 
 #define CAuto const auto

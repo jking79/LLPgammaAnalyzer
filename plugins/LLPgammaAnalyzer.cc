@@ -1368,15 +1368,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			auto nMother = jetGenJet->numberOfMothers();
             auto nDaughter = jetGenJet->numberOfDaughters();
 			auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
-			std::cout << " -- jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
-
+			std::cout << " - jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
 			auto kids = jetGenJet->daughterPtrVector();
 			for( auto kid : kids ){
-				auto kMother = kid->mother();
-				auto nKGMother = kMother->numberOfMothers(); 
-                std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt(); 
-				std::cout << " momID : " << kMother->pdgId() << " nGrandMothers " << kMother->numberOfMothers() << std::endl; 
-				for( long unsigned int gmit(0); gmit < nKGMother; gmit++ ){ std::cout << " ---- gMomID : " << kMother->mother(gmit)->pdgId() << std::endl; }				
+                std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt() << " nMothers : " << kid->numberOfMothers() << std::endl;
+				motherChase( kid.get(), " ---" );
 			}//<<>>for( auto kid : kids )
 
 		}//<<>>if( hasGenInfo )
