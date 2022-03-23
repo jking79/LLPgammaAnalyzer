@@ -850,8 +850,10 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
         hist2d[77]->Fill(epxcor,epycor,fill);
         hist2d[78]->Fill(epxcor,epycor,wts[it]);
         //}//<<>>if( std::abs(fill) < 20 )
-        hist2d[79]->Fill(etxcor,etycor);
-        hist2d[80]->Fill(leta,ltime);
+        hist2d[79]->Fill(etxcor,etycor,fill);
+        hist2d[84]->Fill(etxcor,etycor,wts[it]);
+        hist2d[80]->Fill(leta,ltime,fill);
+        hist2d[85]->Fill(leta,ltime,wts[it]);
 
     }//<<>>for( uInt it(0); it < wts.size(); it++ )
 
@@ -2345,6 +2347,9 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[82] = fs->make<TH2D>("sc3DEgn01", "sc3DEgn01", 200, -5, 5, 200, -5, 5);
     hist2d[83] = fs->make<TH2D>("sc3DEgn02", "sc3DEgn02", 200, -5, 5, 200, -5, 5);
 
+    hist2d[84] = fs->make<TH2D>("cluster_3D_etwtmap", "Cluster Eta(x)Time(y) Wt Map 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[85] = fs->make<TH2D>("cluster_3D_etwtmap_nr", "Cluster Eta(x)Time(y) Wt Map 3D NoRot", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+
    //------ ECAL Map Hists --------------------------------------------------------------------------
 
 	for(int it=0; it<nEBEEMaps; it++){
@@ -2434,6 +2439,8 @@ void LLPgammaAnalyzer::endJob(){
     thresDivTH2D( hist2d[75], hist2d[76], 100 );
     //hist2d[77]->Divide(hist2d[78]);
     thresDivTH2D( hist2d[77], hist2d[78], 100 );
+    thresDivTH2D( hist2d[79], hist2d[84], 100 );
+    thresDivTH2D( hist2d[80], hist2d[85], 100 );
 
 }//>>>>void LLPgammaAnalyzer::endJob()
 
