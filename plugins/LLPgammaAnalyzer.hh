@@ -215,19 +215,23 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 		detIdMap SetupDetIDs();
+
       	int getPFJetID(const pat::Jet & jet);
+
       	rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
       	rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
 		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax );
       	rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
       	rhGroup getRHGroup( uInt detid );
       	rhGroup getRHGroup();
+
       	EcalRecHit getLeadRh( rhGroup recHits );
       	vector<float> getRhTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
       	vector<float> getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
       	vector<float> getTimeDistStats( vector<float> input );
       	vector<float> getTimeDistStats( vector<float> times, vector<float> wts );
       	vector<float> getTimeDistStats( vector<float> input, rhGroup rechits );
+
 		vector<float> getRhGrpEigen_xyz( vector<float> times, rhGroup rechits );
         vector<float> getRhGrpEigen_ep( vector<float> times, rhGroup rechits );
         vector<float> getRhGrpEigen_ieipt( vector<float> times, rhGroup rechits );
@@ -235,6 +239,8 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
         vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts );
         vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> wts );
 		vector<float> getRhGrpEigen( vector<float> xs, vector<float> wts );
+
+		vector<float> kidTOFChain( std::vector<reco::CandidatePtr> kids, float cx, float cy, float cz  );
 
       	float getdt( float t1, float t2 );
       	void mrgRhGrp( rhGroup & x, rhGroup & y);
@@ -504,14 +510,86 @@ const float getAngle ( const float x, const float y){
 
 }//<<>> const float getAngle (CFlt x, CFlt y) with atan2
 
-void motherChase( const reco::Candidate* kid, string depth ){
+string bigKidChase( std::vector<reco::CandidatePtr> kids, float vx ){
 
+	std::string result("");
+	float maxpt(0.0);
+	const reco::Candidate* bigKid(NULL);
+	for( auto kid : kids ){
+		
+		if( kid->pt() > maxpt ){
+			maxpt = kid->pt();
+			bigKid = kid.get();
+		}
+
+	}//<<>>for( auto kid : kids )
+	
+	result += std::string(" -- BigKid : pdgID : ") + bigKid->pdgId() + std::string(" pt : ") + bigKid->pt();
+	result += std::string(" vtx : ") + bigKid->mother(0)->vx() + std::string(" / ") + vx ;
+	return result;
+
+}//<<>>string bigKidChase( std::vector<reco::CandidatePtr> kids, float vx )
+
+void motherChase( const reco::Candidate* kid, string & depth ){
+
+	depth += "-";
 	for( long unsigned int gmit(0); gmit < kid->numberOfMothers(); gmit++ ){
-        std::cout <<  depth  << " gMomID : " << kid->mother(gmit)->pdgId() << " nGMothers " << kid->mother(gmit)->numberOfMothers() << std::endl; 
-		if( kid->mother(gmit)->numberOfMothers() > 0 ) motherChase( kid->mother(gmit), depth+"-" );
+        std::cout <<  depth  << " gMomID : " << kid->mother(gmit)->pdgId() << " pt : " << kid->mother(gmit)->pt(); 
+		std::cout << " Vertix (" << kid->mother(gmit)->vx() << "," << kid->mother(gmit)->vy() << "," << kid->mother(gmit)->vz() << ")";
+		std::cout << " nGMothers " << kid->mother(gmit)->numberOfMothers() << std::endl; 
+		//if( kid->mother(gmit)->numberOfMothers() > 0 ) motherChase( kid->mother(gmit), depth );
 	}//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+	if( not depth.empty() ) depth = depth.substr (0,depth.length()-1);
 
 }//<<>> void MotherChase( Candidate* kid, string depth  )
+
+bool llpChase( const reco::Candidate* kid ){
+
+	bool result(false);
+    for( long unsigned int gmit(0); gmit < kid->numberOfMothers(); gmit++ ){
+		if( kid->pdgId() == 6000113 ) return true; 
+        if( kid->mother(gmit)->numberOfMothers() > 0 ) result = llpChase( kid->mother(gmit) );
+		if( result == true ) return true;
+    }//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+	return result;
+
+}//<<>> void llpChase( Candidate* kid )
+
+void kidChase( std::vector<reco::CandidatePtr> kids, float vx, float vy, float vz ){
+
+    for( auto kid : kids ){
+
+		bool done(false);
+		auto mom = kid->mother();
+		//std::cout << " -- Kid pdgID : " << kid->pdgId() << " pt : " << kid->pt() << " PV : (" << vx << "," << vy << "," << vz << ")" << std::endl;
+        std::cout << " -- Kid pdgID : " << kid->pdgId() << " p : " << kid->p() << " e : " << kid->energy() << std::endl;
+		bool top(true);
+		while( not done ){
+			if( mom->pt() == 0 ) done = true;
+			else {
+ 				auto gmom = mom->mother();
+                if( top ){
+                    std::cout << " ---- KidStep pdgID : " << mom->pdgId() << " p : " << mom->p() << " e : " << mom->energy();
+                    std::cout << " vert : (" << mom->vx() << "," << mom->vy() << "," << mom->vz() << ")" << std::endl;
+                }//<<>>if( top )
+				if( gmom->pt() == 0 ) done = true;
+				else { 
+					if( mom->vx() == gmom->vx() ) top = false;
+					else top = true; 		
+					mom = gmom;
+				}//<<>>if( gmom->pt() == 0 )
+			}//<<>>if( mom->pt() == 0 )					
+		}//<<>>while( not done )
+
+		//if( llpChase( kid.get() ) ){
+		//	auto gmom = mom->mother();
+		//	std::cout << " ---- LLP found : " << gmom->pdgId() << " pt : " << gmom->pt();
+		//	std::cout << " vert : (" << gmom->vx() << "," << gmom->vy() << "," << gmom->vz() << ")" << std::endl;
+		//}//<<>>if( llpChase( kid.get() ) )
+
+    }//<<>>for( auto kid : kids )
+
+}//<<>>string kidChase( std::vector<reco::CandidatePtr> kids, float vx )
 
 // sort functions
 
