@@ -261,7 +261,6 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	TH1D *jetTimeHist, *jetRHTimeHist;
 		TH1D *hist1d[nHists];
       	TH2D *hist2d[nHists];
-        TH3D *hist3d[nHists];
 
       	TH2D *ebeeMapSc[nEBEEMaps];
       	TH2D *ebeeMapBc[nEBEEMaps];
@@ -460,6 +459,29 @@ void normTH1D(TH1D* hist){
 
 }//<<>>void NormTH1D(TH1D* hist)
 
+void profileTH2D(TH2D* nhist, TH1D* prof){
+
+    std::cout << "Profile " << " hist: " << nhist->GetName() << std::endl;
+
+    const auto nXBins = nhist->GetNbinsX();
+    //const auto nYBins = nhist->GetNbinsY();
+    for (auto ibinX = 1; ibinX <= nXBins; ibinX++){
+
+		auto phist = (TH1F*)nhist->ProjectionY("temp",ibinX,ibinX);
+		//double error;
+        //auto content = hist->IntegralAndError(ibinX,ibinX,1,nYBins,error);
+        auto content = phist->GetMean();
+        //auto error = phist->GetStdDev();
+		auto error = phist->GetMeanError();
+		//auto norm = nhist->Integral(ibinX,ibinX,1,nYBins);
+        // set new contents
+        prof->SetBinContent(ibinX,content);
+        prof->SetBinError  (ibinX,error);
+
+    }//<<>>for (auto ibinX = 1; ibinX <= nBins; ibinX++)
+
+}//<<>>void profileTH2D(TH2D* hist, TH1D* prof)
+
 void thresDivTH2D(TH2D* numi, TH2D* denom, float thres){
 
     std::cout << "Threshold Division - " << " hist: " << numi->GetName() << std::endl;
@@ -595,12 +617,15 @@ void kidChase( std::vector<reco::CandidatePtr> kids, float vx, float vy, float v
 
 #define CAuto const auto
 #define CFlt  const float
+#define CDbl  const double
 #define CVFlt const vector<float>
+#define CVDbl const vector<double>
 
 CAuto sortByPt = [](CAuto & obj1, CAuto & obj2) {return obj1.pt() > obj2.pt();};
 
 // math functions
 CAuto sq2			(CFlt x){return x*x;}
+CAuto sq2           (CDbl x){return x*x;}
 CAuto rad2  		(CFlt x, CFlt y, CFlt z = 0.f){return x*x+y*y+z*z;}
 CAuto hypo  		(CFlt x, CFlt y, CFlt z = 0.f){return std::sqrt(rad2(x,y,z));}
 CAuto phi   		(CFlt x, CFlt y){return std::atan2(y,x);}
@@ -620,18 +645,47 @@ CAuto stdev			(CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(i
 CAuto var           (CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return sum/(x.size()-1);}
 CAuto stdev			(CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/wnum(it,w));}
 CAuto var           (CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return sum/wnum(it,w);}
-CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w)
-							 {float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*(ix-mx)*(y[it]-my); it++; } return sum/wnum(it,w);}
+
+CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w){
+						float sum(0.0); int it(0); 
+						for(auto ix : x ){ sum += wv[it]*(ix-mx)*(y[it]-my); it++; } 
+						return sum/wnum(it,w);
+					}//<<>> CAuto cvar(CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w)
+
 CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my){float sum(0.0); int it(0); for( auto ix : x ){ sum += (ix-mx)*(y[it]-my); it++; } return sum/(x.size()-1);}
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
-CAuto meanPhi		(CVFlt x){auto maxphi = max(x); float sum(0.0); for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360); else sum+=ix; } 
-							  auto rslt = sum/x.size(); if( rslt > 360 ) rslt-=360; return rslt;}
-CAuto meanPhi       (CVFlt x, CVFlt wv){float wt(0.0); int it(0); auto maxphi = max(x); float sum(0.0); 
-										for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360)*wv[it]; else sum+=ix*wv[it]; wt+=wv[it]; it++; }
-                              			auto rslt = sum/wt; if( rslt > 360 ) rslt-=360; return rslt;}
-CAuto wsin2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sq2(sin(ix)); it++; wt+=wv[it];} return sum/wt;}
-CAuto wcos2         (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); it++; wt+=wv[it];} return sum/wt;}
-CAuto wsincos       (CVFlt x, CVFlt wv){float sum(0.0); int it(0); float wt(0.0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); it++; wt+=wv[it];} return sum/wt;}
+
+CAuto meanPhi		(CVFlt x){
+						float sum(0.0);
+                        auto maxphi = max(x); 
+						for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360); else sum+=ix; } 
+						auto rslt = sum/x.size(); 
+						if( rslt > 360 ) rslt-=360; 
+						return rslt;
+					}//<<>> CAuto meanPhi(CVFlt x)
+
+CAuto meanPhi       (CVFlt x, CVFlt wv){
+						float wt(0.0), sum(0.0); int it(0); 
+						auto maxphi = max(x); 
+						for(auto ix : x ){ if( (maxphi-ix) > 180 ) sum+=(ix+360)*wv[it]; else sum+=ix*wv[it]; wt+=wv[it]; it++; }
+                        auto rslt = sum/wt; 
+						if( rslt > 360 ) rslt-=360; 
+						return rslt;
+					 }//<<>> CAuto meanPhi(CVFlt x, CVFlt wv)
+
+CAuto wsin2         (CVFlt x, CVFlt wv){
+						double sum(0.0), wt(0.0); int it(0); 
+						for(auto ix : x ){ 
+							sum += wv[it]*sq2(sin(ix)); 
+							wt += wv[it];
+							//std::cout << " ---- wsin2 : " << it << " x: " << ix << " sin^2: " << sq2(sin(ix)) << " sum: " << sum << " wt: " << wt << std::endl;
+							it++;
+						}//for(auto ix : x )
+						return sum/wt;
+					}//CAuto wsin2(CVFlt x, CVFlt wv)
+
+CAuto wcos2         (CVFlt x, CVFlt wv){double sum(0.0), wt(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); wt += wv[it]; it++;} return sum/wt;}
+CAuto wsincos       (CVFlt x, CVFlt wv){double sum(0.0), wt(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); wt += wv[it]; it++;} return sum/wt;}
 
 // rh group functions
 CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}

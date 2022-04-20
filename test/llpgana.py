@@ -33,7 +33,13 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t47S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 35a + ph time
 #outfilename = 'llpgana_t55S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 47 with eigins ( spherical and ieipt in units of time )
 #outfilename = 'llpgana_t56S_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56+ eigns with wted spherical ( reso*dt*dt + angle+PI if dt negitive )
-outfilename = 'llpgana_t68L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56 with res wted 2d histo
+#outfilename = 'llpgana_t68L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 56 with res wted 2d histo
+#outfilename = 'llpgana_t69L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 68 with ltsum for spher and oval egin in ieipt
+#outfilename = 'llpgana_t72L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 69 with code if/then loop bug corrected
+#outfilename = 'llpgana_t73S_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 72 w/ sphcty cut &/or #rh cut for sphcal eta/time profl
+#outfilename = 'llpgana_t74L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & ignore 1st couple of etas for sphcal
+outfilename = 'llpgana_t75M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & sphcal rot :  ebp ebn + ltime sum for flip
+
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
 ## parsing command line arguments
@@ -133,15 +139,16 @@ process.source = cms.Source("PoolSource",
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(62500))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))#LT
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))#US
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))#VS
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#S
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 
 # Set the global tag depending on the sample type
 from Configuration.AlCa.GlobalTag import GlobalTag
