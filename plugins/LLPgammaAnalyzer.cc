@@ -1148,10 +1148,11 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
         auto mom = kid->mother();
         vector<double> stepp{kid->p()};
         vector<double> stepe{kid->energy()};
-        vector<float> orignvx;
-        vector<float> orignvy;
-        vector<float> orignvz;
+        vector<double> orignvx;
+        vector<double> orignvy;
+        vector<double> orignvz;
         bool top(true);
+		int steps(0);
         while( not done ){
             if( mom->pt() == 0 ) done = true;
             else {
@@ -1162,6 +1163,7 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
                         stepp.push_back(mom->p());
                         stepe.push_back(mom->energy());
                     }//<<>>if( first )
+					steps++;
                     orignvx.push_back(mom->vx());
                     orignvy.push_back(mom->vy());
                     orignvz.push_back(mom->vz());
@@ -1176,28 +1178,35 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
         }//<<>>while( not done )
         first = true;
 
-		//std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
         kide.push_back(stepe[0]);
-		int steps = orignvx.size();
-        if( steps == 0 ){ kidtime.push_back(999); impact.push_back(999); }
-        else {
-            float t(0.0);
+        //std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
+        if( steps == 0 ){ 
+			kidtime.push_back(999); 
+			impact.push_back(999);
+			//std::cout << "Steps are Zero" << std::endl; 
+		} else {
+            float totaltime(0.0);
             auto destvx(cx);
             auto destvy(cy);
             auto destvz(cz);
             for( int it(0); it < steps; it++ ){
                 auto beta = stepp[it]/stepe[it];
-                t += hypo( (destvx-orignvx[it]), (destvy-orignvy[it]), (destvz-orignvz[it]) )/(SOL*beta);
-				if( steps == 0 ){
-					auto r = hypo((destvx-orignvx[it]), (destvy-orignvy[it]));
-					auto iangle = getAngle(r,(destvz-orignvz[it]));
-					impact.push_back(iangle);
-				}//<<>>if( step == 0 )
+                auto legtime = hypo( (destvx-orignvx[it]), (destvy-orignvy[it]), (destvz-orignvz[it]) )/(SOL*beta);
+				totaltime += legtime;
+				//std::cout << "Sum path legs beta: " << beta << " x: " << (destvx-orignvx[it]) << " y: " << (destvy-orignvy[it]);
+				//std::cout << " z: " << (destvz-orignvz[it]) << " legtime: " << legtime << " totaltime: " << totaltime << std::endl;
+                //std::cout << " -- dest : " << destvx << ", " << destvy << ", " << destvz; 
+                //std::cout << " orig : " << orignvx[it] << ", " << orignvy[it] << ", " << orignvz[it] << std::endl;
                 destvx = orignvx[it];
                 destvy = orignvy[it];
                 destvz = orignvz[it];
             }//<<>>for( int it(0); it < steps; it++ )
-            kidtime.push_back(t);
+			auto r = hypo((cx-orignvx[0]), (cy-orignvy[0]));
+			auto iangle = getAngle((cz-orignvz[0]),r);	
+			//std::cout << "getAngle: " << iangle << " r: " << r << " z: " << cz-orignvz[0] << " x: " << cx-orignvx[0];
+			//std::cout << " y: " << cy-orignvy[0] << std::endl; 
+			impact.push_back(iangle);
+            kidtime.push_back(totaltime);
         }//<<>>if( steps == 0 )
 
     }//<<>>for( auto kid : kids )
@@ -1206,16 +1215,16 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
 	double se(0.0);
     double sae(0.0);
 	int nKids = kidtime.size();
-	std::cout << " ---- jetGenTime Calc : " << std::endl;
+	//std::cout << " ---- jetGenTime Calc : " << std::endl;
     for( int it(0); it < nKids; it++ ){ 
 		if( kidtime[it] != 999 ){
 			ste += kidtime[it]*kide[it]; 
 			sae += impact[it]*kide[it];
 			se += kide[it]; 
-			std::cout << " t: " << kidtime[it] << " e: " << kide[it] << std::endl;
+			//std::cout << " t: " << kidtime[it] << " e: " << kide[it] << " a: " << impact[it] << std::endl;
 		}//<<>>if( kidtime[it] != 999 )
 	}//<<>>for( int it(0); it < nKids; it++ )
-	std::cout << " ste: " << ste << " se: " << se << std::endl;
+	//std::cout << " ste: " << ste << " se: " << se << " sae: " << sae << std::endl;
     result.push_back(ste/se);
     result.push_back(sae/se);
 
@@ -1625,46 +1634,52 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
             auto jetGenParton = jet.genParton();
             auto jetGenJet = jet.genJet();
-            if( DEBUG ) std::cout << " ---- jetGenParton : " << jetGenParton << " genJet : " << jetGenJet << std::endl;
-            // size_t numberOfDaughters() const override;
-            // size_t numberOfMothers() const override;
-            // const Candidate * daughter(size_type) const override;
-            // const Candidate * mother(size_type = 0) const override;
-            // Candidates :
-            //  virtual double vx() const  = 0;
-            //  virtual double vy() const  = 0;
-            //  virtual double vz() const  = 0;
-            //  virtual int pdgId() const  = 0;
-            //  + mass/energy/momentum info ....
-
-            //auto nMother = jetGenJet->numberOfMothers();
-            //auto nDaughter = jetGenJet->numberOfDaughters();
-            auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
-            std::cout << " ---------------------------------------------------- " << std::endl;
-            //std::cout << " - jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
-            std::cout << " - jetGenJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
-            auto kids = jetGenJet->daughterPtrVector();
-            //std::cout << bigKidChase( kids, vtxX ) << std::endl;
-            kidChase( kids, vtxX, vtxY, vtxZ );
 			if( rhCount > 0 ){
+			if( jetGenJet ){
+            	if( DEBUG ) std::cout << " ---- jetGenParton : " << jetGenParton << " genJet : " << jetGenJet << std::endl;
+            	// size_t numberOfDaughters() const override;
+            	// size_t numberOfMothers() const override;
+            	// const Candidate * daughter(size_type) const override;
+            	// const Candidate * mother(size_type = 0) const override;
+            	// Candidates :
+            	//  virtual double vx() const  = 0;
+            	//  virtual double vy() const  = 0;
+            	//  virtual double vz() const  = 0;
+            	//  virtual int pdgId() const  = 0;
+            	//  + mass/energy/momentum info ....
+
+            	//auto nMother = jetGenJet->numberOfMothers();
+            	//auto nDaughter = jetGenJet->numberOfDaughters();
+            	auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
+            	if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+            	//std::cout << " - jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
+            	if( DEBUG ) std::cout << " - jetGenJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
+            	auto kids = jetGenJet->daughterPtrVector();
+            	//std::cout << bigKidChase( kids, vtxX ) << std::endl;
+            	//kidChase( kids, vtxX, vtxY, vtxZ );
 				auto leadJetRh = getLeadRh( jetDrRhGroup );
             	auto leadJetRhId = leadJetRh.detid();
             	auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
 				auto cx = leadJetRhIdPos.x();
 				auto cy = leadJetRhIdPos.y();
 				auto cz = leadJetRhIdPos.z();
+				auto tofcor = hypo( cx, cy, cz )/SOL;
+				if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
             	auto genTime = kidTOFChain( kids, cx, cy, cz );
-				jetGenTime = genTime[0];
-				std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz << std::endl;
+				jetGenTime = genTime[0]-tofcor;
+				auto impactAngle = genTime[1];
+				if( DEBUG ) std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz << " Angle: " << impactAngle << std::endl;
 				hist1d[88]->Fill(jetGenTime);
-                hist1d[90]->Fill(genTime[1]);
+                hist1d[90]->Fill(impactAngle);
+			}//<<>>if( jetGenJet )
+			else { if( DEBUG ) std::cout << " - jetGenJet GenTime : jetGenJet == 0 " << std::endl; jetGenTime = -50.0; }
 			}//<<>>if( rhCount >= minRHcnt )
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 		//<<<<if( hasGenInfo )
     
-			else std::cout << " - jetGenJet GenTime : rhCount == 0 " << std::endl;
-			std::cout << " ---------------------------------------------------- " << std::endl;
+			else if( DEBUG ) std::cout << " - jetGenJet GenTime : rhCount == 0 " << std::endl;
+			if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
             //for( auto kid : kids ){
             //  std::string depth(" --");
             //    std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt() << " vtx (" << kid->vx() << "," << kid->vy() << "," << kid->vz() << ")";
@@ -2449,6 +2464,7 @@ void LLPgammaAnalyzer::beginJob(){
 
     hist1d[88] = fs->make<TH1D>("jetGenTime", "jetGenTime", jdtdiv, -1*jdtran, jdtran);
     hist1d[89] = fs->make<TH1D>("jetmudtgen", "jetmudtgen", jdtdiv, -1*jdtran, jdtran);
+    hist1d[90] = fs->make<TH1D>("jetImpactAngle", "jetImpactAngle", 660, -0.2, 6.4);
 
     // used below : hist1d[87] = fs->make<TH1D>("cluster_etprofile", "Cluster Eta Time Profile Sph", 80, -40, 40);
 
