@@ -1050,7 +1050,7 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 
     auto nWts = resolutions.size();
 	//auto nWts = wts.size();
-	bool nwtcut = nWts > 10;
+	bool nwtcut = nWts > 0;
     //bool pfcut = true;
 	//bool pfcut = eigens[2] < 0.95 && eigens[2] > 0.6;
     bool pfcut = eigens[2] > 0.6 && nwtcut && eigens[2] < 0.95;
@@ -1069,24 +1069,22 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
         //std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         //if( abs(wts[it]) < 8 )
         auto fill = ltime*resolutions[it];
-        //if( nwtcut ){
-        if( pfcut ){
-        	hist2d[73]->Fill(sxcor,ycor,fill);
-        	hist2d[74]->Fill(sxcor,ycor,resolutions[it]);
+        if( nwtcut ){
+        	hist2d[73]->Fill(xcor,ycor,fill);
+        	hist2d[74]->Fill(xcor,ycor,resolutions[it]);
         	hist2d[75]->Fill(leta,lphi,fill);
         	hist2d[76]->Fill(leta,lphi,resolutions[it]);
-		//}//<<>>if( std::abs(fill) < x )
-		//if( pfcut ){
+		}//<<>>if( std::abs(fill) < x )
+		if( pfcut ){
 			hist2d[86]->Fill(ycor,ltime,resolutions[it]);
-			hist2d[87]->Fill(sxcor,ltime,resolutions[it]);
-        //}//<<>>if( pfcut )
-			if( sxcor > -1 && sxcor <= 0 ) hist1d[94]->Fill(ltime,resolutions[it]);
-        	if( sxcor < 1 && sxcor >= 0 ) hist1d[95]->Fill(ltime,resolutions[it]);
-        	if( sxcor > -2 && sxcor <= -1 ) hist1d[96]->Fill(ltime,resolutions[it]);
-        	if( sxcor < 2 && sxcor >= 1 ) hist1d[97]->Fill(ltime,resolutions[it]);
-        	if( sxcor > -3 && sxcor <= -2 ) hist1d[98]->Fill(ltime,resolutions[it]);
-        	if( sxcor < 3 && sxcor >= 2 ) hist1d[99]->Fill(ltime,resolutions[it]);
+			hist2d[87]->Fill(xcor,ltime,resolutions[it]);
         }//<<>>if( pfcut )
+		if( xcor > -1 && xcor <= 0 ) hist1d[94]->Fill(ltime,resolutions[it]);
+        if( xcor < 1 && xcor >= 0 ) hist1d[95]->Fill(ltime,resolutions[it]);
+        if( xcor > -2 && xcor <= -1 ) hist1d[96]->Fill(ltime,resolutions[it]);
+        if( xcor < 2 && xcor >= 1 ) hist1d[97]->Fill(ltime,resolutions[it]);
+        if( xcor > -3 && xcor <= -2 ) hist1d[98]->Fill(ltime,resolutions[it]);
+        if( xcor < 3 && xcor >= 2 ) hist1d[99]->Fill(ltime,resolutions[it]);
 		//if( xcor < minx ) { minx = xcor; miny = ltime; }
         //if( xcor > maxx ) { maxx = xcor; maxy = ltime; }
 		//xs.push_back(ltime/dxcor);
@@ -1108,17 +1106,15 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 	//auto slope = pol1->GetParameter(1);
 	//float xsum(0); for( uInt it(0); it < nWts; it++ ){ xsum += xs[it]*resolutions[it]; hist1d[100]->Fill(xs[it]);}
 	auto slope = xsum/totRes;
-	float svarsl(0); for( uInt it(0); it < nWts; it++ ){ svarsl += sq2(xs[it]-slope)*resolutions[it];}
-	auto varsl = svarsl/totRes;
-    //float schi2(0); for( uInt it(0); it < nWts; it++ ){ schi2 += sq2(xs[it]-slope)*resolutions[it]/abs(slope);}
-	float chi2(0); for( uInt it(0); it < nWts; it++ ){ chi2 += sq2(xs[it]-slope)/varsl;}
-    //auto chi2 = schi2/totRes;
+	float schi2(0); for( uInt it(0); it < nWts; it++ ){ schi2 += sq2(xs[it]-slope)*resolutions[it]/abs(slope);}
+	//auto chi2 = schi2/totWts/nWts;
+    auto chi2 = schi2/totRes;
 	//auto chi2pf = chi2/(nWts-1);
     auto chi2pf = TMath::Prob(chi2, nWts);
 	eigens.push_back(slope);//3
     eigens.push_back(chi2pf);//4
 
-	auto slope_cut = ( eigens[2] < 0.9 ) && ( chi2pf > 0.05 );
+	auto slope_cut = ( eigens[2] < 0.9 ) && ( slope > 0.05 );
 	hist1d[91]->Fill(slope);
     hist1d[103]->Fill(1/slope);
     hist1d[92]->Fill(chi2pf);
@@ -1833,7 +1829,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	         	const auto nrh = hitsAndFractions.size();
 				//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 				//std::cout << " -- SC has nRecHits: " << nrh << std::endl;
-				if( nrh < 5 ) continue;
 				if( nrh != 0 ){
 					for( const auto &clustptr : clusters ){
 						if( not clustptr.isAvailable() ) continue;
@@ -1920,7 +1915,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 					const auto clusters = elesc->clusters();
 	            	const auto &hitsAndFractions = elesc->hitsAndFractions();
 					const auto nrh = hitsAndFractions.size();
-					if( nrh < 5 ) continue;
  					//const auto nBClusts = elesc->clustersSize();
 	            	//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 	            	//std::cout << " -- SC has nRecHits: " << nrh << std::endl;

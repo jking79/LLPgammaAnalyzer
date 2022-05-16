@@ -38,7 +38,15 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t72L_eigen_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 69 with code if/then loop bug corrected
 #outfilename = 'llpgana_t73S_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 72 w/ sphcty cut &/or #rh cut for sphcal eta/time profl
 #outfilename = 'llpgana_t74L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & ignore 1st couple of etas for sphcal
-outfilename = 'llpgana_t75M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & sphcal rot :  ebp ebn + ltime sum for flip
+#outfilename = 'llpgana_t75L_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & sphcal rot :  ebp ebn + ltime sum for flip
+#outfilename = 'llpgana_t74M_pheigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root'#
+#outfilename = 'llpgana_t75M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # added 2sigma filter for eta time profile (exclude t>1 eta t map)
+#outfilename = 'llpgana_t79L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # add by cluster slope extraction
+#outfilename = 'llpgana_t81M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # add by cluster slope extraction
+#outfilename = 'llpgana_t82M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + crystalball
+#outfilename = 'llpgana_t84L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D
+#outfilename = 'llpgana_t85M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D + slope cuts
+outfilename = 'llpgana_t88M_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D + slope cuts
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -147,6 +155,7 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#S
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#ML
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 

@@ -155,6 +155,8 @@
 #include "TMatrixD.h"
 #include "TVectorD.h"
 #include "TMatrixDSymEigen.h"
+#include "TGraph.h"
+#include "TMathBase.h"
 
 using namespace std;
 using namespace edm;
@@ -388,6 +390,80 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 // Helper functions ( single line function defs, mostly )
 //
 
+//
+// The "crystalball" function for ROOT 5.x (mimics ROOT 6.x).
+//
+// Create the "crystalball" TF1 somewhere in your source code using:
+// double xmin = 3., xmax = 8.; // whatever you need
+// TF1 *crystalball = new TF1("crystalball", crystalball_function, xmin, xmax, 5);
+// crystalball->SetParNames("Constant", "Mean", "Sigma", "Alpha", "N");
+// crystalball->SetTitle("crystalball"); // not strictly necessary
+//
+
+// #include "TMath.h"
+#include <cmath>
+
+// see math/mathcore/src/PdfFuncMathCore.cxx in ROOT 6.x
+double crystalball_function(double x, double alpha, double n, double sigma, double mean) {
+
+  	// evaluate the crystal ball function
+  	if (sigma < 0.)     return 0.;
+  	double z = (x - mean)/sigma; 
+  	if (alpha < 0) z = -z; 
+  	double abs_alpha = std::abs(alpha);
+  	// double C = n/abs_alpha * 1./(n-1.) * std::exp(-alpha*alpha/2.);
+  	// double D = std::sqrt(M_PI/2.)*(1.+ROOT::Math::erf(abs_alpha/std::sqrt(2.)));
+  	// double N = 1./(sigma*(C+D));
+  	if (z  > - abs_alpha) return std::exp(- 0.5 * z * z);
+  	else {
+    	//double A = std::pow(n/abs_alpha,n) * std::exp(-0.5*abs_alpha*abs_alpha);
+    	double nDivAlpha = n/abs_alpha;
+    	double AA =  std::exp(-0.5*abs_alpha*abs_alpha);
+    	double B = nDivAlpha -abs_alpha;
+    	double arg = nDivAlpha/(B-z);
+    	return AA * std::pow(arg,n);
+  	}//<<>> if (z  > - abs_alpha)
+
+}//<<>>double crystalball_function(double x, double alpha, double n, double sigma, double mean)
+
+double crystalball_function(const double *x, const double *p) {
+
+  	// if ((!x) || (!p)) return 0.; // just a precaution
+  	// [Constant] * ROOT::Math::crystalball_function(x, [Alpha], [N], [Sigma], [Mean])
+  	return (p[0] * crystalball_function(x[0], p[3], p[4], p[2], p[1]));
+
+}//<<>>double crystalball_function(const double *x, const double *p)
+
+double twosided_crystalball_function(double x, double alphalow, double alphahigh, double nlow, double nhigh, double sigma, double mean) {
+
+  	// evaluate the crystal ball function
+  	if(sigma < 0.) return 0.;
+  	auto z = (x - mean)/sigma;
+  	auto abs_alphalow = std::abs(alphalow);
+  	auto abs_alphahigh = std::abs(alphahigh);
+  	if( z  > abs_alphalow and z  < abs_alphahigh ) return std::exp(- 0.5 * z * z);
+  	else if( z  > abs_alphahigh ){
+    	double nDivAlpha = nhigh/abs_alphahigh;
+    	double AA =  std::exp(-0.5*abs_alphahigh*abs_alphahigh);
+    	double B = nDivAlpha -abs_alphahigh;
+    	double arg = nDivAlpha/(B-z);
+    	return AA * std::pow(arg,nhigh);
+  	} else {
+    	double nDivAlpha = nlow/abs_alphalow;
+    	double AA =  std::exp(-0.5*abs_alphalow*abs_alphalow);
+    	double B = nDivAlpha -abs_alphalow;
+    	double arg = nDivAlpha/(B-z);
+    	return AA * std::pow(arg,nlow);
+  	}//<<>>if( z  > abs_alphalow and z  < abs_alphahigh )
+
+}//<<>>double double_crystalball_function(double x, double alphalow, double alphahigh, double nlow, double nhigh, double sigma, double mean)
+
+double twosided_crystalball_function(const double *x, const double *p) {
+
+	return (p[0] * twosided_crystalball_function(x[0], p[3], p[4], p[5], p[6], p[2], p[1]));
+
+}//<<>>double double_crystalball_function(const double *x, const double *p)
+
 void fillTH1F( float val, TH1F* hist ){
 
    	auto nBins = hist->GetNbinsX();
@@ -459,7 +535,7 @@ void normTH1D(TH1D* hist){
 
 }//<<>>void NormTH1D(TH1D* hist)
 
-void profileTH2D(TH2D* nhist, TH1D* prof){
+void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
 
     std::cout << "Profile " << " hist: " << nhist->GetName() << std::endl;
 
@@ -470,13 +546,54 @@ void profileTH2D(TH2D* nhist, TH1D* prof){
 		auto phist = (TH1F*)nhist->ProjectionY("temp",ibinX,ibinX);
 		//double error;
         //auto content = hist->IntegralAndError(ibinX,ibinX,1,nYBins,error);
-        auto content = phist->GetMean();
-        //auto error = phist->GetStdDev();
-		auto error = phist->GetMeanError();
-		//auto norm = nhist->Integral(ibinX,ibinX,1,nYBins);
-        // set new contents
-        prof->SetBinContent(ibinX,content);
-        prof->SetBinError  (ibinX,error);
+
+        auto mean = phist->GetMean();
+        //auto mean = 0.f;
+        auto stdv = phist->GetStdDev();
+		//auto error = phist->GetMeanError();
+		auto norm = phist->GetBinContent(phist->GetMaximumBin());
+		auto high = mean + 0.2*stdv;
+        //auto high = 0.2;
+        auto low = mean - 0.2*stdv;
+        //auto low = -0.2;
+		//std::cout << " - Profile: m " << mean << " s " << stdv << " h " << high << " l " << low << " n " << norm << std::endl;
+		if( abs(stdv) > 0.01 && abs(norm) > 1 ){
+			auto tmp_form = new TFormula("tmp_formula","[0]*exp(-0.5*((x-[1])/[2])**2)");
+			auto tmp_fit  = new TF1("tmp_fit",tmp_form->GetName(),low,high);
+            //auto tmp_fit  = new TF1("tmp_fit","crystalball",low,high);
+			//auto tmp_fit = new TF1("crystalball", twosided_crystalball_function, low, high, 7);
+            //auto tmp_fit  = new TF1("tmp_fit","gaus",high,low);
+    		tmp_fit->SetParameter(0,norm); //tmp_fit->SetParLimits(0,norm/2,norm*2);
+    		tmp_fit->SetParameter(1,mean); //tmp_fit->SetParLimits(1,-2,2);
+    		tmp_fit->SetParameter(2,stdv); //tmp_fit->SetParLimits(2,0,10);
+            //tmp_fit->SetParameter(3,0.25);
+            //tmp_fit->SetParameter(4,0.25);
+            //tmp_fit->SetParameter(5,1);
+            //tmp_fit->SetParameter(6,1);
+			phist->Fit(tmp_fit->GetName(),"RBQ0");
+            //phist->Fit(tmp_fit->GetName(),"R");
+			//auto fnorm = tmp_fit->GetParameter(0);
+			auto fmean = tmp_fit->GetParameter(1);
+            //auto fstd = tmp_fit->GetParameter(2);
+			auto error = tmp_fit->GetParError(1);
+            //auto fChi2 = tmp_fit->GetChisquare();
+            auto fNdf = tmp_fit->GetNDF();
+            auto fProb = tmp_fit->GetProb();
+			//auto error = fstd/std::sqrt(fnorm);
+			std::cout << " - Profile: fm " << fmean << " fChi2 " << fProb  << " e " << error << " fNdf " << fNdf << std::endl;
+	
+        	// set new contents
+        	if( fNdf > 0 && fProb > 0.05 && error < 1.0 ){
+				//auto fChi2Ndf = fChi2/fNdf;
+				fithist->SetBinContent( ibinX, fProb );
+                fithist->SetBinError( ibinX, 0 );
+				prof->SetBinContent( ibinX, fmean );
+        		prof->SetBinError( ibinX, error );
+			}//<<>>if( fmean < 1 && error < 0.1 )
+
+			//delete tmp_form;
+        	delete tmp_fit;
+		}//<<>>if( stdv > 0.01 )
 
     }//<<>>for (auto ibinX = 1; ibinX <= nBins; ibinX++)
 
