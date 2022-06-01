@@ -2,6 +2,7 @@ macros/trplots/trash/
 macros/trplots/makedisplayplots/downloads/
 macros/trplots/downloaded/
 test/myworkingArea/
+test/oldWorkingFiles
 *.root
 *.pyc
 *.log
