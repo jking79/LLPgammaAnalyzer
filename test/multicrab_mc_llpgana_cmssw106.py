@@ -104,7 +104,17 @@ def docrab( dataset ):
             dataset        = inDO[0].split('/')[3]
             print( dataset )
 
-            trial          = "llpga_v1" # 4 Feb 22 : t37L_ phsc & elesc _005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2 
+            #trial          = "llpga_v1" # 4 Feb 22 : t37L_ phsc & elesc _005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2 
+            #trial          = "llpga_v2" # 16 May 22
+            #trial          = "llpga_v3" # 17 May 22
+            #trial          = "llpga_v6" # added dr & sc times - use sc
+            #trial          = "llpga_v7" # added dr & sc times - use dr
+            #trial          = "llpga_v8" # added dr & sc times - use gentime
+            #trial          = "llpga_v9" # added dr & sc times - use gentime w/ gen filter
+            #trial          = "llpga_v10" # added dr & sc times - use dr w/ gen filter
+            #trial          = "llpga_v11" # added dr & sc times - use gentime w/ gen filter jet pt -> 100  jet ID -> 2
+            #trial          = "llpga_v12" # added ootPhoton - cut gentime > 25.0   
+            trial          = "llpga_v13" # as 12 + eta cut on genplots ( + difftime plots )
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"

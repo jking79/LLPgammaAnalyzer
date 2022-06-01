@@ -580,7 +580,7 @@ void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
             auto fNdf = tmp_fit->GetNDF();
             auto fProb = tmp_fit->GetProb();
 			//auto error = fstd/std::sqrt(fnorm);
-			std::cout << " - Profile: fm " << fmean << " fChi2 " << fProb  << " e " << error << " fNdf " << fNdf << std::endl;
+			//std::cout << " - Profile: fm " << fmean << " fChi2 " << fProb  << " e " << error << " fNdf " << fNdf << std::endl;
 	
         	// set new contents
         	if( fNdf > 0 && fProb > 0.05 && error < 1.0 ){

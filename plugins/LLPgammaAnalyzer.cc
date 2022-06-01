@@ -461,17 +461,17 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times ){
 	
 	if( size == 0 ){		
 	   	std::cout << "Time group is empty" << std::endl; 
-	   	results.push_back(-9.25);//0
+	   	results.push_back(-29.25);//0
 	   	results.push_back(99.9);//1
-	   	results.push_back(-9.25);//2
+	   	results.push_back(-29.25);//2
 	   	results.push_back(99.9);//3
 	   	results.push_back(99.9);//4
 	   	results.push_back(9.9);//5
-	   	results.push_back(-9.25);//6
+	   	results.push_back(-29.25);//6
 	   	results.push_back(99.9);//7
 	   	results.push_back(99.9);//8
 	   	results.push_back(99.9);//9
-	   	results.push_back(-9.25);//10
+	   	results.push_back(-29.25);//10
 	   	results.push_back(99.9);//11
 	   	return results;
 	}//<<>>if( size == 0 )
@@ -518,17 +518,17 @@ vector<float> LLPgammaAnalyzer::getTimeDistStats( vector<float> times, vector<fl
 	int wtsize = wts.size();
 	if( size != wtsize || size == 0 ){ 
 		std::cout << "Time & rechit groups not same or empty" << std::endl; 
-		results.push_back(-9.25);//0 mu
+		results.push_back(-29.25);//0 mu
 	   	results.push_back(99.9);//1
-	   	results.push_back(-9.25);//2
+	   	results.push_back(-29.25);//2
 	   	results.push_back(99.9);//3
 	   	results.push_back(99.9);//4
 	   	results.push_back(9.9);//5
-	   	results.push_back(-9.25);//6
+	   	results.push_back(-29.25);//6
 	   	results.push_back(99.9);//7
 	   	results.push_back(99.9);//8
 	   	results.push_back(99.9);//9
-		results.push_back(-9.25);//10
+		results.push_back(-29.25);//10
 	   	results.push_back(9.9);//11
 	   	results.push_back(-10.0);//12
 		return results; 
@@ -1174,7 +1174,7 @@ float LLPgammaAnalyzer::getdt( float t1, float t2 ){
 	auto dt = t1 - t2;
 	if( dt == 0.0 )	dt = -5.5;// to be commented out in final version
 	if( t1 == 0.0 || t2 == 0.0 ) dt = -5.0;// to be copmmented out in final version
-	if( t1 < -8.9 || t2 < -8.9 ) dt = -3.75;
+	if( t1 < -28.9 || t2 < -28.9 ) dt = -3.75;
 	
 	return dt;
 }//>>>>float LLPgammaAnalyzer::getdt( float t1, float t2 )
@@ -1226,6 +1226,8 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
 
         bool done(false);
         bool first(true);
+        bool llp(false);
+        bool bquark(false);
         auto mom = kid->mother();
         vector<double> stepp{kid->p()};
         vector<double> stepe{kid->energy()};
@@ -1235,6 +1237,10 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
         bool top(true);
 		int steps(0);
         while( not done ){
+			auto pdgid = std::abs(mom->pdgId());
+			if( pdgid == 6000113 ) llp = true;
+			if( pdgid == 5 ) bquark = true;
+			if( std::floor(pdgid/100) == 5 ) bquark = true;
             if( mom->pt() == 0 ) done = true;
             else {
                 auto gmom = mom->mother();
@@ -1261,7 +1267,7 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
 
         kide.push_back(stepe[0]);
         //std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
-        if( steps == 0 ){ 
+        if( steps == 0 || not llp || not bquark ){ 
 			kidtime.push_back(999); 
 			impact.push_back(999);
 			//std::cout << "Steps are Zero" << std::endl; 
@@ -1306,8 +1312,13 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
 		}//<<>>if( kidtime[it] != 999 )
 	}//<<>>for( int it(0); it < nKids; it++ )
 	//std::cout << " ste: " << ste << " se: " << se << " sae: " << sae << std::endl;
-    result.push_back(ste/se);
-    result.push_back(sae/se);
+	if( se > 0 ){
+    	result.push_back(ste/se);
+    	result.push_back(sae/se);
+	} else {
+		result.push_back(-30.0);
+        result.push_back(7.0);	
+	}//<<>>if( se > 0 )
 
     return result;
 
@@ -1404,8 +1415,10 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	// deltaRmin from ecalelf SC Associtor : 0.2
 	float	deltaRminJet	= 0.3;//0.4
 	//float deltaRminKid	= 0.15;//0.2
-	float 	jetPTmin		= 200.0;
+	//float 	jetPTmin		= 200.0;
+    float   jetPTmin        = 100.0;// for energy/time comp
 	int 	jetIDmin		= 2; //3;
+    //int     jetIDmin        = 1; //3; for energy/time comp
 	float 	jetETAmax		= 1.5; //1.5;
 	uInt 	minRHcnt		= 5; //32;
 	float 	minRHenr		= 2.0;
@@ -1528,7 +1541,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		//std::cout << "Processing with jet " << ijet << std::endl;
 	   	const auto & jet = fjets[ijet];
 
-		float jetGenTime(-9.9);
 	   	// jetID in jet.h ?
 
 	   	jetHt += jet.pt();
@@ -1591,6 +1603,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	//std::cout << "rhCount is " << rhCount << std::endl;
 	   	auto sumdrrhe = getRhGrpEnr( jetDrRhGroup );
 		auto dremf = sumdrrhe/jet.energy();
+		float jetDrTime(-99.9);
 		if( rhCount >= minRHcnt && dremf > minEmf ){
 
 			if( DEBUG ) std::cout << " - get jetDRtofTimes " << std::endl;
@@ -1636,6 +1649,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			auto jcmutime = jetTimeStats[6];
 	      	auto jcmedtime = jetTimeStats[10];
 
+			jetDrTime = jcmutime;
 		   	njetRecHits.push_back(rhCount);
 		   	jetMuTime.push_back(jmutime);
 		   	jetTimeError.push_back(jterr);
@@ -1644,7 +1658,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	      	jetCMuTime.push_back(jcmutime);	
 	      	jetCMedTime.push_back(jcmedtime);
 
-			if( jcmutime > -8.9 ) nGoodDrJets++;			
+			if( jcmutime > -28.9 ) nGoodDrJets++;			
 
 		   	hist1d[29]->Fill(jmutime);
 		   	hist1d[1]->Fill(rhCount);
@@ -1696,12 +1710,12 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		} else { //<<>>if( rhCount > minRHcnt && dremf > minEmf )
 
 			njetRecHits.push_back(0);
-	      	jetMuTime.push_back(-9.25);
+	      	jetMuTime.push_back(-29.25);
 	      	jetTimeError.push_back(99.9);
 	      	jetTimeRMS.push_back(99.9);
-	      	jetMedTime.push_back(-9.25);
-	      	jetCMuTime.push_back(-9.25);
-	      	jetCMedTime.push_back(-9.25);
+	      	jetMedTime.push_back(-29.25);
+	      	jetCMuTime.push_back(-29.25);
+	      	jetCMedTime.push_back(-29.25);
 			
 		}//<<>>if( rhCount > minRHcnt && dremf > minEmf ) : else
 		
@@ -1711,6 +1725,12 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
         if( DEBUG ) std::cout << "Getting jetGenParton Information" << std::endl;
         //const reco::GenParticle * jetGenParton(0);
+        float jetGenImpactAngle(7.0);
+        float jetGenTime(-99.9);
+        float jetGenPt(-1.0);
+        float jetGenEta(10.0);
+        float jetGenEnergy(-1.0);
+        float jetGenEMFrac(-1.0);
         if( hasGenInfo ){
             if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
             auto jetGenParton = jet.genParton();
@@ -1747,11 +1767,21 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				auto tofcor = hypo( cx, cy, cz )/SOL;
 				if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
             	auto genTime = kidTOFChain( kids, cx, cy, cz );
-				jetGenTime = genTime[0]-tofcor;
-				auto impactAngle = genTime[1];
-				if( DEBUG ) std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz << " Angle: " << impactAngle << std::endl;
+				jetGenEta = jetGenJet->eta();
+				if( genTime[0] > 24.0 ) jetGenTime = -28.0;
+				else if( genTime[0] > -25.0 ) jetGenTime = genTime[0]-tofcor;
+				else jetGenTime = genTime[0];
+				jetGenImpactAngle = genTime[1];
+				jetGenPt = jetGenJet->pt();
+                jetGenEnergy = jetGenJet->energy();
+				jetGenEMFrac = (jetGenJet->chargedEmEnergy() + jetGenJet->neutralEmEnergy())/jetGenEnergy;
+				if( DEBUG ){ 
+					std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz; 
+					std::cout << " Angle: " << jetGenImpactAngle << std::endl;
+					std::cout << " -- Energy : " << jetGenEnergy << " Pt : " << jetGenPt << " EMfrac : " << jetGenEMFrac << std::endl;
+				}//<<>>if( DEBUG )
 				hist1d[93]->Fill(jetGenTime);
-                hist1d[90]->Fill(impactAngle);
+                hist1d[90]->Fill(jetGenImpactAngle);
 			}//<<>>if( jetGenJet )
 			else { if( DEBUG ) std::cout << " - jetGenJet GenTime : jetGenJet == 0 " << std::endl; jetGenTime = -50.0; }
 			}//<<>>if( rhCount >= minRHcnt )
@@ -1780,6 +1810,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		int sum_nrh(0);
 	   	float sum_sce(0.0);
 	   	float sum_phe(0.0);
+        auto jetSCTime(-29.25);
 		scGroup jetSCGroup;
         scGroup jetPhSCGroup;
         scGroup jetEleSCGroup;
@@ -1799,21 +1830,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	         	//std::cout << "Processing asc pfcand # " << ipcp << std::endl;
 	         	edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
 	         	const auto *ascpacked_cand = passociatedPtr.get();
-	            //int ijk(0);
 	            for( const auto kid : jet.daughterPtrVector() ){
 	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
 	               	auto kidcand = pfcands_->ptrAt(kid.key());
 	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
-	            	if( ascpacked_cand == packed_cand ){
-
-	        			//const auto pce = ascpacked_cand->energy();
-	                    //std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
-						//std::cout << ijet << "/" << nJets	<< " kid: " << ijk; // << std::endl;
-	                    //std::cout << " pce: " << pce << std::endl;
-	                    matched = true;
-
-	                }//<<>>if( ascpacked_cand == packed_cand )
-	               	//ijk++;
+	            	if( ascpacked_cand == packed_cand ){ matched = true; }//<<>>if( ascpacked_cand == packed_cand )
 	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
 			}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
 
@@ -1833,7 +1854,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	         	const auto nrh = hitsAndFractions.size();
 				//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 				//std::cout << " -- SC has nRecHits: " << nrh << std::endl;
-				if( nrh < 5 ) continue;
+				if( nrh < minRHcnt ) continue;
 				if( nrh != 0 ){
 					for( const auto &clustptr : clusters ){
 						if( not clustptr.isAvailable() ) continue;
@@ -1854,6 +1875,57 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	    	}//<<>>if( matched )
 
 		}//<<>>for( const auto photon : *gedPhotons_ ) 
+
+    //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
+
+  for( const auto photon : *ootPhotons_ ){
+
+            //std::cout << "Proccesssing New Photon :" << std::endl;
+            edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
+            for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
+                //std::cout << "Processing asc pfcand # " << ipcp << std::endl;
+                edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
+                const auto *ascpacked_cand = passociatedPtr.get();
+                for( const auto kid : jet.daughterPtrVector() ){
+                    //std::cout << "Proccesssing New jetKid :" << std::endl;
+                    auto kidcand = pfcands_->ptrAt(kid.key());
+                    const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+                    if( ascpacked_cand == packed_cand ){  matched = true; }//<<>>if( ascpacked_cand == packed_cand )
+                }//<<>>for( const auto kid : jet.daughterPtrVector() )
+            }//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
+
+            if( matched ){
+                iph++;
+                nMatched++;
+                const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
+                const auto scptr = phosc.get();
+                jetSCGroup.push_back(*scptr);
+                const auto clusters = phosc->clusters();
+                const auto &hitsAndFractions = phosc->hitsAndFractions();
+                const auto nrh = hitsAndFractions.size();
+                //std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
+                //std::cout << " -- SC has nRecHits: " << nrh << std::endl;
+                if( nrh < minRHcnt ) continue;
+                if( nrh != 0 ){
+                    for( const auto &clustptr : clusters ){
+                        if( not clustptr.isAvailable() ) continue;
+                        const auto clust = clustptr.get();
+                        jetBCGroup.push_back(*clust);
+                        //std::cout << " --- Adding cluster " << std::endl;
+                    }//<<>>for( const auto &clustptr : clusters ){
+                }//<<>>if( nrh != 0 ){
+                const auto sce = phosc->energy();
+                sum_nrh += nrh;
+                sum_sce += sce;
+                sum_phe += photon.energy();
+                matched = false;
+
+                jetPhSCGroup.push_back(*scptr);
+                phEnergy.push_back(photon.energy());
+                phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), photon.eta(), photon.phi())));
+            }//<<>>if( matched )
+
+        }//<<>>for( const auto photon : *ootPhotons_ ) 
 
 	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 		
@@ -1997,7 +2069,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
     	//<<<<if( jetScRhGroup.size() >= minRHcnt && scemf > minEmf )
 
-			if( jetSCTimeStats[6] > -8.9 ) nGoodScJets++;
+			if( jetSCTimeStats[6] > -28.9 ) nGoodScJets++;
             //std::cout << " - fill hists " << std::endl;
             for( auto t : jetSCtofTimes ) hist1d[47]->Fill(t);
             //if( rhCount >= minRHcnt ) 
@@ -2029,6 +2101,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         	if( DEBUG ) std::cout << " " << jet.etaphiMoment() << " " << jet.maxDistance(); 
 			if( DEBUG ) std::cout << " " << jet.constituentPtDistribution() << " " << jet.constituentEtaPhiSpread();
         	if( DEBUG ) std::cout << " " << jet.jetArea() << " " << jet.nCarrying(0.1) << " " << jet.nConstituents() << std::endl; 	
+
+			jetSCTime = jetSCTimeStats[0];
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
         //<<<<if( jetScRhGroup.size() >= minRHcnt && scemf > minEmf )
@@ -2080,11 +2154,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     //std::cout << "fill phMuTimeTemp : " << jetPhTimeStats[6] << std::endl;
 
                 } else {
-                    jetPhMuTime.push_back( -9.75 );
+                    jetPhMuTime.push_back( -29.75 );
                     if( DEBUG ) std::cout << " - jetPhRhGroup is < minRHcnt " << std::endl;
                 }//<<>>if( jetPhRhGroup.size() >= minRHcnt )
 			} else {
-				jetPhMuTime.push_back( -9.25 );
+				jetPhMuTime.push_back( -29.25 );
             }//<<>>if( jetPhSCGroup.size() != 0 )
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2107,11 +2181,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     //std::cout << "fill phMuTimeTemp : " << jetPhTimeStats[6] << std::endl;
 
                 } else {
-                    jetEleMuTime.push_back( -9.75 );
+                    jetEleMuTime.push_back( -29.75 );
                     if( DEBUG ) std::cout << " - jetEleRhGroup is < minRHcnt " << std::endl;
                 }//<<>>if( jetPhRhGroup.size() >= minRHcnt )
 			} else {
-				jetEleMuTime.push_back( -9.25 );
+				jetEleMuTime.push_back( -29.25 );
             }//<<>>if( jetEleSCGroup.size() != 0 )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2241,7 +2315,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				auto jetBCTimeStats = getTimeDistStats( bcTimes, bcRhGrpEnergy );
             	//auto jetBCTimeStats = getTimeDistStats( bcTimes, bcEnergies );
 				//auto jetBCTimeStats = getTimeDistStats( bcTimes );
-				if( jetBCTimeStats[6] > -8.9 ) nGoodBcJets++;
+				if( jetBCTimeStats[6] > -28.9 ) nGoodBcJets++;
 				jetCBCMedTime.push_back(jetBCTimeStats[10]);//c med
 	        	jetCBCMuTime.push_back(jetBCTimeStats[6]);//c mu
 				hist1d[10]->Fill(jetBCTimeStats[10]);//c med
@@ -2266,9 +2340,9 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             	hist2d[60]->Fill( scemf, bcemf );
 
         	} else { //<<>>if( nBCTimes == 0 )
-               		jetCBCMedTime.push_back(-9.75);
-               		jetCBCMuTime.push_back(-9.75);
-               		hist1d[10]->Fill(-9.75);
+               		jetCBCMedTime.push_back(-29.75);
+               		jetCBCMuTime.push_back(-29.75);
+               		hist1d[10]->Fill(-29.75);
 			}//<<>>if( nBCTimes == 0 ) : else
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2277,21 +2351,52 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	} else { //<<>>if( jetSCGroup.size() >= minRHcnt)
 
 			if( DEBUG ) std::cout << " - jetScRhGroup is < minRHcnt " << std::endl;
-	        jetSCMuTime.push_back(-9.25);
-	   	   	jetCSCMuTime.push_back(-9.25);
-	   	   	jetSCMedTime.push_back(-9.25);
-	        jetCSCMedTime.push_back(-9.25);
-            jetPhMuTime.push_back(-9.25);
-            jetEleMuTime.push_back(-9.25);
-	    	jetCBCMuTime.push_back(-9.25);
-	    	jetCBCMedTime.push_back(-9.25);
-			//jetCSBCMuTime.push_back(-9.25);
+	        jetSCMuTime.push_back(-29.25);
+	   	   	jetCSCMuTime.push_back(-29.25);
+	   	   	jetSCMedTime.push_back(-29.25);
+	        jetCSCMedTime.push_back(-29.25);
+            jetPhMuTime.push_back(-29.25);
+            jetEleMuTime.push_back(-29.25);
+	    	jetCBCMuTime.push_back(-29.25);
+	    	jetCBCMedTime.push_back(-29.25);
+			//jetCSBCMuTime.push_back(-29.25);
 				
 	   	}//<<>>if( jetSCGroup.size() >= minRHcnt) : else			
 
 		if( DEBUG ) std::cout << "Finished with get SC Med times --------------------------- " << std::endl;
 			
 		//****************************	photon/electron to kid pfcand -> SC matcher ********************************
+
+        //auto jetRecoTime = jetGenTime;
+        auto jetRecoTime = jetSCTime;
+        //auto jetRecoTime = jetDrTime;
+        //auto hasGoodTime = jetRecoTime > -28.0 && jetGenTime > -28.0;
+        auto hasGoodTime = jetGenTime > -27.0;
+        auto etaCut = jetGenEta < 1.5 && jet.eta() < 1.5;
+    	//auto isDelayed = std::abs( jetRecoTime ) > 1.0;
+		hist2d[103]->Fill( jetSCTime, jetDrTime );
+        if( hasGoodTime && etaCut ){
+			if( jetRecoTime < - 27.9 ) jetRecoTime = -15.0;
+            if( jetGenTime < - 27.9 ) jetGenTime = -15.0;
+            auto jetERatio = jet.energy()/jetGenEnergy;
+            //auto jetERatio = jetGenEnergy/jet.energy();
+            //auto difTimeRatio = jetSCTimeStats[0]/jetGenTime; 
+            //auto difTimeRatio = jetGenTime/jetSCTimeStats[0];
+            auto difScTime = jetSCTime - jetGenTime;
+            auto difDrTime = jetDrTime - jetGenTime;
+			//if( jetRecoTime == -15.0 && jetGenTime == -15.0 ) difTime = -10.0;
+            if( jetDrTime == -15.0 && jetGenTime == -15.0 ) difDrTime = -10.0;
+            hist2d[98]->Fill( jet.energy(), jetGenEnergy );
+            hist2d[99]->Fill( jetERatio, jetRecoTime );
+            //hist2d[100]->Fill( jetGenEMFrac, jetSCTimeStats[0] );
+            hist2d[100]->Fill( jetemfrac, jetRecoTime );
+            //hist2d[101]->Fill( jetERatio, difTimeRatio );
+            //hist2d[101]->Fill( jetERatio, difDrTime );
+            hist2d[102]->Fill( jetGenTime, jetRecoTime );
+            hist2d[101]->Fill( jetERatio, difScTime );
+            hist2d[103]->Fill( jetERatio, difDrTime );
+            hist2d[104]->Fill( jetDrTime, jetSCTime );
+        }//<<>>if( jetSCTimeStats[0] > -28.0 && jetGenTime > -28.0 )
 
 		if( DEBUG ) std::cout << "Next Jet .......................... " << std::endl; 	
 	}//<<>>for ( uInt ijet = 0; ijet < nJets; ijet++ )
@@ -2436,8 +2541,10 @@ void LLPgammaAnalyzer::beginJob(){
 
 	// Book histograms
 	
-	int jtdiv(400);
-	float jtran(8);
+	//int jtdiv(400);
+	//float jtran(8);
+    int jtdiv(625);
+    float jtran(25);
 	int jdtdiv(200);
 	float jdtran(4);
    	int jztdiv(100);
@@ -2557,7 +2664,7 @@ void LLPgammaAnalyzer::beginJob(){
     hist1d[91] = fs->make<TH1D>("clEtaTimeSlope", "Cluster Eta Time Slope", 2500, -0.01, 24.99);
     hist1d[92] = fs->make<TH1D>("clEtaTimeSlopeChi", "Cluster Eta Time Slope Chi2", 100, 0, 1);
 
-    hist1d[93] = fs->make<TH1D>("jetGenTime", "jetGenTime", jdtdiv, -1*jdtran, jdtran);
+    hist1d[93] = fs->make<TH1D>("jetGenTime", "jetGenTime", jtdiv, -1*jtran, jtran);
 
 	hist1d[94] = fs->make<TH1D>("clBinProfile_m1", "spCluster Bin -1 Profile", 200, -10, 10);
     hist1d[95] = fs->make<TH1D>("clBinProfile_p1", "spCluster Bin +1 Profile", 200, -10, 10);
@@ -2719,6 +2826,15 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[95] = fs->make<TH2D>("clEtaTimeChi2vEVal", "Cluster EtaTime Chi2 v EigenValue", chidiv, 0, chimax, 60, 0.45, 1.05);
     hist2d[96] = fs->make<TH2D>("jetImpAnglevSlope3D", "Jet ImpactAngle v Slope 3D", 150, 0, 1.5, sldiv, slmin, slmax);
     hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits", chidiv, 0, chimax, 60, 0, 60);
+
+    hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy", 100, 0, 1000, 100, 0, 1000 );
+    hist2d[99] = fs->make<TH2D>("jetEGenERatiovTime", "Jet E/GenE v Time", 80, 0, 2, 40, -15, 25 );
+    hist2d[100] = fs->make<TH2D>("jetEMFracvTime", "Jet EMFrac v Time", 80, 0, 2, 40, -15, 25 );
+    //hist2d[101] = fs->make<TH2D>("jetGenRatiovTimeRatio", "Jet E/GenE v Jet/genTime", 30, 0, 1.5, 30, 0, 1.5 );
+    hist2d[101] = fs->make<TH2D>("jetEGenERatiovTimeDiff", "Jet E/GenE v JetDR/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
+    hist2d[102] = fs->make<TH2D>("jetGenTimevJetTime", "GenTime v JetTime", 70, -15, 25, 70, -15, 25 );
+    hist2d[103] = fs->make<TH2D>("jetEGenERatiovTimeDiff", "Jet E/GenE v JetSC/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
+    hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime", 60, -15, 15, 60, -15, 15 );
 
    //------ ECAL Map Hists --------------------------------------------------------------------------
 
