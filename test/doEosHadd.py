@@ -19,7 +19,7 @@ def doCommand( command ):
 mspc = '/store/user/jaking/'
 eosll = 'eos root://cmseos.fnal.gov ls '
 command = eosll+mspc+'LLPGamma/'
-version = '_v13_'
+version = '_v16_'
 #command = 'ls'
 
 targdirs = []
