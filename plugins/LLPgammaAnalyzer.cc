@@ -1274,8 +1274,13 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
         first = true;
 
         kide.push_back(stepe[0]);
-        //std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
-        if( steps == 0 || not llp || not bquark ){ 
+        if( DEBUG && false ) std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
+		bool stepcut( steps == 0 );
+		bool llpcut( llp && bquark );
+		if( DEBUG && false ) std::cout << " ---- jetGenTime Calc llpcut : " << llpcut << std::endl;
+        auto gencut = stepcut && not llpcut;
+		//auto gencut = stepcut || not llpcut;
+        if( gencut ){ 
 			kidtime.push_back(999); 
 			impact.push_back(999);
 			//std::cout << "Steps are Zero" << std::endl; 
@@ -1773,7 +1778,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				auto cy = leadJetRhIdPos.y();
 				auto cz = leadJetRhIdPos.z();
 				auto tofcor = hypo( cx, cy, cz )/SOL;
-				if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
+				//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
             	auto genTime = kidTOFChain( kids, cx, cy, cz );
 				jetGenEta = jetGenJet->eta();
 				if( genTime[0] > 24.0 ) jetGenTime = -28.0;
@@ -1812,8 +1817,6 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		// Super Cluster group	-----------------------------------------------
 		
 		if( DEBUG ) std::cout << " - Get jet SC Group " << std::endl;
-	   	int iph(0);
-	   	bool matched(false);
 		int nMatched(0);
 		int sum_nrh(0);
 	   	float sum_sce(0.0);
@@ -1830,9 +1833,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 
+	if( true ) { //---------------------------------- gedPhotons lock ------------------------------------------------
+        int iph(0);
+        bool pmatched(false);
+		if( DEBUG ) std::cout << "Proccesssing Photon :" << std::endl;
 	   	for( const auto photon : *gedPhotons_ ){
 
-	      	//std::cout << "Proccesssing New Photon :" << std::endl;
+			if( DEBUG ) std::cout << " --- Proccesssing : " << photon  << std::endl;
 	      	edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
 	      	for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
 	         	//std::cout << "Processing asc pfcand # " << ipcp << std::endl;
@@ -1842,14 +1849,15 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
 	               	auto kidcand = pfcands_->ptrAt(kid.key());
 	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
-	            	if( ascpacked_cand == packed_cand ){ matched = true; }//<<>>if( ascpacked_cand == packed_cand )
+	            	if( ascpacked_cand == packed_cand ){ pmatched = true; }//<<>>if( ascpacked_cand == packed_cand )
 	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
 			}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
       	//<<<<for( const auto photon : *gedPhotons_ ){ 
   
-	      	if( matched ){
+	      	if( pmatched ){
+				if( DEBUG ) std:: cout << " ----- Photon Match !!!! " << std::endl;
 				iph++;
 				nMatched++;
 	         	const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
@@ -1875,41 +1883,49 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				sum_nrh += nrh;
 				sum_sce += sce;
 				sum_phe += photon.energy();
-	         	matched = false;
 
                 jetPhSCGroup.push_back(*scptr);
 				phEnergy.push_back(photon.energy());
 				phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), photon.eta(), photon.phi())));
+
+                pmatched = false;
 	    	}//<<>>if( matched )
 
 		}//<<>>for( const auto photon : *gedPhotons_ ) 
+	} // ------------ gedPhotons lock ------------------------------------------------------------------
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 
-  for( const auto photon : *ootPhotons_ ){
+    if( true ) { //---------------------------------- ootPhotons lock ------------------------------------------------
+        int iootph(0);
+        auto ootmatched = false;
+		if( DEBUG ) std::cout << "Proccesssing OOTPhoton :" << std::endl;
+  		for( const auto ootphoton : *ootPhotons_ ){
 
-            //std::cout << "Proccesssing New Photon :" << std::endl;
-            edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
-            for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
-                //std::cout << "Processing asc pfcand # " << ipcp << std::endl;
-                edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
-                const auto *ascpacked_cand = passociatedPtr.get();
-                for( const auto kid : jet.daughterPtrVector() ){
-                    //std::cout << "Proccesssing New jetKid :" << std::endl;
-                    auto kidcand = pfcands_->ptrAt(kid.key());
-                    const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
-                    if( ascpacked_cand == packed_cand ){  matched = true; }//<<>>if( ascpacked_cand == packed_cand )
-                }//<<>>for( const auto kid : jet.daughterPtrVector() )
-            }//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
+            if( DEBUG ) std::cout << " --- Proccesssing : " << ootphoton  << std::endl;
+            //edm::RefVector<pat::PackedCandidateCollection> ootpassociated =  ootphoton.associatedPackedPFCandidates();
+            //for( uInt ipcp = 0; ipcp < ootpassociated.size(); ipcp++ ) {
+            //    //std::cout << "Processing asc pfcand # " << ipcp << std::endl;
+            //    edm::Ptr<pat::PackedCandidate> ootpassociatedPtr = edm::refToPtr( ootpassociated[ipcp] );
+            //    const auto *ootascpacked_cand = ootpassociatedPtr.get();
+            //    for( const auto kid : jet.daughterPtrVector() ){
+            //        //std::cout << "Proccesssing New jetKid :" << std::endl;
+            //        auto kidcand = pfcands_->ptrAt(kid.key());
+            //        const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+            //        if( ootascpacked_cand == packed_cand ){  ootmatched = true; }//<<>>if( ascpacked_cand == packed_cand )
+            //    }//<<>>for( const auto kid : jet.daughterPtrVector() )
+            //}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
+			if( std::sqrt( reco::deltaR2( jet.eta(), jet.phi(), ootphoton.eta(), ootphoton.phi() ) ) < deltaRminJet ){ ootmatched = true; }
 
-            if( matched ){
-                iph++;
+            if( ootmatched ){
+				if( DEBUG ) std:: cout << " ----- OOT Photon Match !!!! " << std::endl;
+                iootph++;
                 nMatched++;
-                const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
-                const auto scptr = phosc.get();
+                const auto &ootphosc = ootphoton.superCluster().isNonnull() ? ootphoton.superCluster() : ootphoton.parentSuperCluster();
+                const auto scptr = ootphosc.get();
                 jetSCGroup.push_back(*scptr);
-                const auto clusters = phosc->clusters();
-                const auto &hitsAndFractions = phosc->hitsAndFractions();
+                const auto clusters = ootphosc->clusters();
+                const auto &hitsAndFractions = ootphosc->hitsAndFractions();
                 const auto nrh = hitsAndFractions.size();
                 //std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
                 //std::cout << " -- SC has nRecHits: " << nrh << std::endl;
@@ -1922,24 +1938,30 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                         //std::cout << " --- Adding cluster " << std::endl;
                     }//<<>>for( const auto &clustptr : clusters ){
                 }//<<>>if( nrh != 0 ){
-                const auto sce = phosc->energy();
+                const auto sce = ootphosc->energy();
                 sum_nrh += nrh;
                 sum_sce += sce;
-                sum_phe += photon.energy();
-                matched = false;
+                sum_phe += ootphoton.energy();
 
                 jetPhSCGroup.push_back(*scptr);
-                phEnergy.push_back(photon.energy());
-                phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), photon.eta(), photon.phi())));
+                phEnergy.push_back(ootphoton.energy());
+                phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), ootphoton.eta(), ootphoton.phi())));
+
+                ootmatched = false;
             }//<<>>if( matched )
 
         }//<<>>for( const auto photon : *ootPhotons_ ) 
 
 	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
-		
-		int iel(0);
-		matched = false;
+    } // ------------ ootPhotons lock ------------------------------------------------------------------		
+
+    if( true ) { //---------------------------------- electrons lock ------------------------------------------------
+        int iel(0);
+        bool ematched = false;
+		if( DEBUG ) std::cout << "Proccesssing Electron :" << std::endl;
 	   	for( const auto electron : *electrons_ ){
+
+			if( DEBUG ) std::cout << " --- Proccesssing : " << electron  << std::endl;
 	    	edm::RefVector<pat::PackedCandidateCollection> eassociated = electron.associatedPackedPFCandidates();
 	      	for( uInt ipce = 0; ipce < eassociated.size(); ipce++ ) {
 	         	edm::Ptr<pat::PackedCandidate> eassociatedPtr = edm::refToPtr( eassociated[ipce] );
@@ -1955,7 +1977,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	                	//std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
 	                    //std::cout << ijet << "/" << nJets  << " kid: " << ijk; // << std::endl;
 	                    //std::cout << " pce: " << pce << std::endl;
-	                    matched = true;
+	                    ematched = true;
 									
 	                }//<<>>if( ascpacked_cand == packed_cand )
 	               	//ijk++;
@@ -1965,7 +1987,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
       	//<<<<for( const auto electron : *electrons_ ){
 
-	      	if( matched ){  //  modified to remove electrons from SC group instead of add them to it -  leaves BC groups unchanged
+	      	if( ematched ){  //  makes electron SC group and adds to SC Group if not already present -  leaves BC groups unchanged
+				if( DEBUG ) std:: cout << " ----- Electron Match !!!! " << std::endl;
 				bool found(false);
 	         	const auto &elesc = electron.superCluster().isNonnull() ? electron.superCluster() : electron.parentSuperCluster();
 	         	const auto scptr = elesc.get();
@@ -2000,7 +2023,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 					const auto clusters = elesc->clusters();
 	            	const auto &hitsAndFractions = elesc->hitsAndFractions();
 					const auto nrh = hitsAndFractions.size();
-					if( nrh < 5 ) continue;
+					if( nrh < minRHcnt ) continue;
  					//const auto nBClusts = elesc->clustersSize();
 	            	//std::cout << " -- SC match found with nBClusts: " << nBClusts << " nClusters: "<< clusters.size() << std::endl;
 	            	//std::cout << " -- SC has nRecHits: " << nrh << std::endl;
@@ -2019,9 +2042,10 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	         		sum_phe += electron.energy();
 
 				}//<<>>if( not found )
-	         	matched = false;
+	         	ematched = false;
 	    	}//<<>>if( matched )
 	   	}//<<>>for( const auto electron : *electrons_ )
+    } // ------------ electrons lock ------------------------------------------------------------------
         // SC group creation finished <<<<< -----------------------------------------------
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2042,7 +2066,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		if( jetScRhGroup.size() >= minRHcnt && scemf > minEmf ){
 
 			// Get and fill SC times ----------------------------------------------
-			//std::cout << " --- get jetSCtofTimes " << std::endl;
+			if( DEBUG ) std::cout << " --- get jetSCtofTimes for " << jetScRhGroup.size() << " rechits " << std::endl;
 	 		auto jetSCtofTimes = getLeadTofRhTime( jetScRhGroup, vtxX, vtxY, vtxZ );
 	 		auto jetSCTimeStats = getTimeDistStats( jetSCtofTimes, jetScRhGroup );
 
@@ -2382,10 +2406,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         //auto jetRecoTime = jetDrTime;
         //auto hasGoodTime = jetRecoTime > -28.0 && jetGenTime > -28.0;
         auto hasGoodTime = jetGenTime > -27.0;
-        auto etaCut = jetGenEta < 1.5 && jet.eta() < 1.5;
+        auto etaCut = std::abs(jetGenEta) < 1.5 && std::abs(jet.eta()) < 1.5;
+		auto genEnergyCut = jetGenEnergy > 50.0;
     	//auto isDelayed = std::abs( jetRecoTime ) > 1.0;
-		//hist2d[103]->Fill( jetSCTime, jetDrTime );
-        if( hasGoodTime && etaCut ){
+        if( hasGoodTime && etaCut && genEnergyCut ){
+
 			if( jetRecoTime < - 27.9 ) jetRecoTime = -15.0;
             if( jetGenTime < - 27.9 ) jetGenTime = -15.0;
             auto jetERatio = jet.energy()/jetGenEnergy;
@@ -2397,15 +2422,18 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			//if( jetRecoTime == -15.0 && jetGenTime == -15.0 ) difTime = -10.0;
             if( jetDrTime == -15.0 && jetGenTime == -15.0 ) difDrTime = -10.0;
             hist2d[98]->Fill( jet.energy(), jetGenEnergy );
-            hist2d[99]->Fill( jetERatio, jetRecoTime );
+            hist2d[99]->Fill( jetERatio, jetGenTime );
             //hist2d[100]->Fill( jetGenEMFrac, jetSCTimeStats[0] );
             hist2d[100]->Fill( jetemfrac, jetRecoTime );
             //hist2d[101]->Fill( jetERatio, difTimeRatio );
             //hist2d[101]->Fill( jetERatio, difDrTime );
-            hist2d[102]->Fill( jetGenTime, jetRecoTime );
             hist2d[101]->Fill( jetERatio, difScTime );
             hist2d[103]->Fill( jetERatio, difDrTime );
             hist2d[104]->Fill( jetDrTime, jetSCTime );
+            hist2d[102]->Fill( jetGenTime, jetDrTime );
+            hist2d[105]->Fill( jetGenTime, jetSCTime );
+            hist2d[106]->Fill( jetGenTime, jetGenEnergy );
+
         }//<<>>if( jetSCTimeStats[0] > -28.0 && jetGenTime > -28.0 )
 
 		if( DEBUG ) std::cout << "Next Jet .......................... " << std::endl; 	
@@ -2840,13 +2868,15 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits", chidiv, chimin, chimax, 60, 0, 60);
 
     hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy", 100, 0, 1000, 100, 0, 1000 );
-    hist2d[99] = fs->make<TH2D>("jetEGenERatiovTime", "Jet E/GenE v Time", 80, 0, 2, 40, -15, 25 );
+    hist2d[99] = fs->make<TH2D>("jetEGenERatiovGenTime", "Jet E/GenE v GenTime", 80, 0, 2, 40, -15, 25 );
     hist2d[100] = fs->make<TH2D>("jetEMFracvTime", "Jet EMFrac v Time", 80, 0, 2, 40, -15, 25 );
     //hist2d[101] = fs->make<TH2D>("jetGenRatiovTimeRatio", "Jet E/GenE v Jet/genTime", 30, 0, 1.5, 30, 0, 1.5 );
-    hist2d[101] = fs->make<TH2D>("jetEGenERatiovTimeDiff", "Jet E/GenE v JetDR/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
-    hist2d[102] = fs->make<TH2D>("jetGenTimevJetTime", "GenTime v JetTime", 70, -15, 25, 70, -15, 25 );
-    hist2d[103] = fs->make<TH2D>("jetEGenERatiovTimeDiff", "Jet E/GenE v JetSC/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
-    hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime", 60, -15, 15, 60, -15, 15 );
+    hist2d[101] = fs->make<TH2D>("jetEGenERatiovDRTimeDiff", "Jet E/GenE v JetDR/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
+    hist2d[102] = fs->make<TH2D>("jetGenTimevDrJetTime", "GenTime v DrJetTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[103] = fs->make<TH2D>("jetEGenERatiovSCTimeDiff", "Jet E/GenE v JetSC/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
+    hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[105] = fs->make<TH2D>("jetGenTimevSCJetTime", "GenTime v SCJetTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[106] = fs->make<TH2D>("jetGenTimevGenEnergy", "GenTime v GenEnergy", 280, -15, 25, 100, 0, 1000 );
 
    //------ ECAL Map Hists --------------------------------------------------------------------------
 

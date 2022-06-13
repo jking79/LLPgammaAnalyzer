@@ -114,7 +114,11 @@ def docrab( dataset ):
             #trial          = "llpga_v10" # added dr & sc times - use dr w/ gen filter
             #trial          = "llpga_v11" # added dr & sc times - use gentime w/ gen filter jet pt -> 100  jet ID -> 2
             #trial          = "llpga_v12" # added ootPhoton - cut gentime > 25.0   
-            trial          = "llpga_v13" # as 12 + eta cut on genplots ( + difftime plots )
+            #trial          = "llpga_v14" # as 12 + eta & genenergy cuts on genplots ( + difftime plots )
+            #trial          = "llpga_v15" # as 14 + does not contain LLP or B
+            #trial          = "llpga_v16" # as 14 + no LLP or B cut
+            #trial          = "llpga_v17" # as 14 w/ expanded plots + LLP or B cut
+            trial          = "llpga_v18" # as 14 w/ expanded plots + LLP or B cut + ootphoton dr match
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"
