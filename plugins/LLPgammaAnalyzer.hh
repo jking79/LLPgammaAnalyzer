@@ -649,6 +649,13 @@ const float getAngle ( const float x, const float y){
 
 }//<<>> const float getAngle (CFlt x, CFlt y) with atan2
 
+const float getATan2 ( const float x, const float y){
+
+    if( x == 0 && y == 0) return 6.39;
+    else return std::atan2(y,x);
+
+}//<<>> const float getAngle (CFlt x, CFlt y) with atan2
+
 string bigKidChase( std::vector<reco::CandidatePtr> kids, float vx ){
 
 	std::string result("");

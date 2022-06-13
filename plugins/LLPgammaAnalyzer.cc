@@ -1028,12 +1028,16 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 
 	}//<<>>for( uInt it(0); it < wts.size(); it++ )
 
+	auto oreignsin = eignsin;
+    auto oreigncos = eigncos;
 	if( ltsum/totRes < 0 ){ 
+
 		eigens[0] *= -1; 
 		eigens[1] *= -1;
     	rotangle = getAngle(eigens[0], eigens[1]);
 		eignsin = std::sin(rotangle);
 		eigncos = std::cos(rotangle);
+
 	}//if( ebp && ebn && ltsum < 0 )
 
 	//if( not ebn && ebp ){
@@ -1063,10 +1067,12 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
         float lphi = dPhi(phis[it],mphi);
         float ltime = ebtimes[it]-mtime;
         auto xcor = eigncos*(leta) - eignsin*(lphi);
+        //auto sxcor = oreigncos*(leta*2.2) - oreignsin*(lphi*2.2);
         auto sxcor = eigncos*(leta*2.2) - eignsin*(lphi*2.2);
         auto ycor = eignsin*(leta) + eigncos*(lphi);
         //if( not ebp ) xcor *= -1;
-        //std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
+        if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
+        if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << sxcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         //if( abs(wts[it]) < 8 )
         auto fill = ltime*resolutions[it];
         //if( nwtcut ){
@@ -1114,15 +1120,17 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 	float chi2(0); for( uInt it(0); it < nWts; it++ ){ chi2 += sq2(xs[it]-slope)/varsl;}
     //auto chi2 = schi2/totRes;
 	//auto chi2pf = chi2/(nWts-1);
-    auto chi2pf = TMath::Prob(chi2, nWts);
+    auto chi2pf = 1 - TMath::Prob(chi2, nWts);
 	eigens.push_back(slope);//3
     eigens.push_back(chi2pf);//4
 
-	auto slope_cut = ( eigens[2] < 0.9 ) && ( chi2pf > 0.05 );
-	hist1d[91]->Fill(slope);
-    hist1d[103]->Fill(1/slope);
+	auto slope_cut = ( eigens[2] < 0.8 ) && ( eigens[2] > 0.6 )  && ( chi2pf > 0.95 );
+	//hist1d[91]->Fill(slope);
+    //hist1d[103]->Fill(1/slope);
     hist1d[92]->Fill(chi2pf);
     if( slope_cut ){
+    	hist1d[91]->Fill(slope);
+   	 	hist1d[103]->Fill(1/slope);
     	hist2d[91]->Fill(slope,chi2pf);
     	hist2d[92]->Fill(slope,eigens[2]);
     	hist2d[93]->Fill(slope,rotangle);
@@ -2042,7 +2050,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			//std::cout << " --- get jetSC eigen vectors " << std::endl;
             auto jetSCEigen3D = getRhGrpEigen_ieipt( jetSCtofTimes, jetScRhGroup );
     	    auto jetSCEigen2D = getRhGrpEigen_sph( jetSCtofTimes, jetScRhGroup );
-            auto impangle = getAngle( hypo( jet.px(), jet.py()), jet.pz());
+            auto impangle = getATan2( hypo( jet.px(), jet.py()), jet.pz());
 			if( jetSCEigen3D[0] != -999 ){
 				auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
             	hist1d[63]->Fill(epanlge);//etaphi angle
@@ -2052,16 +2060,18 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             	hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
             	hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
 				hist1d[86]->Fill(jetSCEigen3D[3]);
-                hist2d[96]->Fill( impangle, jetSCEigen3D[4]);
+                if( jetSCEigen3D[5] > 0.95 )hist2d[96]->Fill( impangle, jetSCEigen3D[4] );
 			}//<<>>if( jetSCEigen3D[0] != -999 )
 			if( jetSCEigen2D[0] != -999 ){
 				auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
 		    	hist1d[65]->Fill(sphanlge);//eliptical angle
             	hist2d[81]->Fill( jetSCEigen2D[0], jetSCEigen2D[1] );
             	hist1d[81]->Fill(jetSCEigen2D[2]);
-				hist2d[88]->Fill(sphanlge, jetSCEigen2D[2]);
-				hist2d[89]->Fill( jet.eta(), jetSCEigen2D[3]);
-                hist2d[90]->Fill( impangle, jetSCEigen2D[3]);
+				hist2d[88]->Fill( sphanlge, jetSCEigen2D[2] );
+				if( jetSCEigen2D[4] > 0.95 ){ 
+					hist2d[89]->Fill( jet.eta(), jetSCEigen2D[3] );
+                	hist2d[90]->Fill( impangle, jetSCEigen2D[3] );
+				}//<<>>if( jetSCEigen2D[4] < 0.1 )
 				//hist2d[91]->Fill( jetSCEigen2D[3], jetSCEigen2D[4]);
             }//<<>>if( jetSCEigen2D[0] != -999 )
 			}//if( true/false ) on/off switch for jetSC or PhotonSC
@@ -2374,7 +2384,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         auto hasGoodTime = jetGenTime > -27.0;
         auto etaCut = jetGenEta < 1.5 && jet.eta() < 1.5;
     	//auto isDelayed = std::abs( jetRecoTime ) > 1.0;
-		hist2d[103]->Fill( jetSCTime, jetDrTime );
+		//hist2d[103]->Fill( jetSCTime, jetDrTime );
         if( hasGoodTime && etaCut ){
 			if( jetRecoTime < - 27.9 ) jetRecoTime = -15.0;
             if( jetGenTime < - 27.9 ) jetGenTime = -15.0;
@@ -2801,11 +2811,13 @@ void LLPgammaAnalyzer::beginJob(){
     auto clsphtrn = 4;
     auto cwdiv = 80;
     auto cwtrn = 40;
-	auto slmax = 7.9;
-	auto slmin = -0.1;
-	auto sldiv = 160;
-	auto chimax = 1.5;
-	auto chidiv = 150;
+	auto slmax = 1.20;
+	auto slmin = -1.20;
+	auto sldiv = 240;
+    //auto sldiv = 320;
+	auto chimax = 1.01;
+    auto chimin = 0.91;
+	auto chidiv = 400;
 
     hist2d[86] = fs->make<TH2D>("cluster_ptwtmap", "Cluster Phi(x)Time(y) Wt Map Sph", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
     hist2d[87] = fs->make<TH2D>("cluster_etwtmap", "Cluster Eta(x)Time(y) Wt Map Sph", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
@@ -2817,15 +2829,15 @@ void LLPgammaAnalyzer::beginJob(){
     	hist1d[102] = fs->make<TH1D>("profileFitEtavChi3D", "Profile Fit Eta v Chi2Prob 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1 );
 
 
-    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope", 40, -2, 2, sldiv, slmin, slmax);
-    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope", 150, 0, 1.5, sldiv, slmin, slmax);
-    hist2d[91] = fs->make<TH2D>("clEtaTimeSlvChi", "Cluster EtaTime Slope v Chi2", sldiv, slmin, slmax, chidiv, 0, chimax);
-    hist2d[92] = fs->make<TH2D>("clEtaTimeSlvEVal", "Cluster EtaTime Slope v EigenValue", sldiv, slmin, slmax, 60, 0.45, 1.05);
+    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope", 120, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope", 30, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[91] = fs->make<TH2D>("clEtaTimeSlvChi", "Cluster EtaTime Slope v Chi2", sldiv, slmin, slmax, chidiv, chimin, chimax);
+    hist2d[92] = fs->make<TH2D>("clEtaTimeSlvEVal", "Cluster EtaTime Slope v EigenValue", sldiv, slmin, slmax, 180, 0.55, 1.0);
     hist2d[93] = fs->make<TH2D>("clEtaTimeSlvRotAng", "Cluster EtaTime Slope v Rotation Angle", sldiv, slmin, slmax, 660, -0.2, 6.4);
     hist2d[94] = fs->make<TH2D>("clEtaTimeSlvNumClRHs", "Cluster EtaTime Slope v nClRecHits", sldiv, slmin, slmax, 60, 0, 60);
-    hist2d[95] = fs->make<TH2D>("clEtaTimeChi2vEVal", "Cluster EtaTime Chi2 v EigenValue", chidiv, 0, chimax, 60, 0.45, 1.05);
+    hist2d[95] = fs->make<TH2D>("clEtaTimeChi2vEVal", "Cluster EtaTime Chi2 v EigenValue", chidiv, chimin, chimax, 60, 0.45, 1.05);
     hist2d[96] = fs->make<TH2D>("jetImpAnglevSlope3D", "Jet ImpactAngle v Slope 3D", 150, 0, 1.5, sldiv, slmin, slmax);
-    hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits", chidiv, 0, chimax, 60, 0, 60);
+    hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits", chidiv, chimin, chimax, 60, 0, 60);
 
     hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy", 100, 0, 1000, 100, 0, 1000 );
     hist2d[99] = fs->make<TH2D>("jetEGenERatiovTime", "Jet E/GenE v Time", 80, 0, 2, 40, -15, 25 );

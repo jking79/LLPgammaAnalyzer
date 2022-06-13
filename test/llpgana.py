@@ -46,7 +46,8 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t82M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + crystalball
 #outfilename = 'llpgana_t84L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D
 #outfilename = 'llpgana_t85M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D + slope cuts
-outfilename = 'llpgana_t88M_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D + slope cuts
+#outfilename = 'llpgana_t90L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 85 with slope cut at chiprob 0.8, slope not dirct corrted 
+outfilename = 'llpgana_t91L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 85 with slope cut at chiprob 0.95, slope is dirct corrted
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -154,9 +155,9 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))#VS
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#S
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#ML
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 
 # Set the global tag depending on the sample type
