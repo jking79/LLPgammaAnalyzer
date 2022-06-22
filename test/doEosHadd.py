@@ -19,7 +19,8 @@ def doCommand( command ):
 mspc = '/store/user/jaking/'
 eosll = 'eos root://cmseos.fnal.gov ls '
 command = eosll+mspc+'LLPGamma/'
-version = '_v16_'
+version = '_v30_'
+date = ''
 #command = 'ls'
 
 targdirs = []
@@ -28,13 +29,16 @@ subdirlist2 = []
 theFileList = ''
 dirls = bashout( command ).splitlines()
 #print( dirls )
-#print( '-------------------------------------------------')
+print('0000-------------------------------------------------')
 dirselect = 'HTo2LongLivedTo4b'
 for line in dirls:
 	#print( line )
 	if dirselect in line :
 		targdirs.append( line )
+		print( line )
 #print( targdirs )
+
+print('1111-------------------------------------------------')
 for mydir in targdirs:
 	command1 = command+mydir+'/'
 	subdir1 = bashout( command1 ).rstrip().splitlines()
@@ -42,13 +46,18 @@ for mydir in targdirs:
 	#print( mydir+'/'+subdir1+'/' )
 	for line in subdir1 : 
 		#print( line )
-		if version in line : subdirlist1.append( mydir+'/'+line+'/' )
-	#print( subdirlist1 )
-	for thesubdir in subdirlist1 :
-		command2 = command+thesubdir
-		subdir2 = bashout( command2 ).rstrip()
-		#print( thesubdir+subdir2+'/0000/' )
-		subdirlist2.append(thesubdir+subdir2+'/0000/')
+		if version in line : 
+			print( mydir+'/'+line+'/' )
+			subdirlist1.append( mydir+'/'+line+'/' )
+
+print('2222------------------------------------------------' )
+for thesubdir in subdirlist1 :
+	command2 = command+thesubdir
+	subdir2m = bashout( command2 ).rstrip().splitlines()
+	for subdir2 in subdir2m :
+		if date in subdir2 :
+			print( thesubdir+subdir2+'/0000/' )
+			subdirlist2.append(thesubdir+subdir2+'/0000/')
 		#for subdir2 in subdirlist2:
 		#	command3 = command+subdir2
 		#	files = bashout( command3 ).splitlines()
@@ -56,7 +65,8 @@ for mydir in targdirs:
 		#		#print( subdir2+thefile )
 		#		theFileList +=(subdir2+thefile)
 
-#print( theFileList )
+print('33333------------------------------------------------' )
+num = 0
 for subdir2 in subdirlist2:
 	filename = 'tmp_'+subdir2.split('/')[1]+'.root '
 	#print( filename )
@@ -66,7 +76,10 @@ for subdir2 in subdirlist2:
 	#haddcommand = "`xrdfs root://cmseos.fnal.gov ls -u "+mspc+"LLPGamma/"+subdir2+" | grep '\.root'`"
 	#haddcommand = "`xrdfs root://cmseos.fnal.gov ls -u "+mspc+"LLPGamma/"+subdir2+"`"
 	#haddcommand = "hadd "+filename+lists
-	print( haddcommand )
+	num = num + 1
+	preface = str(num)+": "
+	print( '---------------------------------------------------' )
+	print( preface+haddcommand )
 	doCommand( haddcommand )
 	print( '---------------------------------------------------' )
 

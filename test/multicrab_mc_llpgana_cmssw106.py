@@ -118,7 +118,17 @@ def docrab( dataset ):
             #trial          = "llpga_v15" # as 14 + does not contain LLP or B
             #trial          = "llpga_v16" # as 14 + no LLP or B cut
             #trial          = "llpga_v17" # as 14 w/ expanded plots + LLP or B cut
-            trial          = "llpga_v18" # as 14 w/ expanded plots + LLP or B cut + ootphoton dr match
+            #trial          = "llpga_v18" # as 14 w/ expanded plots + LLP or B cut + ootphoton dr match
+            #trial          = "llpga_v21" # as 18 + jet genJet dr match + sqrt(sq2(dif)/sq2(gen))
+            #trial          = "llpga_v23" # as 21 + modified genjet getTOFChain added nextBX flag and gentime var, using maxe for wieghts
+            #trial          = "llpga_v24" # as 23 + exclude flight legs with sum t > 25.0 ( nextBX = true ) in genTime/angle/ect calc
+            #trial          = "llpga_v25" # as 24 + step is llp logic, purity, and varince cuts
+            #trial          = "llpga_v26" # as 25 w/ var < 1.5 & purity > 0.75 on 2Ds + var vs purity plot  named 25/220617-XXXXXX
+            #trial          = "llpga_v27" # as 25 w/ var < 15 & purity > 0.88 on 2Ds + nKids
+            #trial          = "llpga_v28" # as 25 w/ var < 1 & purity > 0.88 on 2Ds + nKids
+            #trial          = "llpga_v29" # as 28 + difftime < 1.5
+            #trial          = "llpga_v30" # as 28 + difftime < 1.0
+            trial          = "llpga_v31" # as 28 + difftime < 0.8 + genPhaseSpaceCut
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"

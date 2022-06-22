@@ -883,8 +883,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
     auto chi2pf = TMath::Prob(chi2, nWts);
     eigens.push_back(slope);//4
     eigens.push_back(chi2pf);//5
-    hist1d[105]->Fill(slope);
-    hist1d[106]->Fill(chi2pf);
+    hist1d[114]->Fill(slope);
+    hist1d[115]->Fill(chi2pf);
     hist1d[104]->Fill(1/slope);
 
     return eigens;
@@ -1028,8 +1028,8 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 
 	}//<<>>for( uInt it(0); it < wts.size(); it++ )
 
-	auto oreignsin = eignsin;
-    auto oreigncos = eigncos;
+	//auto oreignsin = eignsin;
+    //auto oreigncos = eigncos;
 	if( ltsum/totRes < 0 ){ 
 
 		eigens[0] *= -1; 
@@ -1230,6 +1230,9 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
     vector<float> kidtime;
     vector<float> kide;
 	vector<float> impact;
+	bool llpcut(false);
+	float nextBX(0.0);
+	float llpkid(0.0);
     for( auto kid : kids ){
 
         bool done(false);
@@ -1259,6 +1262,7 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
                         stepe.push_back(mom->energy());
                     }//<<>>if( first )
 					steps++;
+					//if( llp || bquark ) llpstep.push_back(1.0); else llpstep.push_back(0.0);
                     orignvx.push_back(mom->vx());
                     orignvy.push_back(mom->vy());
                     orignvz.push_back(mom->vz());
@@ -1273,23 +1277,26 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
         }//<<>>while( not done )
         first = true;
 
-        kide.push_back(stepe[0]);
+        //kide.push_back(stepe[0]);
         if( DEBUG && false ) std::cout << " ---- jetGenTime Calc Steps : " << steps << std::endl;
 		bool stepcut( steps == 0 );
-		bool llpcut( llp && bquark );
+		//llpcut = llp || bquark;
 		if( DEBUG && false ) std::cout << " ---- jetGenTime Calc llpcut : " << llpcut << std::endl;
-        auto gencut = stepcut && not llpcut;
+        //auto gencut = stepcut && not llpcut;
 		//auto gencut = stepcut || not llpcut;
-        if( gencut ){ 
-			kidtime.push_back(999); 
-			impact.push_back(999);
-			//std::cout << "Steps are Zero" << std::endl; 
-		} else {
+        //if( stepcut ){ 
+		//	kidtime.push_back(999); 
+		//	impact.push_back(999);
+		//	//std::cout << "Steps are Zero" << std::endl; 
+		//} else {
+		if( not stepcut ){
+			float maxe(0.0);
             float totaltime(0.0);
             auto destvx(cx);
             auto destvy(cy);
             auto destvz(cz);
             for( int it(0); it < steps; it++ ){
+				if( stepe[it] > maxe ) maxe = stepe[it];
                 auto beta = stepp[it]/stepe[it];
                 auto legtime = hypo( (destvx-orignvx[it]), (destvy-orignvy[it]), (destvz-orignvz[it]) )/(SOL*beta);
 				totaltime += legtime;
@@ -1305,34 +1312,42 @@ vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kid
 			auto iangle = getAngle((cz-orignvz[0]),r);	
 			//std::cout << "getAngle: " << iangle << " r: " << r << " z: " << cz-orignvz[0] << " x: " << cx-orignvx[0];
 			//std::cout << " y: " << cy-orignvy[0] << std::endl; 
-			impact.push_back(iangle);
-            kidtime.push_back(totaltime);
+			if( totaltime > 25.0 ) {
+				nextBX = 1.0;
+			} else {
+				impact.push_back(iangle);
+            	kidtime.push_back(totaltime);
+				kide.push_back(maxe);
+				llpcut = llpcut || llp || bquark;
+				if( llp || bquark ) llpkid++;
+			}//<<>>if( totaltime > 25.0 )
         }//<<>>if( steps == 0 )
 
     }//<<>>for( auto kid : kids )
 
-    double ste(0.0);
-	double se(0.0);
-    double sae(0.0);
-	int nKids = kidtime.size();
-	//std::cout << " ---- jetGenTime Calc : " << std::endl;
-    for( int it(0); it < nKids; it++ ){ 
-		if( kidtime[it] != 999 ){
-			ste += kidtime[it]*kide[it]; 
-			sae += impact[it]*kide[it];
-			se += kide[it]; 
-			//std::cout << " t: " << kidtime[it] << " e: " << kide[it] << " a: " << impact[it] << std::endl;
-		}//<<>>if( kidtime[it] != 999 )
-	}//<<>>for( int it(0); it < nKids; it++ )
-	//std::cout << " ste: " << ste << " se: " << se << " sae: " << sae << std::endl;
-	if( se > 0 ){
-    	result.push_back(ste/se);
-    	result.push_back(sae/se);
-	} else {
-		result.push_back(-30.0);
-        result.push_back(7.0);	
-	}//<<>>if( se > 0 )
-
+	auto mtime(-30.0);
+	auto mangle(7.0);
+	auto tvar(-2.0);
+	auto ktsize = kidtime.size();
+	//if( llpcut && ( ktsize > 0 ) ){
+    if( ktsize > 0 ){
+		if( ktsize > 1 ){
+			mtime = mean(kidtime,kide);
+			mangle = mean(impact,kide);
+			tvar = var(kidtime,mtime,kide);
+		} else {
+			mtime = kidtime[0];
+			mangle = impact[0];
+			tvar = -1.0;
+		}//<<>>if( kidtime.size() > 1 )
+	}//<<>>if( llpcut )
+	result.push_back(mtime);//0
+	result.push_back(mangle);//1
+	result.push_back(tvar);//2
+	result.push_back(nextBX);//3
+	if( llpcut ) result.push_back(1.0); else result.push_back(0.0);//4
+	result.push_back(llpkid/ktsize);//5
+    result.push_back(ktsize);//6
     return result;
 
 }//>>>>vector<float> LLPgammaAnalyzer::kidTOFChain( std::vector<reco::CandidatePtr> kids, float cx, float cy, float cz  )
@@ -1744,6 +1759,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         float jetGenEta(10.0);
         float jetGenEnergy(-1.0);
         float jetGenEMFrac(-1.0);
+        float jetGenDrMatch(-1.0);
+		float jetGenTimeVar(-1.0);
+        float jetGenTimeLLP(0.0);
+        float jetGenLLPPurity(-1.0);
+        float jetGenNextBX(-1.0);
+        float jetGenNKids(-1.0);
+
         if( hasGenInfo ){
             if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
             auto jetGenParton = jet.genParton();
@@ -1781,20 +1803,27 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
             	auto genTime = kidTOFChain( kids, cx, cy, cz );
 				jetGenEta = jetGenJet->eta();
-				if( genTime[0] > 24.0 ) jetGenTime = -28.0;
+				if( genTime[0] > 25.0 ) jetGenTime = -28.0;
 				else if( genTime[0] > -25.0 ) jetGenTime = genTime[0]-tofcor;
-				else jetGenTime = genTime[0];
+				else jetGenTime = -27.0;
 				jetGenImpactAngle = genTime[1];
 				jetGenPt = jetGenJet->pt();
                 jetGenEnergy = jetGenJet->energy();
 				jetGenEMFrac = (jetGenJet->chargedEmEnergy() + jetGenJet->neutralEmEnergy())/jetGenEnergy;
+				jetGenDrMatch = std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), jetGenJet->eta(), jetGenJet->phi()));
+				jetGenTimeVar = genTime[2];
+                jetGenNextBX = genTime[3];
+                jetGenTimeLLP = genTime[4];
+                jetGenLLPPurity = genTime[5];
+				jetGenNKids = genTime[6];
 				if( DEBUG ){ 
 					std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz; 
 					std::cout << " Angle: " << jetGenImpactAngle << std::endl;
 					std::cout << " -- Energy : " << jetGenEnergy << " Pt : " << jetGenPt << " EMfrac : " << jetGenEMFrac << std::endl;
 				}//<<>>if( DEBUG )
-				hist1d[93]->Fill(jetGenTime);
-                hist1d[90]->Fill(jetGenImpactAngle);
+                hist2d[109]->Fill(genTime[0],tofcor);
+                hist1d[110]->Fill(genTime[0]);
+                hist1d[111]->Fill(tofcor);
 			}//<<>>if( jetGenJet )
 			else { if( DEBUG ) std::cout << " - jetGenJet GenTime : jetGenJet == 0 " << std::endl; jetGenTime = -50.0; }
 			}//<<>>if( rhCount >= minRHcnt )
@@ -2401,38 +2430,57 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 			
 		//****************************	photon/electron to kid pfcand -> SC matcher ********************************
 
-        //auto jetRecoTime = jetGenTime;
-        auto jetRecoTime = jetSCTime;
-        //auto jetRecoTime = jetDrTime;
-        //auto hasGoodTime = jetRecoTime > -28.0 && jetGenTime > -28.0;
+        auto jetERatio = jet.energy()/jetGenEnergy;
+    	auto difSCTime = std::abs(jetGenTime-jetSCTime);
+        auto difDrTime = std::abs(jetGenTime-jetDrTime);
+        if( jetSCTime < -27.9 ) jetSCTime = -15.0;
+        if( jetDrTime < -27.9 ) jetDrTime = -15.0;
+        if( jetSCTime == -15.0 ) difSCTime = -1.0;
+        if( jetDrTime == -15.0 ) difDrTime = -1.0;
         auto hasGoodTime = jetGenTime > -27.0;
         auto etaCut = std::abs(jetGenEta) < 1.5 && std::abs(jet.eta()) < 1.5;
-		auto genEnergyCut = jetGenEnergy > 50.0;
-    	//auto isDelayed = std::abs( jetRecoTime ) > 1.0;
-        if( hasGoodTime && etaCut && genEnergyCut ){
+        auto genEnergyCut = jetGenEnergy > 100.0;
+        auto genVarCut = jetGenLLPPurity > 0.88 && jetGenTimeVar < 1;
+        auto hasGoodGenTime = difSCTime < 0.8;
+		//auto genSpaceCut = true;// no cut
+        auto genSpaceCut = jetGenTime > (9-4*jetERatio);
 
-			if( jetRecoTime < - 27.9 ) jetRecoTime = -15.0;
-            if( jetGenTime < - 27.9 ) jetGenTime = -15.0;
-            auto jetERatio = jet.energy()/jetGenEnergy;
-            //auto jetERatio = jetGenEnergy/jet.energy();
-            //auto difTimeRatio = jetSCTimeStats[0]/jetGenTime; 
-            //auto difTimeRatio = jetGenTime/jetSCTimeStats[0];
-            auto difScTime = jetSCTime - jetGenTime;
-            auto difDrTime = jetDrTime - jetGenTime;
-			//if( jetRecoTime == -15.0 && jetGenTime == -15.0 ) difTime = -10.0;
-            if( jetDrTime == -15.0 && jetGenTime == -15.0 ) difDrTime = -10.0;
+		if( genSpaceCut ){
+
+            hist1d[112]->Fill(jetGenTimeLLP);
+            hist1d[113]->Fill(jetGenLLPPurity);
+            hist2d[114]->Fill(jetGenLLPPurity,jetGenTimeVar);
+            hist1d[116]->Fill(jetGenNKids);
+            hist2d[115]->Fill(jetGenTimeVar,jetGenNKids);
+            hist2d[116]->Fill(jetGenLLPPurity,jetGenNKids);
+            hist1d[93]->Fill(jetGenTime);
+            hist1d[90]->Fill(jetGenImpactAngle);
+            hist1d[105]->Fill(jetGenDrMatch);
+            hist1d[108]->Fill(jetGenTimeVar);
+            hist1d[109]->Fill(jetGenNextBX);
+            hist1d[106]->Fill( difSCTime );
+            hist1d[107]->Fill( difDrTime );
+            hist2d[101]->Fill( jetERatio, jetGenTime );
+
+		}//<<>>if( genSpaceCut )
+
+	    if( hasGoodTime && etaCut && genEnergyCut && genVarCut && hasGoodGenTime ){
+
             hist2d[98]->Fill( jet.energy(), jetGenEnergy );
             hist2d[99]->Fill( jetERatio, jetGenTime );
-            //hist2d[100]->Fill( jetGenEMFrac, jetSCTimeStats[0] );
-            hist2d[100]->Fill( jetemfrac, jetRecoTime );
-            //hist2d[101]->Fill( jetERatio, difTimeRatio );
-            //hist2d[101]->Fill( jetERatio, difDrTime );
-            hist2d[101]->Fill( jetERatio, difScTime );
-            hist2d[103]->Fill( jetERatio, difDrTime );
+            hist2d[110]->Fill( jetERatio, jetSCTime );
+            hist2d[111]->Fill( jetERatio, jetDrTime );
+            hist2d[100]->Fill( jetemfrac, jetSCTime );
+            hist2d[101]->Fill( jetERatio, jetGenTime );
+            hist2d[103]->Fill( jetERatio, difSCTime );
             hist2d[104]->Fill( jetDrTime, jetSCTime );
             hist2d[102]->Fill( jetGenTime, jetDrTime );
             hist2d[105]->Fill( jetGenTime, jetSCTime );
             hist2d[106]->Fill( jetGenTime, jetGenEnergy );
+            hist2d[107]->Fill( jetGenDrMatch, difSCTime );
+            hist2d[108]->Fill( jetGenDrMatch, difDrTime );
+            hist2d[112]->Fill( jetGenTimeVar, difSCTime );
+            hist2d[113]->Fill( jetGenLLPPurity, difSCTime );
 
         }//<<>>if( jetSCTimeStats[0] > -28.0 && jetGenTime > -28.0 )
 
@@ -2715,11 +2763,25 @@ void LLPgammaAnalyzer::beginJob(){
 	//101 used below
 	//102 used blow
 
-    hist1d[105] = fs->make<TH1D>("clETSlope3D", "Cluster EtaTimeSlope 3D", 2500, -0.01, 24.99);
-    hist1d[106] = fs->make<TH1D>("clETSlopeChi3D", "Cluster EtaTimeSlope Chi2 3D", 100, 0, 1);	
+    hist1d[114] = fs->make<TH1D>("clETSlope3D", "Cluster EtaTimeSlope 3D", 2500, -0.01, 24.99);
+    hist1d[115] = fs->make<TH1D>("clETSlopeChi3D", "Cluster EtaTimeSlope Chi2 3D", 100, 0, 1);	
 	
     hist1d[103] = fs->make<TH1D>("clEtaTimeSlopeInv", "Cluster Eta Time SlopeInv", 350, -0.1, 34.9);
     hist1d[104] = fs->make<TH1D>("clEtaTimeSlopeInv3D", "Cluster Eta Time SlopeInv 3D", 350, -0.1, 34.9);
+
+    hist1d[105] = fs->make<TH1D>("genJetDrMatchJet", "genJetDrMatchJet", 320, 0, 3.2);
+    hist1d[106] = fs->make<TH1D>("genJetSCTimeDiff", "genJetSCTimeDiff", 300, 0, 30);
+    hist1d[107] = fs->make<TH1D>("genJetDrTimeDiff", "genJetSCTimeDiff", 300, 0, 30);
+
+    hist1d[108] = fs->make<TH1D>("jetGenTimeVar", "jetGenTimeVar", 408, -2, 100);
+    hist1d[109] = fs->make<TH1D>("jetGenTimeNextBX", "jetGenTimeNextBX", 3, -1, 2);
+    hist1d[110] = fs->make<TH1D>("jetGenTimeNoTOF", "jetGenTimeNoTOF", 300, 0, 30);
+    hist1d[111] = fs->make<TH1D>("jetGenTOF", "jetGenTOF", 300, 0, 30);
+    hist1d[112] = fs->make<TH1D>("jetGenTimeIsLLP", "jetGenTimeIsLLP", 3, -1, 2);
+    hist1d[113] = fs->make<TH1D>("jetGenTimeLLPPurity", "jetGenTimeLLPPurity", 100, 0, 1);
+	//hist1d[114] used above
+	//hist1d[115] usded above
+	hist1d[116] = fs->make<TH1D>("jetGenNKids", "jetGenNKids", 100, 0, 100);
 
 	//------ 2D Hists --------------------------------------------------------------------------
 
@@ -2847,8 +2909,8 @@ void LLPgammaAnalyzer::beginJob(){
     auto chimin = 0.91;
 	auto chidiv = 400;
 
-    hist2d[86] = fs->make<TH2D>("cluster_ptwtmap", "Cluster Phi(x)Time(y) Wt Map Sph", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
-    hist2d[87] = fs->make<TH2D>("cluster_etwtmap", "Cluster Eta(x)Time(y) Wt Map Sph", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
+    hist2d[86] = fs->make<TH2D>("cluster_ptwtmap", "Cluster Phi(x)Time(y) Wt Map Sph;Phi;Time", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
+    hist2d[87] = fs->make<TH2D>("cluster_etwtmap", "Cluster Eta(x)Time(y) Wt Map Sph;Eta;Time", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
 
 	// transposed from 1d hist above
 		hist1d[87] = fs->make<TH1D>("cluster_etprofile", "Cluster Eta Time Profile Sph", cwdiv, -1*cwtrn, cwtrn);
@@ -2857,26 +2919,35 @@ void LLPgammaAnalyzer::beginJob(){
     	hist1d[102] = fs->make<TH1D>("profileFitEtavChi3D", "Profile Fit Eta v Chi2Prob 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1 );
 
 
-    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope", 120, -1.5, 1.5, sldiv, slmin, slmax);
-    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope", 30, -1.5, 1.5, sldiv, slmin, slmax);
-    hist2d[91] = fs->make<TH2D>("clEtaTimeSlvChi", "Cluster EtaTime Slope v Chi2", sldiv, slmin, slmax, chidiv, chimin, chimax);
-    hist2d[92] = fs->make<TH2D>("clEtaTimeSlvEVal", "Cluster EtaTime Slope v EigenValue", sldiv, slmin, slmax, 180, 0.55, 1.0);
-    hist2d[93] = fs->make<TH2D>("clEtaTimeSlvRotAng", "Cluster EtaTime Slope v Rotation Angle", sldiv, slmin, slmax, 660, -0.2, 6.4);
-    hist2d[94] = fs->make<TH2D>("clEtaTimeSlvNumClRHs", "Cluster EtaTime Slope v nClRecHits", sldiv, slmin, slmax, 60, 0, 60);
-    hist2d[95] = fs->make<TH2D>("clEtaTimeChi2vEVal", "Cluster EtaTime Chi2 v EigenValue", chidiv, chimin, chimax, 60, 0.45, 1.05);
-    hist2d[96] = fs->make<TH2D>("jetImpAnglevSlope3D", "Jet ImpactAngle v Slope 3D", 150, 0, 1.5, sldiv, slmin, slmax);
-    hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits", chidiv, chimin, chimax, 60, 0, 60);
+    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope;Eta;Slope", 120, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope;ImpactAngle;Slope", 30, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[91] = fs->make<TH2D>("clEtaTimeSlvChi", "Cluster EtaTime Slope v Chi2;Slope;Chi2", sldiv, slmin, slmax, chidiv, chimin, chimax);
+    hist2d[92] = fs->make<TH2D>("clEtaTimeSlvEVal", "Cluster EtaTime Slope v EigenValue;Slope;EigenValue", sldiv, slmin, slmax, 180, 0.55, 1.0);
+    hist2d[93] = fs->make<TH2D>("clEtaTimeSlvRotAng", "Cluster EtaTime Slope v Rotation Angle;Slope;rotAngle", sldiv, slmin, slmax, 660, -0.2, 6.4);
+    hist2d[94] = fs->make<TH2D>("clEtaTimeSlvNumClRHs", "Cluster EtaTime Slope v nClRecHits;Slope;nClRecHits", sldiv, slmin, slmax, 60, 0, 60);
+    hist2d[95] = fs->make<TH2D>("clEtaTimeChi2vEVal", "Cluster EtaTime Chi2 v EigenValue;Chi2;EigenValue", chidiv, chimin, chimax, 60, 0.45, 1.05);
+    hist2d[96] = fs->make<TH2D>("jetImpAnglevSlope3D", "Jet ImpactAngle v Slope 3D;ImpactAngle;Slope", 150, 0, 1.5, sldiv, slmin, slmax);
+    hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits;Chi2;nClRecHits", chidiv, chimin, chimax, 60, 0, 60);
 
-    hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy", 100, 0, 1000, 100, 0, 1000 );
-    hist2d[99] = fs->make<TH2D>("jetEGenERatiovGenTime", "Jet E/GenE v GenTime", 80, 0, 2, 40, -15, 25 );
-    hist2d[100] = fs->make<TH2D>("jetEMFracvTime", "Jet EMFrac v Time", 80, 0, 2, 40, -15, 25 );
-    //hist2d[101] = fs->make<TH2D>("jetGenRatiovTimeRatio", "Jet E/GenE v Jet/genTime", 30, 0, 1.5, 30, 0, 1.5 );
-    hist2d[101] = fs->make<TH2D>("jetEGenERatiovDRTimeDiff", "Jet E/GenE v JetDR/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
-    hist2d[102] = fs->make<TH2D>("jetGenTimevDrJetTime", "GenTime v DrJetTime", 280, -15, 25, 280, -15, 25 );
-    hist2d[103] = fs->make<TH2D>("jetEGenERatiovSCTimeDiff", "Jet E/GenE v JetSC/Gen TimeDif", 80, 0, 2, 200, -25.0, 25.0 );
-    hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime", 280, -15, 25, 280, -15, 25 );
-    hist2d[105] = fs->make<TH2D>("jetGenTimevSCJetTime", "GenTime v SCJetTime", 280, -15, 25, 280, -15, 25 );
-    hist2d[106] = fs->make<TH2D>("jetGenTimevGenEnergy", "GenTime v GenEnergy", 280, -15, 25, 100, 0, 1000 );
+    hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy;JetEnergy;GenEnergy", 100, 0, 1000, 100, 0, 1000 );
+    hist2d[99] = fs->make<TH2D>("jetEGenERatiovGenTime", "Jet E/GenE v GenTime var > 0;E/GenE;GenTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[100] = fs->make<TH2D>("jetEMFracvSCTime", "Jet EMFrac v SCTime;EMFrac;SCTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[101] = fs->make<TH2D>("jetGenRatiovGenTimePre", "Jet E/GenE v GenTime Pre;E/GenE;GenTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[102] = fs->make<TH2D>("jetGenTimevDrJetTime", "GenTime v DrJetTime;GenTime;JetTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[103] = fs->make<TH2D>("jetEGenERatiovSCTimeDiff", "Jet E/GenE v JetSC GenJet TimeDif;E/GenE;DRTimeDif", 80, 0, 2, 300, 0, 30.0 );
+    hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime;JetSCTime;JetDrTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[105] = fs->make<TH2D>("jetGenTimevSCJetTime", "GenTime v SCJetTime;GenTime;JetTime", 280, -15, 25, 280, -15, 25 );
+    hist2d[106] = fs->make<TH2D>("jetGenTimevGenEnergy", "GenTime v GenEnergy;GenTime;GenEnergy", 280, -15, 25, 100, 0, 1000 );
+    hist2d[107] = fs->make<TH2D>("jetGenjetDrvSCTimeDiff", "Jet GenJet Dr v SCJet GenJet TimeDif;jetGenDr;TimeDif", 200, 0, 0.5, 300, 0, 30.0 );
+    hist2d[108] = fs->make<TH2D>("jetGenjetDrvDRTimeDiff", "Jet GenJet Dr v DRJet GenJet TimeDif;jetGenDr;TimeDif", 200, 0, 0.5, 300, 0, 30.0 );
+    hist2d[109] = fs->make<TH2D>("jetGenTimevTOFcorr", "GenTime v TOFcorr;GenTime;TOFcorr", 250, 0, 25, 250, 0, 25 );
+    hist2d[110] = fs->make<TH2D>("jetEGenERatiovSCTime", "Jet E/GenE v SCTime;E/GenE;SCTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[111] = fs->make<TH2D>("jetEGenERatiovDRTime", "Jet E/GenE v DRTime;E/GenE;DRTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[112] = fs->make<TH2D>("jetGenVarvSCTimeDiff", "Jet GenJet Var v SCJet GenJet TimeDif;Var;TimeDif", 270, -2, 25, 200, 0, 20.0 );
+    hist2d[113] = fs->make<TH2D>("jetGenPurityvSCTimeDiff", "Jet GenJet Puity v SCJet GenJet TimeDif;Puity;TimeDif", 100, 0, 1, 200, 0, 20.0 );
+    hist2d[114] = fs->make<TH2D>("jetGenPurityvGenJetVar", "Jet GenJet Puity v GenJet Var;Puity;Var", 100, 0, 1, 270, -2, 25 );
+    hist2d[115] = fs->make<TH2D>("jetGenVarvGenJetNKids", "Jet GenJet Var v GenJet nKids;Var;nKids", 270, -2, 25, 100, 0, 100 );
+    hist2d[116] = fs->make<TH2D>("jetGenPuityvGenJetNKids", "Jet GenJet Puity v GenJet nKids;Puity;nKids", 100, 0, 1, 100, 0, 100 );
 
    //------ ECAL Map Hists --------------------------------------------------------------------------
 
