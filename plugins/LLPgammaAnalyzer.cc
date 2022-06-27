@@ -2433,19 +2433,25 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         auto jetERatio = jet.energy()/jetGenEnergy;
     	auto difSCTime = std::abs(jetGenTime-jetSCTime);
         auto difDrTime = std::abs(jetGenTime-jetDrTime);
-        if( jetSCTime < -27.9 ) jetSCTime = -15.0;
-        if( jetDrTime < -27.9 ) jetDrTime = -15.0;
-        if( jetSCTime == -15.0 ) difSCTime = -1.0;
-        if( jetDrTime == -15.0 ) difDrTime = -1.0;
-        auto hasGoodTime = jetGenTime > -27.0;
+        //if( jetSCTime < -27.9 ) jetSCTime = -25.0;
+        //if( jetDrTime < -27.9 ) jetDrTime = -25.0;
+        if( jetSCTime < -25.0 || jetGenTime < -25.0 ) difSCTime = 100.0;
+        if( jetDrTime < -25.0 || jetGenTime < -25.0 ) difDrTime = 100.0;
+        auto hasGoodGenTime = jetGenTime > -25.0;
         auto etaCut = std::abs(jetGenEta) < 1.5 && std::abs(jet.eta()) < 1.5;
         auto genEnergyCut = jetGenEnergy > 100.0;
         auto genVarCut = jetGenLLPPurity > 0.88 && jetGenTimeVar < 1;
-        auto hasGoodGenTime = difSCTime < 0.8;
-		//auto genSpaceCut = true;// no cut
-        auto genSpaceCut = jetGenTime > (9-4*jetERatio);
+        auto hasGoodGenSCMatch = difSCTime < 0.8;
+        //auto hasGoodGenSCMatch = difSCTime < 20.0;
+		auto genNoCut = true;// no cut
+        //auto genCutTime = 9.0 - 4.0 * jetERatio;
+        //auto genPhSpaceCut = jetGenTime > genCutTime;
+        //auto genCutDr = jetGenDrMatch > 0.04;
+        //auto genCutSCdiff = difSCTime > 4;
+		//auto genDrPhSpaceCut = genCutSCdiff && genCutDr;
+		auto hasGoodSCTime = jetSCTime > -14.0;
 
-		if( genSpaceCut ){
+		if( genNoCut ){
 
             hist1d[112]->Fill(jetGenTimeLLP);
             hist1d[113]->Fill(jetGenLLPPurity);
@@ -2461,17 +2467,18 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             hist1d[106]->Fill( difSCTime );
             hist1d[107]->Fill( difDrTime );
             hist2d[101]->Fill( jetERatio, jetGenTime );
+            hist2d[117]->Fill( difSCTime, jetGenDrMatch );
+            hist2d[118]->Fill( jetGenTime, jetemfrac );
 
 		}//<<>>if( genSpaceCut )
 
-	    if( hasGoodTime && etaCut && genEnergyCut && genVarCut && hasGoodGenTime ){
+	    if( hasGoodGenSCMatch && etaCut && genEnergyCut && genVarCut && hasGoodGenTime && hasGoodSCTime ){
 
             hist2d[98]->Fill( jet.energy(), jetGenEnergy );
             hist2d[99]->Fill( jetERatio, jetGenTime );
             hist2d[110]->Fill( jetERatio, jetSCTime );
             hist2d[111]->Fill( jetERatio, jetDrTime );
             hist2d[100]->Fill( jetemfrac, jetSCTime );
-            hist2d[101]->Fill( jetERatio, jetGenTime );
             hist2d[103]->Fill( jetERatio, difSCTime );
             hist2d[104]->Fill( jetDrTime, jetSCTime );
             hist2d[102]->Fill( jetGenTime, jetDrTime );
@@ -2930,11 +2937,11 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[97] = fs->make<TH2D>("clEtaTimeChi2vNumClRHs", "Cluster EtaTime Chi2 v nClRecHits;Chi2;nClRecHits", chidiv, chimin, chimax, 60, 0, 60);
 
     hist2d[98] = fs->make<TH2D>("jetEvGenE", "Jet Energy v GenEnergy;JetEnergy;GenEnergy", 100, 0, 1000, 100, 0, 1000 );
-    hist2d[99] = fs->make<TH2D>("jetEGenERatiovGenTime", "Jet E/GenE v GenTime var > 0;E/GenE;GenTime", 80, 0, 2, 40, -15, 25 );
+    hist2d[99] = fs->make<TH2D>("jetEGenERatiovGenTime", "Jet E/GenE v GenTime;E/GenE;GenTime", 80, 0, 2, 40, -15, 25 );
     hist2d[100] = fs->make<TH2D>("jetEMFracvSCTime", "Jet EMFrac v SCTime;EMFrac;SCTime", 80, 0, 2, 40, -15, 25 );
     hist2d[101] = fs->make<TH2D>("jetGenRatiovGenTimePre", "Jet E/GenE v GenTime Pre;E/GenE;GenTime", 80, 0, 2, 40, -15, 25 );
     hist2d[102] = fs->make<TH2D>("jetGenTimevDrJetTime", "GenTime v DrJetTime;GenTime;JetTime", 280, -15, 25, 280, -15, 25 );
-    hist2d[103] = fs->make<TH2D>("jetEGenERatiovSCTimeDiff", "Jet E/GenE v JetSC GenJet TimeDif;E/GenE;DRTimeDif", 80, 0, 2, 300, 0, 30.0 );
+    hist2d[103] = fs->make<TH2D>("jetEGenERatiovSCTimeDiff", "Jet E/GenE v JetSC GenJet TimeDif;E/GenE;SCTimeDif", 80, 0, 2, 300, 0, 30.0 );
     hist2d[104] = fs->make<TH2D>("jetSCTimevDrTime", "JetSCTime v JetDrTime;JetSCTime;JetDrTime", 280, -15, 25, 280, -15, 25 );
     hist2d[105] = fs->make<TH2D>("jetGenTimevSCJetTime", "GenTime v SCJetTime;GenTime;JetTime", 280, -15, 25, 280, -15, 25 );
     hist2d[106] = fs->make<TH2D>("jetGenTimevGenEnergy", "GenTime v GenEnergy;GenTime;GenEnergy", 280, -15, 25, 100, 0, 1000 );
@@ -2948,6 +2955,8 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[114] = fs->make<TH2D>("jetGenPurityvGenJetVar", "Jet GenJet Puity v GenJet Var;Puity;Var", 100, 0, 1, 270, -2, 25 );
     hist2d[115] = fs->make<TH2D>("jetGenVarvGenJetNKids", "Jet GenJet Var v GenJet nKids;Var;nKids", 270, -2, 25, 100, 0, 100 );
     hist2d[116] = fs->make<TH2D>("jetGenPuityvGenJetNKids", "Jet GenJet Puity v GenJet nKids;Puity;nKids", 100, 0, 1, 100, 0, 100 );
+    hist2d[117] = fs->make<TH2D>("genJetSCTimeDiffvDrMatchJet", "genJet SCTimeDiff v DrMatchJet;SCTimeDiff;DrMatchJet", 300, 0, 30, 320, 0, 3.2 );
+    hist2d[118] = fs->make<TH2D>("jetGenTimevJetEMFrac", "GenTime v JetEMFrac;GenTime;JetEMFrac", 280, -15, 25, 150, 0, 1.5 );
 
    //------ ECAL Map Hists --------------------------------------------------------------------------
 

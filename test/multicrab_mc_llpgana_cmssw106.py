@@ -128,7 +128,10 @@ def docrab( dataset ):
             #trial          = "llpga_v28" # as 25 w/ var < 1 & purity > 0.88 on 2Ds + nKids
             #trial          = "llpga_v29" # as 28 + difftime < 1.5
             #trial          = "llpga_v30" # as 28 + difftime < 1.0
-            trial          = "llpga_v31" # as 28 + difftime < 0.8 + genPhaseSpaceCut
+            #trial          = "llpga_v33" # as 28 + difftime < 0.8 + genPhaseSpaceCut (9-4*e/genE)
+            #trial          = "llpga_v34" # as 28 + difftime < 0.8 + genPhaseSpaceCut (9-4*e/genE) && not genPhSpaceCut + scdiff v drmatch
+            #trial          = "llpga_v35" # as 34 + emfrac && gen plots have full cut selection with genPhaseSpaceCut && gen/cluster plots have hasGoodSCTime cut
+            trial          = "llpga_v36" # as 35 w/ no gen plot cut, changed difftime endcase checks, set goodGenSCdiffTime < 20.0 to testnew end cases
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"
