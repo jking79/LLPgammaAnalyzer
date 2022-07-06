@@ -184,7 +184,7 @@ typedef vector<reco::CaloCluster> bcGroup;
 typedef unsigned int uInt;
 
 #define nEBEEMaps 32
-#define nHists 128
+#define nHists 256
 //const float sol = 29.9792458; // speed of light in cm/ns
 #define SOL 29.9792458 // speed of light in cm/ns
 #define PI 3.1415926535 // pie ...  
@@ -223,6 +223,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
       	rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
       	rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
 		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax );
+        rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
       	rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
       	rhGroup getRHGroup( uInt detid );
       	rhGroup getRHGroup();
@@ -326,7 +327,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
         std::vector<uInt>   jetNCarry, jetNConst; 
       	std::vector<float>  jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
       	std::vector<float>  jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
-      	std::vector<float>  jetPhMuTime, jetEleMuTime;
+      	std::vector<float>  jetPhMuTime, jetOOTPhMuTime, jetEleMuTime;
       	std::vector<int>    jetID, njetKids, jetKidOfJet, njetSubs, njetRecHits, jetRecHitOfJet;
       	std::vector<int>    jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
       	std::vector<uInt>   jetRecHitId;
@@ -464,7 +465,7 @@ double twosided_crystalball_function(const double *x, const double *p) {
 
 }//<<>>double double_crystalball_function(const double *x, const double *p)
 
-void fillTH1F( float val, TH1F* hist ){
+void fillTH1( float val, TH1F* hist ){
 
    	auto nBins = hist->GetNbinsX();
    	auto low = hist->GetBinCenter(1);
@@ -473,9 +474,9 @@ void fillTH1F( float val, TH1F* hist ){
    	else if ( val > high ) hist->Fill( high );
    	else hist->Fill( val );
 
-}//<<>>void fillTH1F( float val, TH1F* hist )
+}//<<>>void fillTH1( float val, TH1F* hist )
 
-void fillTH1D( float val, TH1D* hist ){
+void fillTH1( float val, TH1D* hist ){
 
    	auto nBins = hist->GetNbinsX();
    	auto low = hist->GetBinCenter(1);
@@ -484,7 +485,7 @@ void fillTH1D( float val, TH1D* hist ){
    	else if ( val > high ) hist->Fill( high );
    	else hist->Fill( val );
 
-}//<<>>void fillTH1D( float val, TH1D* hist )
+}//<<>>void fillTH1( float val, TH1D* hist )
 
 void normTH2D(TH2D* hist){
 
@@ -767,7 +768,13 @@ CAuto mean			(CVFlt x, CVFlt wv){float sum(0.0), wt(0.0); int it(0); for( auto i
 CAuto wnum			(CFlt it, CFlt w){return (((it-1)*w)/it);}
 CAuto stdev			(CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return std::sqrt(sum/(x.size()-1));}	
 CAuto var           (CVFlt x, CFlt m){float sum(0.0); for( auto ix : x ){ sum += sq2(ix-m); } return sum/(x.size()-1);}
-CAuto stdev			(CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return std::sqrt(sum/wnum(it,w));}
+
+CAuto stdev			(CVFlt x, CFlt m, CVFlt wv, CFlt w){
+						float sum(0.0); int it(0); 
+						for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } 
+						return std::sqrt(sum/wnum(it,w));
+					}//CAuto stdev
+
 CAuto var           (CVFlt x, CFlt m, CVFlt wv, CFlt w){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return sum/wnum(it,w);}
 CAuto var           (CVFlt x, CFlt m, CVFlt wv){float sum(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(ix-m); it++; } return sum/wnum(it,vfsum(wv));}
 
@@ -777,8 +784,14 @@ CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w){
 						return sum/wnum(it,w);
 					}//<<>> CAuto cvar(CVFlt x, CFlt mx, CVFlt y, CFlt my, CVFlt wv, CFlt w)
 
-CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my){float sum(0.0); int it(0); for( auto ix : x ){ sum += (ix-mx)*(y[it]-my); it++; } return sum/(x.size()-1);}
+CAuto cvar          (CVFlt x, CFlt mx, CVFlt y, CFlt my){
+						float sum(0.0); int it(0); 
+						for( auto ix : x ){ sum += (ix-mx)*(y[it]-my); it++; } 
+						return sum/(x.size()-1);
+					}//CAuto cvar
+
 CAuto rms			(CVFlt x){float sum(0.0); for(auto ix : x ){ sum += sq2(ix); } return std::sqrt(sum/x.size());}
+CAuto chisq			(CVFlt x, CFlt m, CFlt v){ float chi(0); for(auto ix : x ){ chi += sq2(ix-m)/v; } return chi; }
 
 CAuto meanPhi		(CVFlt x){
 						float sum(0.0);
@@ -809,8 +822,17 @@ CAuto wsin2         (CVFlt x, CVFlt wv){
 						return sum/wt;
 					}//CAuto wsin2(CVFlt x, CVFlt wv)
 
-CAuto wcos2         (CVFlt x, CVFlt wv){double sum(0.0), wt(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); wt += wv[it]; it++;} return sum/wt;}
-CAuto wsincos       (CVFlt x, CVFlt wv){double sum(0.0), wt(0.0); int it(0); for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); wt += wv[it]; it++;} return sum/wt;}
+CAuto wcos2         (CVFlt x, CVFlt wv){
+						double sum(0.0), wt(0.0); int it(0); 
+						for(auto ix : x ){ sum += wv[it]*sq2(cos(ix)); wt += wv[it]; it++;} 
+						return sum/wt;
+					}//CAuto wcos2
+
+CAuto wsincos       (CVFlt x, CVFlt wv){
+						double sum(0.0), wt(0.0); int it(0); 
+						for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); wt += wv[it]; it++;} 
+						return sum/wt;
+					}//CAuto wsincos
 
 // rh group functions
 CAuto getRawID		(const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}

@@ -47,7 +47,12 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t84L_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D
 #outfilename = 'llpgana_t85M_eigen95t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 81 + 2sided crystalball + slope algiment for 2D + slope cuts
 #outfilename = 'llpgana_t90L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 85 with slope cut at chiprob 0.8, slope not dirct corrted 
-outfilename = 'llpgana_t91L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 85 with slope cut at chiprob 0.95, slope is dirct corrted
+#outfilename = 'llpgana_t91L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 85 with slope cut at chiprob 0.95, slope is dirct corrted
+#outfilename = 'llpgana_t92ML_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 91, w/slope leta*2.2 based & sphericty 0.7- 0.95 cut
+#outfilename = 'llpgana_t93ML_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 92 w/ exclude leta < 2 && in slope : ltime*10
+#outfilename = 'llpgana_t94ML_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 93 removed plot cuts in slope calc w/ ltime*1000
+#outfilename = 'llpgana_t95L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 94 adjusted axis + added eta v rotated slope plot
+outfilename = 'llpgana_t96L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 95 add phi and eta range plots 
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -156,8 +161,9 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#S
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#ML
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#LM
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1750000))#L
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#VL
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 
 # Set the global tag depending on the sample type

@@ -365,6 +365,52 @@ rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float min
 
 }//>>>>rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax )
 
+rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist ){
+
+    rhGroup result;
+    vector<uInt> rawIds;
+
+    float dRcut = 0.05;
+
+    int iter = -1;
+	int nRecHits(0);
+	int matched(0);
+	int nOOT(0);
+    for ( const auto superCluster : superClusterGroup ){
+        iter++;
+        if( phDr[iter] > dRcut ) continue;
+        if( phEnergy[iter] != phEnMax ) continue;
+        auto & hitsAndFractions = superCluster.hitsAndFractions();
+        const auto nHAF = hitsAndFractions.size();
+        for( uInt iHAF = 0; iHAF < nHAF; iHAF++ ){
+            const auto detId = hitsAndFractions[iHAF].first;
+            const auto rawId = detId.rawId();
+            if( std::find( rawIds.begin(), rawIds.end(), rawId ) == rawIds.end() ){ rawIds.push_back(rawId); nRecHits++; }
+        }//<<>>for( uInt iHAF = 0; iHAF < nHAF; iHAF++ )
+    }//<<>>for ( const auto superCluster : superClusterGroup )   
+    for (const auto recHit : *recHitsEB_ ){
+        auto enr = recHit.energy();
+        if( enr <= minenr ) continue;
+        const auto recHitId = recHit.detid();
+        const auto rawId = recHitId.rawId();
+        if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() )
+				{ result.push_back(recHit); if(recHit.checkFlag(EcalRecHit::kOutOfTime)) nOOT++; rhTimeHist->Fill(recHit.time()); matched++; }
+    }//<<>>for (const auto recHit : *recHitsEB_ )
+    for (const auto recHit : *recHitsEE_ ){
+        auto enr = recHit.energy();
+        if( enr <= minenr ) continue;
+        const auto recHitId = recHit.detid();
+        const auto rawId = recHitId.rawId();
+        if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() )
+				{ result.push_back(recHit); if(recHit.checkFlag(EcalRecHit::kOutOfTime)) nOOT++; rhTimeHist->Fill(recHit.time()); matched++; }
+    }//<<>>for (const auto recHit : *recHitsEE_ )
+	matchHist->Fill(matched/nRecHits);
+	ootHist->Fill(nOOT/nRecHits);
+
+    return result;
+
+}//>>>>rhGroup LLPgammaAnalyzer::getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, TH1D ootHist, ... )
+
 rhGroup LLPgammaAnalyzer::getRHGroup( const reco::CaloCluster basicCluster, float minenr = 0.0 ){
 
 	rhGroup result;
@@ -885,7 +931,7 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_ieipt( vector<float> times, rhGrou
     eigens.push_back(chi2pf);//5
     hist1d[114]->Fill(slope);
     hist1d[115]->Fill(chi2pf);
-    hist1d[104]->Fill(1/slope);
+    hist1d[104]->Fill(1000/slope);
 
     return eigens;
 }//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen( vector<float> times, rhGroup rechits ){
@@ -1014,6 +1060,12 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 	//hist1d[74]->Fill(rotangle);
 	float eignsin = std::sin(rotangle);
 	float eigncos = std::cos(rotangle);
+	auto orgsin = eignsin;
+	auto orgcos = eigncos;
+
+	// ----------------------
+	// aligning eigen to point same direction
+	// ----------------------
     float totRes(0.0);
 	float ltsum(0.0);
 	for( uInt it(0); it < wts.size(); it++ ){
@@ -1052,6 +1104,9 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 	hist1d[78]->Fill(eigens[0]);
 	hist1d[79]->Fill(eigens[1]);
 
+	// -----------------------------------------
+	// finding nemo ( slope )
+	// -----------------------------------------
     auto nWts = resolutions.size();
 	//auto nWts = wts.size();
 	bool nwtcut = nWts > 10;
@@ -1060,7 +1115,9 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
     bool pfcut = eigens[2] > 0.6 && nwtcut && eigens[2] < 0.95;
 
 	vector<float> xs;
+    vector<float> xs2;
 	float xsum(0.0);
+    float xsum2(0.0);
     for( uInt it(0); it < nWts; it++ ){
 
         float leta = etas[it] - meta;
@@ -1068,15 +1125,15 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
         float ltime = ebtimes[it]-mtime;
         auto xcor = eigncos*(leta) - eignsin*(lphi);
         //auto sxcor = oreigncos*(leta*2.2) - oreignsin*(lphi*2.2);
-        auto sxcor = eigncos*(leta*2.2) - eignsin*(lphi*2.2);
-        auto ycor = eignsin*(leta) + eigncos*(lphi);
+        auto sxcor = orgcos*(leta*2.2) - orgsin*(lphi*2.2);
+        auto ycor = orgsin*(leta) + orgcos*(lphi);
         //if( not ebp ) xcor *= -1;
         if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi << " : xcor " << sxcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         //if( abs(wts[it]) < 8 )
         auto fill = ltime*resolutions[it];
         //if( nwtcut ){
-        if( pfcut ){
+        //if( pfcut ){
         	hist2d[73]->Fill(sxcor,ycor,fill);
         	hist2d[74]->Fill(sxcor,ycor,resolutions[it]);
         	hist2d[75]->Fill(leta,lphi,fill);
@@ -1092,14 +1149,19 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
         	if( sxcor < 2 && sxcor >= 1 ) hist1d[97]->Fill(ltime,resolutions[it]);
         	if( sxcor > -3 && sxcor <= -2 ) hist1d[98]->Fill(ltime,resolutions[it]);
         	if( sxcor < 3 && sxcor >= 2 ) hist1d[99]->Fill(ltime,resolutions[it]);
-        }//<<>>if( pfcut )
+        //}//<<>>if( pfcut )
 		//if( xcor < minx ) { minx = xcor; miny = ltime; }
         //if( xcor > maxx ) { maxx = xcor; maxy = ltime; }
 		//xs.push_back(ltime/dxcor);
-		auto sl = (ltime)/(sxcor);
-        xs.push_back(sl);
-		hist1d[100]->Fill(sl);
-		xsum += sl*resolutions[it]; 
+        //if( ltime/leta  > 0 ){
+        	auto sl2 = (ltime*1000)/(sxcor);
+			auto sl = (ltime*1000)/(leta*2.2);// changed to eta to look at slope in eta direction
+			xs.push_back(sl);
+            xs2.push_back(sl2);
+			hist1d[100]->Fill(sl*resolutions[it]);
+            xsum += sl*resolutions[it];
+			xsum2 += sl2*resolutions[it]; 
+		//}//<<>>if( std::abs(leta) > 1 )
 		//xs[it] = xcor;
 		//ys.push_back(fill);
 		//ys[it] = ltime;
@@ -1113,31 +1175,34 @@ vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup 
 	//auto pol1 = graph->GetFunction("pol1");
 	//auto slope = pol1->GetParameter(1);
 	//float xsum(0); for( uInt it(0); it < nWts; it++ ){ xsum += xs[it]*resolutions[it]; hist1d[100]->Fill(xs[it]);}
+	auto nXSum = xs.size();
 	auto slope = xsum/totRes;
-	float svarsl(0); for( uInt it(0); it < nWts; it++ ){ svarsl += sq2(xs[it]-slope)*resolutions[it];}
-	auto varsl = svarsl/totRes;
-    //float schi2(0); for( uInt it(0); it < nWts; it++ ){ schi2 += sq2(xs[it]-slope)*resolutions[it]/abs(slope);}
-	float chi2(0); for( uInt it(0); it < nWts; it++ ){ chi2 += sq2(xs[it]-slope)/varsl;}
-    //auto chi2 = schi2/totRes;
-	//auto chi2pf = chi2/(nWts-1);
+    auto slope2 = xsum2/totRes;
+	auto varsl = var(xs,slope,resolutions,totRes);
+    auto varsl2 = var(xs2,slope2,resolutions,totRes);
+	auto chi2 = chisq(xs,slope,varsl);
+    auto chi22 = chisq(xs,slope,varsl);
     auto chi2pf = 1 - TMath::Prob(chi2, nWts);
+    auto chi2pf2 = 1 - TMath::Prob(chi22, nWts);
 	eigens.push_back(slope);//3
     eigens.push_back(chi2pf);//4
+    eigens.push_back(slope2);//5
+    eigens.push_back(chi2pf2);//6
 
-	auto slope_cut = ( eigens[2] < 0.8 ) && ( eigens[2] > 0.6 )  && ( chi2pf > 0.95 );
-	//hist1d[91]->Fill(slope);
-    //hist1d[103]->Fill(1/slope);
-    hist1d[92]->Fill(chi2pf);
-    if( slope_cut ){
+	auto slope_cut = ( eigens[2] < 0.95 ) && ( eigens[2] > 0.6 )  && ( chi2pf > 0.95 ) && ( nXSum > 5 ) ;
+    //if( slope_cut ){
     	hist1d[91]->Fill(slope);
-   	 	hist1d[103]->Fill(1/slope);
+    	hist1d[92]->Fill(chi2pf);
+   	 	hist1d[103]->Fill(std::abs(1000/slope));
     	hist2d[91]->Fill(slope,chi2pf);
     	hist2d[92]->Fill(slope,eigens[2]);
     	hist2d[93]->Fill(slope,rotangle);
-    	hist2d[94]->Fill(slope,nWts);
+    	hist2d[94]->Fill(slope,nXSum);
         hist2d[95]->Fill(chi2pf,eigens[2]);
-        hist2d[97]->Fill(chi2pf,nWts);
-	}//<<>>if( slope_cut )
+        hist2d[97]->Fill(chi2pf,nXSum);
+		hist2d[119]->Fill(slope,slope2);
+        hist2d[120]->Fill(slope,slope-slope2);
+	//}//<<>>if( slope_cut )
 
 	return eigens;
 }//>>>>vector<float> LLPgammaAnalyzer::getRhGrpEigen_sph( vector<float> times, rhGroup rechits ){
@@ -1474,6 +1539,11 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	
 	for(const auto& bclust : *caloCluster_ ) fbclusts.push_back(bclust);
 
+	for (const auto recHit : *recHitsEB_ )
+	{ fillTH1(recHit.time(),hist1d[131]); fillTH1(recHit.energy(),hist1d[132]); hist2d[122]->Fill(recHit.time(),recHit.energy()); fillTH1(recHit.checkFlag(EcalRecHit::kOutOfTime),hist1d[135]); }
+    for (const auto recHit : *recHitsEE_ )
+	{ fillTH1(recHit.time(),hist1d[133]); fillTH1(recHit.energy(),hist1d[134]); hist2d[123]->Fill(recHit.time(),recHit.energy()); fillTH1(recHit.checkFlag(EcalRecHit::kOutOfTime),hist1d[136]); }
+
 	auto nUnJets = (*jets_).size();
 	nJets = fjets.size();
 	uInt nGoodDrJets(0);
@@ -1519,6 +1589,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	jetCBCMuTime.clear();
 	jetCBCMedTime.clear();
     jetPhMuTime.clear();
+    jetOOTPhMuTime.clear();
     jetEleMuTime.clear();
 
 	jetPHM.clear();
@@ -1618,11 +1689,14 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		hist2d[61]->Fill(jetepafrac,jetepfrac);
       	hist2d[62]->Fill(jetepfrac,jetemfrac);
 
-	   	hist1d[12]->Fill(jet.pt());
-	   	hist1d[13]->Fill(jet.phi());
-	   	hist1d[14]->Fill(jet.eta());
+	   	fillTH1(jet.pt(),hist1d[12]);//hist1d[12]->Fill(jet.pt());
+	   	fillTH1(jet.phi(),hist1d[13]);//hist1d[13]->Fill(jet.phi());
+	   	fillTH1(jet.eta(),hist1d[14]);//hist1d[14]->Fill(jet.eta());
 
    //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
+
+        // dR matched RH group  -----------------------------------------------
+		// --------------------------------------------------------------------
 
 	   	if( DEBUG ) std::cout << "Getting jet dR rechit group" << std::endl; 
 		auto jetDrRhGroup = getRHGroup( jet.eta(), jet.phi(), deltaRminJet, minRHenr ); 
@@ -1650,7 +1724,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		      	jetRecHitId.push_back(detid.rawId());	
 				auto rhtime = tofTimes[irhg];
 				//std::cout << " -- tofTimes[irhg]: " << rhtime << std::endl;
-		      	hist1d[0]->Fill(rhtime);
+		      	fillTH1(rhtime,hist1d[0]);//hist1d[0]->Fill(rhtime);
 				auto rhe = (jetDrRhGroup[irhg]).energy();
 		      	//std::cout << " -- jetDrRhGroup[irhg]).energy(): " << rhe << std::endl;
 		      	hist2d[38]->Fill(rhtime, rhe);
@@ -1688,13 +1762,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 			if( jcmutime > -28.9 ) nGoodDrJets++;			
 
-		   	hist1d[29]->Fill(jmutime);
-		   	hist1d[1]->Fill(rhCount);
-		   	hist1d[2]->Fill(jterr);
-		   	hist1d[3]->Fill(jtrms);
-		   	hist1d[4]->Fill(jmedtime);
-	      	hist1d[6]->Fill(jcmutime);
-	      	hist1d[7]->Fill(jcmedtime);
+		   	fillTH1(jmutime,hist1d[29]);//hist1d[29]->Fill(jmutime);
+		   	fillTH1(rhCount,hist1d[1]);//hist1d[1]->Fill(rhCount);
+		   	fillTH1(jterr,hist1d[2]);//hist1d[2]->Fill(jterr);
+		   	fillTH1(jtrms,hist1d[3]);//hist1d[3]->Fill(jtrms);
+		   	fillTH1(jmedtime,hist1d[4]);//hist1d[4]->Fill(jmedtime);
+	      	fillTH1(jcmutime,hist1d[6]);//hist1d[6]->Fill(jcmutime);
+	      	fillTH1(jcmedtime,hist1d[7]);//hist1d[7]->Fill(jcmedtime);
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
       	//<<<<if( rhCount >= minRHcnt ){
@@ -1750,6 +1824,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
 
 		// GenJet Info for MC  -------------------------------------------------------------------
+		// ---------------------------------------------------------------------------------------
 
         if( DEBUG ) std::cout << "Getting jetGenParton Information" << std::endl;
         //const reco::GenParticle * jetGenParton(0);
@@ -1844,7 +1919,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 
 		// Super Cluster group	-----------------------------------------------
-		
+		// --------------------------------------------------------------------		
+
 		if( DEBUG ) std::cout << " - Get jet SC Group " << std::endl;
 		int nMatched(0);
 		int sum_nrh(0);
@@ -1853,10 +1929,13 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         auto jetSCTime(-29.25);
 		scGroup jetSCGroup;
         scGroup jetPhSCGroup;
+        scGroup jetOOTPhSCGroup;
         scGroup jetEleSCGroup;
 		bcGroup jetBCGroup;
 		vector<float> phEnergy;
         vector<float> phDr;
+        vector<float> ootPhEnergy;
+        vector<float> ootPhDr;
         vector<float> eleEnergy;
         vector<float> eleDr;
 
@@ -1891,8 +1970,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 				nMatched++;
 	         	const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
 				const auto scptr = phosc.get();
-
 				jetSCGroup.push_back(*scptr);
+
 				const auto clusters = phosc->clusters();
 	      		//const auto nBClusts = phosc->clustersSize();
 	         	const auto &hitsAndFractions = phosc->hitsAndFractions();
@@ -1972,9 +2051,10 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                 sum_sce += sce;
                 sum_phe += ootphoton.energy();
 
-                jetPhSCGroup.push_back(*scptr);
-                phEnergy.push_back(ootphoton.energy());
-                phDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), ootphoton.eta(), ootphoton.phi())));
+                //jetPhSCGroup.push_back(*scptr);
+                jetOOTPhSCGroup.push_back(*scptr);
+                ootPhEnergy.push_back(ootphoton.energy());
+                ootPhDr.push_back(std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), ootphoton.eta(), ootphoton.phi())));
 
                 ootmatched = false;
             }//<<>>if( matched )
@@ -2100,33 +2180,36 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	 		auto jetSCTimeStats = getTimeDistStats( jetSCtofTimes, jetScRhGroup );
 
 			if( useJetSC ){  //  use for jetSC eigen info
-			//std::cout << " --- get jetSC eigen vectors " << std::endl;
-            auto jetSCEigen3D = getRhGrpEigen_ieipt( jetSCtofTimes, jetScRhGroup );
-    	    auto jetSCEigen2D = getRhGrpEigen_sph( jetSCtofTimes, jetScRhGroup );
-            auto impangle = getATan2( hypo( jet.px(), jet.py()), jet.pz());
-			if( jetSCEigen3D[0] != -999 ){
-				auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
-            	hist1d[63]->Fill(epanlge);//etaphi angle
-				auto ephypo3D = hypo( jetSCEigen3D[0], jetSCEigen3D[1] );
-            	auto etanlge = getAngle( ephypo3D, jetSCEigen3D[2] );
-            	hist1d[64]->Fill(etanlge);//etatim angle
-            	hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
-            	hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
-				hist1d[86]->Fill(jetSCEigen3D[3]);
-                if( jetSCEigen3D[5] > 0.95 )hist2d[96]->Fill( impangle, jetSCEigen3D[4] );
-			}//<<>>if( jetSCEigen3D[0] != -999 )
-			if( jetSCEigen2D[0] != -999 ){
-				auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
-		    	hist1d[65]->Fill(sphanlge);//eliptical angle
-            	hist2d[81]->Fill( jetSCEigen2D[0], jetSCEigen2D[1] );
-            	hist1d[81]->Fill(jetSCEigen2D[2]);
-				hist2d[88]->Fill( sphanlge, jetSCEigen2D[2] );
-				if( jetSCEigen2D[4] > 0.95 ){ 
-					hist2d[89]->Fill( jet.eta(), jetSCEigen2D[3] );
-                	hist2d[90]->Fill( impangle, jetSCEigen2D[3] );
-				}//<<>>if( jetSCEigen2D[4] < 0.1 )
-				//hist2d[91]->Fill( jetSCEigen2D[3], jetSCEigen2D[4]);
-            }//<<>>if( jetSCEigen2D[0] != -999 )
+				//std::cout << " --- get jetSC eigen vectors " << std::endl;
+            	auto jetSCEigen3D = getRhGrpEigen_ieipt( jetSCtofTimes, jetScRhGroup );
+    	    	auto jetSCEigen2D = getRhGrpEigen_sph( jetSCtofTimes, jetScRhGroup );
+            	auto impangle = getATan2( hypo( jet.px(), jet.py()), jet.pz());
+				if( jetSCEigen3D[0] != -999 ){
+					auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
+            		hist1d[63]->Fill(epanlge);//etaphi angle
+					auto ephypo3D = hypo( jetSCEigen3D[0], jetSCEigen3D[1] );
+            		auto etanlge = getAngle( ephypo3D, jetSCEigen3D[2] );
+            		fillTH1(etanlge,hist1d[64]);//hist1d[64]->Fill(etanlge);//etatim angle
+            		hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
+            		hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
+					hist1d[86]->Fill(jetSCEigen3D[3]);
+                	if( jetSCEigen3D[5] > 0.95 )hist2d[96]->Fill( impangle, jetSCEigen3D[4] );
+				}//<<>>if( jetSCEigen3D[0] != -999 )
+				if( jetSCEigen2D[0] != -999 ){
+					auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
+		    		hist1d[65]->Fill(sphanlge);//eliptical angle
+            		hist2d[81]->Fill( jetSCEigen2D[0], jetSCEigen2D[1] );
+            		hist1d[81]->Fill(jetSCEigen2D[2]);
+					hist2d[88]->Fill( sphanlge, jetSCEigen2D[2] );
+					if( jetSCEigen2D[4] > 0.95 && jetSCEigen2D[2] < 0.95 && jetSCEigen2D[2] > 0.7 ){ 
+                    	if( jet.eta() > 1.0 ) hist1d[117]->Fill( jetSCEigen2D[3] );
+                    	if( jet.eta() < 0.5 ) hist1d[118]->Fill( jetSCEigen2D[3] );
+						hist2d[89]->Fill( jet.eta(), jetSCEigen2D[3] );
+                    	hist2d[121]->Fill( jet.phi(), jetSCEigen2D[3] );
+                		hist2d[90]->Fill( impangle, jetSCEigen2D[3] );
+					}//<<>>if( jetSCEigen2D[4] < 0.1 )
+					//hist2d[91]->Fill( jetSCEigen2D[3], jetSCEigen2D[4]);
+            	}//<<>>if( jetSCEigen2D[0] != -999 )
 			}//if( true/false ) on/off switch for jetSC or PhotonSC
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2177,8 +2260,9 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             jetCSCMuTime.push_back(jetSCTimeStats[6]);
             jetCSCMedTime.push_back(jetSCTimeStats[10]);
 
+			// Photon SCGroup --------------------------------------
             if( jetPhSCGroup.size() != 0 ){
-                auto jetPhRhGroup = getRHGroup( jetPhSCGroup, minRHenr, phEnergy, phDr, max(phEnergy) );
+                auto jetPhRhGroup = getRHGroup( jetPhSCGroup, minRHenr, phEnergy, phDr, max(phEnergy), hist1d[122], hist1d[123], hist1d[124] );
                 if( not isRhGrpEx( jetPhRhGroup ) ) std::cout << " --- !!!!! jetPhRhGroup is not exclusive !!! " << std::endl;
                 //std::cout << " Num Ph rechits : " << jetPhRhGroup.size() << std::endl;
                	if( jetPhRhGroup.size() >= minRHcnt ){
@@ -2188,26 +2272,26 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
                     auto jetPhTimeStats = getTimeDistStats( jetPhtofTimes, jetPhRhGroup );
 
             		if( not useJetSC ){ // use Photon SC eigen info
-            		//std::cout << " --- get jetSC eigen vectors " << std::endl;
-            		auto jetSCEigen3D = getRhGrpEigen_ieipt( jetPhtofTimes, jetPhRhGroup );
-            		auto jetSCEigen2D = getRhGrpEigen_sph( jetPhtofTimes, jetPhRhGroup );
-            		if( jetSCEigen3D[0] != -999 ){
-                		auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
-                		hist1d[63]->Fill(epanlge);//etaphi angle
-                		auto ephypo3D = hypo( jetSCEigen3D[0], jetSCEigen3D[1] );
-                		auto etanlge = getAngle( ephypo3D, jetSCEigen3D[2] );
-                		hist1d[64]->Fill(etanlge);//etatim angle
-                		hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
-                		hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
-                		hist1d[86]->Fill(jetSCEigen3D[3]);
-            		}//<<>>if( jetSCEigen3D[0] != -999 )
-            		if( jetSCEigen2D[0] != -999 ){
-                		auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
-                		hist1d[65]->Fill(sphanlge);//eliptical angle
-                		hist2d[81]->Fill( jetSCEigen2D[0], jetSCEigen2D[1] );
-                		hist1d[81]->Fill(jetSCEigen2D[2]);
-                		hist2d[88]->Fill(sphanlge, jetSCEigen2D[2]);
-           		 	}//<<>>if( jetSCEigen2D[0] != -999 )
+            			//std::cout << " --- get jetSC eigen vectors " << std::endl;
+            			auto jetSCEigen3D = getRhGrpEigen_ieipt( jetPhtofTimes, jetPhRhGroup );
+            			auto jetSCEigen2D = getRhGrpEigen_sph( jetPhtofTimes, jetPhRhGroup );
+            			if( jetSCEigen3D[0] != -999 ){
+                			auto epanlge = getAngle( jetSCEigen3D[0], jetSCEigen3D[1] );
+                			hist1d[63]->Fill(epanlge);//etaphi angle
+                			auto ephypo3D = hypo( jetSCEigen3D[0], jetSCEigen3D[1] );
+                			auto etanlge = getAngle( ephypo3D, jetSCEigen3D[2] );
+                			hist1d[64]->Fill(etanlge);//etatim angle
+                			hist2d[82]->Fill( jetSCEigen3D[0], jetSCEigen3D[1] );
+                			hist2d[83]->Fill( jetSCEigen3D[0], jetSCEigen3D[2] );
+                			hist1d[86]->Fill(jetSCEigen3D[3]);
+            			}//<<>>if( jetSCEigen3D[0] != -999 )
+            			if( jetSCEigen2D[0] != -999 ){
+                			auto sphanlge = getAngle( jetSCEigen2D[0], jetSCEigen2D[1] );
+                			hist1d[65]->Fill(sphanlge);//eliptical angle
+                			hist2d[81]->Fill( jetSCEigen2D[0], jetSCEigen2D[1] );
+                			hist1d[81]->Fill(jetSCEigen2D[2]);
+                			hist2d[88]->Fill(sphanlge, jetSCEigen2D[2]);
+           		 		}//<<>>if( jetSCEigen2D[0] != -999 )
           			}//if( ture/false ) on/off switch for jetSC or PhotonSC
   
                     hist1d[57]->Fill(jetPhTimeStats[6]);//c mean
@@ -2226,9 +2310,35 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
         //<<<<if( jetScRhGroup.size() >= minRHcnt && scemf > minEmf )
-        
+
+			// OOTPhoton SCGroup --------------------------------------
+            if( jetOOTPhSCGroup.size() != 0 ){
+                auto jetOOTPhRhGroup = getRHGroup( jetOOTPhSCGroup, minRHenr, ootPhEnergy, ootPhDr, max(ootPhEnergy), hist1d[125], hist1d[126], hist1d[127] );
+                if( not isRhGrpEx( jetOOTPhRhGroup ) ) std::cout << " --- !!!!! jetOOTPhRhGroup is not exclusive !!! " << std::endl;
+                //std::cout << " Num OOTPh rechits : " << jetOOTPhRhGroup.size() << std::endl;
+                if( jetOOTPhRhGroup.size() >= minRHcnt ){
+
+                    //std::cout << "getting jetPhtofTimes with jetPhRhGroup size : " << jetPhRhGroup.size() << std::endl;
+                    auto jetOOTPhTofTimes = getLeadTofRhTime( jetOOTPhRhGroup, vtxX, vtxY, vtxZ );
+                    auto jetOOTPhTimeStats = getTimeDistStats( jetOOTPhTofTimes, jetOOTPhRhGroup );
+
+                    hist1d[120]->Fill(jetOOTPhTimeStats[6]);//c mean
+                    hist1d[121]->Fill(jetOOTPhTimeStats[10]);//c med  
+
+                    jetOOTPhMuTime.push_back(jetOOTPhTimeStats[6]);
+                    //std::cout << "fill phMuTimeTemp : " << jetPhTimeStats[6] << std::endl;
+
+                } else {
+                    jetOOTPhMuTime.push_back( -29.75 );
+                    if( DEBUG ) std::cout << " - jetOOTPhRhGroup is < minRHcnt " << std::endl;
+                }//<<>>if( jetOOTPhRhGroup.size() >= minRHcnt )
+            } else {
+                jetOOTPhMuTime.push_back( -29.25 );
+            }//<<>>if( jetOOTPhSCGroup.size() != 0 )
+
+			// Electron SCGroup --------------------------------------
             if( jetEleSCGroup.size() != 0 ){
-            	auto jetEleRhGroup = getRHGroup( jetEleSCGroup, minRHenr, eleEnergy, eleDr, max(eleEnergy) );
+            	auto jetEleRhGroup = getRHGroup( jetEleSCGroup, minRHenr, eleEnergy, eleDr, max(eleEnergy), hist1d[128], hist1d[129], hist1d[130] );
             	if( not isRhGrpEx( jetEleRhGroup ) ) std::cout << " --- !!!!! jetEleRhGroup is not exclusive !!! " << std::endl;
             	//std::cout << " Num Ph rechits : " << jetPhRhGroup.size() << std::endl;
                 if( jetEleRhGroup.size() >= minRHcnt ){
@@ -2439,7 +2549,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         if( jetDrTime < -25.0 || jetGenTime < -25.0 ) difDrTime = 100.0;
         auto hasGoodGenTime = jetGenTime > -25.0;
         auto etaCut = std::abs(jetGenEta) < 1.5 && std::abs(jet.eta()) < 1.5;
-        auto genEnergyCut = jetGenEnergy > 100.0;
+        auto genEnergyCut = jetGenEnergy > 0.0;
         auto genVarCut = jetGenLLPPurity > 0.88 && jetGenTimeVar < 1;
         auto hasGoodGenSCMatch = difSCTime < 0.8;
         //auto hasGoodGenSCMatch = difSCTime < 20.0;
@@ -2469,6 +2579,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
             hist2d[101]->Fill( jetERatio, jetGenTime );
             hist2d[117]->Fill( difSCTime, jetGenDrMatch );
             hist2d[118]->Fill( jetGenTime, jetemfrac );
+			hist2d[124]->Fill( jetemfrac, jetGenDrMatch );
 
 		}//<<>>if( genSpaceCut )
 
@@ -2754,7 +2865,7 @@ void LLPgammaAnalyzer::beginJob(){
     hist1d[89] = fs->make<TH1D>("jetmudtgen", "jetmudtgen", jdtdiv, -1*jdtran, jdtran);
     hist1d[90] = fs->make<TH1D>("genJetImpactAngle", "genJetImpactAngle", 660, -0.2, 6.4);
 
-    hist1d[91] = fs->make<TH1D>("clEtaTimeSlope", "Cluster Eta Time Slope", 2500, -0.01, 24.99);
+    hist1d[91] = fs->make<TH1D>("clEtaTimeSlope", "Cluster Eta Time Slope", 240, -120, 120);
     hist1d[92] = fs->make<TH1D>("clEtaTimeSlopeChi", "Cluster Eta Time Slope Chi2", 100, 0, 1);
 
     hist1d[93] = fs->make<TH1D>("jetGenTime", "jetGenTime", jtdiv, -1*jtran, jtran);
@@ -2766,11 +2877,11 @@ void LLPgammaAnalyzer::beginJob(){
     hist1d[98] = fs->make<TH1D>("clBinProfile_m3", "spCluster Bin -3 Profile", 200, -10, 10);
     hist1d[99] = fs->make<TH1D>("clBinProfile_p3", "spCluster Bin +3 Profile", 200, -10, 10);
 
-    hist1d[100] = fs->make<TH1D>("clETSlopes", "Cluster ET Slopes", 1000, -5, 5);
+    hist1d[100] = fs->make<TH1D>("clETSlopes", "Cluster ET Slopes", 240, -120, 120);
 	//101 used below
 	//102 used blow
 
-    hist1d[114] = fs->make<TH1D>("clETSlope3D", "Cluster EtaTimeSlope 3D", 2500, -0.01, 24.99);
+    hist1d[114] = fs->make<TH1D>("clETSlope3D", "Cluster EtaTimeSlope 3D", 2500, 0, 250);
     hist1d[115] = fs->make<TH1D>("clETSlopeChi3D", "Cluster EtaTimeSlope Chi2 3D", 100, 0, 1);	
 	
     hist1d[103] = fs->make<TH1D>("clEtaTimeSlopeInv", "Cluster Eta Time SlopeInv", 350, -0.1, 34.9);
@@ -2789,6 +2900,30 @@ void LLPgammaAnalyzer::beginJob(){
 	//hist1d[114] used above
 	//hist1d[115] usded above
 	hist1d[116] = fs->make<TH1D>("jetGenNKids", "jetGenNKids", 100, 0, 100);
+    hist1d[117] = fs->make<TH1D>("clEtaTimeSlopeRangeA", "Cluster Eta Time Slope Eta > 1.0", 480, -240, 240);
+    hist1d[118] = fs->make<TH1D>("clEtaTimeSlopeRangeB", "Cluster Eta Time Slope Eta < 0.5", 480, -240, 240);
+
+    hist1d[119] = fs->make<TH1D>("ootPhotonTime", "ootPhotonTime", jtdiv, -1*jtran, jtran);
+
+    hist1d[120] = fs->make<TH1D>("jetCOOTPhMuTime", "jetCOOTPhMuTime", jtdiv, -1*jtran, jtran);
+    hist1d[121] = fs->make<TH1D>("jetCOOTPhMedTime", "jetCOOTPhMedTime", jtdiv, -1*jtran, jtran);
+
+	hist1d[122] = fs->make<TH1D>("phClRhTime", "phClRhTime", jtdiv, -1*jtran, jtran);
+    hist1d[123] = fs->make<TH1D>("phClRhPkOOT", "phClRhPkOOT", 100, 0.0, 1.0);
+    hist1d[124] = fs->make<TH1D>("phClRhPMatched", "phClRhPMatched", 100, 0.0, 1.0);
+    hist1d[125] = fs->make<TH1D>("ootPhClRhTime", "ootPhClRhTime", jtdiv, -1*jtran, jtran);
+    hist1d[126] = fs->make<TH1D>("ootPhClRhPkOOT", "ootPhClRhPkOOT", 100, 0.0, 1.0);
+    hist1d[127] = fs->make<TH1D>("ootPhClRhPMatched", "ootPhClRhPMatched", 100, 0.0, 1.0);
+    hist1d[128] = fs->make<TH1D>("eleClRhTime", "eleClRhTime", jtdiv, -1*jtran, jtran);
+    hist1d[129] = fs->make<TH1D>("eleClRhPkOOT", "eleClRhPkOOT", 100, 0.0, 1.0);
+    hist1d[130] = fs->make<TH1D>("eleClRhPMatched", "eleClRhPMatched", 100, 0.0, 1.0);
+
+    hist1d[131] = fs->make<TH1D>("ebRhTime", "ebRhTime", jtdiv, -1*jtran, jtran);
+    hist1d[132] = fs->make<TH1D>("ebRhEnergy", "ebRhEnergy", 1000, 0, 1000);
+    hist1d[133] = fs->make<TH1D>("eeRhTime", "eeRhTime", jtdiv, -1*jtran, jtran);
+    hist1d[134] = fs->make<TH1D>("eeRhEnergy", "eeRhEnergy", 1000, 0, 1000);
+    hist1d[135] = fs->make<TH1D>("ebRhkOOT", "ebRhkOOT", 3, 0, 1);
+    hist1d[136] = fs->make<TH1D>("eeRhkOOT", "eeRhkOOT", 3, 0, 1);
 
 	//------ 2D Hists --------------------------------------------------------------------------
 
@@ -2882,35 +3017,35 @@ void LLPgammaAnalyzer::beginJob(){
 
 	auto cldiv = 80;
 	auto cltrn = 20;
-	hist2d[73] = fs->make<TH2D>("cluster_tmap_rot", "Cluster Time Map Rotated", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[74] = fs->make<TH2D>("cluster_occmap_rot", "Cluster Occ Map Rotated", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[75] = fs->make<TH2D>("cluster_tmap", "Cluster Time Map", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[76] = fs->make<TH2D>("cluster_occmap", "Cluster Occ Map", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+	hist2d[73] = fs->make<TH2D>("cluster_tmap_rot", "Cluster Time Map Rotated;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[74] = fs->make<TH2D>("cluster_occmap_rot", "Cluster Occ Map Rotated;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[75] = fs->make<TH2D>("cluster_tmap", "Cluster Time Map;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[76] = fs->make<TH2D>("cluster_occmap", "Cluster Occ Map;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
 
-    hist2d[88] = fs->make<TH2D>("scEtaPhiAngle2D_eginValueSph","scEtaTimAngle(x) v eginValueSph(y)",660, -0.2, 6.4, 160, 0.4, 1.2);
+    hist2d[88] = fs->make<TH2D>("scEtaPhiAngle2D_eginValueSph","scEtaTimAngle(x) v eginValueSph(y);angle;sphericity",660, -0.2, 6.4, 160, 0.4, 1.2);
 
     auto cl3ddiv = 200;
     auto cl3dtrn = 4;
     auto cl3ddiv1 = 200;
     auto cl3dtrn1 = 4;
-    hist2d[77] = fs->make<TH2D>("cluster_3D_tmap", "Cluster Time Map 3D", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[78] = fs->make<TH2D>("cluster_3D_occmap", "Cluster Occ Map 3D", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[79] = fs->make<TH2D>("cluster_3D_etmap", "Cluster Eta(x)Time(y) Map 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[80] = fs->make<TH2D>("cluster_3D_etprofl", "Clstr Eta(x)Time(y) Map 3DProfile", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[77] = fs->make<TH2D>("cluster_3D_tmap", "Cluster Time Map 3D;eta;phi", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[78] = fs->make<TH2D>("cluster_3D_occmap", "Cluster Occ Map 3D;eta;phi", cl3ddiv, -1*cl3dtrn, cl3dtrn, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[79] = fs->make<TH2D>("cluster_3D_etmap", "Cluster Eta(x)Time(y) Map 3D;eta;time", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[80] = fs->make<TH2D>("cluster_3D_etprofl", "Clstr Eta(x)Time(y) Map 3DProfile;eta;time", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
 
     hist2d[81] = fs->make<TH2D>("scSphEgn01", "scSphEgn01", 200, -5, 5, 200, -5, 5);
     hist2d[82] = fs->make<TH2D>("sc3DEgn01", "sc3DEgn01", 200, -5, 5, 200, -5, 5);
     hist2d[83] = fs->make<TH2D>("sc3DEgn02", "sc3DEgn02", 200, -5, 5, 200, -5, 5);
-    hist2d[84] = fs->make<TH2D>("cluster_3D_etwtmap", "Cluster Eta(x)Time(y) Wt Map 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
-    hist2d[85] = fs->make<TH2D>("cluster_3D_etwtprofl", "Clstr Eta(x)Time(y) WtMap 3DProfile", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[84] = fs->make<TH2D>("cluster_3D_etwtmap", "Cluster Eta(x)Time(y) Wt Map 3D;eta;time", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
+    hist2d[85] = fs->make<TH2D>("cluster_3D_etwtprofl", "Clstr Eta(x)Time(y) WtMap 3DProfile;eta;time", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
 
     auto clsphdiv = 400;
     auto clsphtrn = 4;
     auto cwdiv = 80;
     auto cwtrn = 40;
-	auto slmax = 1.20;
-	auto slmin = -1.20;
-	auto sldiv = 240;
+	auto slmax = 120;
+	auto slmin = -120;
+	auto sldiv = 120;
     //auto sldiv = 320;
 	auto chimax = 1.01;
     auto chimin = 0.91;
@@ -2926,8 +3061,8 @@ void LLPgammaAnalyzer::beginJob(){
     	hist1d[102] = fs->make<TH1D>("profileFitEtavChi3D", "Profile Fit Eta v Chi2Prob 3D", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1 );
 
 
-    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope;Eta;Slope", 120, -1.5, 1.5, sldiv, slmin, slmax);
-    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope;ImpactAngle;Slope", 30, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[89] = fs->make<TH2D>("jetEtavSlope", "Jet Eta v Slope;Eta;Slope ps/cm", 60, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[90] = fs->make<TH2D>("jetImpAnglevSlope", "Jet ImpactAngle v Slope;ImpactAngle;Slope ps/cm", 60, -1.5, 1.5, sldiv, slmin, slmax);
     hist2d[91] = fs->make<TH2D>("clEtaTimeSlvChi", "Cluster EtaTime Slope v Chi2;Slope;Chi2", sldiv, slmin, slmax, chidiv, chimin, chimax);
     hist2d[92] = fs->make<TH2D>("clEtaTimeSlvEVal", "Cluster EtaTime Slope v EigenValue;Slope;EigenValue", sldiv, slmin, slmax, 180, 0.55, 1.0);
     hist2d[93] = fs->make<TH2D>("clEtaTimeSlvRotAng", "Cluster EtaTime Slope v Rotation Angle;Slope;rotAngle", sldiv, slmin, slmax, 660, -0.2, 6.4);
@@ -2951,12 +3086,21 @@ void LLPgammaAnalyzer::beginJob(){
     hist2d[110] = fs->make<TH2D>("jetEGenERatiovSCTime", "Jet E/GenE v SCTime;E/GenE;SCTime", 80, 0, 2, 40, -15, 25 );
     hist2d[111] = fs->make<TH2D>("jetEGenERatiovDRTime", "Jet E/GenE v DRTime;E/GenE;DRTime", 80, 0, 2, 40, -15, 25 );
     hist2d[112] = fs->make<TH2D>("jetGenVarvSCTimeDiff", "Jet GenJet Var v SCJet GenJet TimeDif;Var;TimeDif", 270, -2, 25, 200, 0, 20.0 );
-    hist2d[113] = fs->make<TH2D>("jetGenPurityvSCTimeDiff", "Jet GenJet Puity v SCJet GenJet TimeDif;Puity;TimeDif", 100, 0, 1, 200, 0, 20.0 );
-    hist2d[114] = fs->make<TH2D>("jetGenPurityvGenJetVar", "Jet GenJet Puity v GenJet Var;Puity;Var", 100, 0, 1, 270, -2, 25 );
+    hist2d[113] = fs->make<TH2D>("jetGenPurityvSCTimeDiff", "Jet GenJet Purity v SCJet GenJet TimeDif;Purity;TimeDif", 100, 0, 1, 200, 0, 20.0 );
+    hist2d[114] = fs->make<TH2D>("jetGenPurityvGenJetVar", "Jet GenJet Purity v GenJet Var;Purity;Var", 100, 0, 1, 270, -2, 25 );
     hist2d[115] = fs->make<TH2D>("jetGenVarvGenJetNKids", "Jet GenJet Var v GenJet nKids;Var;nKids", 270, -2, 25, 100, 0, 100 );
-    hist2d[116] = fs->make<TH2D>("jetGenPuityvGenJetNKids", "Jet GenJet Puity v GenJet nKids;Puity;nKids", 100, 0, 1, 100, 0, 100 );
+    hist2d[116] = fs->make<TH2D>("jetGenPurityvGenJetNKids", "Jet GenJet Purity v GenJet nKids;Purity;nKids", 100, 0, 1, 100, 0, 100 );
     hist2d[117] = fs->make<TH2D>("genJetSCTimeDiffvDrMatchJet", "genJet SCTimeDiff v DrMatchJet;SCTimeDiff;DrMatchJet", 300, 0, 30, 320, 0, 3.2 );
     hist2d[118] = fs->make<TH2D>("jetGenTimevJetEMFrac", "GenTime v JetEMFrac;GenTime;JetEMFrac", 280, -15, 25, 150, 0, 1.5 );
+
+    hist2d[119] = fs->make<TH2D>("jetSlopevRotSlope", "Jet Slope v rotated Slope;Slope;rotated Slope", sldiv, slmin, slmax, sldiv, slmin, slmax);
+    hist2d[120] = fs->make<TH2D>("jetSlopevDifSlope", "Jet Slope v dif w/ rotSlope;Slope;difSlope", sldiv, slmin, slmax, sldiv, slmin, slmax);
+    hist2d[121] = fs->make<TH2D>("jetPhivSlope", "Jet Phi v Slope;Phi;Slope ps/cm", 140, -3.5, 3.5, sldiv, slmin, slmax);
+
+    hist2d[122] = fs->make<TH2D>("ebRhTimevEnergy", "ebRhTimevEnergy;Time [ns];Energy [GeV]", jtdiv, -1*jtran, jtran, 1000, 0, 1000 );
+    hist2d[123] = fs->make<TH2D>("eeRhTimevEnergy", "eeRhTimevEnergy;Time [ns];Energy [GeV]", jtdiv, -1*jtran, jtran, 1000, 0, 1000 );
+
+    hist2d[124] = fs->make<TH2D>("jetEGenERatiovGenjetDr", "Jet E/GenE v GenJet Dr;E/GenE;jetGenDr", 80, 0, 2, 200, 0, 0.5 );
 
    //------ ECAL Map Hists --------------------------------------------------------------------------
 
