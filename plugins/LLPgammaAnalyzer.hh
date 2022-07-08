@@ -222,6 +222,7 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
       	rhGroup getRHGroup( float eta, float phi, float drmin, float minenr );
       	rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
+ 		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
 		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax );
         rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
       	rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
@@ -245,6 +246,9 @@ class LLPgammaAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources> 
 
 		vector<float> kidTOFChain( std::vector<reco::CandidatePtr> kids, float cx, float cy, float cz  );
 
+        float getRhTOF( EcalRecHit rechit, double vtxX, double vtxY, double vtxZ );
+        float getLeadTofTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ );
+		float getSeedTofTime( reco::SuperCluster sprclstr, double vtxX, double vtxY, double vtxZ );
       	float getdt( float t1, float t2 );
       	void mrgRhGrp( rhGroup & x, rhGroup & y);
       	bool reduceRhGrps( vector<rhGroup> & x);
@@ -656,6 +660,10 @@ const float getATan2 ( const float x, const float y){
     else return std::atan2(y,x);
 
 }//<<>> const float getAngle (CFlt x, CFlt y) with atan2
+
+//  --------------------------------------------------------------------------
+//  ---------   move all chase functions into class   !!!!!!!!!!!!!!!!!!!!!!!!
+//  --------------------------------------------------------------------------
 
 string bigKidChase( std::vector<reco::CandidatePtr> kids, float vx ){
 

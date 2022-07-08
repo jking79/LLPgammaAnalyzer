@@ -52,7 +52,10 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_t93ML_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 92 w/ exclude leta < 2 && in slope : ltime*10
 #outfilename = 'llpgana_t94ML_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 93 removed plot cuts in slope calc w/ ltime*1000
 #outfilename = 'llpgana_t95L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 94 adjusted axis + added eta v rotated slope plot
-outfilename = 'llpgana_t96L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 95 add phi and eta range plots 
+#outfilename = 'llpgana_t96L_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 95 add phi and eta range plots 
+#outfilename = 'llpgana_t97LM_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 96 + 
+		# photon,oot,electron seperate + plots ( jet matfched and each collection) && rh collection plots && gen dr match v e ratio plot
+outfilename = 'llpgana_t98LM_eigen96t60_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 97 with seed time for p/o/e collections
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -161,8 +164,8 @@ process.source = cms.Source("PoolSource",
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#S
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#LM
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1750000))#L
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000000))#LM
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1750000))#L
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#VL
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 
