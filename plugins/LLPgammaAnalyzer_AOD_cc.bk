@@ -109,7 +109,7 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig) :
 	//rhoToken_					= consumes<double>(rhoTag);
 
 	// mets
-	metsToken_					= consumes<std::vector<pat::MET>>(metsTag);
+	metsToken_					= consumes<std::vector<reco::PFMET>>(metsTag);
 
 	// supercluster
 	scToken_             		= consumes<reco::SuperClusterCollection>(superClusterCollectionTag);
@@ -119,19 +119,19 @@ LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig) :
 	ccToken_			     	= consumes<std::vector<reco::CaloCluster>>(caloClusterTag);	
 
 	// jets
-	jetsToken_					= consumes<std::vector<pat::Jet>>(jetsTag);
+	jetsToken_					= consumes<std::vector<reco::PFJet>>(jetsTag);
 	
 	// leptons
-	electronsToken_				= consumes<std::vector<pat::Electron>>(electronsTag);
-	muonsToken_					= consumes<std::vector<pat::Muon>>(muonsTag);
+	electronsToken_				= consumes<std::vector<reco::GsfElectron>>(electronsTag);
+	muonsToken_					= consumes<std::vector<reco::Muon>>(muonsTag);
 
 	// rechits
 	recHitsEBToken_				= consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(recHitsEBTag);
 	recHitsEEToken_				= consumes<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit>>>(recHitsEETag);
 
 	// photons
-	gedPhotonsToken_ 			= consumes<std::vector<pat::Photon>>(gedPhotonsTag);
-	ootPhotonsToken_ 			= consumes<std::vector<pat::Photon>>(ootPhotonsTag);
+	gedPhotonsToken_ 			= consumes<std::vector<reco::Photon>>(gedPhotonsTag);
+	ootPhotonsToken_ 			= consumes<std::vector<reco::Photon>>(ootPhotonsTag);
 
 // ---------------------------------------------------------------------------------
 }//>>>>LLPgammaAnalyzer::LLPgammaAnalyzer(const edm::ParameterSet& iConfig)
@@ -173,7 +173,7 @@ detIdMap LLPgammaAnalyzer::SetupDetIDs(){
 }//>>>>detIdMap LLPgammaAnalyzer::SetupDetIDs()
 
 
-int LLPgammaAnalyzer::getPFJetID(const pat::Jet & jet){ 
+int LLPgammaAnalyzer::getPFJetID(const reco::PFJet & jet){ 
 	
 	const auto eta  = std::abs(jet.eta());
 	const auto NHF  = jet.neutralHadronEnergyFraction();
@@ -233,7 +233,7 @@ int LLPgammaAnalyzer::getPFJetID(const pat::Jet & jet){
 
 	return -1; // should not happen
 
-}//>>>>int LLPgammaAnalyzer::getPFJetID(const pat::Jet & jet)
+}//>>>>int LLPgammaAnalyzer::getPFJetID(const reco::PFJet & jet)
 
 
 rhGroup LLPgammaAnalyzer::getRHGroup( float eta, float phi, float drmin, float minenr = 0.0 ){
@@ -1610,7 +1610,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 // ** extracted from disphoana : starting point **** not all functios/varibles defined ***************
 // ** for example only -- convert to nano?, use ewkino varibles for output, find rechit information ** 
 
-	std::vector<pat::Jet> fjets;
+	std::vector<reco::PFJet> fjets;
+    std::vector<int> fjetsID;
    	std::vector<reco::CaloCluster> fbclusts;
 
 	//jets.clear(); 
@@ -1644,8 +1645,9 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	  	// save the jets, and then store the ID
 	  	fjets.emplace_back(jet);
-	  	fjets.back().addUserInt("jetID",jetID);
-	  
+	  	//fjets.back().addUserInt("jetID",jetID);
+		fjetsID.push_back(jetID);	  
+
 	  	std::sort(fjets.begin(),fjets.end(),sortByPt);
 	}//<<>>for(const auto& jet : *jets_ )
 	
@@ -1661,6 +1663,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     if( DEBUG ) std::cout << "Processing gedPhotons" << std::endl;
     for( const auto photon : *gedPhotons_ ){
 
+		if( DEBUG ) std::cout << " --- Proccesssing : " << photon << std::endl;
         const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
         const auto scptr = phosc.get();
 		//if( DEBUG ) std::cout << " -- gedPhotons : " << scptr << std::endl;
@@ -1681,6 +1684,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     if( DEBUG ) std::cout << "Processing ootPhotons" << std::endl;
     for( const auto ootphoton : *ootPhotons_ ){
 
+		if( DEBUG ) std::cout << " --- Proccesssing : " << ootphoton  << std::endl;
         const auto &ootphosc = ootphoton.superCluster().isNonnull() ? ootphoton.superCluster() : ootphoton.parentSuperCluster();
         const auto scptr = ootphosc.get();
         //if( DEBUG ) std::cout << " -- ootPhotons : " << scptr << std::endl;
@@ -1701,6 +1705,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     if( DEBUG ) std::cout << "Processing Electrons" << std::endl;
 	for( const auto electron : *electrons_ ){
 
+		if( DEBUG ) std::cout << " --- Proccesssing : " << electron << std::endl;
     	const auto &elesc = electron.superCluster().isNonnull() ? electron.superCluster() : electron.parentSuperCluster();
         const auto scptr = elesc.get();
         //if( DEBUG ) std::cout << " -- Electrons : " << scptr << std::endl;
@@ -1722,10 +1727,10 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 
 	}//<<>>for( const auto electron : *electrons_ )
 
+    auto nUnJets = (*jets_).size();
+    nJets = fjets.size();
     if( DEBUG ) std::cout << "Init for Jet Loop with " << nJets << " jets"<< std::endl;
 
-	auto nUnJets = (*jets_).size();
-	nJets = fjets.size();
 	uInt nGoodDrJets(0);
    	uInt nGoodScJets(0);
    	uInt nGoodBcJets(0);
@@ -1818,6 +1823,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		
 		//std::cout << "Processing with jet " << ijet << std::endl;
 	   	const auto & jet = fjets[ijet];
+		const auto jetid = fjetsID[ijet];
+		if( DEBUG ) std::cout << " --- Proccesssing : " << jet  << std::endl;
 
 	   	// jetID in jet.h ?
 
@@ -1837,7 +1844,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		jetNCarry.push_back(jet.nCarrying(0.1));
 		jetNConst.push_back(jet.nConstituents());
 
-	   	jetID.push_back(jet.userInt("jetID"));
+	   	//jetID.push_back(jet.userInt("jetID"));
+		jetID.push_back(jetid);
 	   	jetNHF.push_back(jet.neutralHadronEnergyFraction());
 	   	jetNEMF.push_back(jet.neutralEmEnergyFraction());
 	   	jetCHF.push_back(jet.chargedHadronEnergyFraction());
@@ -1845,7 +1853,7 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	jetMUF.push_back(jet.muonEnergyFraction());
 	   	jetNHM.push_back(jet.neutralMultiplicity());
 		jetCHM.push_back(jet.chargedMultiplicity());
-		jetCharge.push_back(jet.jetCharge());
+		//jetCharge.push_back(jet.jetCharge());
 
 		jetPHE.push_back(jet.photonEnergy());
 		jetPHEF.push_back(jet.photonEnergyFraction()); 
@@ -1955,7 +1963,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 		   	if( DEBUG ) std::cout << "Filling 2D Histos" << std::endl;
 	
 		   	hist2d[1]->Fill(jmutime,jet.pt());
-		   	hist2d[2]->Fill(jmutime,jet.userInt("jetID"));
+		   	//hist2d[2]->Fill(jmutime,jet.userInt("jetID"));
+            hist2d[2]->Fill(jmutime,jetid);
 		   	hist2d[3]->Fill(jmutime,jet.neutralHadronEnergyFraction());
 		   	hist2d[4]->Fill(jmutime,jet.chargedHadronEnergyFraction());
 		   	hist2d[5]->Fill(jmutime,jet.neutralEmEnergyFraction());
@@ -1979,7 +1988,8 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	
 	
 		   	hist2d[13]->Fill(jmedtime,jet.pt());
-		   	hist2d[14]->Fill(jmedtime,jet.userInt("jetID"));
+		   	//hist2d[14]->Fill(jmedtime,jet.userInt("jetID"));
+            hist2d[14]->Fill(jmedtime,jetid);
 		   	hist2d[15]->Fill(jmedtime,jet.neutralHadronEnergyFraction());
 		   	hist2d[16]->Fill(jmedtime,jet.chargedHadronEnergyFraction());
 		   	hist2d[17]->Fill(jmedtime,jet.neutralEmEnergyFraction());
@@ -2021,78 +2031,78 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
         float jetGenNKids(-1.0);
 
         if( hasGenInfo ){
-            if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
-            auto jetGenParton = jet.genParton();
-            auto jetGenJet = jet.genJet();
-			if( rhCount > 0 ){
-			if( jetGenJet ){
-            	if( DEBUG ) std::cout << " ---- jetGenParton : " << jetGenParton << " genJet : " << jetGenJet << std::endl;
-            	// size_t numberOfDaughters() const override;
-            	// size_t numberOfMothers() const override;
-            	// const Candidate * daughter(size_type) const override;
-            	// const Candidate * mother(size_type = 0) const override;
-            	// Candidates :
-            	//  virtual double vx() const  = 0;
-            	//  virtual double vy() const  = 0;
-            	//  virtual double vz() const  = 0;
-            	//  virtual int pdgId() const  = 0;
-            	//  + mass/energy/momentum info ....
-
-            	//auto nMother = jetGenJet->numberOfMothers();
-            	//auto nDaughter = jetGenJet->numberOfDaughters();
-            	auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
-            	if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
-            	//std::cout << " - jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
-            	if( DEBUG ) std::cout << " - jetGenJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
-            	auto kids = jetGenJet->daughterPtrVector();
-            	//std::cout << bigKidChase( kids, vtxX ) << std::endl;
-            	//kidChase( kids, vtxX, vtxY, vtxZ );
-				auto leadJetRh = getLeadRh( jetDrRhGroup );
-            	auto leadJetRhId = leadJetRh.detid();
-            	auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
-				auto cx = leadJetRhIdPos.x();
-				auto cy = leadJetRhIdPos.y();
-				auto cz = leadJetRhIdPos.z();
-				auto tofcor = hypo( cx, cy, cz )/SOL;
-				//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
-            	auto genTime = kidTOFChain( kids, cx, cy, cz );
-				jetGenEta = jetGenJet->eta();
-				if( genTime[0] > 25.0 ) jetGenTime = -28.0;
-				else if( genTime[0] > -25.0 ) jetGenTime = genTime[0]-tofcor;
-				else jetGenTime = -27.0;
-				jetGenImpactAngle = genTime[1];
-				jetGenPt = jetGenJet->pt();
-                jetGenEnergy = jetGenJet->energy();
-				jetGenEMFrac = (jetGenJet->chargedEmEnergy() + jetGenJet->neutralEmEnergy())/jetGenEnergy;
-				jetGenDrMatch = std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), jetGenJet->eta(), jetGenJet->phi()));
-				jetGenTimeVar = genTime[2];
-                jetGenNextBX = genTime[3];
-                jetGenTimeLLP = genTime[4];
-                jetGenLLPPurity = genTime[5];
-				jetGenNKids = genTime[6];
-				if( DEBUG ){ 
-					std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz; 
-					std::cout << " Angle: " << jetGenImpactAngle << std::endl;
-					std::cout << " -- Energy : " << jetGenEnergy << " Pt : " << jetGenPt << " EMfrac : " << jetGenEMFrac << std::endl;
-				}//<<>>if( DEBUG )
-                hist2d[109]->Fill(genTime[0],tofcor);
-                hist1d[110]->Fill(genTime[0]);
-                hist1d[111]->Fill(tofcor);
-			}//<<>>if( jetGenJet )
-			else { if( DEBUG ) std::cout << " - jetGenJet GenTime : jetGenJet == 0 " << std::endl; jetGenTime = -50.0; }
-			}//<<>>if( rhCount >= minRHcnt )
-
-    //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
-		//<<<<if( hasGenInfo )
-    
-			else if( DEBUG ) std::cout << " - jetGenJet GenTime : rhCount == 0 " << std::endl;
-			if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
-            //for( auto kid : kids ){
-            //  std::string depth(" --");
-            //    std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt() << " vtx (" << kid->vx() << "," << kid->vy() << "," << kid->vz() << ")";
-            //  std::cout << " nMothers : " << kid->numberOfMothers() << std::endl;
-            //  motherChase( kid.get(), depth );
-            //}//<<>>for( auto kid : kids )
+//            if( DEBUG ) std::cout << " -- Pulling jet gen info " << std::endl;
+//            auto jetGenParton = jet.genParton(); // ?? not used ?? used in cout below only ??
+//            auto jetGenJet = jet.genJet();
+//			if( rhCount > 0 ){
+//			if( jetGenJet ){
+//            	if( DEBUG ) std::cout << " ---- jetGenParton : " << jetGenParton << " genJet : " << jetGenJet << std::endl;
+//            	// size_t numberOfDaughters() const override;
+//            	// size_t numberOfMothers() const override;
+//            	// const Candidate * daughter(size_type) const override;
+//            	// const Candidate * mother(size_type = 0) const override;
+//            	// Candidates :
+//            	//  virtual double vx() const  = 0;
+//            	//  virtual double vy() const  = 0;
+//            	//  virtual double vz() const  = 0;
+//            	//  virtual int pdgId() const  = 0;
+//            	//  + mass/energy/momentum info ....
+//
+//            	//auto nMother = jetGenJet->numberOfMothers();
+//            	//auto nDaughter = jetGenJet->numberOfDaughters();
+//            	auto nSources = jetGenJet->numberOfSourceCandidatePtrs();
+//            	if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+//            	//std::cout << " - jetGenJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
+//            	if( DEBUG ) std::cout << " - jetGenJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
+//            	auto kids = jetGenJet->daughterPtrVector();
+//            	//std::cout << bigKidChase( kids, vtxX ) << std::endl;
+//            	//kidChase( kids, vtxX, vtxY, vtxZ );
+//				auto leadJetRh = getLeadRh( jetDrRhGroup );
+//            	auto leadJetRhId = leadJetRh.detid();
+//            	auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
+//				auto cx = leadJetRhIdPos.x();
+//				auto cy = leadJetRhIdPos.y();
+//				auto cz = leadJetRhIdPos.z();
+//				auto tofcor = hypo( cx, cy, cz )/SOL;
+//				//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
+//            	auto genTime = kidTOFChain( kids, cx, cy, cz );
+//				jetGenEta = jetGenJet->eta();
+//				if( genTime[0] > 25.0 ) jetGenTime = -28.0;
+//				else if( genTime[0] > -25.0 ) jetGenTime = genTime[0]-tofcor;
+//				else jetGenTime = -27.0;
+//				jetGenImpactAngle = genTime[1];
+//				jetGenPt = jetGenJet->pt();
+//                jetGenEnergy = jetGenJet->energy();
+//				jetGenEMFrac = (jetGenJet->chargedEmEnergy() + jetGenJet->neutralEmEnergy())/jetGenEnergy;
+//				jetGenDrMatch = std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), jetGenJet->eta(), jetGenJet->phi()));
+//				jetGenTimeVar = genTime[2];
+//                jetGenNextBX = genTime[3];
+//                jetGenTimeLLP = genTime[4];
+//                jetGenLLPPurity = genTime[5];
+//				jetGenNKids = genTime[6];
+//				if( DEBUG ){ 
+//					std::cout << " - jetGenJet GenTime : " << jetGenTime << " rhPos: " << cx << "," << cy << "," << cz; 
+//					std::cout << " Angle: " << jetGenImpactAngle << std::endl;
+//					std::cout << " -- Energy : " << jetGenEnergy << " Pt : " << jetGenPt << " EMfrac : " << jetGenEMFrac << std::endl;
+//				}//<<>>if( DEBUG )
+//                hist2d[109]->Fill(genTime[0],tofcor);
+//                hist1d[110]->Fill(genTime[0]);
+//                hist1d[111]->Fill(tofcor);
+//			}//<<>>if( jetGenJet )
+//			else { if( DEBUG ) std::cout << " - jetGenJet GenTime : jetGenJet == 0 " << std::endl; jetGenTime = -50.0; }
+//			}//<<>>if( rhCount >= minRHcnt )
+//
+//    //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
+//		//<<<<if( hasGenInfo )
+//    
+//			else if( DEBUG ) std::cout << " - jetGenJet GenTime : rhCount == 0 " << std::endl;
+//			if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+//            //for( auto kid : kids ){
+//            //  std::string depth(" --");
+//            //    std::cout << " -- kid > pdgID : " << kid->pdgId() << " pt : " << kid->pt() << " vtx (" << kid->vx() << "," << kid->vy() << "," << kid->vz() << ")";
+//            //  std::cout << " nMothers : " << kid->numberOfMothers() << std::endl;
+//            //  motherChase( kid.get(), depth );
+//            //}//<<>>for( auto kid : kids )
 
         }//<<>>if( hasGenInfo )
 
@@ -2127,18 +2137,36 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	for( const auto photon : *gedPhotons_ ){
 
 			if( DEBUG ) std::cout << " --- Proccesssing : " << photon  << std::endl;
-	      	edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
-	      	for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
-	         	//std::cout << "Processing asc pfcand # " << ipcp << std::endl;
-	         	edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
-	         	const auto *ascpacked_cand = passociatedPtr.get();
-	            for( const auto kid : jet.daughterPtrVector() ){
-	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
-	               	auto kidcand = pfcands_->ptrAt(kid.key());
-	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
-	            	if( ascpacked_cand == packed_cand ){ pmatched = true; }//<<>>if( ascpacked_cand == packed_cand )
-	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
-			}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
+
+			std::cout << "----------------------------------" << std::endl;
+			reco::CaloCluster_iterator clStart = photon.superCluster()->clustersBegin();
+			reco::CaloCluster_iterator clEnd = photon.superCluster()->clustersEnd();
+			for( reco::CaloCluster_iterator clusIt = clStart; clusIt != clEnd; ++clusIt ){
+				std::cout << " -- clusIt ref ptr: " << clusIt->get() << std::endl;
+				std::vector<reco::PFCandidatePtr> jetPFCands = jet.getPFConstituents();
+				for( auto jpfcand : jetPFCands ){
+					std::cout << " --- jet pf cand ptr: " << jpfcand << std::endl;
+				}//<<>>for( auto jpfcand : jetPFCands )
+			}//<<>>for ( const auto clusIt = clStart; clusIt != clEnd; ++clusIt )
+			for( const auto kid : jet.daughterPtrVector() ){ 
+				auto kidcand = pfcands_->ptrAt(kid.key());
+				const auto *kpfcand = dynamic_cast<const reco::PFCandidate *>(kidcand.get());
+				std::cout << " -- kid ptr: " << kid.get() << " - " << kpfcand << std::endl; 
+			}//<<>>for( const auto kid : jet.daughterPtrVector() )
+
+
+//	      	edm::RefVector<pat::PackedCandidateCollection> passociated =  photon.associatedPackedPFCandidates();
+//	      	for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ ) {
+//	         	//std::cout << "Processing asc pfcand # " << ipcp << std::endl;
+//	         	edm::Ptr<pat::PackedCandidate> passociatedPtr = edm::refToPtr( passociated[ipcp] );
+//	         	const auto *ascpacked_cand = passociatedPtr.get();
+//	            for( const auto kid : jet.daughterPtrVector() ){
+//	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
+//	               	auto kidcand = pfcands_->ptrAt(kid.key());
+//	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+//	            	if( ascpacked_cand == packed_cand ){ pmatched = true; }//<<>>if( ascpacked_cand == packed_cand )
+//	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
+//			}//<<>>for( uInt ipcp = 0; ipcp < passociated.size(); ipcp++ )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
       	//<<<<for( const auto photon : *gedPhotons_ ){ 
@@ -2250,27 +2278,27 @@ void LLPgammaAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& 
 	   	for( const auto electron : *electrons_ ){
 
 			if( DEBUG ) std::cout << " --- Proccesssing : " << electron  << std::endl;
-	    	edm::RefVector<pat::PackedCandidateCollection> eassociated = electron.associatedPackedPFCandidates();
-	      	for( uInt ipce = 0; ipce < eassociated.size(); ipce++ ) {
-	         	edm::Ptr<pat::PackedCandidate> eassociatedPtr = edm::refToPtr( eassociated[ipce] );
-	         	const auto *ascpacked_cand = eassociatedPtr.get();
-	            //int ijk(0);
-	            for( const auto kid : jet.daughterPtrVector() ){
-	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
-	               	auto kidcand = pfcands_->ptrAt(kid.key());
-	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
-	                if( ascpacked_cand == packed_cand ){
-
-	                	//const auto pce = ascpacked_cand->energy();
-	                	//std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
-	                    //std::cout << ijet << "/" << nJets  << " kid: " << ijk; // << std::endl;
-	                    //std::cout << " pce: " << pce << std::endl;
-	                    ematched = true;
-									
-	                }//<<>>if( ascpacked_cand == packed_cand )
-	               	//ijk++;
-	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
-	    	}//<<>>for( uInt ipce = 0; ipce < eassociated.size(); ipce++ )
+//	    	edm::RefVector<pat::PackedCandidateCollection> eassociated = electron.associatedPackedPFCandidates();
+//	      	for( uInt ipce = 0; ipce < eassociated.size(); ipce++ ) {
+//	         	edm::Ptr<pat::PackedCandidate> eassociatedPtr = edm::refToPtr( eassociated[ipce] );
+//	         	const auto *ascpacked_cand = eassociatedPtr.get();
+//	            //int ijk(0);
+//	            for( const auto kid : jet.daughterPtrVector() ){
+//	            	//std::cout << "Proccesssing New jetKid :" << std::endl;
+//	               	auto kidcand = pfcands_->ptrAt(kid.key());
+//	               	const auto *packed_cand = dynamic_cast<const pat::PackedCandidate *>(kidcand.get());
+//	                if( ascpacked_cand == packed_cand ){
+//
+//	                	//const auto pce = ascpacked_cand->energy();
+//	                	//std::cout << "Match found at ph: " << iph << " asc: " << ipcp << " jet: "; 
+//	                    //std::cout << ijet << "/" << nJets  << " kid: " << ijk; // << std::endl;
+//	                    //std::cout << " pce: " << pce << std::endl;
+//	                    ematched = true;
+//									
+//	                }//<<>>if( ascpacked_cand == packed_cand )
+//	               	//ijk++;
+//	        	}//<<>>for( const auto kid : jet.daughterPtrVector() )
+//	    	}//<<>>for( uInt ipce = 0; ipce < eassociated.size(); ipce++ )
 
    	//<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
       	//<<<<for( const auto electron : *electrons_ ){

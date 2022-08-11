@@ -24,9 +24,7 @@ options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.
 
 ## GT to be used
 #options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
-#options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
-options.register('globalTag','102X_mc2017_realistic_v7',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
-#102X_mc2017_realistic_v7
+options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #112X_mcRun3_2021_realistic_v16
 
 ## processName
@@ -41,7 +39,8 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_t75M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & sphcalrot : ebp ebn + ltime sum flip
 #outfilename = 'llpgana_mc_t76SM_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as May 16 2022 update with energy/delaytime info
 #outfilename = 'llpgana_mc_t79M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 76 + ootPhotons only
-outfilename = 'llpgana_GMSB_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
+#outfilename = 'llpgana_mc_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
+outfilename = 'llpgana_mc_AODSIM_local_test.root'
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -77,18 +76,59 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
+aodpath_1k_450_100k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
+aodpath_1k_450_10k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
+aodpath_125_25_15k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-15000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
+
+aodpath21_1k_450_100k = '/store/mc/Run3Summer21DRPremix/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV-pythia8/AODSIM/120X_mcRun3_2021_realistic_v6-v2/'
+
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 
-		#'file:jwk_reco_data_DIGI2RAW.root'),
+		  #'file:jwk_reco_data_DIGI2RAW.root'),
 
          ## HTo2LongLivedTo4b
 
         #'/store/mc/Run3Winter21DRMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV-pythia8/MINIAODSIM/FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/280000/17bd2d71-8a76-46c5-947a-7ea2b1df44b6.root'
 
-		 ## GMSB
+		# AOD
+         'file:BCB550D6-CAB3-5C4F-8866-77897305A646.root',#aodpath_125_25_15k
+         #cmssw12XX only #'file:bc04e7b9-31c7-4bec-a396-258ba40b8bd5.root',#aodpath21_1k_450_100k
 
-		'/store/mc/RunIIFall17NanoAODv6/GMSB_L-100TeV_Ctau-0p001cm_TuneCP5_13TeV-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/100000/F55896ED-3696-8846-A324-FA843F791D25.root'
+         #aodpath_1k_450_100k+'10000/07C1D360-FDE3-B04C-8E7A-DDE4275C7F04.root',
+         #aodpath_1k_450_100k+'10000/2EBC0785-9656-2B43-A9D2-FFEB5032E66A.root',
+         #aodpath_1k_450_100k+'10000/4002AC07-8CA1-0643-9237-F38929578E9D.root',
+         #aodpath_1k_450_100k+'10000/447E972B-3F0E-E646-AB2E-8D1D530CFE88.root',
+         #aodpath_1k_450_100k+'10000/6C3EEB7D-B4DD-2E4C-AA3C-8BFA5109627E.root',
+         #aodpath_1k_450_100k+'10000/701683AD-0961-B346-98C4-349653C33F5C.root',
+         #aodpath_1k_450_100k+'10000/7080FB51-EF47-D74F-B68A-187AFCF0278A.root',
+         #aodpath_1k_450_100k+'10000/7BE0C49A-88F0-0E4E-9CB5-06DD4CBEB538.root',
+         #aodpath_1k_450_100k+'10000/DF28A0DC-1D69-2147-90FB-546BD0443684.root',
+         #aodpath_1k_450_100k+'10000/FFC58857-0181-8D41-BB92-1DBA57796135.root',
+         #aodpath_1k_450_100k+'240000/49A0EB69-E794-2D4D-9955-4A3ECC27B6F3.root',
+
+         #aodpath_1k_450_10k+'10000/06A10966-0ABE-A94D-A5C0-BA43FB64B0AB.root',
+         #aodpath_1k_450_10k+'10000/190B92B5-4416-A346-B0A9-B9980F15563C.root',
+         #aodpath_1k_450_10k+'10000/40AF3AF3-6F15-1341-BF57-6A7C2ACBD01F.root',
+         #aodpath_1k_450_10k+'10000/4DA81C18-5BCD-5E44-B7AA-AE4963A8D1A5.root',
+         #aodpath_1k_450_10k+'10000/61B67C46-6181-EA42-90B6-6680A697CF1B.root',
+         #aodpath_1k_450_10k+'10000/7FEE9823-303D-0D4C-A852-97CBA777CBFA.root',
+         #aodpath_1k_450_10k+'10000/A449E283-46F7-E74D-B6BF-15862B85F3D8.root',
+         #aodpath_1k_450_10k+'10000/D0488318-FB3D-7041-BB72-A009D26248E5.root',
+         #aodpath_1k_450_10k+'10000/F9C14E6C-6FC0-F14A-BA16-6E44B7480009.root',
+         #aodpath_1k_450_10k+'50000/4E0AC838-A6FF-B549-8441-A86B04B2BEFA.root',
+
+         #aodpath_125_25_15k+'240000/2543A8DF-4540-FE45-A496-9EF8D7918E35.root',
+         #aodpath_125_25_15k+'240000/6299C20E-A359-8B4F-A4C3-858E50BC461E.root',
+         #aodpath_125_25_15k+'240000/6EA51191-B27D-B547-920E-66EF94292870.root',
+         #aodpath_125_25_15k+'240000/74F70EBA-B107-9348-B707-5FA925F5B13F.root',
+         #aodpath_125_25_15k+'240000/8E42896A-57F9-284A-A1A3-26857DD2A4F5.root',
+         #aodpath_125_25_15k+'240000/9381F9E2-2338-5049-AB04-0EDDD054F299.root',
+         #aodpath_125_25_15k+'240000/A330CAF2-7A94-4F40-B4DE-2287AB3E5831.root',
+         #aodpath_125_25_15k+'240000/B4282E0A-8B1A-D94C-84CB-A85F0F210D1E.root',
+         #aodpath_125_25_15k+'240000/B5CECD56-5DA4-E44C-B5D2-508043F27FCE.root',
+         #aodpath_125_25_15k+'240000/BCB550D6-CAB3-5C4F-8866-77897305A646.root',
+         #aodpath_125_25_15k+'240000/C7D370A7-A4B4-A442-BB53-4A5F0EDF10AE.root',
 
 		  ## EGamma
 
@@ -179,34 +219,49 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    hasGenInfo = cms.bool(options.hasGenInfo),
    ## additional collections
    ## tracks
-   tracks = cms.InputTag("unpackedTracksAndVertices"),
+   #tracks = cms.InputTag("unpackedTracksAndVertices"),
+   tracks = cms.InputTag("generalTracks"),
    ## vertices
-   vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+   #vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+   vertices = cms.InputTag("offlinePrimaryVertices"),
    ## pfcandidates
-   pfcandidates = cms.InputTag("packedPFCandidates"),
+   #pfcandidates = cms.InputTag("packedPFCandidates"),
+   pfcandidates = cms.InputTag("particleFlow"),
    ## rho
-   rho = cms.InputTag("fixedGridRhoFastjetAll"), #fixedGridRhoAll
+   #rho = cms.InputTag("fixedGridRhoFastjetAll"), #fixedGridRhoAll
+   rho = cms.InputTag("fixedGridRhoAll"),
    ## METs
-   mets = cms.InputTag("slimmedMETs"),
+   #mets = cms.InputTag("slimmedMETs"),
+   mets = cms.InputTag("pfMet"),
    ## jets
    #jets = cms.InputTag("updatedPatJetsUpdatedJEC"),
-   jets = cms.InputTag("slimmedJets"),
+   #jets = cms.InputTag("slimmedJets"),
+   jets = cms.InputTag("ak4PFJets"),
    ## electrons
-   electrons = cms.InputTag("slimmedElectrons"),
+   #electrons = cms.InputTag("slimmedElectrons"),
+   electrons = cms.InputTag("gedGsfElectrons"),
    ## muons
-   muons = cms.InputTag("slimmedMuons"),
+   #muons = cms.InputTag("slimmedMuons"),
+   muons = cms.InputTag("muons"),
    ## photons
-   gedPhotons = cms.InputTag("slimmedPhotons"),
-   ootPhotons = cms.InputTag("slimmedOOTPhotons"),
+   #gedPhotons = cms.InputTag("slimmedPhotons"),
+   gedPhotons = cms.InputTag("gedPhotons"),
+   #ootPhotons = cms.InputTag("slimmedOOTPhotons"),
+   ootPhotons = cms.InputTag("ootPhotons"),
    ## ecal recHits
-   recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
-   recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
+   #recHitsEB = cms.InputTag("reducedEgamma", "reducedEBRecHits"),
+   #recHitsEE = cms.InputTag("reducedEgamma", "reducedEERecHits"),
+   recHitsEB = cms.InputTag("reducedEcalRecHitsEB"),
+   recHitsEE = cms.InputTag("reducedEcalRecHitsEE"),
    ## superclusters
-   superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
-   ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
+   #superClusters = cms.InputTag("reducedEgamma", "reducedSuperClusters"),
+   superClusters = cms.InputTag("particleFlowSuperClusterECAL", "particleFlowSuperClusterECALBarrel"),
+   #ootSuperClusters = cms.InputTag("reducedEgamma", "reducedOOTSuperClusters"),
+   ootSuperClusters = cms.InputTag("particleFlowSuperClusterOOTECAL", "particleFlowSuperClusterOOTECALBarrel"), 
    ## caloclusters
-   caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
-)##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer"
+   #caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
+   caloClusters = cms.InputTag("particleFlowEGamma", "EBEEClusters"),
+)##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_aod"
 
 
 # Set up the path
