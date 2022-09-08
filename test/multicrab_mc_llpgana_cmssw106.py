@@ -86,7 +86,7 @@ def docrab( dataset ):
         config.Data.publication    = False
         #config.Site.storageSite    = 'T2_US_Nebraska'
         config.Site.storageSite    = 'T3_US_FNALLPC'
-        config.Data.outLFNDirBase  = '/store/user/jaking/LLPGamma/'
+        config.Data.outLFNDirBase  = '/store/user/jaking/LLPGamma/GMSB/'
         #--------------------------------------------------------
 
         # Will submit one task for each of these input datasets.
@@ -133,6 +133,7 @@ def docrab( dataset ):
             #trial          = "llpga_v35" # as 34 + emfrac && gen plots have full cut selection with genPhaseSpaceCut && gen/cluster plots have hasGoodSCTime cut
             #trial          = "llpga_v36" # as 35 w/ no gen plot cut, changed difftime endcase checks, set goodGenSCdiffTime < 20.0 to testnew end cases
             trial          = "llpga_v38" # ps 36 /o/e + rh plots 
+            trial          = "llpga_GMSB_v38" # switching to run2 2017 GMSB MC
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"
@@ -143,8 +144,10 @@ def docrab( dataset ):
             #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v20', 'outputFileName=output.root']
 #>>>>>>>>>>>>>>>>>>>	    #2016  #globalTag=106X_dataRun2_v27
             #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v27', 'outputFileName=output.root']
-#>>>>>>>>>>>>>>>>>>>     #MC   #globalTag=112X_mcRun3_2021_realistic_v16  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
-            config.JobType.pyCfgParams   = ['globalTag=112X_mcRun3_2021_realistic_v16','outputFileName=output.root']
+#>>>>>>>>>>>>>>>>>>>     #MC Run3  #globalTag=112X_mcRun3_2021_realistic_v16  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
+            #config.JobType.pyCfgParams   = ['globalTag=112X_mcRun3_2021_realistic_v16','outputFileName=output.root']
+#>>>>>>>>>>>>>>>>>>>     #MC GMSB 17  #globalTag=94X_mc2017_realistic_v14  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
+            config.JobType.pyCfgParams   = ['globalTag=94X_mc2017_realistic_v14','outputFileName=output.root']
 
             config.Data.inputDataset     = inDO[0]
             # Submit.

@@ -25,7 +25,8 @@ options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.
 ## GT to be used
 #options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
-options.register('globalTag','102X_mc2017_realistic_v7',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+options.register('globalTag','94X_mc2017_realistic_v14',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+#94X_mc2017_realistic_v14
 #102X_mc2017_realistic_v7
 #112X_mcRun3_2021_realistic_v16
 
@@ -88,7 +89,7 @@ process.source = cms.Source("PoolSource",
 
 		 ## GMSB
 
-		'/store/mc/RunIIFall17NanoAODv6/GMSB_L-100TeV_Ctau-0p001cm_TuneCP5_13TeV-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano25Oct2019_102X_mc2017_realistic_v7-v1/100000/F55896ED-3696-8846-A324-FA843F791D25.root'
+        '/store/mc/RunIIFall17MiniAODv2/GMSB_L-150TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/B03A864D-79BA-E811-BA05-0242AC1C0500.root'
 
 		  ## EGamma
 

@@ -23,8 +23,8 @@ options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.
 #options.register('muhighpTmin',50.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'muon high pT minimum cut');
 
 ## GT to be used
-#options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
-options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+#options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #112X_mcRun3_2021_realistic_v16
 
 ## processName
@@ -40,7 +40,7 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_t76SM_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as May 16 2022 update with energy/delaytime info
 #outfilename = 'llpgana_mc_t79M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 76 + ootPhotons only
 #outfilename = 'llpgana_mc_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
-outfilename = 'llpgana_mc_AODSIM_local_test.root'
+outfilename = 'llpgana_mc_AODSIM_GMSB17_ST.root'
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -68,19 +68,20 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 
 ## Message Logger settings
 process.load("FWCore.MessageService.MessageLogger_cfi")
-#process.MessageLogger.destinations = ['cout', 'cerr']
+process.MessageLogger.destinations = ['cout', 'cerr']
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10
 #process.MessageLogger.cerr.FwkReport.reportEvery = 100
-process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+#process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
 aodpath_1k_450_100k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
 aodpath_1k_450_10k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
 aodpath_125_25_15k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-15000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
-
 aodpath21_1k_450_100k = '/store/mc/Run3Summer21DRPremix/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV-pythia8/AODSIM/120X_mcRun3_2021_realistic_v6-v2/'
+
+lpcpath_350_600 = 'file:/eos/uscms/store/mc/RunIIFall17DRPremix/GMSB_L-350TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/AODSIM/PU2017_94X_mc2017_realistic_v11-v1/'
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -92,7 +93,11 @@ process.source = cms.Source("PoolSource",
         #'/store/mc/Run3Winter21DRMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV-pythia8/MINIAODSIM/FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/280000/17bd2d71-8a76-46c5-947a-7ea2b1df44b6.root'
 
 		# AOD
-         'file:BCB550D6-CAB3-5C4F-8866-77897305A646.root',#aodpath_125_25_15k
+
+		 #'file:/eos/uscms/store/mc/RunIIFall17DRPremix/GMSB_L-100TeV_Ctau-0_1cm_TuneCP5_13TeV-pythia8/AODSIM/PU2017_94X_mc2017_realistic_v11-v1/100000/2C55A98D-E4D7-E811-AC40-002590491B1E.root'
+		 lpcpath_350_600+'120000/80762156-99D6-E811-8942-34E6D7E3879B.root'
+
+         #'file:BCB550D6-CAB3-5C4F-8866-77897305A646.root',#aodpath_125_25_15k
          #cmssw12XX only #'file:bc04e7b9-31c7-4bec-a396-258ba40b8bd5.root',#aodpath21_1k_450_100k
 
          #aodpath_1k_450_100k+'10000/07C1D360-FDE3-B04C-8E7A-DDE4275C7F04.root',
@@ -193,8 +198,8 @@ process.source = cms.Source("PoolSource",
 
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))#LT
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))#US
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))#VS
@@ -214,7 +219,7 @@ process.TFileService = cms.Service("TFileService",
 		                   fileName = cms.string(options.outputFileName))
 				   
 # Make the tree 
-process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
+process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_AOD",
    ## flags
    hasGenInfo = cms.bool(options.hasGenInfo),
    ## additional collections
@@ -227,6 +232,8 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer",
    ## pfcandidates
    #pfcandidates = cms.InputTag("packedPFCandidates"),
    pfcandidates = cms.InputTag("particleFlow"),
+   particleflow = cms.InputTag("particleFlow",""),	
+   pfcanphomap = cms.InputTag("particleFlow","photons"),
    ## rho
    #rho = cms.InputTag("fixedGridRhoFastjetAll"), #fixedGridRhoAll
    rho = cms.InputTag("fixedGridRhoAll"),
@@ -281,4 +288,11 @@ process.options = cms.untracked.PSet()
 #call to customisation function miniAOD_customizeAllData imported from PhysicsTools.PatAlgos.slimming.miniAOD_tools
 #process = miniAOD_customizeAllData(process)
 # End of customisation functions
+
+process.options = cms.untracked.PSet( 
+    #numberOfThreads = cms.untracked.uint32(4), 
+    #numberOfStreams = cms.untracked.uint32(4), 
+    SkipEvent = cms.untracked.vstring('ProductNotFound'), 
+    #wantSummary = cms.untracked.bool(True) 
+)
 
