@@ -16,65 +16,54 @@ def doCommand( command ):
 	output = os.system( command )
 	return output
 
+debug = True
+#debug = False
+
 mspc = '/store/user/jaking/'
+mdis = '/store/user/lpcsusylep/jaking/ecalTiming/EGamma/'
+edis = '/eos/uscms/store/mc/RunIIFall17DRPremix/'
 eosll = 'eos root://cmseos.fnal.gov ls '
-command = eosll+mspc+'LLPGamma/'
-version = '_v11_'
+#command = eosll+mspc+'LLPGamma/'
+#command = eosll+mspc+'ecalTiming/'
+command = eosll+edis
+#version = '_v11_'
+#version = '_noOOTAmp_'
+#version = '_wthOOTAmp_'
+version = ''
+folder = ''
 rootfile = '.root'
-dirselect = 'HTo2LongLivedTo4b'
+dirselect = 'GMSB'
+#dirselect = 'HTo2LongLivedTo4b'
+#dirselect = '_jitdif_'
 
 targdirs = []
 subdirlist1 = []
 subdirlist2 = []
+subdirlist3 = []
 filelist = []
 theFileList = ''
 
 dirls = bashout( command ).splitlines()
 #print( '-------------------------------------------------')
 for line in dirls:
-	#print( line )
 	if dirselect in line : targdirs.append( line )
-#print( targdirs )
 for mydir in targdirs:
 	command1 = command+mydir+'/'
 	subdir1 = bashout( command1 ).rstrip().splitlines()
-	#print( subdir1 )
-	#print( mydir+'/'+subdir1+'/' )
 	for line in subdir1 : 
-		#print( line )
 		if version in line : subdirlist1.append( mydir+'/'+line+'/' )
-	#print( subdirlist1 )
 for thesubdir in subdirlist1 :
 	command2 = command+thesubdir
 	subdir2 = bashout( command2 ).rstrip().splitlines()
-	#print( thesubdir+subdir2+'/0000/' )
-	for subdir in subdir2 : subdirlist2.append(thesubdir+subdir+'/0000/')
-	#for subdir2 in subdirlist2:
-	#	command3 = command+subdir2
-	#	files = bashout( command3 ).splitlines()
-	#	for thefile in files : 
-	#		#print( subdir2+thefile )
-	#		theFileList +=(subdir2+thefile)
+	for subdir in subdir2 : subdirlist2.append(thesubdir+subdir+'/')
 for subdir2 in subdirlist2:
 	lists = bashout( command+subdir2 ).rstrip().splitlines()
 	for line in lists :
-		if rootfile in line : filelist.append(subdir2+line)
-
+		if folder in line : subdirlist3.append(subdir2+line+'/')
+for subdir3 in subdirlist3:
+    lists = bashout( command+subdir3 ).rstrip().splitlines()
+    for line in lists :
+        if rootfile in line : filelist.append(subdir3+line)
 for thefile in filelist:
 	print( thefile )
 
-	#filename = 'tmp_'+subdir2.split('/')[1]+'.root '
-	#print( filename )
-	#lists = bashout( "eosls "+mspc+"LLPGamma/"+subdir2 ).rstrip()
-	#print( subdir2 )
-	#haddcommand = "hadd -f "+filename+"`xrdfs root://cmseos.fnal.gov ls -u "+mspc+"LLPGamma/"+subdir2+" | grep '\.root'`"
-	#haddcommand = "`xrdfs root://cmseos.fnal.gov ls -u "+mspc+"LLPGamma/"+subdir2+" | grep '\.root'`"
-	#haddcommand = "`xrdfs root://cmseos.fnal.gov ls -u "+mspc+"LLPGamma/"+subdir2+"`"
-	#haddcommand = "hadd "+filename+lists
-	#print( mspc+"LLPGamma/"+subdir2 )
-	#print( haddcommand )
-	#doCommand( haddcommand )
-	#print( '---------------------------------------------------' )
-
-	
-#print( bashout( 'hadd llpgana_HTo2LongLivedTo4b_t37MC_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root ' + theFileList ) )	

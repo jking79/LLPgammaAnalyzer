@@ -42,7 +42,8 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_t75M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 73 w/ 3DProfile & sphcalrot : ebp ebn + ltime sum flip
 #outfilename = 'llpgana_mc_t76SM_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as May 16 2022 update with energy/delaytime info
 #outfilename = 'llpgana_mc_t79M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 76 + ootPhotons only
-outfilename = 'llpgana_GMSB_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
+#outfilename = 'llpgana_GMSB_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
+outfilename = 'llpgana_mc_MINIAODSIM_GMSB100TeV_v80a_2per_FL.root'
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -78,6 +79,11 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
+
+GMSBpath = '/store/mc/RunIIFall17MiniAODv2/' 
+gmsbver = 'MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/'
+gmsbver2 = 'MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/' 
+
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 
@@ -89,7 +95,74 @@ process.source = cms.Source("PoolSource",
 
 		 ## GMSB
 
-        '/store/mc/RunIIFall17MiniAODv2/GMSB_L-150TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/B03A864D-79BA-E811-BA05-0242AC1C0500.root'
+        #'/store/mc/RunIIFall17MiniAODv2/GMSB_L-150TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/60000/B03A864D-79BA-E811-BA05-0242AC1C0500.root'
+
+        GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'10000/841F7B7B-F629-E911-88C8-0025905B860C.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'10000/3C4B6292-F629-E911-8AD4-24BE05CECBD1.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/D428E60B-AD32-E911-B3EA-0025905C42A8.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/6EE235DE-5433-E911-B06D-0CC47AFF025C.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/FA2A3E25-0032-E911-AEFB-00266CF8586C.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/BEF92BA4-5433-E911-BDEB-44A842CFC9E6.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/AA8BA6A5-5533-E911-9468-B083FED42FAF.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/94C0303E-5533-E911-851A-24BE05C6E7E1.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/BCDCE0E5-5433-E911-AB00-001E67F33631.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10000cm_TuneCP5_13TeV-pythia8/'+gmsbver2+'100000/2E56CD8A-5533-E911-8E63-00259019A41E.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/0C22794B-F7DA-E811-97AF-001EC94B4F57.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/4C422BFD-F6DA-E811-A790-001E67DDCC81.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/BC90DCFB-F6DA-E811-8186-00259075D62E.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/C67BE728-F7DA-E811-9E36-B499BAAC0572.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/026A1D51-6DB4-E811-90E0-0025905D1CB4.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/5A6BB0E2-6CB4-E811-A4B2-E0071B73C630.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/D0579E44-3DB4-E811-A58E-1C6A7A26E465.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-1000cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/D4AC52BB-6DB4-E811-8F2D-A4BF010120C5.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/6E9F4FA2-67AE-E811-9E39-24BE05CEECD1.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/FA10588B-55B3-E811-A08D-A4BF0101DDD7.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/D6DC264C-55B3-E811-9607-001E67E63AE6.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/10191D17-55B3-E811-B24A-EC0D9A82261E.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/56778B4A-55B3-E811-A0E7-0CC47AF9B32A.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/6E777363-55B3-E811-98A0-0CC47A13D416.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/BEEB6449-55B3-E811-8F9D-A0369FE2C0D2.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/DED58E6F-55B3-E811-982A-008CFA0087C4.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'120000/BA26173B-BCBC-E811-9C4B-FA163EC2B778.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-10cm_TuneCP5_13TeV-pythia8/'+gmsbver+'120000/FA59BD8A-2FC7-E811-A4C7-008CFA197E18.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/C25F11E2-A1B3-E811-B4A4-0090FAA58924.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/EAA4D0DD-A1B3-E811-A44A-00269E95B0A4.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/304BEDCA-A1B3-E811-8A43-0023AEEEB208.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/7A5A6CE8-A1B3-E811-989F-B499BAAC0626.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/BC34C0E1-A1B3-E811-8A82-0CC47AF9B1AA.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/4E1FFED6-A1B3-E811-BC6B-002590725380.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/A6DCC1C0-43B3-E811-B2FE-24BE05C48801.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'120000/C4992F84-16D9-E811-9313-D4AE526A10E8.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/'+gmsbver+'120000/6806C678-16D9-E811-ADC1-AC1F6B8DD22E.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/16678BE8-90B6-E811-BE66-484D7E8DF085.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/7A3167FA-88B6-E811-AECA-AC1F6B0DE454.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/827D4CB4-8BB6-E811-B294-246E96D10CBC.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/E67A2621-89B6-E811-8183-24B6FDFFBC48.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/80ED4776-C2B3-E811-8454-E0071B6CAD00.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/DAF3347D-9DB6-E811-885F-90B11CBCFF4E.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-400cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/AED6BBBC-9DB6-E811-81C0-FA163E3C0C41.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/1E320180-2AB0-E811-B097-842B2B76653D.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/F6F9A29D-2AB0-E811-8A2F-A4BF01159514.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/8C02DA9A-2AB0-E811-A4B0-0025905C5502.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/0814AB87-2AB0-E811-82C7-E0071B7A7830.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/E25298F9-2AB0-E811-A54C-009C02AABB60.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/FC0993AB-2AB0-E811-AE73-0025905B8564.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/CA16B7E8-2AB0-E811-93A6-1C6A7A21A6B3.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'60000/26DE9DF3-BBD7-E811-A0C6-A4BF0101DB93.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/'+gmsbver+'60000/A2F6CF9B-BBD7-E811-A94D-0425C5DE7BF2.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/B4FF3ECF-52B5-E811-A6D9-0025905C3DF8.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/9A1B0A02-53B5-E811-A72F-001F29089F2A.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/4E1493A8-53B5-E811-8B2D-5065F3812261.root',
+        GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/4CDE3601-53B5-E811-A342-1866DA890B94.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/B498C3D9-52B5-E811-994A-001E67E6F8FA.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/202BC5D4-52B5-E811-827C-0CC47AD98D00.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/A0F1EAFE-52B5-E811-9D20-AC1F6B8DBE36.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'80000/58EAF902-53B5-E811-82C9-0026B9278651.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/C456A226-0DD9-E811-BB19-AC1F6B1AF142.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/3CD4E9BE-F6D8-E811-891A-90E2BAD57CD0.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'270000/3E6187BA-F6D8-E811-ACF5-6CC2173D6B10.root',
+        #GMSBpath+'GMSB_L-100TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/'+gmsbver+'100000/6C2B5185-0BD8-E811-80B8-0CC47A1E0484.root',
+
 
 		  ## EGamma
 
@@ -155,7 +228,7 @@ process.source = cms.Source("PoolSource",
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))#LT
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))#US
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))#VS
@@ -163,7 +236,7 @@ process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#T
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#SM
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(250000))#M
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500000))#L
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))#F
 
 # Set the global tag depending on the sample type
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -217,7 +290,13 @@ process.content_step = cms.Path(process.content)
 
 process.endjob_step = cms.EndPath(process.endOfProcess)
 process.schedule = cms.Schedule(process.tree_step)
-process.options = cms.untracked.PSet()
+
+process.options = cms.untracked.PSet( 
+    #numberOfThreads = cms.untracked.uint32(4), 
+	#numberOfStreams = cms.untracked.uint32(4), 
+    SkipEvent = cms.untracked.vstring('ProductNotFound'), 
+    #wantSummary = cms.untracked.bool(True) 
+)#process.options = cms.untracked.PSet
 
 #do not add changes to your config after this point (unless you know what you are doing)
 #from FWCore.ParameterSet.Utilities import convertToUnscheduled

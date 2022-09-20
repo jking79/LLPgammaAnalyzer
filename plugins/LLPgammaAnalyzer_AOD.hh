@@ -311,6 +311,12 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         const edm::InputTag pfCanPhoMapTag;
 		edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanPhotonMap_token_;
         edm::Handle<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanPhotonMap_;
+        const edm::InputTag pfCanOOTPhoMapTag;
+        edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanOOTPhotonMap_token_;
+        edm::Handle<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanOOTPhotonMap_;
+        const edm::InputTag pfCanEleMapTag;
+        edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanElectronMap_token_;
+        edm::Handle<edm::ValueMap<edm::Ptr<reco::PFCandidate>>> pfCanElectronMap_;
 
       	// vertices
       	const edm::InputTag verticesTag;
@@ -342,6 +348,11 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	const edm::InputTag jetsTag;
       	edm::EDGetTokenT<std::vector<reco::PFJet>> jetsToken_;
       	edm::Handle<std::vector<reco::PFJet>> jets_;
+
+		// genJets
+        const edm::InputTag genJetsTag;
+        edm::EDGetTokenT<std::vector<reco::GenJet>> genJetsToken_;
+        edm::Handle<std::vector<reco::GenJet>> genJets_;
 
       	uInt nJets;
         uInt nGoodJetEvents;
