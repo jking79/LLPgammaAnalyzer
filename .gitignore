@@ -3,6 +3,7 @@ macros/trplots/makedisplayplots/downloads/
 macros/trplots/downloaded/
 test/myworkingArea/
 test/oldWorkingFiles
+test/oldWorkingArea/
 *.root
 *.pyc
 *.log

@@ -133,7 +133,8 @@ def docrab( dataset ):
             #trial          = "llpga_v35" # as 34 + emfrac && gen plots have full cut selection with genPhaseSpaceCut && gen/cluster plots have hasGoodSCTime cut
             #trial          = "llpga_v36" # as 35 w/ no gen plot cut, changed difftime endcase checks, set goodGenSCdiffTime < 20.0 to testnew end cases
             #trial          = "llpga_v38" # ps 36 /o/e + rh plots 
-            trial          = "llpga_GMSB_v38" # switching to run2 2017 GMSB MC
+            #trial          = "llpga_GMSB_v38" # switching to run2 2017 GMSB MC
+            trial          = "llpga_GMSB_v39" # switching to v1 of nutuplizer
 
             config.General.requestName   = trial+"_"+primaryDataset+"_"+runEra+"_"+dataset+"_llpga"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_llpga"

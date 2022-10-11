@@ -187,15 +187,22 @@ typedef vector<EcalRecHit> rhGroup;
 typedef vector<reco::SuperCluster> scGroup;
 typedef vector<reco::CaloCluster> bcGroup;
 typedef unsigned int uInt;
+typedef	unsigned long int ulInt;
+typedef vector<uInt> rhIdGroup;
 
 #define nEBEEMaps 32
 #define nHists 256
 //const float sol = 29.9792458; // speed of light in cm/ns
 #define SOL 29.9792458 // speed of light in cm/ns
 #define PI 3.1415926535 // pie ...  
+#define BUNCHES 3564
+#define SAMPLES 10
 
 enum class ECAL {EB, EM, EP, EE, NONE};
-#define ecal_config_path "/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
+
+#define ecal_config_path ""
+//#define ecal_config_path "ecal_config/"
+//#define ecal_config_path "/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
 //#define ecal_config_path "/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/"
 
 //#define  const auto const auto
@@ -235,7 +242,8 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	rhGroup getRHGroup( const scGroup superClusterGroup, float minenr );
  		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
 		rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax );
-        rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
+        rhGroup getRHGroup( const scGroup superClusterGroup, float minenr, vector<float> phEnergy, vector<float> phDr, float phEnMax, 
+								TH1D* rhTimeHist, TH1D* ootHist, TH1D* matchHist );
       	rhGroup getRHGroup( const reco::CaloCluster basicCluster, float minenr );
       	rhGroup getRHGroup( uInt detid );
       	rhGroup getRHGroup();
@@ -276,7 +284,6 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	TTree *outTree;
 
 		// histograms
-      	TH1D *jetTimeHist, *jetRHTimeHist;
 		TH1D *hist1d[nHists];
       	TH2D *hist2d[nHists];
 
@@ -291,13 +298,31 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
 		const bool hasGenInfo;
 
       	// Event
-      	unsigned long int event; // technically unsigned long long in Event.h...
-      	uInt run, lumi; 
+      	ulInt				event; // technically unsigned long long in Event.h...
+      	uInt 				run, lumi; 
 
       	// Tracks
       	const edm::InputTag tracksTag;
       	edm::EDGetTokenT<TrackCollection> tracksToken_;  //used to select what tracks to read from configuration file
       	edm::Handle<std::vector<reco::Track>> tracks_;
+
+		// Trigger Info -> From miniAOD code not converted
+		// trigger inputs
+        const std::string inputPaths;
+        std::vector<std::string> pathNames;
+        //strBitMap triggerBitMap;
+        const std::string inputFilters;
+        std::vector<std::string> filterNames;
+		// trigger results
+        const edm::InputTag triggerResultsTag;
+        edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken;
+        edm::Handle<edm::TriggerResults> triggerResultsH;
+        // trigger objects
+        const edm::InputTag triggerObjectsTag;
+        edm::EDGetTokenT<std::vector<pat::TriggerObjectStandAlone> > triggerObjectsToken;
+        edm::Handle<std::vector<pat::TriggerObjectStandAlone> > triggerObjectsH;
+        // output triggers
+        std::map<std::string,std::vector<pat::TriggerObjectStandAlone> > triggerObjectsByFilterMap; // first index is filter label, second is trigger objects
 
       	// PF Candidates View
       	const edm::InputTag pfcandTag;
@@ -322,13 +347,24 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	const edm::InputTag verticesTag;
       	edm::EDGetTokenT<std::vector<reco::Vertex>> verticesToken_;
       	edm::Handle<std::vector<reco::Vertex>> vertices_;
-      	int nVtx;
-      	float vtxX, vtxY, vtxZ;
+
+      	int 				nVtx;
+      	float 				vtxX, vtxY, vtxZ;
 
       	// mets
-      	const edm::InputTag metsTag;
-      	edm::EDGetTokenT<std::vector<reco::PFMET>> metsToken_;
-      	edm::Handle<std::vector<reco::PFMET>> mets_;
+      	const edm::InputTag pfmetsTag;
+      	edm::EDGetTokenT<std::vector<reco::PFMET>> pfmetsToken_;
+      	edm::Handle<std::vector<reco::PFMET>> pfmets_;
+
+		// Met Filters -> From miniAOD code not converted
+  		// met filter inputs
+  		const std::string inputFlags;
+  		std::vector<std::string> flagNames;
+  		//strBitMap triggerFlagMap;
+  		// met filters
+  		const edm::InputTag triggerFlagsTag;
+  		edm::EDGetTokenT<edm::TriggerResults> triggerFlagsToken;
+  		edm::Handle<edm::TriggerResults> triggerFlagsH;
 
 	   	// supercluster
       	const edm::InputTag superClusterCollectionTag;
@@ -349,16 +385,12 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	edm::EDGetTokenT<std::vector<reco::PFJet>> jetsToken_;
       	edm::Handle<std::vector<reco::PFJet>> jets_;
 
-		// genJets
-        const edm::InputTag genJetsTag;
-        edm::EDGetTokenT<std::vector<reco::GenJet>> genJetsToken_;
-        edm::Handle<std::vector<reco::GenJet>> genJets_;
-
-      	uInt nJets;
-        uInt nGoodJetEvents;
+      	uInt 				nJets, nGoodDrJets, nGoodScJets, nGoodBcJets, nUnJets;
+		float 				jetHt;
+        uInt 				nGoodJetEvents;
       	std::vector<float>  jetE, jetPt, jetPhi, jetEta; 
         std::vector<float>  jetEtaetaMmt, jetPhiphiMnt, jetEtaphiMnt, jetMaxD, jetConPtDis, jetConEtaPhiSprd, jetArea;
-        std::vector<uInt>   jetNCarry, jetNConst; 
+        std::vector<uInt>   jetNCarry, jetNConst;
       	std::vector<float>  jetMuTime, jetTimeError, jetTimeRMS, jetMedTime, jetCMuTime, jetCMedTime;
       	std::vector<float>  jetSCMuTime, jetSCMedTime, jetCSCMuTime, jetCSCMedTime, jetCBCMuTime, jetCBCMedTime;
       	std::vector<float>  jetPhMuTime, jetOOTPhMuTime, jetEleMuTime;
@@ -368,15 +400,68 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	std::vector<bool>   jetKidLLP;
       	std::vector<double> jetKidMass, jetKidVx, jetKidVy, jetKidVz;
       	std::vector<float>  jetKidE, jetKidPt, jetKidPhi, jetKidEta, jetKidTime, jetKidMedTime;
-      	std::vector<float>  jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM, jetC, jetPHE, jetPHEF;
-      	std::vector<float>  jetELE, jetELEF, jetMUE, jetCharge;
+      	std::vector<float>  jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM, jetPHE, jetPHEF;
+      	std::vector<float>  jetELE, jetELEF, jetMUE;
+
+        std::vector<float>  jetSumEPFrac, jetEPEnergy, jetEMEnergy, jetEMEnrFrac, jetEPEnrFrac;
+        std::vector<float>  jetDrLeadEta, jetDrLeadPhi, jetDrLeadEnr;
+        std::vector<uInt>   jetDrRhCnt;
+        std::vector<float>  sJetDrRHEnergy, jetDrEMF;
+        std::vector<rhIdGroup> jetDrRhIDs;
+
+        std::vector<uInt>   nJetScMatch, jetScRhCnt;
+        std::vector<float>  sJetScEnergy, sJetScPhEnergy, sJetScRhEnergy, jetScEMF;
+        std::vector<rhIdGroup> jetScRhIDs;
+
+        std::vector<uInt>   jetBcTimesCnt, jetBcRhCnt, jetBcGrpCnt;
+        std::vector<float>  jetBcSumRHEnr, jetBcEMFr; 
+
+        std::vector<float>  jetImpactAngle;
+        std::vector<float>  jetSc3dEx, jetSc3dEy, jetSc3dEz, jetSc3dEv, jetSc3dEslope, jetSc3dEchisp;
+
+        std::vector<float>  jetSc2dEx, jetSc2dEy, jetSc2dEv, jetSc2dEslope, jetSc2dEchisp;
+        std::vector<float>  jetSc2dEslope2, jetSc2dEchisp2, jetSc2dErangle, jetSc2dEnxsum;
+
+         // calojets
+        const edm::InputTag caloJetsTag;
+        edm::EDGetTokenT<std::vector<reco::CaloJet>> caloJetsToken_;
+        edm::Handle<std::vector<reco::CaloJet>> caloJets_;
+
+        uInt                nCaloJets;
+		std::vector<uInt>   cljBcCnt;
+        std::vector<double> cljPt, cljEnergy, cljPhi, cljEta, cljPx, cljPy, cljPz;
+        std::vector<float>  cljSeedTOFTime, cljCMeanTime, cljCDrMeanTime;
+        std::vector<float>  cljBc3dEx, cljBc3dEy, cljBc3dEz, cljBc3dEv, cljBc3dEslope, cljBc3dEchisp;
+        std::vector<float>  cljBc2dEx, cljBc2dEy, cljBc2dEv, cljBc2dEslope, cljBc2dEchisp;
+
+         // genJets
+        const edm::InputTag genJetsTag;
+        edm::EDGetTokenT<std::vector<reco::GenJet>> genJetsToken_;
+        edm::Handle<std::vector<reco::GenJet>> genJets_;
+
+        std::vector<float>  jetGenImpactAngle, jetGenTime, jetGenPt, jetGenEta, jetGenEnergy, jetGenEMFrac, jetGenDrMatch;
+        std::vector<float>  jetGenTimeVar, jetGenTimeLLP, jetGenLLPPurity, jetGenNextBX, jetGenNKids, jetGenTOF;
+
+		// JEC & JER  -> From miniAOD code not converted
+  		// JECs
+  		edm::ESHandle<JetCorrectorParametersCollection> jetCorrH;
+  		// JERs
+  		JME::JetResolution jetRes;
+  		JME::JetResolutionScaleFactor jetRes_sf;
 
       	// electrons
       	const edm::InputTag electronsTag;
       	edm::EDGetTokenT<std::vector<reco::GsfElectron> > electronsToken_;
       	edm::Handle<std::vector<reco::GsfElectron> > electrons_;
       	std::vector<reco::GsfElectron> electrons;
-      
+     
+        uInt                nElectrons;
+        std::vector<int> 	eleCharge;
+        std::vector<double> elePt, eleEnergy, elePhi, eleEta, elePx, elePy, elePz;
+        std::vector<float>  eleSeedTOFTime, eleCMeanTime;
+        std::vector<float>  eleSc3dEx, eleSc3dEy, eleSc3dEz, eleSc3dEv, eleSc3dEslope, eleSc3dEchisp;
+        std::vector<float>  eleSc2dEx, eleSc2dEy, eleSc2dEv, eleSc2dEslope, eleSc2dEchisp; 
+
       	// muons
       	const edm::InputTag muonsTag;
       	edm::EDGetTokenT<std::vector<reco::Muon> > muonsToken_;
@@ -394,29 +479,179 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	edm::Handle<edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > > recHitsEE_;
       	const edm::SortedCollection<EcalRecHit,edm::StrictWeakOrdering<EcalRecHit> > * recHitsEE;
 
+        const edm::InputTag ecalBadCalibFlagTag;
+        edm::EDGetTokenT<bool> ecalBadCalibFlagToken;
+        edm::Handle<bool> ecalBadCalibFlagH;
+
         detIdMap DetIDMap;
       	int nRecHits;
-      	std::vector<float> rhX, rhY, rhZ, rhE, rhtime, rhtimeErr, rhTOF;
-      	std::vector<uInt> rhID;
-      	std::vector<bool> rhisOOT, rhisGS6, rhisGS1;
-      	std::vector<float> rhadcToGeV;
-      	std::vector<float> rhped12, rhped6, rhped1;
-      	std::vector<float> rhpedrms12, rhpedrms6, rhpedrms1;
+      	std::vector<float> 	rhPosX, rhPosY, rhPosZ, rhPosEta, rhPosPhi;
+      	std::vector<uInt> 	rhID;
+		std::vector<int>    rhXtalI1, rhXtalI2, rhSubdet;
+        std::vector<float>  rhEnergy, rhTime, rhTimeErr, rhTOF;  
+      	std::vector<bool> 	rhisOOT, rhisGS6, rhisGS1, rhisWeird, rhisDiWeird;
+      	std::vector<float> 	rhadcToGeV, rhSwCross;
+      	std::vector<float> 	rhped12, rhped6, rhped1;
+      	std::vector<float> 	rhpedrms12, rhpedrms6, rhpedrms1;
+
+//edm::SortedCollection<HBHERecHit,edm::StrictWeakOrdering<HBHERecHit> >    "reducedHcalRecHits"        "hbhereco"        "RECO"  
 
       	// gedPhotons
       	const edm::InputTag gedPhotonsTag;
       	edm::EDGetTokenT<std::vector<reco::Photon> > gedPhotonsToken_;
       	edm::Handle<std::vector<reco::Photon> > gedPhotons_;
 
+//edm::ValueMap<bool>                   "PhotonIDProd"              "PhotonCutBasedIDLoose"   "RECO"    
+//edm::ValueMap<bool>                   "PhotonIDProdGED"           "PhotonCutBasedIDLoose"   "RECO"    
+//edm::ValueMap<bool>                   "PhotonIDProd"              "PhotonCutBasedIDLooseEM"   "RECO"    
+//edm::ValueMap<bool>                   "PhotonIDProdGED"           "PhotonCutBasedIDLooseEM"   "RECO"    
+//edm::ValueMap<bool>                   "PhotonIDProd"              "PhotonCutBasedIDTight"   "RECO"    
+//edm::ValueMap<bool>                   "PhotonIDProdGED"           "PhotonCutBasedIDTight"   "RECO"   
+
+
+//		bool
+//		isPFlowPhoton()
+//		isStandardPhoton()
+//		hasConversionTracks()
+//		hasPixelSeed()
+//		isPhoton()
+//		isEB()
+//		isEE()
+//0125     bool isEBGap()
+//0126     bool isEBEtaGap()
+//0127     bool isEBPhiGap()
+//0129     bool isEEGap()
+//0130     bool isEERingGap()
+//0131     bool isEEDeeGap()
+//0133     bool isEBEEGap()
+//
+//		float
+//
+//0212     float hadronicOverEm() const {return   showerShapeBlock_.hcalDepth1OverEcal + showerShapeBlock_.hcalDepth2OverEcal  ;}
+//0214     float hadronicDepth1OverEm() const {return  showerShapeBlock_.hcalDepth1OverEcal  ;}
+//0216     float hadronicDepth2OverEm() const {return  showerShapeBlock_.hcalDepth2OverEcal  ;}
+//0218     float hadronicOverEmValid() const {return !showerShapeBlock_.invalidHcal  ;}
+//0221     float hadTowOverEm() const {return   showerShapeBlock_.hcalDepth1OverEcalBc + showerShapeBlock_.hcalDepth2OverEcalBc  ;}
+//0223     float hadTowDepth1OverEm() const {return  showerShapeBlock_.hcalDepth1OverEcalBc  ;}
+//0225     float hadTowDepth2OverEm() const {return  showerShapeBlock_.hcalDepth2OverEcalBc  ;}
+//0228     float hadTowOverEmValid() const {return !showerShapeBlock_.invalidHcal  ;}
+//0231     float e1x5()            const {return showerShapeBlock_.e1x5;}
+//0232     float e2x5()            const {return showerShapeBlock_.e2x5;}
+//0233     float e3x3()            const {return showerShapeBlock_.e3x3;}
+//0234     float e5x5()            const {return showerShapeBlock_.e5x5;}
+//0235     float maxEnergyXtal()   const {return showerShapeBlock_.maxEnergyXtal;}
+//0236     float sigmaEtaEta()     const {return showerShapeBlock_.sigmaEtaEta;}
+//0237     float sigmaIetaIeta()   const {return showerShapeBlock_.sigmaIetaIeta;}
+//0238     float r1x5 ()           const {return showerShapeBlock_.e1x5/showerShapeBlock_.e5x5;}
+//0239     float r2x5 ()           const {return showerShapeBlock_.e2x5/showerShapeBlock_.e5x5;}
+//0240     float r9 ()             const {return showerShapeBlock_.e3x3/this->superCluster()->rawEnergy();}  
+//0243     float full5x5_e1x5()            const {return full5x5_showerShapeBlock_.e1x5;}
+//0244     float full5x5_e2x5()            const {return full5x5_showerShapeBlock_.e2x5;}
+//0245     float full5x5_e3x3()            const {return full5x5_showerShapeBlock_.e3x3;}
+//0246     float full5x5_e5x5()            const {return full5x5_showerShapeBlock_.e5x5;}
+//0247     float full5x5_maxEnergyXtal()   const {return full5x5_showerShapeBlock_.maxEnergyXtal;}
+//0248     float full5x5_sigmaEtaEta()     const {return full5x5_showerShapeBlock_.sigmaEtaEta;}
+//0249     float full5x5_sigmaIetaIeta()   const {return full5x5_showerShapeBlock_.sigmaIetaIeta;}
+//0250     float full5x5_r1x5 ()           const {return full5x5_showerShapeBlock_.e1x5/full5x5_showerShapeBlock_.e5x5;}
+//0251     float full5x5_r2x5 ()           const {return full5x5_showerShapeBlock_.e2x5/full5x5_showerShapeBlock_.e5x5;}
+//0252     float full5x5_r9 ()             const {return full5x5_showerShapeBlock_.e3x3/this->superCluster()->rawEnergy();}  		
+//		nSaturatedXtals()
+//		isSeedSaturated()
+//0347     ///  MIP variables
+//0348     float mipChi2()         const {return mipVariableBlock_.mipChi2;}
+//0349     float mipTotEnergy()    const {return mipVariableBlock_.mipTotEnergy;}
+//0350     float mipSlope()        const {return mipVariableBlock_.mipSlope;}
+//0351     float mipIntercept()    const {return mipVariableBlock_.mipIntercept;}
+//0352     int mipNhitCone()     const {return mipVariableBlock_.mipNhitCone;}
+//0353     bool  mipIsHalo()       const {return mipVariableBlock_.mipIsHalo;}
+//
+//0414     /// Egamma Isolation variables in cone dR=0.4
+//0415     ///Ecal isolation sum calculated from recHits
+//0416     float ecalRecHitSumEtConeDR04()      const{return  isolationR04_.ecalRecHitSumEt;}
+//0417     /// Hcal isolation sum
+//0418     float hcalTowerSumEtConeDR04()      const{return  isolationR04_.hcalTowerSumEt ;}
+//0419     /// Hcal-Depth1 isolation sum
+//0420     float hcalDepth1TowerSumEtConeDR04()      const{return  isolationR04_.hcalDepth1TowerSumEt;}
+//0421     /// Hcal-Depth2 isolation sum
+//0422     float hcalDepth2TowerSumEtConeDR04()      const{return  isolationR04_.hcalDepth2TowerSumEt;}
+//0423     /// Hcal isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0424     float hcalTowerSumEtBcConeDR04()      const{return  isolationR04_.hcalTowerSumEtBc ;}
+//0425     /// Hcal-Depth1 isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0426     float hcalDepth1TowerSumEtBcConeDR04()      const{return  isolationR04_.hcalDepth1TowerSumEtBc;}
+//0427     /// Hcal-Depth2 isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0428     float hcalDepth2TowerSumEtBcConeDR04()      const{return  isolationR04_.hcalDepth2TowerSumEtBc;}
+//0429     //  Track pT sum 
+//0430     float trkSumPtSolidConeDR04()    const{return   isolationR04_.trkSumPtSolidCone;}
+//0431     //As above, excluding the core at the center of the cone
+//0432     float trkSumPtHollowConeDR04()   const{return   isolationR04_.trkSumPtHollowCone;}
+//0433     //Returns number of tracks in a cone of dR
+//0434     int nTrkSolidConeDR04()              const{return   isolationR04_.nTrkSolidCone;}
+//0435     //As above, excluding the core at the center of the cone
+//0436     int nTrkHollowConeDR04()            const{return   isolationR04_.nTrkHollowCone;}
+//0437     //
+//0438     /// Isolation variables in cone dR=0.3
+//0439     float ecalRecHitSumEtConeDR03()      const{return  isolationR03_.ecalRecHitSumEt;}
+//0440     /// Hcal isolation sum
+//0441     float hcalTowerSumEtConeDR03()      const{return isolationR03_.hcalTowerSumEt;}
+//0442     /// Hcal-Depth1 isolation sum
+//0443     float hcalDepth1TowerSumEtConeDR03()      const{return isolationR03_.hcalDepth1TowerSumEt;}
+//0444     /// Hcal-Depth2 isolation sum
+//0445     float hcalDepth2TowerSumEtConeDR03()      const{return isolationR03_.hcalDepth2TowerSumEt;}
+//0446     /// Hcal isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0447     float hcalTowerSumEtBcConeDR03()      const{return  isolationR03_.hcalTowerSumEtBc ;}
+//0448     /// Hcal-Depth1 isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0449     float hcalDepth1TowerSumEtBcConeDR03()      const{return  isolationR03_.hcalDepth1TowerSumEtBc;}
+//0450     /// Hcal-Depth2 isolation sum subtracting the hadronic energy in towers behind the BCs in the SC
+//0451     float hcalDepth2TowerSumEtBcConeDR03()      const{return  isolationR03_.hcalDepth2TowerSumEtBc;}
+//0452     //  Track pT sum c
+//0453     float trkSumPtSolidConeDR03()    const{return  isolationR03_.trkSumPtSolidCone;}
+//0454     //As above, excluding the core at the center of the cone
+//0455     float trkSumPtHollowConeDR03()   const{return  isolationR03_.trkSumPtHollowCone;}
+//0456     //Returns number of tracks in a cone of dR
+//0457     int nTrkSolidConeDR03()              const{return  isolationR03_.nTrkSolidCone;}
+//0458     //As above, excluding the core at the center of the cone
+//0459     int nTrkHollowConeDR03()             const{return  isolationR03_.nTrkHollowCone;}
+
+        uInt                nPhotons;
+		std::vector<double> phoPt, phoEnergy, phoPhi, phoEta, phoPx, phoPy, phoPz;
+        //std::vector<float>  
+        //std::vector<bool>	
+        std::vector<float>  phoSeedTOFTime, phoCMeanTime;
+		std::vector<std::vector<uInt>> phoRhIds;
+        std::vector<float>  phoSc3dEx, phoSc3dEy, phoSc3dEz, phoSc3dEv, phoSc3dEslope, phoSc3dEchisp;
+        std::vector<float>  phoSc2dEx, phoSc2dEy, phoSc2dEv, phoSc2dEslope, phoSc2dEchisp;
+
       	// ootPhotons
       	const edm::InputTag ootPhotonsTag;
       	edm::EDGetTokenT<std::vector<reco::Photon> > ootPhotonsToken_;
       	edm::Handle<std::vector<reco::Photon> > ootPhotons_;
      
+        uInt                nOotPhotons;
+        std::vector<double> ootPhoPt, ootPhoEnergy, ootPhoPhi, ootPhoEta, ootPhoPx, ootPhoPy, ootPhoPz;
+        std::vector<float>  ootPhoSeedTOFTime, ootPhoCMeanTime;
+        std::vector<float>  ootPhoSc3dEx, ootPhoSc3dEy, ootPhoSc3dEz, ootPhoSc3dEv, ootPhoSc3dEslope, ootPhoSc3dEchisp;
+        std::vector<float>  ootPhoSc2dEx, ootPhoSc2dEy, ootPhoSc2dEv, ootPhoSc2dEslope, ootPhoSc2dEchisp;
+
       	// geometry CaloSubdetectorGeometry
       	edm::ESHandle<CaloGeometry> caloGeo_;
       	const CaloSubdetectorGeometry * barrelGeometry;
       	const CaloSubdetectorGeometry * endcapGeometry;  
+
+        // lasers
+        edm::ESHandle<EcalLaserDbService> laserH;
+        edm::Timestamp evTime;
+
+        // inter calibration
+        edm::ESHandle<EcalIntercalibConstants> interCalibH;
+        const EcalIntercalibConstantMap * interCalibMap;
+
+        // ADCToGeV
+        edm::ESHandle<EcalADCToGeVConstant> adcToGeVH;
+        float adcToGeVEB;
+        float adcToGeVEE;
+
+        // pedestals
+        edm::ESHandle<EcalPedestals> pedestalsH;
 
 	    // pf cand refs
 		const edm::InputTag reco2pfTag;	
@@ -868,12 +1103,15 @@ const auto wsincos	(CVFlt x, CVFlt wv){
 
 // rh group functions
 const auto getRawID      (const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.rawId();}
+const auto getIsEB		 (const EcalRecHit recHit){ auto recHitId = recHit.detid(); return (recHitId.subdetId() == EcalBarrel)?1:0;}
+const auto getSubDetID   (const EcalRecHit recHit){ auto recHitId = recHit.detid(); return recHitId.subdetId();}
+const auto getRhGrpIDs	 (const rhGroup rhs ){ rhIdGroup rt; if(rhs.empty()){ rt.push_back(0);} else{ for(const auto rh : rhs ){ rt.push_back(getRawID(rh));}} return rt;}
 const auto rhMatch       (const EcalRecHit rhx, const EcalRecHit rhy){ return getRawID(rhx) == getRawID(rhy);}
 const auto dupRhFnd      (const rhGroup x, const rhGroup y){for(auto rhx : x ){for(auto rhy : y ){if(rhMatch(rhx,rhy)){ return true;}}} return false;}
 const auto isRhGrpEx     (const rhGroup x){int s=x.size();for( int i=0;i<s;i++){for( int j=i+1;j<s;j++){if(rhMatch(x[i],x[j])) return false;}} return true;}
 const auto getRhGrpEnr   (const rhGroup x){float e(0.0);for( auto ix : x ){e+=ix.energy();} return e;}
-const auto getDupCnt     (const vector<rhGroup> x){
-								int c=0; int s=x.size();for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
+const auto getDupCnt     (const vector<rhGroup> x){ int c=0; int s=x.size();
+								for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
 
 };//<<>>class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources>  {
 

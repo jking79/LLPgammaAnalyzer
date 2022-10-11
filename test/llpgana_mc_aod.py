@@ -23,7 +23,8 @@ options.register('hasGenInfo',True,VarParsing.multiplicity.singleton,VarParsing.
 #options.register('muhighpTmin',50.0,VarParsing.multiplicity.singleton,VarParsing.varType.float,'muon high pT minimum cut');
 
 ## GT to be used
-options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+options.register('globalTag','94X_mc2017_realistic_v14',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
+#options.register('globalTag','106X_dataRun2_v28',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #options.register('globalTag','112X_mcRun3_2021_realistic_v16',VarParsing.multiplicity.singleton,VarParsing.varType.string,'gloabl tag to be used');
 #112X_mcRun3_2021_realistic_v16
 
@@ -40,7 +41,9 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_t76SM_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as May 16 2022 update with energy/delaytime info
 #outfilename = 'llpgana_mc_t79M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 76 + ootPhotons only
 #outfilename = 'llpgana_mc_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
-outfilename = 'llpgana_mc_AODSIM_GMSB100TeV_v80a_2per_US.root'
+#outfilename = 'llpgana_mc_AODSIM_GMSB100TeV_v80a_selected_FL.root'
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v3.root' # finishd addig rechits
+outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v4.root' # testing saved rhIDsGroup for photons
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -71,9 +74,9 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.destinations = ['cout', 'cerr']
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10
-#process.MessageLogger.cerr.FwkReport.reportEvery = 100
+process.MessageLogger.cerr.FwkReport.reportEvery = 100
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.MessageLogger.cerr.FwkReport.reportEvery = 10000
+#process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
 aodpath_1k_450_100k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
@@ -88,6 +91,8 @@ gmsbaodsim2 = '_TuneCP5_13TeV-pythia8/AODSIM/PU2017_94X_mc2017_realistic_v11-v2/
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
+
+		'root://cmsxrootd-site.fnal.gov//store/mc/RunIIFall17DRPremix/GMSB_L-100TeV_Ctau-200cm_TuneCP5_13TeV-pythia8/AODSIM/PU2017_94X_mc2017_realistic_v11-v1/80000/58DCC006-3FB2-E811-94AE-AC1F6B0DE454.root',	
 
 		  #'file:jwk_reco_data_DIGI2RAW.root'),
 
@@ -123,10 +128,10 @@ process.source = cms.Source("PoolSource",
 #         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-0p001cm'+gmsbaodsim+'100000/A478345F-0FBA-E811-BF99-AC1F6B8DBE02.root',
 #         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-0p001cm'+gmsbaodsim+'100000/AA75735E-69BA-E811-AFAA-001E675A5244.root',
 #         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-0p001cm'+gmsbaodsim+'100000/D6C707C3-10BA-E811-B654-D8D385AE8B78.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'10000/162DBEEE-DC29-E911-843B-0CC47A745294.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'10000/162DBEEE-DC29-E911-843B-0CC47A745294.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'10000/BCE6A6F2-A929-E911-AEA9-24BE05C63651.root',
-         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/22F81F5B-3D33-E911-906C-0CC47AD24D28.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/3CDA2489-9132-E911-B4E3-0025905D1E08.root',
+         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/22F81F5B-3D33-E911-906C-0CC47AD24D28.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/3CDA2489-9132-E911-B4E3-0025905D1E08.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/44349E62-F131-E911-97A6-848F69FD09D7.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/5695AF8D-5F32-E911-BF44-0CC47AF9B1B2.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/9896ACF2-5532-E911-963A-0025904C6214.root',
@@ -138,10 +143,10 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/BECF33BA-2933-E911-B37A-0CC47AFB7DA8.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/C293109D-3D33-E911-9988-6C3BE5B59060.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10000cm'+gmsbaodsim2+'100000/D0F23085-9132-E911-BEE6-EC0D9A82220E.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/1647CA2B-6ADA-E811-86E8-44A842CF05F3.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/1647CA2B-6ADA-E811-86E8-44A842CF05F3.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/26A7404E-C5DA-E811-92D3-001E675A6AB8.root',
-         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/66971865-6ADA-E811-A9C2-002590D9D8C0.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/6E716649-6ADA-E811-B9E5-0025901AC0FC.root',
+         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/66971865-6ADA-E811-A9C2-002590D9D8C0.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/6E716649-6ADA-E811-B9E5-0025901AC0FC.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'270000/A89ECEA5-C5DA-E811-AB4B-D4AE526DDB3F.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'80000/3494ACD2-47B3-E811-B9F5-0CC47AA992AC.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1000cm'+gmsbaodsim+'80000/40BE1709-48B3-E811-BADE-0025901D08F0.root',
@@ -156,7 +161,7 @@ process.source = cms.Source("PoolSource",
          lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/08A3D920-E5B2-E811-85C5-0CC47A4DEEE4.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/0C51F68D-E5B2-E811-8703-002590E39F2E.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/2097D13F-30B3-E811-9FB3-0025905C96EA.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/2A549E4C-30B3-E811-9C35-A4BF0108B89A.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/2A549E4C-30B3-E811-9C35-A4BF0108B89A.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/4A4FF5B7-D1AC-E811-999C-24BE05CEECD1.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/4E262481-D1AC-E811-ADB1-E0071B7B2380.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/56C88443-30B3-E811-8224-0CC47A7EEE96.root',
@@ -164,10 +169,10 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/A0754829-30B3-E811-9C70-001E67A4202B.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/CC71640F-97AE-E811-B076-0CC47A2B0214.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-10cm'+gmsbaodsim+'80000/FA501E6E-6CAE-E811-9779-00000086FE80.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'110000/6A0C039C-BFD6-E811-B51D-FA163E94E4CF.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'110000/6A0C039C-BFD6-E811-B51D-FA163E94E4CF.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/605B95ED-8AD8-E811-B640-001E67A3F70E.root',
-         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/68C5DD84-EAD6-E811-9028-44A842CFD60C.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/846C6D28-D4D8-E811-A8BE-00266CFFBEB4.root',
+         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/68C5DD84-EAD6-E811-9028-44A842CFD60C.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/846C6D28-D4D8-E811-A8BE-00266CFFBEB4.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/8EC1497F-E9D6-E811-A390-44A842CFC98B.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/CC76650E-1ED7-E811-A050-506B4BB134F6.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'60000/D6CA9ABF-ECD7-E811-AA12-24BE05CE2EE1.root',
@@ -181,10 +186,10 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'80000/D4AAA201-7BB3-E811-AE3A-509A4C833A82.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-1200cm'+gmsbaodsim+'80000/FA1CA7D9-ACB2-E811-9A12-44A842124E15.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/3C4A134D-42D8-E811-BF63-68B59972BF62.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/44485BE6-E2D7-E811-9916-1866DA89095D.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/44485BE6-E2D7-E811-9916-1866DA89095D.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/54A181B6-41D8-E811-9E37-90E2BAD5729C.root',
-         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/ACDBAA3E-9ED8-E811-813B-1866DA89095D.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/AEA9923B-9ED8-E811-87D6-34E6D7BDDECE.root',
+         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/ACDBAA3E-9ED8-E811-813B-1866DA89095D.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'120000/AEA9923B-9ED8-E811-87D6-34E6D7BDDECE.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/02BF43DF-72AF-E811-85ED-E0071B7901F1.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/40A0FB2D-1CB3-E811-A408-B499BAAC039C.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/58DCC006-3FB2-E811-94AE-AC1F6B0DE454.root',
@@ -196,11 +201,11 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/D6A72F99-94AD-E811-AC12-24BE05C4E822.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/D8C92026-1FAE-E811-B228-0CC47AD9901C.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-200cm'+gmsbaodsim+'80000/E2B503CA-7EB3-E811-B4ED-008CFAF558E0.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/0E36F633-D4AF-E811-B5AD-24BE05C6C7E1.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/0E36F633-D4AF-E811-B5AD-24BE05C6C7E1.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/1EC8E1D9-1AB3-E811-AF02-44A84225CABC.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/301550E4-81B5-E811-8362-FA163EF08F5B.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/34D601E8-3CB2-E811-B2BA-24BE05C6B701.root',
-         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/4ACDB9DD-C0AF-E811-A364-24BE05C6D731.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/34D601E8-3CB2-E811-B2BA-24BE05C6B701.root',
+         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/4ACDB9DD-C0AF-E811-A364-24BE05C6D731.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/7411AE64-81B5-E811-9F51-FA163E301A96.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/8292361D-13B3-E811-9F13-A0369FE2C12E.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-400cm'+gmsbaodsim+'80000/DEAFE6DA-21B3-E811-8FF8-0026B9FA0310.root',
@@ -211,7 +216,7 @@ process.source = cms.Source("PoolSource",
          lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'60000/E25EAAE9-A5D6-E811-8502-34E6D7E05F0E.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'60000/F65FFA8E-09D7-E811-81E5-A4BF0102A4F5.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/0E8A7BB8-B2AF-E811-BC4F-0CC47A009148.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/10235037-84AE-E811-9D2F-00000086FE80.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/10235037-84AE-E811-9D2F-00000086FE80.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/1E150469-A2AF-E811-B37A-A4BF01125A30.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/2EBF2342-7CAF-E811-A013-0026B94DBDFD.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/582F0DCA-19AC-E811-9BAC-000101002B35.root',
@@ -220,7 +225,7 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/C65CAF27-62AF-E811-9338-00000086FE80.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-600cm'+gmsbaodsim+'80000/F693809F-8AAE-E811-8BEE-0025900EAB5E.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'100000/18E35D15-FCD7-E811-8B6E-AC1F6B0DE362.root',
-         lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'270000/0850C268-32D8-E811-AA03-34E6D7BDDECE.root',
+         #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'270000/0850C268-32D8-E811-AA03-34E6D7BDDECE.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'270000/4EE016B8-35D8-E811-81D1-0425C5DE7BEE.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'270000/B624F4E1-86D8-E811-BD73-A0369F83633E.root',
          lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'270000/DE490468-30D8-E811-99AC-0025B3E015D2.root',
@@ -233,6 +238,7 @@ process.source = cms.Source("PoolSource",
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'80000/7C6B9C95-11B3-E811-9745-002590A88810.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'80000/BECE7946-97AE-E811-804F-0CC47A2B0744.root',
          #lpcpath_GMSB+'GMSB_L-100TeV_Ctau-800cm'+gmsbaodsim+'80000/D656F837-38B2-E811-99F8-484D7E8DF05E.root',
+
 #         lpcpath_GMSB+'GMSB_L-150TeV_Ctau-0_1cm'+gmsbaodsim+'110000/0264C59B-68D6-E811-A8E6-FA163E8C4238.root',
 #         lpcpath_GMSB+'GMSB_L-150TeV_Ctau-0_1cm'+gmsbaodsim+'120000/0851E992-F0D6-E811-BE7E-6C3BE5B59060.root',
 #         lpcpath_GMSB+'GMSB_L-150TeV_Ctau-0_1cm'+gmsbaodsim+'120000/0CBD25A5-F0D6-E811-BDEE-1866DA87EE25.root',
@@ -1339,9 +1345,9 @@ process.source = cms.Source("PoolSource",
 ## How many events to process
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#TT
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#TT
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))#LT
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))#US
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2500))#US
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(12500))#VS
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(25000))#SM
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100000))#MS
@@ -1362,7 +1368,6 @@ process.TFileService = cms.Service("TFileService",
 process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_AOD",
    ## flags
    hasGenInfo = cms.bool(options.hasGenInfo),
-   genjet = cms.InputTag("ak4GenJets",""),
    ## additional collections
    ## tracks
    #tracks = cms.InputTag("unpackedTracksAndVertices"),
@@ -1387,6 +1392,8 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_AOD",
    #jets = cms.InputTag("updatedPatJetsUpdatedJEC"),
    #jets = cms.InputTag("slimmedJets"),
    jets = cms.InputTag("ak4PFJets"),
+   genjets = cms.InputTag("ak4GenJets",""),
+   calojets = cms.InputTag("ak4CaloJets",""),
    ## electrons
    #electrons = cms.InputTag("slimmedElectrons"),
    electrons = cms.InputTag("gedGsfElectrons"),
