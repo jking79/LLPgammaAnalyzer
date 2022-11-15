@@ -4,6 +4,9 @@ macros/trplots/downloaded/
 test/myworkingArea/
 test/oldWorkingFiles
 test/oldWorkingArea/
+test/GJetWorkSpace/
+test/GMSBWorkSpace/
+test/oldworkingArea/
 *.root
 *.pyc
 *.log

@@ -43,7 +43,12 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_t80M_pheigen95t60r9_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root' # as 79 + genJetDrmatch
 #outfilename = 'llpgana_mc_AODSIM_GMSB100TeV_v80a_selected_FL.root'
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v3.root' # finishd addig rechits
-outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v4.root' # testing saved rhIDsGroup for photons
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v4.root' # testing saved rhIDsGroup for photons
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v5.root' # testing valuemap id cut loose for photons
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v6.root' # adding photon information
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v7.root' # adding ootphoton information
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v8.root' #  added genparticle info for photons, changed genjet to best dr match
+outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v9.root' # modded genpart to match only photons, mom count on genpart collection
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -74,9 +79,9 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.destinations = ['cout', 'cerr']
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10
-process.MessageLogger.cerr.FwkReport.reportEvery = 100
+#process.MessageLogger.cerr.FwkReport.reportEvery = 100
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-#process.MessageLogger.cerr.FwkReport.reportEvery = 10000
+process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
 aodpath_1k_450_100k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
@@ -1404,6 +1409,7 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_AOD",
    #gedPhotons = cms.InputTag("slimmedPhotons"),
    #gedPhotons = cms.InputTag("gedPhotons"),
    gedPhotons = cms.InputTag("photons"),
+   phoCBIDLooseMap = cms.InputTag("PhotonIDProd", "PhotonCutBasedIDLooseEM"), 
    #ootPhotons = cms.InputTag("slimmedOOTPhotons"),
    ootPhotons = cms.InputTag("ootPhotons"),
    ## ecal recHits
@@ -1419,6 +1425,14 @@ process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_AOD",
    ## caloclusters
    #caloClusters = cms.InputTag("reducedEgamma", "reducedEBEEClusters"),
    caloClusters = cms.InputTag("particleFlowEGamma", "EBEEClusters"),
+   ## gen info
+   genEvt = cms.InputTag("generator", ""),
+   gent0 = cms.InputTag("genParticles", "t0"), 
+   genxyz0 = cms.InputTag("genParticles", "xyz0"), 
+   pileups = cms.InputTag("addPileupInfo", ""),
+   #pileups = cms.InputTag("mixData", ""),
+   genParticles = cms.InputTag("genParticles", ""),		
+
 )##<<>>process.tree = cms.EDAnalyzer("LLPgammaAnalyzer_aod"
 
 

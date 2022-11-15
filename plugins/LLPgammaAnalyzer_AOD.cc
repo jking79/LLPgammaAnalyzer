@@ -9,15 +9,16 @@
 
  		Implementation: [Notes on implementation]
 
-*/
+*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Original Author:  Jack W King III
 //         Created:  Wed, 27 Jan 2021 19:19:35 GMT
 //
 //
-
+//
 //----------------------------------------  cc file   --------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "LLPGamma/LLPgammaAnalyzer/plugins/LLPgammaAnalyzer_AOD.hh"
 using namespace std;
@@ -25,15 +26,16 @@ using namespace std;
 //#define DEBUG true
 #define DEBUG false
 
-//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // constructors and destructor
-//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig) :
 
 // -- declare tags ----------------------------------------------------------
 
 	// flags
-	hasGenInfo(iConfig.existsAs<bool>("hasGenInfo")  ? iConfig.getParameter<bool>("hasGenInfo")  : false),
+	hasGenInfo(iConfig.existsAs<bool>("hasGenInfo")  ? iConfig.getParameter<bool>("hasGenInfo")  : true),
 
 	// triggers
 	//triggerResultsTag(iConfig.getParameter<edm::InputTag>("triggerResults")),
@@ -86,13 +88,21 @@ LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig) :
 
 	// gedphotons
 	gedPhotonsTag(iConfig.getParameter<edm::InputTag>("gedPhotons")),
+    phoCBIDLooseMapTag(iConfig.getParameter<edm::InputTag>("phoCBIDLooseMap")),
 
 	// ootPhotons
-	ootPhotonsTag(iConfig.getParameter<edm::InputTag>("ootPhotons"))
+	ootPhotonsTag(iConfig.getParameter<edm::InputTag>("ootPhotons")),
 
 	// pfcand ref
-	//reco2pfTag(iConfig.getParameter<edm::InputTag>("recoToPFMap"))
-	//reco2pf_(mayConsume<edm::ValueMap<std::vector<reco::PFCandidateRef> > >(iConfig.getParameter<edm::InputTag>("recoToPFMap")))
+	//reco2pfTag(iConfig.getParameter<edm::InputTag>("recoToPFMap")),
+	//reco2pf_(mayConsume<edm::ValueMap<std::vector<reco::PFCandidateRef> > >(iConfig.getParameter<edm::InputTag>("recoToPFMap"))),
+
+	// genParticles
+	genEvtInfoTag(iConfig.getParameter<edm::InputTag>("genEvt")),
+  	gent0Tag(iConfig.getParameter<edm::InputTag>("gent0")),
+  	genxyz0Tag(iConfig.getParameter<edm::InputTag>("genxyz0")),
+  	pileupInfosTag(iConfig.getParameter<edm::InputTag>("pileups")),
+  	genParticlesTag(iConfig.getParameter<edm::InputTag>("genParticles"))
 
 // -- end of tag declarations ---------------------------------------
 { //<<<< LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig) :
@@ -141,7 +151,6 @@ LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig) :
 	// jets
 	jetsToken_					= consumes<std::vector<reco::PFJet>>(jetsTag);
     caloJetsToken_              = consumes<std::vector<reco::CaloJet>>(caloJetsTag);
-	genJetsToken_				= consumes<std::vector<reco::GenJet>>(genJetsTag);	
 
 	// leptons
 	electronsToken_				= consumes<std::vector<reco::GsfElectron>>(electronsTag);
@@ -155,14 +164,27 @@ LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig) :
 
 	// photons
 	gedPhotonsToken_ 			= consumes<std::vector<reco::Photon>>(gedPhotonsTag);
+	phoCBIDLooseMapToken_		= consumes<edm::ValueMap<bool>>(phoCBIDLooseMapTag); 
 	ootPhotonsToken_ 			= consumes<std::vector<reco::Photon>>(ootPhotonsTag);
 
 	// pfref
 	//reco2pf_					= consumes<edm::ValueMap<std::vector<reco::PFCandidateRef>>>(reco2pfTag);
 
+	//genParticles & genJets
+	if( hasGenInfo ){
+
+		genJetsToken_ 			= consumes<std::vector<reco::GenJet>>(genJetsTag);
+		genEvtInfoToken_   		= consumes<GenEventInfoProduct>(genEvtInfoTag);
+    	gent0Token_        		= consumes<float>(gent0Tag);
+    	genxyz0Token_      		= consumes<Point3D>(genxyz0Tag);
+    	pileupInfosToken_  		= consumes<std::vector<PileupSummaryInfo>>(pileupInfosTag);
+    	genParticlesToken_ 		= consumes<std::vector<reco::GenParticle>>(genParticlesTag);
+
+	}//<<>>if( hasGenInfo )
+
 // ---------------------------------------------------------------------------------
 }//>>>>LLPgammaAnalyzer_AOD::LLPgammaAnalyzer_AOD(const edm::ParameterSet& iConfig)
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 LLPgammaAnalyzer_AOD::~LLPgammaAnalyzer_AOD(){
 	///////////////////////////////////////////////////////////////////
@@ -172,9 +194,9 @@ LLPgammaAnalyzer_AOD::~LLPgammaAnalyzer_AOD(){
 }//>>>>LLPgammaAnalyzer_AOD::~LLPgammaAnalyzer_AOD()
 
 
-//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // member functions
-//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 detIdMap LLPgammaAnalyzer_AOD::SetupDetIDs(){
 
@@ -476,7 +498,7 @@ rhGroup LLPgammaAnalyzer_AOD::getRHGroup( const scGroup superClusterGroup, float
         if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ){ 
 			matched++;
 			if(recHit.checkFlag(EcalRecHit::kOutOfTime)) nOOT++;
-			if( enr <= minenr ){ result.push_back(recHit); rhTimeHist->Fill(recHit.time()); }//<<>>if( enr <= minenr ) 
+			if( enr > minenr ){ result.push_back(recHit); rhTimeHist->Fill(recHit.time()); }//<<>>if( enr <= minenr ) 
 		}//<<>>if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() )
     }//<<>>for (const auto recHit : *recHitsEB_ )
     for (const auto recHit : *recHitsEE_ ){
@@ -487,7 +509,7 @@ rhGroup LLPgammaAnalyzer_AOD::getRHGroup( const scGroup superClusterGroup, float
         if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() ){ 
             matched++;
             if(recHit.checkFlag(EcalRecHit::kOutOfTime)) nOOT++;
-            if( enr <= minenr ){ result.push_back(recHit); rhTimeHist->Fill(recHit.time()); }//<<>>if( enr <= minenr ) 
+            if( enr > minenr ){ result.push_back(recHit); rhTimeHist->Fill(recHit.time()); }//<<>>if( enr <= minenr ) 
         }//<<>>if( std::find( rawIds.begin(), rawIds.end(), rawId ) != rawIds.end() )
     }//<<>>for (const auto recHit : *recHitsEE_ )
 	//std::cout << " --- rh cl stats : nRH " << nRecHits << " matched : " << matched << " nOOT " << nOOT << std::endl;
@@ -960,9 +982,9 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_ieipt( vector<float> times, rh
     }//<<>>for( uInt it(0); it < rechits.size(); it++ )
 
 	vector<float> adjphis;
-	auto mphi = ceil(meanPhi(phis));
+	auto mphi = ceil(meanIPhi(phis));
 	for( uInt it(0); it < phis.size(); it++ ){ 
-		auto dstphi = dPhi(phis[it],mphi);
+		auto dstphi = dIPhi(phis[it],mphi);
 		adjphis.push_back(tdis*(mphi+dstphi));
 	}//<<>>for( auto it : phis )
 
@@ -1082,7 +1104,7 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
     }//<<>>for( uInt it(0); it < rechits.size(); it++ )
 
     auto meta = mean(etas,resolutions);
-    auto mphi = meanPhi(phis,resolutions);
+    auto mphi = meanIPhi(phis,resolutions);
 	auto mtime = mean(ebtimes,resolutions);
 
 	//std::cout << "In getRhGrpEigen_sph w/ meta " << meta << " : mphi " << mphi << " : mt " << mtime << std::endl;
@@ -1090,7 +1112,7 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
 	for( uInt it(0); it < ebtimes.size(); it++ ){
 
 		float leta = etas[it]-meta;
-        float lphi = dPhi(phis[it],mphi);
+        float lphi = dIPhi(phis[it],mphi);
 		if( leta == 0 && lphi == 0 ) continue;
         float ltim = ebtimes[it]-mtime;
 		float angle = getAngle( leta, lphi );
@@ -1112,12 +1134,13 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
 	// ----------------------
     float totRes(0.0);
 	float ltsum(0.0);
+	int slopeCorr(1);
 	for( uInt it(0); it < wts.size(); it++ ){
 
         float leta = etas[it] - meta;
-        float lphi = dPhi(phis[it],mphi);
+        float lphi = dIPhi(phis[it],mphi);
 		float ltime = ebtimes[it]-mtime;
-		auto xcor = eigncos*(leta) - eignsin*(lphi);
+		auto xcor = orgcos*(leta) - orgsin*(lphi);
 		//if( xcor > 0 ) ltsum += ltime*resolutions[it];
 		ltsum += ltime*resolutions[it]/xcor;	
         totRes += resolutions[it];	
@@ -1129,6 +1152,7 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
     	rotangle = getAngle(-1*eigens[0], -1*eigens[1]);
 		eignsin = std::sin(rotangle);
 		eigncos = std::cos(rotangle);
+		slopeCorr = -1;
 
 	}//if( ebp && ebn && ltsum < 0 )
 
@@ -1150,12 +1174,12 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
     for( uInt it(0); it < nWts; it++ ){
 
         float leta = etas[it] - meta;
-        float lphi = dPhi(phis[it],mphi);
+        float lphi = dIPhi(phis[it],mphi);
         float ltime = ebtimes[it]-mtime;
-        auto sxcor = eigncos*(leta*2.2) - eignsin*(lphi*2.2);
-        auto sycor = eignsin*(leta*2.2) + eigncos*(lphi*2.2);
-        auto xcor = orgcos*(leta*2.2) - orgsin*(lphi*2.2);
-        auto ycor = orgsin*(leta*2.2) + orgcos*(lphi*2.2);
+        auto xcor = eigncos*(leta*2.2) - eignsin*(lphi*2.2);
+        auto ycor = eignsin*(leta*2.2) + eigncos*(lphi*2.2);
+        auto sxcor = (orgcos*(leta*2.2) - orgsin*(lphi*2.2))*slopeCorr;
+        auto sycor = orgsin*(leta*2.2) + orgcos*(lphi*2.2);
         if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi 
 								<< " : xcor " << xcor << " : ycor " << ycor << " : dt " << wts[it] << std::endl;
         if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << leta << " : lphi " << lphi 
@@ -1180,8 +1204,10 @@ vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGr
         	//if( sxcor < 3 && sxcor >= 2 ) hist1d[99]->Fill(ltime,resolutions[it]);
         //}//<<>>if( pfcut )
         //if( ltime/leta  > 0 ){
-        	auto sl = (ltime)/(sxcor);
-			auto sl2 = (ltime)/(leta*2.2);// changed to eta to look at slope in eta direction
+        	//auto sl = (ltime)/(sxcor);
+        	auto sl = (ltime)/(sxcor)*slopeCorr;
+			//auto sl2 = (ltime)/(leta*2.2);// changed to eta to look at slope in eta direction
+            auto sl2 = (ltime)/(leta*2.2)*slopeCorr;
 			xs.push_back(sl);
             xs2.push_back(sl2);
 			//hist1d[100]->Fill(sl*resolutions[it]);
@@ -1446,8 +1472,8 @@ vector<float> LLPgammaAnalyzer_AOD::kidTOFChain( std::vector<reco::CandidatePtr>
 }//>>>>vector<float> LLPgammaAnalyzer_AOD::kidTOFChain( std::vector<reco::CandidatePtr> kids, float cx, float cy, float cz  )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // ------------ method called for each event	------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
 	using namespace edm;
@@ -1470,7 +1496,10 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     iEvent.getByToken(pfCanElectronMap_token_, pfCanElectronMap_);
 
     //GEN PARTICLES
-	//if( hasGenInfo ) iEvent.getByToken(genpart_token_, genpart_);
+	if( hasGenInfo ){ //iEvent.getByToken(genpart_token_, genpart_);
+
+
+	}//if( hasGenInfo ){ //iEvent.getByToken(genpart_token_, genpart_);
 
 	// VERTICES
 	iEvent.getByToken(verticesToken_, vertices_);
@@ -1494,14 +1523,24 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     // CALOJETS
     iEvent.getByToken(caloJetsToken_, caloJets_);
 
-	// GENJETS
-    iEvent.getByToken(genJetsToken_, genJets_);
+	// GENPARTICLES & GENJETS
+	if( hasGenInfo ){
+
+		iEvent.getByToken(genEvtInfoToken_, genEvtInfo_);
+    	iEvent.getByToken(gent0Token_, gent0_);
+    	iEvent.getByToken(genxyz0Token_, genxyz0_);
+    	iEvent.getByToken(pileupInfosToken_, pileupInfos_);
+    	iEvent.getByToken(genParticlesToken_, genParticles_);
+    	iEvent.getByToken(genJetsToken_, genJets_);
+
+	}//<<>>if( hasGenInfo )
 
 	// ELECTRONS
 	iEvent.getByToken(electronsToken_, electrons_);
 
 	// PHOTONS
 	iEvent.getByToken(gedPhotonsToken_, gedPhotons_);
+    iEvent.getByToken(phoCBIDLooseMapToken_, phoCBIDLooseMap_);
 	iEvent.getByToken(ootPhotonsToken_, ootPhotons_);
 
 	// MUONS
@@ -1535,7 +1574,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	// PFCand refs
 	//iEvent.getByToken(reco2pf_, reco2pf);
 
-// -- event information --------------------------------------
+// -- event information ------------------------------------------------------------------------------------------------------------------------
 
    	run   = iEvent.id().run();
    	lumi  = iEvent.luminosityBlock();
@@ -1565,6 +1604,8 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     std::vector<reco::CaloJet> 		fcalojets;
 	std::vector<reco::Muon> 		fmuons;
 	std::vector<reco::PFMET> 		fpfmet;
+	std::vector<reco::GenParticle>  fgenparts;
+    std::vector<int>				fgenpartllp;
 
 	//jets.clear(); 
 	//jets.reserve(jets_->size());
@@ -1574,14 +1615,16 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	float	deltaRminJet	= 0.4;//0.4
 	//float deltaRminKid	= 0.15;//0.2
 	//float 	jetPTmin		= 200.0;
-    float   jetPTmin        = 100.0;// for energy/time comp
+    float   jetPTmin        = 0.0;// for energy/time comp
 	int 	jetIDmin		= 2; //3;
     //int     jetIDmin        = 1; //3; for energy/time comp
 	float 	jetETAmax		= 1.5; //1.5;
 	uInt 	minRHcnt		= 5; //32;
     uInt    minObjRHcnt     = 3; //32;
 	float 	minRHenr		= 2.0;
+    //float   minRHenr        = 0.0;
    	float 	bcMinEnergy		= 0.667;
+    //float   bcMinEnergy     = 0.0;
    	uInt 	bcMinRHGrpSize	= 3;
 	float 	minEmf			= 0.0;//0.2
 
@@ -1624,9 +1667,59 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	for( const auto &bclust : *caloCluster_ ){ fbclusts.push_back(bclust); }
 
     if( DEBUG ) std::cout << "Collecting Photons/Electrons" << std::endl;
-    for( const auto photon : *gedPhotons_ ){ fphotons.push_back(photon); }
+
+	//auto phoIdx(0);
+    for( const auto photon : *gedPhotons_ ){
+ 
+		//edm::Ref<reco::PhotonCollection> photonRef(gedPhotons_,phoIdx); 
+		//if( not (*phoCBIDLooseMap_)[photonRef] ){ fphotons.push_back(photon);} 
+		//phoIdx++;
+		fphotons.push_back(photon);
+
+	}//<<>>for( const auto photon : *gedPhotons_ )
+
     for( const auto ootphoton : *ootPhotons_ ){ footphotons.push_back(ootphoton); }
     for( const auto electron : *electrons_ ){ felectrons.push_back(electron); }
+
+	// !!!!!!!  collect gen particles
+	for(const auto& genPart : *genParticles_ ){ 
+			
+		fgenparts.push_back(genPart); 
+
+        bool llp(false);
+		auto pdgid = std::abs(genPart.pdgId());
+		if( genPart.numberOfMothers() > 0 ){
+        bool done(false);
+        bool first(true);
+        auto mom = genPart.mother();
+        bool top(true);
+        int steps(0);
+        while( not done ){
+            pdgid = std::abs(mom->pdgId());
+            if( pdgid == 1000022 || pdgid == 1000023 || pdgid == 1000025 || pdgid == 1000035 ) llp = true;
+            if( mom->pt() == 0 ) done = true;
+            else {
+                auto gmom = mom->mother();
+                if( top ){
+                    if( first ) first = false;
+                    steps++;
+                }//<<>>if( top )
+                if( gmom->pt() == 0 ) done = true;
+                else {
+                    if( mom->vx() == gmom->vx() ) top = false;
+                    else top = true;
+                    mom = gmom;
+                }//<<>>if( gmom->pt() == 0 )
+            }//<<>>if( mom->pt() == 0 )                 
+        }//<<>>while( not done )
+        first = true;
+		}//<<>>if( genPart.numberOfMothers() > 0 )
+
+		if( llp ) fgenpartllp.push_back(1);
+		else fgenpartllp.push_back(0); 
+		//std::cout << " -- GenPart # mothers : " << genPart.numberOfMothers() << " pdgId : " << genPart.pdgId() << " isLLP: " << llp  << " Final pdgId : " << pdgid << std::endl;
+
+	}//<<>>for(const auto& genPart : *genParticles_ )
 
     //------------------------------------------------------------------------------------
     if( DEBUG ) std::cout << "Processing RecHits" << std::endl;
@@ -1747,6 +1840,17 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     }//<<>>for (const auto recHit : *recHitsEB_ )   
     nRecHits = nRecHitCnt;
 
+    //-------------------------------------------------------------------------------------
+    if( DEBUG ) std::cout << "Processing MET" << std::endl;
+
+	auto t1pfMET = (*pfmets_)[0];
+	metSumEt = t1pfMET.sumEt(); 
+	metPt = t1pfMET.pt();
+	metPx = t1pfMET.px();
+	metPy = t1pfMET.py();
+	metPhi = t1pfMET.phi();
+	metEta = t1pfMET.eta();	
+
 	//-------------------------------------------------------------------------------------
 	if( DEBUG ) std::cout << "Processing CaloJets" << std::endl;
 
@@ -1773,6 +1877,9 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     cljPx.clear();
     cljPy.clear();
     cljPz.clear();
+	//cljRhIds.clear();
+
+	cljEMFrac.clear();
 
 	int iCaloJet(0);
 	for (const auto caloJet : fcalojets ){
@@ -1784,6 +1891,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         cljPx.push_back(caloJet.px());
         cljPy.push_back(caloJet.py());
         cljPz.push_back(caloJet.pz());
+		cljEMFrac.push_back(caloJet.emEnergyFraction());
         iCaloJet++;
 
         rhGroup cljRhGroup;
@@ -1794,13 +1902,15 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 		for( const auto cluster : fbclusts ){
 			auto cleta = cluster.eta();
 			auto clphi = cluster.phi();
-			auto cjcldr = reco::deltaR2( cjeta, cjphi, cleta, clphi );		
+			auto cjcldr = std::sqrt(reco::deltaR2( cjeta, cjphi, cleta, clphi ));		
 			if( cjcldr < 0.4 ){ //std::cout << "CJ - BC Match : " << cjcldr << std::endl;
 				nCljBcs++;
 				if( first ){ cljRhGroup = getRHGroup( cluster, bcMinEnergy/2 ); first = false; }
 				else { auto rhgrp = getRHGroup( cluster, bcMinEnergy/2 ); mrgRhGrp( cljRhGroup, rhgrp ); }
 			}//<<>>if( cjcldr < 0.1 )
 		}//<<>>for( const auto cluster : fbclusts )
+        //auto cljRhIdsGroup = getRhGrpIDs( cljRhGroup );
+        //cljRhIds.push_back(cljRhIdsGroup);
         if( cljRhGroup.size() < 3 ){ 
 			cljCMeanTime.push_back( -29.75 ); 
 			cljSeedTOFTime.push_back( -29.75 );
@@ -1849,7 +1959,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 		}//<<>>if( cljRhGroup.size() < minRHcnt )
 
         const auto cljDrGroup = getRHGroup( cjeta, cjphi, 0.4, 2.0 );
-		if( cljRhGroup.size() < 3 ){ cljCDrMeanTime.push_back( -29.75 ); }
+		if( cljRhGroup.size() < 13 ){ cljCDrMeanTime.push_back( -29.75 ); }
 		else { // <<>> if( cljRhGroup.size() < 3 )
 			auto tofTimes = getLeadTofRhTime( cljRhGroup, vtxX, vtxY, vtxZ );
 			auto timeStats = getTimeDistStats( tofTimes, cljRhGroup );
@@ -1887,6 +1997,82 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	phoPz.clear();
 	phoRhIds.clear();
 
+    phoIsPFPhoton.clear();
+    phoIsStdPhoton.clear();
+    phoHasConTracks.clear();
+    phoIsPixelSeed.clear();
+    phoIsPhoton.clear();
+    phoIsEB.clear();
+    phoIsEE.clear();
+    phoIsEBGap.clear();
+    phoIsEBEtaGap.clear();
+    phoIsEBPhiGap.clear();
+    phoIsEEGap.clear();
+    phoIsEERingGap.clear();
+    phoIsEEDeeGap.clear();
+    phoIsEBEEGap.clear();
+
+    phoHadOverEM.clear();
+    phoHadD1OverEM.clear();
+    phoHadD2OverEM.clear();
+    phoHadOverEMVaid.clear();
+    phohadTowOverEM.clear();
+    phohadTowD10OverEM.clear();
+    phohadTowD20OverEM.clear();
+    phohadTowOverEMValid.clear();
+    phoE1x5.clear();
+    phoE2x5.clear();
+    phoE3x3.clear();
+    phoE5x5.clear();
+    phoMaxEnergyXtal.clear();
+    phoSigmaEtaEta.clear();
+    phoSigmaIEtaIEta.clear();
+
+    phoR1x5.clear();
+    phoR2x5.clear();
+    phoR9.clear();
+    phoFull5x5_e1x5.clear();
+    phoFull5x5_e2x5.clear();
+    phoFull5x5_e3x3.clear();
+    phoFull5x5_e5x5.clear();
+    phoFull5x5_maxEnergyXtal.clear();
+    phoFull5x5_sigmaEtaEta.clear();
+    phoFull5x5_sigmaIEtaIEta.clear();
+    phoFull5x5_r1x5.clear();
+    phoFull5x5_r2x5.clear();
+    phoFull5x5_r9.clear();
+    phoNSatXtals.clear();
+    phoIsSeedSat.clear();
+
+    phoMipChi2.clear();
+    phoMipTotEnergy.clear();
+    phoMipSlope.clear();
+    phoMipInter.clear();
+    phoMipNHitCone.clear();
+    phoMipIsHalo.clear();
+
+    phoEcalRHSumEtConeDR04.clear();
+    phoHcalTwrSumEtConeDR04.clear();
+    phoHcalDepth1TowerSumEtConeDR04.clear();
+    phoCalDepth2TowerSumEtConeDR04.clear();
+    phoHcalTowerSumEtBcConeDR04.clear();
+    phoHcalDepth1TowerSumEtBcConeDR04.clear();
+    phoHcalDepth2TowerSumEtBcConeDR04.clear();
+    phoTrkSumPtSolidConeDR04.clear();
+    phoTrkSumPtHollowConeDR04.clear();
+    phoNTrkSolidConeDR04.clear();
+    phoNTrkHollowConeDR04.clear();
+
+    genPhoPt.clear();
+    genPhoEnergy.clear();
+    genPhoPhi.clear();
+    genPhoEta.clear();
+    genPhoPx.clear();
+    genPhoPy.clear();
+    genPhoPz.clear();
+    genPhoPdgId.clear();
+	genPhoLlp.clear();
+
     for( const auto photon : fphotons ){
 
         phoPt.push_back(photon.pt());
@@ -1897,6 +2083,75 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         phoPy.push_back(photon.py());
         phoPz.push_back(photon.pz());
 
+        phoIsPFPhoton.push_back(photon.isPFlowPhoton()) ;
+        phoIsStdPhoton.push_back(photon.isStandardPhoton());
+        phoHasConTracks.push_back(photon.hasConversionTracks());
+        phoIsPixelSeed.push_back(photon.hasPixelSeed());
+        phoIsPhoton.push_back(photon.isPhoton());
+        phoIsEB.push_back(photon.isEB());
+        phoIsEE.push_back(photon.isEE());
+        phoIsEBGap.push_back(photon.isEBGap());
+        phoIsEBEtaGap.push_back(photon.isEBEtaGap());
+        phoIsEBPhiGap.push_back(photon.isEBPhiGap());
+        phoIsEEGap.push_back(photon.isEEGap());
+        phoIsEERingGap.push_back(photon.isEERingGap());
+        phoIsEEDeeGap.push_back(photon.isEEDeeGap());
+        phoIsEBEEGap.push_back(photon.isEBEEGap());
+
+        phoHadOverEM.push_back(photon.hadronicOverEm());
+        phoHadD1OverEM.push_back(photon.hadronicDepth1OverEm() );
+        phoHadD2OverEM.push_back(photon.hadronicDepth2OverEm() );
+        phoHadOverEMVaid.push_back(photon.hadronicOverEmValid());
+        phohadTowOverEM.push_back(photon.hadTowOverEm());
+        phohadTowD10OverEM.push_back(photon.hadTowDepth1OverEm());
+        phohadTowD20OverEM.push_back(photon.hadTowDepth2OverEm() );
+        phohadTowOverEMValid.push_back(photon.hadTowOverEmValid());
+        phoE1x5.push_back(photon.e1x5());
+        phoE2x5.push_back(photon.e2x5());
+        phoE3x3.push_back(photon.e3x3());
+        phoE5x5.push_back(photon.e5x5());
+        phoMaxEnergyXtal.push_back(photon.maxEnergyXtal());
+        phoSigmaEtaEta.push_back(photon.sigmaEtaEta() );
+        phoSigmaIEtaIEta.push_back(photon.sigmaIetaIeta() );
+
+        phoR1x5.push_back(photon.r1x5());
+        phoR2x5.push_back(photon.r2x5());
+        phoR9.push_back(photon.r9());
+        phoFull5x5_e1x5.push_back(photon.full5x5_e1x5());
+        phoFull5x5_e2x5.push_back(photon.full5x5_e2x5());
+        phoFull5x5_e3x3.push_back(photon.full5x5_e3x3());
+        phoFull5x5_e5x5.push_back(photon.full5x5_e5x5());
+        phoFull5x5_maxEnergyXtal.push_back(photon.full5x5_maxEnergyXtal());
+        phoFull5x5_sigmaEtaEta.push_back(photon.full5x5_sigmaEtaEta());
+        phoFull5x5_sigmaIEtaIEta.push_back(photon.full5x5_sigmaIetaIeta());
+        //phoFull5x5_r1x5.push_back(photon.full5x5_r1x5());
+        //phoFull5x5_r2x5.push_back(photon.full5x5_r2x5());
+        phoFull5x5_r9.push_back(photon.full5x5_r9());
+
+        phoNSatXtals.push_back(photon.nSaturatedXtals());
+        phoIsSeedSat.push_back(photon.isSeedSaturated());
+
+        phoMipChi2.push_back(photon.mipChi2());
+        phoMipTotEnergy.push_back(photon.mipTotEnergy());
+        phoMipSlope.push_back(photon.mipSlope());
+        phoMipInter.push_back(photon.mipIntercept());
+
+        phoMipNHitCone.push_back(photon.mipNhitCone());
+        phoMipIsHalo.push_back(photon.mipIsHalo());
+
+        phoEcalRHSumEtConeDR04.push_back(photon.ecalRecHitSumEtConeDR04());
+        phoHcalTwrSumEtConeDR04.push_back(photon.hcalTowerSumEtConeDR04());
+        phoHcalDepth1TowerSumEtConeDR04.push_back(photon.hcalDepth1TowerSumEtConeDR04());
+        phoCalDepth2TowerSumEtConeDR04.push_back(photon.hcalDepth2TowerSumEtConeDR04());
+        phoHcalTowerSumEtBcConeDR04.push_back(photon.hcalTowerSumEtBcConeDR04() );
+        phoHcalDepth1TowerSumEtBcConeDR04.push_back(photon.hcalDepth1TowerSumEtBcConeDR04());
+        phoHcalDepth2TowerSumEtBcConeDR04.push_back(photon.hcalDepth2TowerSumEtBcConeDR04());
+        phoTrkSumPtSolidConeDR04.push_back(photon.trkSumPtSolidConeDR04());
+		phoTrkSumPtHollowConeDR04.push_back(photon.trkSumPtHollowConeDR04());
+        phoNTrkSolidConeDR04.push_back(photon.nTrkSolidConeDR04());
+        phoNTrkHollowConeDR04.push_back(photon.nTrkHollowConeDR04());
+
+
 		iGedPhos++;
 
 		if( DEBUG ) std::cout << " --- Proccesssing : " << photon << std::endl;
@@ -1904,7 +2159,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         const auto scptr = phosc.get();
         scGroup phoSCGroup{*scptr};
         //auto phoRhGroup = getRHGroup( phoSCGroup, 2.0, hist1d[137], hist1d[138], hist1d[139] );
-        auto phoRhGroup = getRHGroup( phoSCGroup, bcMinEnergy );
+        auto phoRhGroup = getRHGroup( phoSCGroup, 0.0 );//bcMinEnergy );
         auto phoRhIdsGroup = getRhGrpIDs( phoRhGroup );
 		phoRhIds.push_back(phoRhIdsGroup);
         if( DEBUG ) std::cout << " -- gedPhotons : " << scptr << " #: " << phoRhGroup.size() << std::endl;
@@ -1951,6 +2206,79 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 							  << phoSCEigen2D[4] << " / " << phoSCEigen3D[0] << " " << phoSCEigen3D[1] << " " << phoSCEigen3D[2] << " " 
                               << phoSCEigen3D[3] << " " << phoSCEigen3D[4] << " " << phoSCEigen3D[5] << " time: " << timeStats[6] << std::endl;
 
+
+        // GenParticle Info for photon  -------------------------------------------------------------------
+        if( DEBUG ) std::cout << "Getting phoGenParton Information" << std::endl;
+
+		// set defaults for no match here
+        auto genPt = -1.0;
+        auto genEnergy = -1.0;
+        auto genPhi = 0.0;
+        auto genEta = 0.0;
+        auto genPx = 0.0;
+        auto genPy = 0.0;
+        auto genPz = 0.0;
+        auto genPdgId = 0;
+		auto genLlp = 0;	
+	
+        if( hasGenInfo ){
+            if( DEBUG ) std::cout << " -- Pulling pho gen info " << std::endl;
+
+            bool matchfound(false);
+            float goodDr(0.1);
+            int matchedIdx(-1);
+            int index(0);
+            for(const auto& genPart : *genParticles_ ){
+
+                auto eta = genPart.eta();
+                auto phi = genPart.phi();
+                auto dr = std::sqrt(reco::deltaR2(eta, phi, photon.eta(), photon.phi() ));
+				auto isPhoton = std::abs(genPart.pdgId()) == 22;
+                if( ( dr < goodDr ) && isPhoton ){
+                    matchfound = true;
+                    goodDr = dr;
+                    matchedIdx = index;
+                }//<<>>if( jtgjdr <= goodDr )
+                index++;
+
+            }//<<>>for(const auto& genJet : *genJets_ ) 
+
+            if( matchedIdx >= 0 ){
+
+                auto genPart = (*genParticles_)[matchedIdx];
+				auto isGenLLP = fgenpartllp[matchedIdx];
+                if( DEBUG ) std::cout << " --- pho-GenPart dR match : " << goodDr << std::endl;
+
+				// set varibles with gen values
+				genPt = genPart.pt();
+				genEnergy = genPart.energy();
+				genPhi = genPart.phi();
+				genEta = genPart.eta();
+				genPx = genPart.px();
+				genPy = genPart.py();
+				genPz = genPart.pz();
+				genPdgId = genPart.pdgId();			
+				genLlp = isGenLLP; 
+
+            }//<<>>if( matchedIdx >= 0 ) 
+
+            if( not matchfound ){ if( DEBUG ) std::cout << " - genpho GenTime : genPho == 0 " << std::endl; } //genPhoTime = -50.0; }
+
+            // load event level vectors for this part with gen info
+			genPhoPt.push_back(genPt);
+			genPhoEnergy.push_back(genEnergy);
+			genPhoPhi.push_back(genPhi);
+			genPhoEta.push_back(genEta);
+			genPhoPx.push_back(genPx);
+			genPhoPy.push_back(genPy);
+			genPhoPz.push_back(genPz);
+			genPhoPdgId.push_back(genPdgId);
+    		genPhoLlp.push_back(genLlp);
+
+            if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+
+        }//<<>>if( hasGenInfo )
+
     }//<<>>for( const auto photon : *gedPhotons_ )
 	nPhotons = iGedPhos;
 
@@ -1977,6 +2305,83 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     ootPhoPx.clear();
     ootPhoPy.clear();
     ootPhoPz.clear();
+    ootPhoRhIds.clear();
+
+    ootPhoIsPFPhoton.clear();
+    ootPhoIsStdPhoton.clear();
+    ootPhoHasConTracks.clear();
+    ootPhoIsPixelSeed.clear();
+    ootPhoIsPhoton.clear();
+    ootPhoIsEB.clear();
+    ootPhoIsEE.clear();
+    ootPhoIsEBGap.clear();
+    ootPhoIsEBEtaGap.clear();
+    ootPhoIsEBPhiGap.clear();
+    ootPhoIsEEGap.clear();
+    ootPhoIsEERingGap.clear();
+    ootPhoIsEEDeeGap.clear();
+    ootPhoIsEBEEGap.clear();
+
+    ootPhoHadOverEM.clear();
+    ootPhoHadD1OverEM.clear();
+    ootPhoHadD2OverEM.clear();
+    ootPhoHadOverEMVaid.clear();
+    ootPhohadTowOverEM.clear();
+    ootPhohadTowD10OverEM.clear();
+    ootPhohadTowD20OverEM.clear();
+    ootPhohadTowOverEMValid.clear();
+    ootPhoE1x5.clear();
+    ootPhoE2x5.clear();
+    ootPhoE3x3.clear();
+    ootPhoE5x5.clear();
+    ootPhoMaxEnergyXtal.clear();
+    ootPhoSigmaEtaEta.clear();
+    ootPhoSigmaIEtaIEta.clear();
+
+    ootPhoR1x5.clear();
+    ootPhoR2x5.clear();
+    ootPhoR9.clear();
+    ootPhoFull5x5_e1x5.clear();
+    ootPhoFull5x5_e2x5.clear();
+    ootPhoFull5x5_e3x3.clear();
+    ootPhoFull5x5_e5x5.clear();
+    ootPhoFull5x5_maxEnergyXtal.clear();
+    ootPhoFull5x5_sigmaEtaEta.clear();
+    ootPhoFull5x5_sigmaIEtaIEta.clear();
+    ootPhoFull5x5_r1x5.clear();
+    ootPhoFull5x5_r2x5.clear();
+    ootPhoFull5x5_r9.clear();
+    ootPhoNSatXtals.clear();
+    ootPhoIsSeedSat.clear();
+
+    ootPhoMipChi2.clear();
+    ootPhoMipTotEnergy.clear();
+    ootPhoMipSlope.clear();
+    ootPhoMipInter.clear();
+    ootPhoMipNHitCone.clear();
+    ootPhoMipIsHalo.clear();
+
+    ootPhoEcalRHSumEtConeDR04.clear();
+    ootPhoHcalTwrSumEtConeDR04.clear();
+    ootPhoHcalDepth1TowerSumEtConeDR04.clear();
+    ootPhoCalDepth2TowerSumEtConeDR04.clear();
+    ootPhoHcalTowerSumEtBcConeDR04.clear();
+    ootPhoHcalDepth1TowerSumEtBcConeDR04.clear();
+    ootPhoHcalDepth2TowerSumEtBcConeDR04.clear();
+    ootPhoTrkSumPtSolidConeDR04.clear();
+    ootPhoTrkSumPtHollowConeDR04.clear();
+    ootPhoNTrkSolidConeDR04.clear();
+    ootPhoNTrkHollowConeDR04.clear();
+
+    genOOTPhoPt.clear();
+    genOOTPhoEnergy.clear();
+    genOOTPhoPhi.clear();
+    genOOTPhoEta.clear();
+    genOOTPhoPx.clear();
+    genOOTPhoPy.clear();
+    genOOTPhoPz.clear();
+    genOOTPhoPdgId.clear();
+    genOOTPhoLlp.clear();
 
     int iOOTPhos(0);
 	scGroup jetOOTPhSCGroup;
@@ -1991,15 +2396,85 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         ootPhoPy.push_back(ootphoton.py());
         ootPhoPz.push_back(ootphoton.pz());
 
+        ootPhoIsPFPhoton.push_back(ootphoton.isPFlowPhoton()) ;
+        ootPhoIsStdPhoton.push_back(ootphoton.isStandardPhoton());
+        ootPhoHasConTracks.push_back(ootphoton.hasConversionTracks());
+        ootPhoIsPixelSeed.push_back(ootphoton.hasPixelSeed());
+        ootPhoIsPhoton.push_back(ootphoton.isPhoton());
+        ootPhoIsEB.push_back(ootphoton.isEB());
+        ootPhoIsEE.push_back(ootphoton.isEE());
+        ootPhoIsEBGap.push_back(ootphoton.isEBGap());
+        ootPhoIsEBEtaGap.push_back(ootphoton.isEBEtaGap());
+        ootPhoIsEBPhiGap.push_back(ootphoton.isEBPhiGap());
+        ootPhoIsEEGap.push_back(ootphoton.isEEGap());
+        ootPhoIsEERingGap.push_back(ootphoton.isEERingGap());
+        ootPhoIsEEDeeGap.push_back(ootphoton.isEEDeeGap());
+        ootPhoIsEBEEGap.push_back(ootphoton.isEBEEGap());
+
+        ootPhoHadOverEM.push_back(ootphoton.hadronicOverEm());
+        ootPhoHadD1OverEM.push_back(ootphoton.hadronicDepth1OverEm() );
+        ootPhoHadD2OverEM.push_back(ootphoton.hadronicDepth2OverEm() );
+        ootPhoHadOverEMVaid.push_back(ootphoton.hadronicOverEmValid());
+        ootPhohadTowOverEM.push_back(ootphoton.hadTowOverEm());
+        ootPhohadTowD10OverEM.push_back(ootphoton.hadTowDepth1OverEm());
+        ootPhohadTowD20OverEM.push_back(ootphoton.hadTowDepth2OverEm() );
+        ootPhohadTowOverEMValid.push_back(ootphoton.hadTowOverEmValid());
+        ootPhoE1x5.push_back(ootphoton.e1x5());
+        ootPhoE2x5.push_back(ootphoton.e2x5());
+        ootPhoE3x3.push_back(ootphoton.e3x3());
+        ootPhoE5x5.push_back(ootphoton.e5x5());
+        ootPhoMaxEnergyXtal.push_back(ootphoton.maxEnergyXtal());
+        ootPhoSigmaEtaEta.push_back(ootphoton.sigmaEtaEta() );
+        ootPhoSigmaIEtaIEta.push_back(ootphoton.sigmaIetaIeta() );
+
+        ootPhoR1x5.push_back(ootphoton.r1x5());
+        ootPhoR2x5.push_back(ootphoton.r2x5());
+        ootPhoR9.push_back(ootphoton.r9());
+        ootPhoFull5x5_e1x5.push_back(ootphoton.full5x5_e1x5());
+        ootPhoFull5x5_e2x5.push_back(ootphoton.full5x5_e2x5());
+        ootPhoFull5x5_e3x3.push_back(ootphoton.full5x5_e3x3());
+        ootPhoFull5x5_e5x5.push_back(ootphoton.full5x5_e5x5());
+        ootPhoFull5x5_maxEnergyXtal.push_back(ootphoton.full5x5_maxEnergyXtal());
+        ootPhoFull5x5_sigmaEtaEta.push_back(ootphoton.full5x5_sigmaEtaEta());
+        ootPhoFull5x5_sigmaIEtaIEta.push_back(ootphoton.full5x5_sigmaIetaIeta());
+        //ootPhoFull5x5_r1x5.push_back(ootphoton.full5x5_r1x5());
+        //ootPhoFull5x5_r2x5.push_back(ootphoton.full5x5_r2x5());
+        ootPhoFull5x5_r9.push_back(ootphoton.full5x5_r9());
+
+        ootPhoNSatXtals.push_back(ootphoton.nSaturatedXtals());
+        ootPhoIsSeedSat.push_back(ootphoton.isSeedSaturated());
+
+        ootPhoMipChi2.push_back(ootphoton.mipChi2());
+        ootPhoMipTotEnergy.push_back(ootphoton.mipTotEnergy());
+        ootPhoMipSlope.push_back(ootphoton.mipSlope());
+        ootPhoMipInter.push_back(ootphoton.mipIntercept());
+
+        ootPhoMipNHitCone.push_back(ootphoton.mipNhitCone());
+        ootPhoMipIsHalo.push_back(ootphoton.mipIsHalo());
+
+        ootPhoEcalRHSumEtConeDR04.push_back(ootphoton.ecalRecHitSumEtConeDR04());
+        ootPhoHcalTwrSumEtConeDR04.push_back(ootphoton.hcalTowerSumEtConeDR04());
+        ootPhoHcalDepth1TowerSumEtConeDR04.push_back(ootphoton.hcalDepth1TowerSumEtConeDR04());
+        ootPhoCalDepth2TowerSumEtConeDR04.push_back(ootphoton.hcalDepth2TowerSumEtConeDR04());
+        ootPhoHcalTowerSumEtBcConeDR04.push_back(ootphoton.hcalTowerSumEtBcConeDR04() );
+        ootPhoHcalDepth1TowerSumEtBcConeDR04.push_back(ootphoton.hcalDepth1TowerSumEtBcConeDR04());
+        ootPhoHcalDepth2TowerSumEtBcConeDR04.push_back(ootphoton.hcalDepth2TowerSumEtBcConeDR04());
+        ootPhoTrkSumPtSolidConeDR04.push_back(ootphoton.trkSumPtSolidConeDR04());
+        ootPhoTrkSumPtHollowConeDR04.push_back(ootphoton.trkSumPtHollowConeDR04());
+        ootPhoNTrkSolidConeDR04.push_back(ootphoton.nTrkSolidConeDR04());
+        ootPhoNTrkHollowConeDR04.push_back(ootphoton.nTrkHollowConeDR04());
+
         iOOTPhos++;
 
 		if( DEBUG ) std::cout << " --- Proccesssing : " << ootphoton  << std::endl;
         const auto &ootphosc = ootphoton.superCluster().isNonnull() ? ootphoton.superCluster() : ootphoton.parentSuperCluster();
-        const auto scptr = ootphosc.get();
-        scGroup ootPhoSCGroup{*scptr};
+        const auto ootscptr = ootphosc.get();
+        scGroup ootPhoSCGroup{*ootscptr};
         //auto ootPhoRhGroup = getRHGroup( ootPhoSCGroup, 2.0, hist1d[140], hist1d[141], hist1d[142] );
-        auto ootPhoRhGroup = getRHGroup( ootPhoSCGroup, bcMinEnergy );
-        if( DEBUG ) std::cout << " -- ootPhotons : " << scptr << " #: " << ootPhoRhGroup.size() << std::endl;
+        auto ootPhoRhGroup = getRHGroup( ootPhoSCGroup, 0.0 );//bcMinEnergy );
+        auto ootPhoRhIdsGroup = getRhGrpIDs( ootPhoRhGroup );
+        ootPhoRhIds.push_back(ootPhoRhIdsGroup);
+        if( DEBUG ) std::cout << " -- ootPhotons : " << ootscptr << " #: " << ootPhoRhGroup.size() << std::endl;
         if( ootPhoRhGroup.size() < minObjRHcnt ){
             ootPhoCMeanTime.push_back( -29.75 );
             ootPhoSeedTOFTime.push_back( -29.75 );
@@ -2019,7 +2494,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         }//<<>>if( ootPhoRhGroup.size() < minRHcnt ) ***** IF ootPhoRhGroup.size() > minRHcnt BELOW THIS POINT IN LOOP *****
         auto tofTimes = getLeadTofRhTime( ootPhoRhGroup, vtxX, vtxY, vtxZ );
         auto timeStats = getTimeDistStats( tofTimes, ootPhoRhGroup );
-        auto seedTOFTime = getSeedTofTime( *scptr, vtxX, vtxY, vtxZ );
+        auto seedTOFTime = getSeedTofTime( *ootscptr, vtxX, vtxY, vtxZ );
         //auto ootPhoLeadTOFTime =  getLeadTofTime( ootPhoRhGroup, vtxX, vtxY, vtxZ );
         auto ootPhoSCEigen3D = getRhGrpEigen_ieipt( tofTimes, ootPhoRhGroup );
         auto ootPhoSCEigen2D = getRhGrpEigen_sph( tofTimes, ootPhoRhGroup );
@@ -2044,6 +2519,79 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 						      << ootPhoSCEigen2D[3] << " " << ootPhoSCEigen2D[4] << " / " << ootPhoSCEigen3D[0] << " " << ootPhoSCEigen3D[1] << " " 
 							  << ootPhoSCEigen3D[2] << " " << ootPhoSCEigen3D[3] << " " << ootPhoSCEigen3D[4] << " " << ootPhoSCEigen3D[5] 
 							  << " time: " << timeStats[6] << std::endl;
+
+
+        // GenParticle Info for photon  -------------------------------------------------------------------
+        if( DEBUG ) std::cout << "Getting phoGenParton Information" << std::endl;
+
+        // set defaults for no match here
+        auto genPt = -1.0;
+        auto genEnergy = -1.0;
+        auto genPhi = 0.0;
+        auto genEta = 0.0;
+        auto genPx = 0.0;
+        auto genPy = 0.0;
+        auto genPz = 0.0;
+        auto genPdgId = 0;
+        auto genLlp = 0;
+    
+        if( hasGenInfo ){
+            if( DEBUG ) std::cout << " -- Pulling pho gen info " << std::endl;
+
+            bool matchfound(false);
+            float goodDr(0.1);
+            int matchedIdx(-1);
+            int index(0);
+            for(const auto& genPart : *genParticles_ ){
+
+                auto eta = genPart.eta();
+                auto phi = genPart.phi();
+                auto dr = std::sqrt(reco::deltaR2(eta, phi, ootphoton.eta(), ootphoton.phi() ));
+                auto isPhoton = std::abs(genPart.pdgId()) == 22;
+                if( ( dr < goodDr ) && isPhoton ){
+                    matchfound = true;
+                    goodDr = dr;
+                    matchedIdx = index;
+                }//<<>>if( jtgjdr <= goodDr )
+                index++;
+
+            }//<<>>for(const auto& genJet : *genJets_ )
+
+            if( matchedIdx >= 0 ){
+
+                auto genPart = (*genParticles_)[matchedIdx];
+                auto isGenLLP = fgenpartllp[matchedIdx];
+                if( DEBUG ) std::cout << " --- pho-GenPart dR match : " << goodDr << std::endl;
+ 
+                // set varibles with gen values
+                genPt = genPart.pt();
+                genEnergy = genPart.energy();
+                genPhi = genPart.phi();
+                genEta = genPart.eta();
+                genPx = genPart.px();
+                genPy = genPart.py();
+                genPz = genPart.pz();
+                genPdgId = genPart.pdgId();
+                genLlp = isGenLLP;
+
+            }//<<>>if( matchedIdx >= 0 ) 
+ 
+            if( not matchfound ){ if( DEBUG ) std::cout << " - genpho GenTime : genPho == 0 " << std::endl; } //genPhoTime = -50.0; }
+
+            // load event level vectors for this part with gen info
+            genOOTPhoPt.push_back(genPt);
+            genOOTPhoEnergy.push_back(genEnergy);
+            genOOTPhoPhi.push_back(genPhi);
+            genOOTPhoEta.push_back(genEta);
+            genOOTPhoPx.push_back(genPx);
+            genOOTPhoPy.push_back(genPy);
+            genOOTPhoPz.push_back(genPz);
+            genOOTPhoPdgId.push_back(genPdgId);
+            genOOTPhoLlp.push_back(genLlp);
+ 
+            if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+
+        }//<<>>if( hasGenInfo )
 
     }//<<>>for( const auto photon : *gedPhotons_ )
 	nOotPhotons = iOOTPhos;
@@ -2071,6 +2619,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     elePx.clear();
     elePy.clear();
     elePz.clear();
+	//eleRhIdsGroup.clear();
 
     int iElectros(0);
 	scGroup jetEleSCGroup;
@@ -2093,6 +2642,8 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         scGroup eleSCGroup{*scptr};
     	//auto eleRhGroup = getRHGroup( eleSCGroup, 2.0, hist1d[143], hist1d[144], hist1d[145] );
         auto eleRhGroup = getRHGroup( eleSCGroup, bcMinEnergy );
+        //auto eleRhIdsGroup = getRhGrpIDs( eleRhGroup );
+        //eleRhIds.push_back(eleRhIdsGroup);
         if( DEBUG ) std::cout << " -- Electrons : " << scptr << " #: " << eleRhGroup.size() << std::endl;
         if( eleRhGroup.size() < minObjRHcnt ){
             eleCMeanTime.push_back( -29.75 );
@@ -2240,6 +2791,9 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     jetOOTPhMuTime.clear();
     jetEleMuTime.clear();
 
+    //jetDrRhIds.clear();
+	//jetScRhIds.clear();
+
 	jetPHM.clear();
 	jetELM.clear();
 	//jetC.clear();
@@ -2356,6 +2910,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	   	jetPt.push_back(jet.pt());
 	   	jetPhi.push_back(jet.phi());
 	   	jetEta.push_back(jet.eta());
+
 		jetEtaetaMmt.push_back(jet.etaetaMoment());
 		jetPhiphiMnt.push_back(jet.phiphiMoment());
 		jetEtaphiMnt.push_back(jet.etaphiMoment());
@@ -2415,6 +2970,8 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
 	   	if( DEBUG ) std::cout << "Getting jet dR rechit group" << std::endl; 
 		auto jetDrRhGroup = getRHGroup( jet.eta(), jet.phi(), deltaRminJet, minRHenr ); 
+        //auto jetDrRhIdsGroup = getRhGrpIDs( jetDrRhGroup );
+        //jetDrRhIds.push_back(jetDrRhIdsGroup);
 		auto rhCount = jetDrRhGroup.size();
 
 	   	//std::cout << "rhCount is " << rhCount << std::endl;
@@ -2423,7 +2980,6 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 		sJetDrRHEnergy.push_back(sumdrrhe);
 		jetDrEMF.push_back(dremf);
         jetDrRhCnt.push_back(rhCount);
-		jetDrRhIDs.push_back( getRhGrpIDs( jetDrRhGroup ) );
 
 		//float jetDrTime(-99.9);
 		if( rhCount >= minRHcnt && dremf > minEmf ){
@@ -2531,68 +3087,79 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
             //auto genJet = jet.genJet();
 		
 			bool matchfound(false);
+			float goodDr(0.1);
+			int matchedIdx(-1);
+			int index(0);
 			for(const auto& genJet : *genJets_ ){
 
             	auto gjeta = genJet.eta();
             	auto gjphi = genJet.phi();
-                auto jtgjdr = reco::deltaR2(gjeta, gjphi, jet.eta(), jet.phi() );
-                if( jtgjdr <= 0.1 && rhCount > 0 ){
-
+                auto jtgjdr = std::sqrt(reco::deltaR2(gjeta, gjphi, jet.eta(), jet.phi() ));
+				if( jtgjdr <= goodDr ){
 					matchfound = true;
-					if( DEBUG ) std::cout << " --- Jet-GenJet dR match : " << jtgjdr << std::endl;
+					goodDr = jtgjdr;	
+					matchedIdx = index;
+				}//<<>>if( jtgjdr <= goodDr )
+				index++;
 
-            		//if( DEBUG ) std::cout << " ---- genParton : " << genParton << " genJet : " << genJet << std::endl;
-            		// size_t numberOfDaughters() const override;
-            		// size_t numberOfMothers() const override;
-            		// const Candidate * daughter(size_type) const override;
-            		// const Candidate * mother(size_type = 0) const override;
-            		// Candidates :
-            		//  virtual double vx() const  = 0;
-            		//  virtual double vy() const  = 0;
-            		//  virtual double vz() const  = 0;
-            		//  virtual int pdgId() const  = 0;
-            		//  + mass/energy/momentum info ....
+            }//<<>>for(const auto& genJet : *genJets_ ) 
 
-            		//auto nMother = genJet.numberOfMothers();
-            		//auto nDaughter = genJet.numberOfDaughters();
-            		auto nSources = genJet.numberOfSourceCandidatePtrs();
-            		if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
-            		//std::cout << " - genJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
-            		if( DEBUG ) std::cout << " - genJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
-            		auto kids = genJet.daughterPtrVector();
-            		//std::cout << bigKidChase( kids, vtxX ) << std::endl;
-            		//kidChase( kids, vtxX, vtxY, vtxZ );
-					auto leadJetRh = getLeadRh( jetDrRhGroup );
-            		auto leadJetRhId = leadJetRh.detid();
-            		auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
-					auto cx = leadJetRhIdPos.x();
-					auto cy = leadJetRhIdPos.y();
-					auto cz = leadJetRhIdPos.z();
-					auto tofcor = hypo( cx, cy, cz )/SOL;
-					//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
-            		auto genKidInfo = kidTOFChain( kids, cx, cy, cz );
-					if( DEBUG ) std::cout << " - genJet GenTime noTOF : " << genKidInfo[0] << " rhPos: " << cx << "," << cy << "," << cz << std::endl;
-					genEta = genJet.eta();
-					if( genKidInfo[0] > 25.0 ) genTime = -28.0;
-					else if( genKidInfo[0] > -25.0 ) genTime = genKidInfo[0]-tofcor;
-					else genTime = -27.0;
-					genImpactAngle = genKidInfo[1];
-					if( DEBUG ) std::cout << " - genJet GenTime : " << genTime << " Angle: " << genImpactAngle << std::endl;
-					genPt = genJet.pt();
-                	genEnergy = genJet.energy();
-					genEMFrac = (genJet.chargedEmEnergy() + genJet.neutralEmEnergy())/genEnergy;
-					genDrMatch = jtgjdr; //std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), genJet.eta(), genJet.phi()));
-					genTimeVar = genKidInfo[2];
-                	genNextBX = genKidInfo[3];
-                	genTimeLLP = genKidInfo[4];
-                	genLLPPurity = genKidInfo[5];
-					genNKids = genKidInfo[6];
-					genTOF = tofcor;
-					if( DEBUG ) std::cout << " -- Energy : " << genEnergy << " Pt : " << genPt << " EMfrac : " << genEMFrac << std::endl;
+            if( matchedIdx >= 0 && rhCount > 0 ){
+
+				auto genJet = (*genJets_)[matchedIdx];
+				if( DEBUG ) std::cout << " --- Jet-GenJet dR match : " << goodDr << std::endl;
+
+            	//if( DEBUG ) std::cout << " ---- genParton : " << genParton << " genJet : " << genJet << std::endl;
+            	// size_t numberOfDaughters() const override;
+            	// size_t numberOfMothers() const override;
+            	// const Candidate * daughter(size_type) const override;
+            	// const Candidate * mother(size_type = 0) const override;
+            	// Candidates :
+            	//  virtual double vx() const  = 0;
+            	//  virtual double vy() const  = 0;
+            	//  virtual double vz() const  = 0;
+            	//  virtual int pdgId() const  = 0;
+            	//  + mass/energy/momentum info ....
+
+            	//auto nMother = genJet.numberOfMothers();
+            	//auto nDaughter = genJet.numberOfDaughters();
+            	auto nSources = genJet.numberOfSourceCandidatePtrs();
+            	if( DEBUG ) std::cout << " ---------------------------------------------------- " << std::endl;
+            	//std::cout << " - genJet mothers : " << nMother << " daughters : " << nDaughter << " sources : " << nSources << std::endl;
+            	if( DEBUG ) std::cout << " - genJet srcs : " << nSources << " PV (" << vtxX << "," << vtxY << "," << vtxZ << ")" << std::endl;
+            	auto kids = genJet.daughterPtrVector();
+            	//std::cout << bigKidChase( kids, vtxX ) << std::endl;
+            	//kidChase( kids, vtxX, vtxY, vtxZ );
+				auto leadJetRh = getLeadRh( jetDrRhGroup );
+            	auto leadJetRhId = leadJetRh.detid();
+            	auto leadJetRhIdPos = barrelGeometry->getGeometry(leadJetRhId)->getPosition();
+				auto cx = leadJetRhIdPos.x();
+				auto cy = leadJetRhIdPos.y();
+				auto cz = leadJetRhIdPos.z();
+				auto tofcor = hypo( cx, cy, cz )/SOL;
+				//if( DEBUG ) kidChase( kids, vtxX, vtxY, vtxZ );
+            	auto genKidInfo = kidTOFChain( kids, cx, cy, cz );
+				if( DEBUG ) std::cout << " - genJet GenTime noTOF : " << genKidInfo[0] << " rhPos: " << cx << "," << cy << "," << cz << std::endl;
+				genEta = genJet.eta();
+				if( genKidInfo[0] > 25.0 ) genTime = -28.0;
+				else if( genKidInfo[0] > -25.0 ) genTime = genKidInfo[0]-tofcor;
+				else genTime = -27.0;
+				genImpactAngle = genKidInfo[1];
+				if( DEBUG ) std::cout << " - genJet GenTime : " << genTime << " Angle: " << genImpactAngle << std::endl;
+				genPt = genJet.pt();
+            	genEnergy = genJet.energy();
+				genEMFrac = (genJet.chargedEmEnergy() + genJet.neutralEmEnergy())/genEnergy;
+				genDrMatch = goodDr; //std::sqrt(reco::deltaR2(jet.eta(), jet.phi(), genJet.eta(), genJet.phi()));
+				genTimeVar = genKidInfo[2];
+            	genNextBX = genKidInfo[3];
+            	genTimeLLP = genKidInfo[4];
+            	genLLPPurity = genKidInfo[5];
+				genNKids = genKidInfo[6];
+				genTOF = tofcor;
+				if( DEBUG ) std::cout << " -- Energy : " << genEnergy << " Pt : " << genPt << " EMfrac : " << genEMFrac << std::endl;
 					
-					break;
-            	}//<<>>if( jtgjdr <= 0.05 ) 
-			}//<<>>for(const auto& genJet : *genJets_ ) 
+            }//<<>>if( matchedIdx >= 0 && rhCount > 0 ) 
+
 			if( not matchfound ){ if( DEBUG ) std::cout << " - genJet GenTime : genJet == 0 " << std::endl; genTime = -50.0; }
 
     //<<<<for ( uInt ijet(0); ijet < nJets; ijet++ )
@@ -2660,7 +3227,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 				//std::cout << " - Matching : " << pfcand.eta() << " = " << kidcand->eta() << std::endl;
 				auto kdeta = kidcand->eta();
 				auto kdphi = kidcand->phi();
-				auto kdpfdr = reco::deltaR2(pheta, phphi, kdeta, kdphi );
+				auto kdpfdr = std::sqrt(reco::deltaR2(pheta, phphi, kdeta, kdphi ));
 				if( kdpfdr <= 0.001 ){ pmatched = true; if( DEBUG ) std::cout << " --- Matched : " << kdpfdr << std::endl; }
 			}//<<>>for( const auto kid : jet.daughterPtrVector() )
 
@@ -2722,7 +3289,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
                 //std::cout << " - Matching : " << pfcand.eta() << " = " << kidcand->eta() << std::endl;
                 auto kdeta = kidcand->eta();
                 auto kdphi = kidcand->phi();
-                auto kdpfdr = reco::deltaR2(pheta, phphi, kdeta, kdphi );
+                auto kdpfdr = std::sqrt(reco::deltaR2(pheta, phphi, kdeta, kdphi ));
                 if( kdpfdr <= 0.001 ){ ootmatched = true; if( DEBUG ) std::cout << " --- Matched : " << kdpfdr << std::endl; }
             }//<<>>for( const auto kid : jet.daughterPtrVector() )
 
@@ -2778,7 +3345,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
                 //std::cout << " - Matching : " << pfcand.eta() << " = " << kidcand->eta() << std::endl;
                 auto kdeta = kidcand->eta();
                 auto kdphi = kidcand->phi();
-                auto kdpfdr = reco::deltaR2(eleeta, elephi, kdeta, kdphi );
+                auto kdpfdr = std::sqrt(reco::deltaR2(eleeta, elephi, kdeta, kdphi ));
                 if( kdpfdr <= 0.001 ){ ematched = true; if( DEBUG ) std::cout << " --- Matched : " << kdpfdr << std::endl; }
             }//<<>>for( const auto kid : jet.daughterPtrVector() )
 
@@ -2837,6 +3404,8 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
 		if( DEBUG ) std::cout << " -- get jetScRhGroup " << std::endl;
 		auto jetScRhGroup = getRHGroup( jetSCGroup, minRHenr );
+        //auto jetScRhIdsGroup = getRhGrpIDs( jetScRhGroup );
+        //jetScRhIds.push_back(jetScRhIdsGroup);
 		if( not isRhGrpEx(jetScRhGroup) ) std::cout << " --- !!!!! jetScRhGroup is not exclusive !!! " << std::endl;  
 		//std::cout << " Num SC rechits : " << jetScRhGroup.size() << std::endl;
             
@@ -3108,8 +3677,10 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	//#endif
 }//>>>>void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ method called once each job just before starting event loop	------------
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void LLPgammaAnalyzer_AOD::beginJob(){
 
 	// Global Varibles
@@ -3158,7 +3729,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     hist2d[75] = fs->make<TH2D>("cluster_tmap", "Cluster Time Map;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
     hist2d[76] = fs->make<TH2D>("cluster_occmap", "Cluster Occ Map;eta;phi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
 
-    hist2d[88] = fs->make<TH2D>("scEtaPhiAngle2D_eginValueSph","scEtaTimAngle(x) v eginValueSph(y);angle;sphericity",660, -0.2, 6.4, 160, 0.4, 1.2);
+    //hist2d[88] = fs->make<TH2D>("scEtaPhiAngle2D_eginValueSph","scEtaTimAngle(x) v eginValueSph(y);angle;sphericity",660, -0.2, 6.4, 160, 0.4, 1.2);
 
     auto cl3ddiv = 200;
     auto cl3dtrn = 4;
@@ -3170,9 +3741,9 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     hist2d[79] = fs->make<TH2D>("cluster_3D_etmap", "Cluster Eta(x)Time(y) Map 3D;eta;time", cl3ddiv1, -1*cl3dtrn1, cl3dtrn1, cl3ddiv, -1*cl3dtrn, cl3dtrn);
     hist2d[80] = fs->make<TH2D>("cluster_3D_etprofl", "Clstr Eta(x)Time(y) Map 3DProfile;eta;time",cl3ddiv1,-1*cl3dtrn1,cl3dtrn1,cl3ddiv,-1*cl3dtrn,cl3dtrn);
 
-    hist2d[81] = fs->make<TH2D>("scSphEgn01", "scSphEgn01", 200, -5, 5, 200, -5, 5);
-    hist2d[82] = fs->make<TH2D>("sc3DEgn01", "sc3DEgn01", 200, -5, 5, 200, -5, 5);
-    hist2d[83] = fs->make<TH2D>("sc3DEgn02", "sc3DEgn02", 200, -5, 5, 200, -5, 5);
+    //hist2d[81] = fs->make<TH2D>("scSphEgn01", "scSphEgn01", 200, -5, 5, 200, -5, 5);
+    //hist2d[82] = fs->make<TH2D>("sc3DEgn01", "sc3DEgn01", 200, -5, 5, 200, -5, 5);
+    //hist2d[83] = fs->make<TH2D>("sc3DEgn02", "sc3DEgn02", 200, -5, 5, 200, -5, 5);
     hist2d[84] = fs->make<TH2D>("cluster_3D_etwtmap", "Cluster Eta(x)Time(y) WtMap 3D;eta;time",cl3ddiv1,-1*cl3dtrn1,cl3dtrn1,cl3ddiv,-1*cl3dtrn,cl3dtrn);
     hist2d[85] = fs->make<TH2D>("cluster_3D_etwtprof","Clstr Eta(x)Time(y) WtMap 3DPrfle;eta;time",cl3ddiv1,-1*cl3dtrn1,cl3dtrn1,cl3ddiv,-1*cl3dtrn,cl3dtrn);
 
@@ -3302,6 +3873,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
 
     outTree->Branch("cljBcCnt", &cljBcCnt);
     outTree->Branch("nCaloJets", &nCaloJets);
+    //outTree->Branch("cljRhIds", &cljRhIds);
     outTree->Branch("cljSeedTOFTime", &cljSeedTOFTime);
     outTree->Branch("cljCMeanTime", &cljCMeanTime);
     outTree->Branch("cljBc3dEx", &cljBc3dEx);
@@ -3353,6 +3925,84 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     outTree->Branch("phoPz", &phoPz);
     outTree->Branch("phoRhIds", &phoRhIds);
 
+    outTree->Branch("phoIsPFPhoton", &phoIsPFPhoton);
+    outTree->Branch("phoIsStdPhoton", &phoIsStdPhoton);
+    outTree->Branch("phoHasConTracks", &phoHasConTracks);
+    outTree->Branch("phoIsPixelSeed", &phoIsPixelSeed);
+    outTree->Branch("phoIsPhoton", &phoIsPhoton);
+    outTree->Branch("phoIsEB", &phoIsEB);
+    outTree->Branch("phoIsEE", &phoIsEE);
+    outTree->Branch("phoIsEBGap", &phoIsEBGap);
+    outTree->Branch("phoIsEBEtaGap", &phoIsEBEtaGap);
+    outTree->Branch("phoIsEBPhiGap", &phoIsEBPhiGap);
+    outTree->Branch("phoIsEEGap", &phoIsEEGap);
+    outTree->Branch("phoIsEERingGap", &phoIsEERingGap);
+    outTree->Branch("phoIsEEDeeGap", &phoIsEEDeeGap);
+    outTree->Branch("phoIsEBEEGap", &phoIsEBEEGap);
+
+    outTree->Branch("phoHadOverEM", &phoHadOverEM);
+    outTree->Branch("phoHadD1OverEM", &phoHadD1OverEM);
+    outTree->Branch("phoHadD2OverEM", &phoHadD2OverEM);
+    outTree->Branch("phoHadOverEMVaid", &phoHadOverEMVaid);
+    outTree->Branch("phohadTowOverEM", &phohadTowOverEM);
+    outTree->Branch("phohadTowD10OverEM", &phohadTowD10OverEM);
+    outTree->Branch("phohadTowD20OverEM", &phohadTowD20OverEM);
+    outTree->Branch("phohadTowOverEMValid", &phohadTowOverEMValid);
+    outTree->Branch("phoE1x5", &phoE1x5);
+    outTree->Branch("phoE2x5", &phoE2x5);
+    outTree->Branch("phoE3x3", &phoE3x3);
+    outTree->Branch("phoE5x5", &phoE5x5);
+    outTree->Branch("phoMaxEnergyXtal", &phoMaxEnergyXtal);
+    outTree->Branch("phoSigmaEtaEta", &phoSigmaEtaEta);
+    outTree->Branch("phoSigmaIEtaIEta", &phoSigmaIEtaIEta);
+
+    outTree->Branch("phoR1x5", &phoR1x5);
+    outTree->Branch("phoR2x5", &phoR2x5);
+    outTree->Branch("phoR9", &phoR9);
+    outTree->Branch("phoFull5x5_e1x5", &phoFull5x5_e1x5);
+    outTree->Branch("phoFull5x5_e2x5", &phoFull5x5_e2x5);
+    outTree->Branch("phoFull5x5_e3x3", &phoFull5x5_e3x3);
+    outTree->Branch("phoFull5x5_e5x5", &phoFull5x5_e5x5);
+    outTree->Branch("phoFull5x5_maxEnergyXtal", &phoFull5x5_maxEnergyXtal);
+    outTree->Branch("phoFull5x5_sigmaEtaEta", &phoFull5x5_sigmaEtaEta);
+    outTree->Branch("phoFull5x5_sigmaIEtaIEta", &phoFull5x5_sigmaIEtaIEta);
+    //outTree->Branch("phoFull5x5_r1x5 ", &phoFull5x5_r1x5);
+    //outTree->Branch("phoFull5x5_r2x5 ", &phoFull5x5_r2x5);
+    outTree->Branch("phoFull5x5_r9", &phoFull5x5_r9);
+
+    outTree->Branch("phoNSatXtals", &phoNSatXtals);
+    outTree->Branch("phoIsSeedSat", &phoIsSeedSat);
+
+    outTree->Branch("phoMipChi2", &phoMipChi2);
+    outTree->Branch("phoMipTotEnergy", &phoMipTotEnergy);
+    outTree->Branch("phoMipSlope", &phoMipSlope);
+    outTree->Branch("phoMipInter", &phoMipInter);
+
+    outTree->Branch("phoMipNHitCone", &phoMipNHitCone);
+    outTree->Branch("phoMipIsHalo", &phoMipIsHalo);
+
+    outTree->Branch("phoEcalRHSumEtConeDR04", &phoEcalRHSumEtConeDR04);
+    outTree->Branch("phoHcalTwrSumEtConeDR04", &phoHcalTwrSumEtConeDR04);
+    outTree->Branch("phoHcalDepth1TowerSumEtConeDR04", &phoHcalDepth1TowerSumEtConeDR04);
+    outTree->Branch("phoCalDepth2TowerSumEtConeDR04", &phoCalDepth2TowerSumEtConeDR04);
+    outTree->Branch("phoHcalTowerSumEtBcConeDR04", &phoHcalTowerSumEtBcConeDR04);
+    outTree->Branch("phoHcalDepth1TowerSumEtBcConeDR04", &phoHcalDepth1TowerSumEtBcConeDR04);
+    outTree->Branch("phoHcalDepth2TowerSumEtBcConeDR04", &phoHcalDepth2TowerSumEtBcConeDR04);
+    outTree->Branch("phoTrkSumPtSolidConeDR04", &phoTrkSumPtSolidConeDR04);
+    outTree->Branch("phoTrkSumPtHollowConeDR04", &phoTrkSumPtHollowConeDR04);
+    outTree->Branch("phoNTrkSolidConeDR04", &phoNTrkSolidConeDR04);
+    outTree->Branch("phoNTrkHollowConeDR04", &phoNTrkHollowConeDR04);
+
+    outTree->Branch("genPhoPt", &genPhoPt);
+    outTree->Branch("genPhoEnergy", &genPhoEnergy);
+    outTree->Branch("genPhoPhi", &genPhoPhi);
+    outTree->Branch("genPhoEta", &genPhoEta);
+    outTree->Branch("genPhoPx", &genPhoPx);
+    outTree->Branch("genPhoPy", &genPhoPy);
+    outTree->Branch("genPhoPz", &genPhoPz);
+    outTree->Branch("genPhoPdgId", &genPhoPdgId);
+    outTree->Branch("genPhoLLP", &genPhoLlp);
+
     //    uInt                nOotPhotons;
     //    std::vector<float>  ootPhoSeedTOFTimes, ootPhoCMeanTimes;
     //    std::vector<float>  ootPhoSc3dEx, ootPhoSc3dEy, ootPhoSc3dEz, ootPhoSc3dEv, ootPhoSc3dEslope, ootPhoSc3dEchisp;
@@ -3380,6 +4030,85 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     outTree->Branch("ootPhoPx", &ootPhoPx);
     outTree->Branch("ootPhoPy", &ootPhoPy);
     outTree->Branch("ootPhoPz", &ootPhoPz);
+    outTree->Branch("ootPhoRhIds", &ootPhoRhIds);
+
+    outTree->Branch("ootPhoIsPFPhoton", &ootPhoIsPFPhoton);
+    outTree->Branch("ootPhoIsStdPhoton", &ootPhoIsStdPhoton);
+    outTree->Branch("ootPhoHasConTracks", &ootPhoHasConTracks);
+    outTree->Branch("ootPhoIsPixelSeed", &ootPhoIsPixelSeed);
+    outTree->Branch("ootPhoIsPhoton", &ootPhoIsPhoton);
+    outTree->Branch("ootPhoIsEB", &ootPhoIsEB);
+    outTree->Branch("ootPhoIsEE", &ootPhoIsEE);
+    outTree->Branch("ootPhoIsEBGap", &ootPhoIsEBGap);
+    outTree->Branch("ootPhoIsEBEtaGap", &ootPhoIsEBEtaGap);
+    outTree->Branch("ootPhoIsEBPhiGap", &ootPhoIsEBPhiGap);
+    outTree->Branch("ootPhoIsEEGap", &ootPhoIsEEGap);
+    outTree->Branch("ootPhoIsEERingGap", &ootPhoIsEERingGap);
+    outTree->Branch("ootPhoIsEEDeeGap", &ootPhoIsEEDeeGap);
+    outTree->Branch("ootPhoIsEBEEGap", &ootPhoIsEBEEGap);
+
+    outTree->Branch("ootPhoHadOverEM", &ootPhoHadOverEM);
+    outTree->Branch("ootPhoHadD1OverEM", &ootPhoHadD1OverEM);
+    outTree->Branch("ootPhoHadD2OverEM", &ootPhoHadD2OverEM);
+    outTree->Branch("ootPhoHadOverEMVaid", &ootPhoHadOverEMVaid);
+    outTree->Branch("ootPhohadTowOverEM", &ootPhohadTowOverEM);
+    outTree->Branch("ootPhohadTowD10OverEM", &ootPhohadTowD10OverEM);
+    outTree->Branch("ootPhohadTowD20OverEM", &ootPhohadTowD20OverEM);
+    outTree->Branch("ootPhohadTowOverEMValid", &ootPhohadTowOverEMValid);
+    outTree->Branch("ootPhoE1x5", &ootPhoE1x5);
+    outTree->Branch("ootPhoE2x5", &ootPhoE2x5);
+    outTree->Branch("ootPhoE3x3", &ootPhoE3x3);
+    outTree->Branch("ootPhoE5x5", &ootPhoE5x5);
+    outTree->Branch("ootPhoMaxEnergyXtal", &ootPhoMaxEnergyXtal);
+    outTree->Branch("ootPhoSigmaEtaEta", &ootPhoSigmaEtaEta);
+    outTree->Branch("ootPhoSigmaIEtaIEta", &ootPhoSigmaIEtaIEta);
+
+    outTree->Branch("ootPhoR1x5", &ootPhoR1x5);
+    outTree->Branch("ootPhoR2x5", &ootPhoR2x5);
+    outTree->Branch("ootPhoR9", &ootPhoR9);
+    outTree->Branch("ootPhoFull5x5_e1x5", &ootPhoFull5x5_e1x5);
+    outTree->Branch("ootPhoFull5x5_e2x5", &ootPhoFull5x5_e2x5);
+    outTree->Branch("ootPhoFull5x5_e3x3", &ootPhoFull5x5_e3x3);
+    outTree->Branch("ootPhoFull5x5_e5x5", &ootPhoFull5x5_e5x5);
+    outTree->Branch("ootPhoFull5x5_maxEnergyXtal", &ootPhoFull5x5_maxEnergyXtal);
+    outTree->Branch("ootPhoFull5x5_sigmaEtaEta", &ootPhoFull5x5_sigmaEtaEta);
+    outTree->Branch("ootPhoFull5x5_sigmaIEtaIEta", &ootPhoFull5x5_sigmaIEtaIEta);
+    //outTree->Branch("ootPhoFull5x5_r1x5 ", &ootPhoFull5x5_r1x5);
+    //outTree->Branch("ootPhoFull5x5_r2x5 ", &ootPhoFull5x5_r2x5);
+    outTree->Branch("ootPhoFull5x5_r9", &ootPhoFull5x5_r9);
+
+    outTree->Branch("ootPhoNSatXtals", &ootPhoNSatXtals);
+    outTree->Branch("ootPhoIsSeedSat", &ootPhoIsSeedSat);
+
+    outTree->Branch("ootPhoMipChi2", &ootPhoMipChi2);
+    outTree->Branch("ootPhoMipTotEnergy", &ootPhoMipTotEnergy);
+    outTree->Branch("ootPhoMipSlope", &ootPhoMipSlope);
+    outTree->Branch("ootPhoMipInter", &ootPhoMipInter);
+
+    outTree->Branch("ootPhoMipNHitCone", &ootPhoMipNHitCone);
+    outTree->Branch("ootPhoMipIsHalo", &ootPhoMipIsHalo);
+
+    outTree->Branch("ootPhoEcalRHSumEtConeDR04", &ootPhoEcalRHSumEtConeDR04);
+    outTree->Branch("ootPhoHcalTwrSumEtConeDR04", &ootPhoHcalTwrSumEtConeDR04);
+    outTree->Branch("ootPhoHcalDepth1TowerSumEtConeDR04", &ootPhoHcalDepth1TowerSumEtConeDR04);
+    outTree->Branch("ootPhoCalDepth2TowerSumEtConeDR04", &ootPhoCalDepth2TowerSumEtConeDR04);
+    outTree->Branch("ootPhoHcalTowerSumEtBcConeDR04", &ootPhoHcalTowerSumEtBcConeDR04);
+    outTree->Branch("ootPhoHcalDepth1TowerSumEtBcConeDR04", &ootPhoHcalDepth1TowerSumEtBcConeDR04);
+    outTree->Branch("ootPhoHcalDepth2TowerSumEtBcConeDR04", &ootPhoHcalDepth2TowerSumEtBcConeDR04);
+    outTree->Branch("ootPhoTrkSumPtHollowConeDR04", &ootPhoTrkSumPtHollowConeDR04);
+    outTree->Branch("ootPhoTrkSumPtSolidConeDR04", &ootPhoTrkSumPtSolidConeDR04);
+    outTree->Branch("ootPhoNTrkSolidConeDR04", &ootPhoNTrkSolidConeDR04);
+    outTree->Branch("ootPhoNTrkHollowConeDR04", &ootPhoNTrkHollowConeDR04);
+
+    outTree->Branch("genOOTPhoPt", &genOOTPhoPt); 
+    outTree->Branch("genOOTPhoEnergy", &genOOTPhoEnergy); 
+    outTree->Branch("genOOTPhoPhi", &genOOTPhoPhi); 
+    outTree->Branch("genOOTPhoEta", &genOOTPhoEta); 
+    outTree->Branch("genOOTPhoPx", &genOOTPhoPx); 
+    outTree->Branch("genOOTPhoPy", &genOOTPhoPy); 
+    outTree->Branch("genOOTPhoPz", &genOOTPhoPz); 
+    outTree->Branch("genOOTPhoPdgId", &genOOTPhoPdgId); 
+    outTree->Branch("genOOTPhoLLP", &genOOTPhoLlp);
 
     //    uInt                nElectrons;
     //    std::vector<float>  eleSeedTOFTimes, eleCMeanTimes;
@@ -3388,6 +4117,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     //    std::vector<double> elePt, eleEnergy, elePhi, eleEta, elePx, elePy, elePz;
 
     outTree->Branch("nElectrons", &nElectrons);
+    //outTree->Branch("eleRhIds", &eleRhIds); 
     outTree->Branch("eleSeedTOFTime", &eleSeedTOFTime);
     outTree->Branch("eleCMeanTime", &eleCMeanTime);
     outTree->Branch("eleSc3dEx", &eleSc3dEx);
@@ -3437,6 +4167,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     outTree->Branch("sJetDrRHEnergy", &sJetDrRHEnergy);
     outTree->Branch("jetDrEMF", &jetDrEMF);
     outTree->Branch("jetDrRhCnt", &jetDrRhCnt);
+    //outTree->Branch("jetDrRhIds", &jetDrRhIds);
 
     outTree->Branch("jetBcTimesCnt", &jetBcTimesCnt);
     outTree->Branch("jetBcSumRHEnr", &jetBcSumRHEnr);
@@ -3446,6 +4177,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
 
     outTree->Branch("nJetScMatch", &nJetScMatch);
     outTree->Branch("jetScRhCnt", &jetScRhCnt);
+    //outTree->Branch("jetScRhIds", &jetScRhIds);
     outTree->Branch("sJetScEnergy", &sJetScEnergy);
     outTree->Branch("sJetScPhEnergy", &sJetScPhEnergy);
     outTree->Branch("sJetScRhEnergy", &sJetScRhEnergy);
@@ -3538,6 +4270,13 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     outTree->Branch("rhpedrms12", &rhpedrms12);
     outTree->Branch("rhpedrms6", &rhpedrms6);
     outTree->Branch("rhpedrms1", &rhpedrms1);
+
+    outTree->Branch("metSumEt", &metSumEt);
+    outTree->Branch("metPt", &metPt);
+    outTree->Branch("metPx", &metPx);
+    outTree->Branch("metPy", &metPy);
+    outTree->Branch("metPhi", &metPhi);
+    outTree->Branch("metEta", &metEta);
 
 }//>>>>void LLPgammaAnalyzer_AOD::beginJob()
 

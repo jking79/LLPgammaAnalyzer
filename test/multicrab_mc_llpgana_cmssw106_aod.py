@@ -25,7 +25,7 @@ def getOptions():
 
     parser.add_option('-w', '--workArea',
                       dest = 'workArea',
-                      default = 'myworkingArea',
+                      default = 'myWorkSpace',
                       help = "work area directory (only if CMD != 'submit')",
                       metavar = 'WAD')
 
@@ -82,7 +82,8 @@ def docrab( dataset ):
         #config.Data.splitting     = 'Automatic'
         #config.Data.unitsPerJob   = 2000
         config.Data.splitting    = 'EventAwareLumiBased' # MC
-        config.Data.unitsPerJob  =  1500 # MC
+        #config.Data.unitsPerJob  =  1500 # MC GMSB
+        config.Data.unitsPerJob  =  5000 # MC GJet
 
         config.JobType.allowUndistributedCMSSW = True
         config.JobType.inputFiles  = [ inptCfgEB, inptCfgEE ]
@@ -142,9 +143,17 @@ def docrab( dataset ):
             #trial          = "llpga_GMSB_AOD_v39d" # units/job 10k -> 2k
             #trial          = "llpga_GMSB_AOD_v43" # units/job 10k -> 1.5k + rechit collection test (40-43)
             #trial          = "llpga_GMSB_AOD_v46" # removed geo & rechit position calcs in rh collection loop (44) -> upload config file ECAL
-            trial          = "llpga_GMSB_AOD_v48" # DetIDMap issues solved : Full run 1
+            #trial          = "llpga_GMSB_AOD_v48" # DetIDMap issues solved : Full run 1
+            #trial          = "llpga_GMSB_AOD_v49" # added more photon/ootphoton + rhcollection information
+            #trial          = "llpga_GMSB_AOD_v50" # added gen particle info
+            #trial          = "llpga_GMSB_AOD_v51" # added gen photon info  and isGenPhotonLLP 
+            #trial          = "llpga_GJets_AOD_v52" # removed photon ID requirment
+            #trial          = "llpga_GMSB_AOD_v52" 
+            #trial          = "llpga_GJets_AOD_v53" # fixed ootpho rh collection ?
+            trial          = "llpga_GMSB_AOD_v53"
 
-            config.Data.outLFNDirBase  = "/store/user/jaking/LLPGamma/"+trial+"/"
+            #config.Data.outLFNDirBase  = "/store/user/jaking/LLPGamma/"+trial+"/"
+            config.Data.outLFNDirBase  = "/store/group/lpcsusylep/jaking/LLPGamma/"+trial+"/"
             config.General.requestName   = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_request"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra
 
@@ -154,11 +163,15 @@ def docrab( dataset ):
             #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v20', 'outputFileName=output.root']
 #>>>>>>>>>>>>>>>>>>>	    #2016  #globalTag=106X_dataRun2_v27
             #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v27', 'outputFileName=output.root']
+
 #>>>>>>>>>>>>>>>>>>>     #MC Run3  #globalTag=112X_mcRun3_2021_realistic_v16  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
-            #config.JobType.pyCfgParams   = ['globalTag=112X_mcRun3_2021_realistic_v16','outputFileName=output.root']
+            ##config.JobType.pyCfgParams   = ['globalTag=112X_mcRun3_2021_realistic_v16','outputFileName=output.root']
+
 #>>>>>>>>>>>>>>>>>>>     #MC GMSB 17  #globalTag=94X_mc2017_realistic_v14  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
             config.JobType.pyCfgParams   = ['globalTag=94X_mc2017_realistic_v14','outputFileName=output.root']
-            #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v28','outputFileName=output.root','hasGenInfo=True']
+            ##config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v28','outputFileName=output.root','hasGenInfo=True']
+#>>>>>>>>>>>>>>>>>>>     #MC RunIISummer20UL18RECO
+            #config.JobType.pyCfgParams   = ['globalTag=106X_upgrade2018_realistic_v11_L1v1','outputFileName=output.root','hasGenInfo=True']
 
             config.Data.inputDataset     = inDO[0]
             # Submit.
@@ -194,14 +207,12 @@ def docrab( dataset ):
 ##33333333333333333333333333333333333333333333333333333333333
 
 def run_multi():
+
+# DataSet: DATA
  
-        #run = 'RunIISummer19UL18RECO-106X_upgrade2018_realistic_v11' 
-        #tune = '_TuneCP5_PSWeights_13TeV-madgraphMLM-pythia8' 
-        #mcdset = 'AODSIM' 
+        dsData = [
 
-        datasets = [
-
-# Dataset: JetHT UL2018
+			# Dataset: JetHT UL2018
 
 			#['/JetHT/Run2018A-UL2018_MiniAODv2-v1/MINIAOD',''],
 			#['/JetHT/Run2018B-UL2018_MiniAODv2-v1/MINIAOD',''],
@@ -209,29 +220,14 @@ def run_multi():
 			#['/JetHT/Run2018D-UL2018_MiniAODv2-v1/MINIAOD',''],
 			#['/JetHT/Run2018D-UL2018_MiniAODv2-v2/MINIAOD',''],
 
+			# Dataset: /EGamma/Run2018-12Nov2019_UL2018-/MINIAOD
 
-# Dataset: QCD HT MC 
-
-            #['/QCD_HT50to100'   +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT100to200'  +tune+'/'+run+'_L1v1-v2/AODSIM',''],
-            #['/QCD_HT200to300'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT200to300'  +tune+'/'+run+'_L1v1_ext1-v1/AODSIM',''], 
-            #['/QCD_HT300to500'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT500to700'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT700to1000' +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT1000to1500'+tune+'/'+run+'_L1v1-v2/AODSIM',''], 
-            #['/QCD_HT1500to2000'+tune+'/'+run+'_L1v1-v2/AODSIM',''],
-            #['/QCD_HT2000toInf' +tune+'/'+run+'_L1v1-v2/AODSIM',''],
-
-
-# Dataset: /EGamma/Run2018-12Nov2019_UL2018-/MINIAOD
-
-            #['/EGamma/Run2018A-12Nov2019_UL2018-v2/MINIAOD',''],
-            #['/EGamma/Run2018B-12Nov2019_UL2018-v2/MINIAOD',''],
-            #['/EGamma/Run2018C-12Nov2019_UL2018-v2/MINIAOD',''],
-            #['/EGamma/Run2018D-12Nov2019_UL2018-v4/MINIAOD',''],
+            ['/EGamma/Run2018A-12Nov2019_UL2018-v2/MINIAOD',''],
+            ['/EGamma/Run2018B-12Nov2019_UL2018-v2/MINIAOD',''],
+            ['/EGamma/Run2018C-12Nov2019_UL2018-v2/MINIAOD',''],
+            ['/EGamma/Run2018D-12Nov2019_UL2018-v4/MINIAOD',''],
     
-# Dataset: /DoubleEG/Run2016-21Feb2020_UL2016-/MINIAOD
+			# Dataset: /DoubleEG/Run2016-21Feb2020_UL2016-/MINIAOD
 
             #['/DoubleEG/Run2016B-21Feb2020_ver2_UL2016_HIPM-v1/MINIAOD',''],
             #['/DoubleEG/Run2016C-21Feb2020_UL2016_HIPM-v1/MINIAOD',''],
@@ -241,7 +237,7 @@ def run_multi():
             #['/DoubleEG/Run2016G-21Feb2020_UL2016-v1/MINIAOD',''],
             #['/DoubleEG/Run2016H-21Feb2020_UL2016-v1/MINIAOD',''],
 
-# Dataset: /DoubleEG/Run2017-09Aug2019_UL2017-/MINIAOD
+			# Dataset: /DoubleEG/Run2017-09Aug2019_UL2017-/MINIAOD
 
             #['/DoubleEG/Run2017B-09Aug2019_UL2017-v1/MINIAOD',''],
             #['/DoubleEG/Run2017C-09Aug2019_UL2017-v1/MINIAOD',''],
@@ -249,42 +245,67 @@ def run_multi():
             #['/DoubleEG/Run2017E-09Aug2019_UL2017-v1/MINIAOD',''],
             #['/DoubleEG/Run2017F-09Aug2019_UL2017-v1/MINIAOD',''],
 
-# Dataset: /SingleElectron/Run2017-09Aug2019_UL2017-/MINIAOD
+			# Dataset: /SingleElectron/Run2017-09Aug2019_UL2017-/MINIAOD
 
-             #['/SingleElectron/Run2017B-09Aug2019_UL2017-v1/MINIAOD',''],
-             #['/SingleElectron/Run2017C-09Aug2019_UL2017-v1/MINIAOD',''],
-             #['/SingleElectron/Run2017C-09Aug2019_UL2017_EcalRecovery-v1/MINIAOD',''],
-             #['/SingleElectron/Run2017D-09Aug2019_UL2017-v1/MINIAOD',''],
-             #['/SingleElectron/Run2017E-09Aug2019_UL2017-v1/MINIAOD',''],
-             #['/SingleElectron/Run2017F-09Aug2019_UL2017_rsb-v2/MINIAOD',''],
-             #['/SingleElectron/Run2017F-09Aug2019_UL2017_EcalRecovery-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017B-09Aug2019_UL2017-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017C-09Aug2019_UL2017-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017C-09Aug2019_UL2017_EcalRecovery-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017D-09Aug2019_UL2017-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017E-09Aug2019_UL2017-v1/MINIAOD',''],
+            #['/SingleElectron/Run2017F-09Aug2019_UL2017_rsb-v2/MINIAOD',''],
+            #['/SingleElectron/Run2017F-09Aug2019_UL2017_EcalRecovery-v1/MINIAOD',''],
 
-            ]
+        ]
 
-        datasetsMC = [
+# Dataset: QCD HT MC 
+
+        run = 'RunIISummer19UL18RECO-106X_upgrade2018_realistic_v11' 
+        tune = '_TuneCP5_PSWeights_13TeV-madgraphMLM-pythia8' 
+        mcdset = 'AODSIM'
+        dsQCD = [
+
+            ['/QCD_HT50to100'   +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT100to200'  +tune+'/'+run+'_L1v1-v2/AODSIM',''],
+            ['/QCD_HT200to300'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT200to300'  +tune+'/'+run+'_L1v1_ext1-v1/AODSIM',''], 
+            ['/QCD_HT300to500'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT500to700'  +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT700to1000' +tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT1000to1500'+tune+'/'+run+'_L1v1-v2/AODSIM',''], 
+            ['/QCD_HT1500to2000'+tune+'/'+run+'_L1v1-v2/AODSIM',''],
+            ['/QCD_HT2000toInf' +tune+'/'+run+'_L1v1-v2/AODSIM',''],
+
+		]
 
 # Dataset: Run3 HTo2LongLivedTo4b
 
-#            ['/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-125_MFF-12_CTau-9000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-15000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-1500mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-30000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-10000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-10000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-1000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-500mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-10000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-1000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-500mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-10000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-1000mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM'],
-#            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-500mm_TuneCP5_14TeV-pythia8/Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2/MINIAODSIM']
+        Ht2LLstring = 'Run3Winter21DRMiniAOD-FlatPU30to80FEVT_112X_mcRun3_2021_realistic_v16-v2'
+        dsHt2LLt4b = [
+
+            ['/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-10000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-125_MFF-12_CTau-9000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-15000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-125_MFF-25_CTau-1500mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-30000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-10000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-10000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-1000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-250_MFF-60_CTau-500mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-10000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-1000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-500mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-10000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-1000mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM'],
+            ['/HTo2LongLivedTo4b_MH-350_MFF-80_CTau-500mm_TuneCP5_14TeV-pythia8/'+Ht2LLstring+'/MINIAODSIM']
+
+		]
 
 # Dataset: Run2 17 GMSB
+
+        dsGMSB = [ 
 
             ##['/GMSB_L-100TeV_Ctau-0_1cm_TuneCP5_13TeV-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM'],
             ##['/GMSB_L-100TeV_Ctau-0p001cm_TuneCP5_13TeV-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM'],
@@ -377,10 +398,23 @@ def run_multi():
             ['/GMSB_L-600TeV_Ctau-600cm_TuneCP5_13TeV-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM'],
             ['/GMSB_L-600TeV_Ctau-800cm_TuneCP5_13TeV-pythia8/RunIIFall17DRPremix-PU2017_94X_mc2017_realistic_v11-v1/AODSIM']
 
-            ]
+        ]
 
-#	    for dataset in datasets :
-        for dataset in datasetsMC :
+# Dataset: GJets HT 18
+
+        dsGJET = [
+
+            ['/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-4cores5k_106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM']
+
+		]
+
+        runDataset = dsGMSB
+        #runDataset = dsGJET
+        for dataset in runDataset :
 		    docrab( dataset )
 
 
