@@ -358,7 +358,7 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	edm::Handle<std::vector<reco::PFMET>> pfmets_;
 		//reco::PFMET t1pfMET;	
 
-        float  metSumEt, metPt, metPx, metPy, metPhi;
+        float  metSumEt, metPt, metPx, metPy, metPhi, metEta;
 
 		// Met Filters -> From miniAOD code not converted
   		// met filter inputs
@@ -510,13 +510,11 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         edm::EDGetTokenT<edm::ValueMap<bool>> phoCBIDLooseMapToken_;
         edm::Handle<edm::ValueMap<bool>> phoCBIDLooseMap_;
 
-        std::vector<std::vector<uInt>> phoRhIds;
-
         uInt                nPhotons;
 		std::vector<double> phoPt, phoEnergy, phoPhi, phoEta, phoPx, phoPy, phoPz;
-        std::vector<bool>   phoIsOotPho, phoExcluded;
 
         std::vector<float>  phoSeedTOFTime, phoCMeanTime;
+		std::vector<std::vector<uInt>> phoRhIds;
         std::vector<float>  phoSc3dEx, phoSc3dEy, phoSc3dEz, phoSc3dEv, phoSc3dEslope, phoSc3dEchisp;
         std::vector<float>  phoSc2dEx, phoSc2dEy, phoSc2dEv, phoSc2dEslope, phoSc2dEchisp;
 
@@ -546,36 +544,36 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	edm::EDGetTokenT<std::vector<reco::Photon> > ootPhotonsToken_;
       	edm::Handle<std::vector<reco::Photon> > ootPhotons_;
      
-//        uInt                nOotPhotons;
-//        std::vector<double> ootPhoPt, ootPhoEnergy, ootPhoPhi, ootPhoEta, ootPhoPx, ootPhoPy, ootPhoPz;
+        uInt                nOotPhotons;
+        std::vector<double> ootPhoPt, ootPhoEnergy, ootPhoPhi, ootPhoEta, ootPhoPx, ootPhoPy, ootPhoPz;
 
-//        std::vector<rhIdGroup> ootPhoRhIds;
-//        std::vector<float>  ootPhoSeedTOFTime, ootPhoCMeanTime;
-//        std::vector<float>  ootPhoSc3dEx, ootPhoSc3dEy, ootPhoSc3dEz, ootPhoSc3dEv, ootPhoSc3dEslope, ootPhoSc3dEchisp;
-//        std::vector<float>  ootPhoSc2dEx, ootPhoSc2dEy, ootPhoSc2dEv, ootPhoSc2dEslope, ootPhoSc2dEchisp;
+        std::vector<rhIdGroup> ootPhoRhIds;
+        std::vector<float>  ootPhoSeedTOFTime, ootPhoCMeanTime;
+        std::vector<float>  ootPhoSc3dEx, ootPhoSc3dEy, ootPhoSc3dEz, ootPhoSc3dEv, ootPhoSc3dEslope, ootPhoSc3dEchisp;
+        std::vector<float>  ootPhoSc2dEx, ootPhoSc2dEy, ootPhoSc2dEv, ootPhoSc2dEslope, ootPhoSc2dEchisp;
 
-//        std::vector<bool>   ootPhoIsPFPhoton, ootPhoIsStdPhoton, ootPhoHasConTracks, ootPhoIsPixelSeed, ootPhoIsPhoton, ootPhoIsEB, ootPhoIsEE;
-//        std::vector<bool>   ootPhoIsEBGap, ootPhoIsEBEtaGap, ootPhoIsEBPhiGap, ootPhoIsEEGap, ootPhoIsEERingGap, ootPhoIsEEDeeGap, ootPhoIsEBEEGap;
+        std::vector<bool>   ootPhoIsPFPhoton, ootPhoIsStdPhoton, ootPhoHasConTracks, ootPhoIsPixelSeed, ootPhoIsPhoton, ootPhoIsEB, ootPhoIsEE;
+        std::vector<bool>   ootPhoIsEBGap, ootPhoIsEBEtaGap, ootPhoIsEBPhiGap, ootPhoIsEEGap, ootPhoIsEERingGap, ootPhoIsEEDeeGap, ootPhoIsEBEEGap;
 
-//        std::vector<float>  ootPhoHadOverEM, ootPhoHadD1OverEM, ootPhoHadD2OverEM, ootPhoHadOverEMVaid, ootPhohadTowOverEM, ootPhohadTowD10OverEM;
-//        std::vector<float>  ootPhohadTowD20OverEM, ootPhohadTowOverEMValid, ootPhoE1x5, ootPhoE2x5, ootPhoE3x3, ootPhoE5x5;
-//        std::vector<float>  ootPhoMaxEnergyXtal, ootPhoSigmaEtaEta, ootPhoSigmaIEtaIEta;
-//        std::vector<float>  ootPhoR1x5, ootPhoR2x5, ootPhoR9, ootPhoFull5x5_e1x5, ootPhoFull5x5_e2x5, ootPhoFull5x5_e3x3;
-//        std::vector<float>  ootPhoFull5x5_e5x5, ootPhoFull5x5_maxEnergyXtal;
-//        std::vector<float>  ootPhoFull5x5_sigmaEtaEta, ootPhoFull5x5_sigmaIEtaIEta, ootPhoFull5x5_r1x5, ootPhoFull5x5_r2x5, ootPhoFull5x5_r9;
-//        std::vector<int>    ootPhoNSatXtals, ootPhoMipNHitCone;
-//        std::vector<bool>   ootPhoIsSeedSat, ootPhoMipIsHalo;
-//        std::vector<float>  ootPhoMipChi2, ootPhoMipTotEnergy, ootPhoMipSlope, ootPhoMipInter;
+        std::vector<float>  ootPhoHadOverEM, ootPhoHadD1OverEM, ootPhoHadD2OverEM, ootPhoHadOverEMVaid, ootPhohadTowOverEM, ootPhohadTowD10OverEM;
+        std::vector<float>  ootPhohadTowD20OverEM, ootPhohadTowOverEMValid, ootPhoE1x5, ootPhoE2x5, ootPhoE3x3, ootPhoE5x5;
+        std::vector<float>  ootPhoMaxEnergyXtal, ootPhoSigmaEtaEta, ootPhoSigmaIEtaIEta;
+        std::vector<float>  ootPhoR1x5, ootPhoR2x5, ootPhoR9, ootPhoFull5x5_e1x5, ootPhoFull5x5_e2x5, ootPhoFull5x5_e3x3;
+        std::vector<float>  ootPhoFull5x5_e5x5, ootPhoFull5x5_maxEnergyXtal;
+        std::vector<float>  ootPhoFull5x5_sigmaEtaEta, ootPhoFull5x5_sigmaIEtaIEta, ootPhoFull5x5_r1x5, ootPhoFull5x5_r2x5, ootPhoFull5x5_r9;
+        std::vector<int>    ootPhoNSatXtals, ootPhoMipNHitCone;
+        std::vector<bool>   ootPhoIsSeedSat, ootPhoMipIsHalo;
+        std::vector<float>  ootPhoMipChi2, ootPhoMipTotEnergy, ootPhoMipSlope, ootPhoMipInter;
 
-//        std::vector<float>  ootPhoEcalRHSumEtConeDR04, ootPhoHcalTwrSumEtConeDR04, ootPhoHcalDepth1TowerSumEtConeDR04, ootPhoCalDepth2TowerSumEtConeDR04;
-//        std::vector<float>  ootPhoHcalTowerSumEtBcConeDR04, ootPhoHcalDepth1TowerSumEtBcConeDR04, ootPhoHcalDepth2TowerSumEtBcConeDR04;
-//        std::vector<float>  ootPhoTrkSumPtSolidConeDR04, ootPhoTrkSumPtHollowConeDR04;
-//        std::vector<int>    ootPhoNTrkSolidConeDR04, ootPhoNTrkHollowConeDR04;
+        std::vector<float>  ootPhoEcalRHSumEtConeDR04, ootPhoHcalTwrSumEtConeDR04, ootPhoHcalDepth1TowerSumEtConeDR04, ootPhoCalDepth2TowerSumEtConeDR04;
+        std::vector<float>  ootPhoHcalTowerSumEtBcConeDR04, ootPhoHcalDepth1TowerSumEtBcConeDR04, ootPhoHcalDepth2TowerSumEtBcConeDR04;
+        std::vector<float>  ootPhoTrkSumPtSolidConeDR04, ootPhoTrkSumPtHollowConeDR04;
+        std::vector<int>    ootPhoNTrkSolidConeDR04, ootPhoNTrkHollowConeDR04;
 
         // genOOTPhotons
 
-//        std::vector<double> genOOTPhoPt, genOOTPhoEnergy, genOOTPhoPhi, genOOTPhoEta, genOOTPhoPx, genOOTPhoPy, genOOTPhoPz, genOOTPhoDr;
-//        std::vector<int>    genOOTPhoPdgId, genOOTPhoLlp;
+        std::vector<double> genOOTPhoPt, genOOTPhoEnergy, genOOTPhoPhi, genOOTPhoEta, genOOTPhoPx, genOOTPhoPy, genOOTPhoPz, genOOTPhoDr;
+        std::vector<int>    genOOTPhoPdgId, genOOTPhoLlp;
 
         // genEvtInfo
         const edm::InputTag genEvtInfoTag;
@@ -953,8 +951,7 @@ bool llpChase( const reco::Candidate* kid ){
 int llpGenChase( const reco::Candidate* kid ){
  
     //if( kid.pdgId() == 1000022 || kid.pdgId() == 1000023 || kid.pdgId() == 1000025 || kid.pdgId() == 1000035 ) return true;
-    auto match = ( std::abs(kid->pdgId()) > 1000020 ) && ( std::abs(kid->pdgId()) < 1000040 );
-    if( match ) return kid->pdgId();
+    if( std::abs(kid->pdgId()) > 1000000 ) return kid->pdgId();
     for( long unsigned int gmit(0); gmit < kid->numberOfMothers(); gmit++ ){
         //if( kid->pdgId() == 6000113 ) return true;
         if( kid->mother(gmit)->numberOfMothers() > 0 ){ auto r = llpGenChase(kid->mother(gmit)); if(r != 0) return r; }
@@ -966,9 +963,7 @@ int llpGenChase( const reco::Candidate* kid ){
 int llpGenChase( const reco::GenParticle kid ){
  
  	//if( kid.pdgId() == 1000022 || kid.pdgId() == 1000023 || kid.pdgId() == 1000025 || kid.pdgId() == 1000035 ) return true;
-	auto match = ( std::abs(kid.pdgId()) > 1000020 ) && ( std::abs(kid.pdgId()) < 1000040 );
-	auto hard = kid.isLastCopy();
-	if( match && hard ) return kid.pdgId();
+	if( std::abs(kid.pdgId()) > 1000000 ) return kid.pdgId();
     for( long unsigned int gmit(0); gmit < kid.numberOfMothers(); gmit++ ){
         //if( kid->pdgId() == 6000113 ) return true;
         if( kid.mother(gmit)->numberOfMothers() > 0 ){ auto r = llpGenChase(kid.mother(gmit)); if(r != 0) return r; }

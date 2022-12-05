@@ -82,8 +82,8 @@ def docrab( dataset ):
         #config.Data.splitting     = 'Automatic'
         #config.Data.unitsPerJob   = 2000
         config.Data.splitting    = 'EventAwareLumiBased' # MC
-        #config.Data.unitsPerJob  =  1500 # MC GMSB
-        config.Data.unitsPerJob  =  5000 # MC GJet
+        config.Data.unitsPerJob  =  1500 # MC GMSB
+        #config.Data.unitsPerJob  =  5000 # MC GJet
 
         config.JobType.allowUndistributedCMSSW = True
         config.JobType.inputFiles  = [ inptCfgEB, inptCfgEE ]
@@ -147,10 +147,12 @@ def docrab( dataset ):
             #trial          = "llpga_GMSB_AOD_v49" # added more photon/ootphoton + rhcollection information
             #trial          = "llpga_GMSB_AOD_v50" # added gen particle info
             #trial          = "llpga_GMSB_AOD_v51" # added gen photon info  and isGenPhotonLLP 
-            #trial          = "llpga_GJets_AOD_v52" # removed photon ID requirment
+            #trial          = "llpga_GJets_AOD_v52" # removed photon ID requirment : done in skim
             #trial          = "llpga_GMSB_AOD_v52" 
             #trial          = "llpga_GJets_AOD_v53" # fixed ootpho rh collection ?
-            trial          = "llpga_GMSB_AOD_v53"
+            #trial          = "llpga_GMSB_AOD_v53"
+            #trial          = "llpga_GMSB_AOD_v54" # extend gen particle isLLp to inlude all exotics and return pdgID of exotic
+            trial          = "llpga_GMSB_AOD_v55" # consolidated ged&oot photons
 
             #config.Data.outLFNDirBase  = "/store/user/jaking/LLPGamma/"+trial+"/"
             config.Data.outLFNDirBase  = "/store/group/lpcsusylep/jaking/LLPGamma/"+trial+"/"

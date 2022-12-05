@@ -40,7 +40,7 @@
 
 //#include "llpgana_hist_base_v2.hh" 
 //#include "llpgana_ntuple_base.hh"
-#include "llpgana_hist_base_v10.hh"
+#include "llpgana_hist_base_v9.hh"
 
 #define n1dHists 512
 #define n2dHists 512 
@@ -447,7 +447,7 @@ vector<float> getRhGrpEigen( vector<float> xs, vector<float> wts ){
 // Make hist class -----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-class makehists : llpgana_hist_base_v10 {
+class makehists : llpgana_hist_base_v9 {
 
 	public:
 
@@ -569,7 +569,7 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
 	//b_rhEnergy->GetEntry(entry);
 
     auto nRecHits = rechitids.size();
-	if( nRecHits < 15 ) return emepReturn;
+	if( nRecHits < 2 ) return emepReturn;
     for( uInt it(0); it < nRecHits; it++ ){
 
         const auto rhIDX = getRhIdx(rechitids[it]);
@@ -696,13 +696,10 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
 
     vector<float> xs1;
     vector<float> xs2;
-    vector<float> xsgeo;
     vector<float> slvars1;
     vector<float> slvars2;
-    vector<float> slvarsgeo;
     float xsum1(0.0);
     float xsum2(0.0);
-    float xsumgeo(0.0);
     //float adj(2.2);
 	float adj(1.0);
 
@@ -716,20 +713,16 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
         auto epsycor = eignsin*(letas[it]*adj) + eigncos*(lphis[it]*adj);
         auto epxcor = (orgcos*(letas[it]*adj) - orgsin*(lphis[it]*adj))*slopeCorr;
         auto epycor = orgsin*(letas[it]*adj) + orgcos*(lphis[it]*adj);
-
+  
         auto sxcor = eigncos*(lzs[it]*adj) - eignsin*(lcs[it]*adj);
         auto sycor = eignsin*(lzs[it]*adj) + eigncos*(lcs[it]*adj);
         auto xcor = (orgcos*(lzs[it]*adj) - orgsin*(lcs[it]*adj))*slopeCorr;
         auto ycor = orgsin*(lzs[it]*adj) + orgcos*(lcs[it]*adj);
-        auto gxcor = ((geoeigens[0])*(lzs[it]*adj) - (geoeigens[1])*(lcs[it]*adj))*slopeCorr;
-        auto gycor = (geoeigens[1])*(lzs[it]*adj) + (geoeigens[0])*(lcs[it]*adj);
 
         auto dsxcor = eigncos*(2.2) - eignsin*(2.2);
         auto dxcor = orgcos*(2.2) - orgsin*(2.2);
-        auto dgxcor = (geoeigens[0])*(2.2) - (geoeigens[1])*(2.2);
 		auto sxcorvar = sq2(dsxcor)/12;
         auto xcorvar = sq2(dxcor)/12;
-        auto gxcorvar = sq2(dgxcor)/12;
 
         if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
                                 << " : xcor " << xcor << " : ycor " << ycor << " : dt " << egwts[it] << std::endl;
@@ -746,25 +739,20 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
         hist2d86->Fill(sycor,lts[it],reswts[it]);
         hist2d87->Fill(sxcor,lts[it],reswts[it]);
         //auto sl1 = (ltime)/(sxcor);
-        auto sl1 = (lts[it])/(sxcor);//*slopeCorr;
+        auto sl1 = (lts[it])/(sxcor*dsxcor);//*slopeCorr;
         //auto sl2 = (ltime)/(leta*adj);// changed to eta to look at slope in eta direction
-        auto sl2 = (lts[it])/(xcor);//*slopeCorr;
-        auto slg = (lts[it])/(gxcor);//*slopeCorr;
+        auto sl2 = (lts[it])/(xcor*dxcor);//*slopeCorr;
         xs1.push_back(sl1);
         xs2.push_back(sl2);
-        xsgeo.push_back(slg);
-
-		slvars1.push_back(1/((tvar[it]+mtvar+sq2(sl1)*sxcorvar*(1.0+(1.0/nWts)))/sq2(sxcor)));
+		slvars1.push_back(1/((tvar[it]+mtvar+sq2(sl1)*sxcorvar*(1.0+(1.0/nWts)))/sq2(sxcor*dsxcor)));
         //std::cout << " slope vsr : " << leta << " " << lphi << " " << ltime << " " << eigncos << " " << eignsin << std::endl;
         //std::cout << " slope vsr : " << nWts << " " << sxcor << " " << dsxcor << std::endl;
 		//std::cout << " slope vsr : " << tvar[it] << " " << mtvar << " " << sq2(sl1)*sxcorvar*(1.0+(1.0/nWts))/sq2(sxcor*dsxcor) << std::endl; 
-        slvars2.push_back(1/((tvar[it]+mtvar+sq2(sl2)*xcorvar*(1.0+(1.0/nWts)))/sq2(xcor)));
-        slvarsgeo.push_back(1/((tvar[it]+mtvar+sq2(slg)*gxcorvar*(1.0+(1.0/nWts)))/sq2(gxcor)));
+        slvars2.push_back(1/((tvar[it]+mtvar+sq2(sl2)*xcorvar*(1.0+(1.0/nWts)))/sq2(xcor*dxcor)));
         //xsum1 += sl1*reswts[it];
         //xsum2 += sl2*reswts[it];
 		xsum1 += sl1*slvars1[it];
         xsum2 += sl2*slvars2[it];
-        xsumgeo += slg*slvarsgeo[it];
     }//<<>>for( uInt it(0); it < wts.size(); it++ )
 
     auto ebside = (mz > 0)?1:-1;
@@ -786,13 +774,8 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
     auto vars2 = var(xs2,slope2,slvars2,totSloRes2);
     auto chi2 = chisq(xs2,slope2,vars2);
     auto slchi2v2 = chisqv(xs2,slope2,slvars2,vars2);//?????????????????
-	//chisqr probs
     auto chi2pf1 = 1 - TMath::Prob(chi1, nWts);
     auto chi2pf2 = 1 - TMath::Prob(chi2, nWts);
-	//geo slope
-    auto totSloResGeo = accum(slvarsgeo);
-    auto slopeg = xsumgeo/totSloResGeo;
-    auto slopegerr = std::sqrt(1/totSloResGeo);
 	// eigens 0 = vector x, 1 = vector y, 2 = vector mag
     eigens.push_back(slope1);//3  aligned slope
     eigens.push_back(chi2pf1);//4 aligned slope chi sqr prob
@@ -813,8 +796,6 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
     eigens.push_back(ebside);//19 EB side
     eigens.push_back(taflip);//20 towards(+)/away(-) slope sign flip
     eigens.push_back(egflip);//21 eigan vector slope aligment flip
-    eigens.push_back(slopeg);//22 geoeigan slope
-    eigens.push_back(slopegerr);//23 geoeigan slope error
 	//std::cout << "Slope egin : " << slope1 << " " << chi2pf1 << " " << rotangle << " " << std::sqrt(varsl) << " " << slope1err << std::endl;
 
     return eigens;
@@ -902,7 +883,7 @@ void makehists::eventLoop( Long64_t entry ){
     float   jetPTmin        = 100.0;// for energy/time comp
     int     jetIDmin        = 2; //3;
     float   jetETAmax       = 1.5; //1.5;
-    int    minRHcnt        = 15; //32;
+    int    minRHcnt        = 5; //32;
     float   minRHenr        = 2.0;
     float   bcMinEnergy     = 0.667;
     int    bcMinRHGrpSize  = 3;
@@ -947,7 +928,7 @@ void makehists::eventLoop( Long64_t entry ){
     b_rhpedrms6->GetEntry(entry);   //!
     b_rhpedrms1->GetEntry(entry);   //!
 
-    if( DEBUG ) std::cout << " -- Looping over " << nRecHits << " rechits" << std::endl;
+    if( DEBUG ) std::cout << " -- Finding rechits" << std::endl;
 
     for( int it = 0; it < nRecHits; it++ ){
 
@@ -967,8 +948,8 @@ void makehists::eventLoop( Long64_t entry ){
 
 	}//<<>>for( int it = 0; it < nRecHits; it++ )
 
-	if( false ) { // calojet lock
     if( DEBUG ) std::cout << "Finding calojets" << std::endl;
+	if( false ) { // calojet lock
 	//------------  calojets ------------------------
 
     b_cljBcCnt->GetEntry(entry);   //!
@@ -1006,51 +987,49 @@ void makehists::eventLoop( Long64_t entry ){
 
 	}//<<>>if( false ) { // calojet lock
 
-//    if( DEBUG ) std::cout << "Finding oot/ged photon matches " << std::endl;
-//	//----------------- oot/ged photon matching ------------------
-//
-//    b_nPhotons->GetEntry(entry);   //!
-//    b_phoPt->GetEntry(entry);   //!
-//    b_phoPhi->GetEntry(entry);   //!
-//    b_phoEta->GetEntry(entry);   //!
-//    b_nOotPhotons->GetEntry(entry);   //!
-//    b_ootPhoPt->GetEntry(entry);   //!
-//    b_ootPhoPhi->GetEntry(entry);   //!
-//    b_ootPhoEta->GetEntry(entry);   //!
-//
-//	vector<bool> phoExcluded(nPhotons+1,false);
-//    vector<bool> ootPhoExcluded(nOotPhotons+1,false);
-//
-//	for( int io = 0; io < nOotPhotons; io++ ){
-//		double minDr(0.5);
-//		double dRmatch(10.0);
-//		int match(-1);
-//       	auto oEta = (*ootPhoEta)[io];
-//       	auto oPhi = (*ootPhoPhi)[io];
-//		for( int ip = 0; ip < nPhotons; ip++ ){
-//           	auto pEta = (*phoEta)[ip];
-//           	auto pPhi = (*phoPhi)[ip];
-//			dRmatch = deltaR( pEta, oEta, pPhi, oPhi );
-//			if( dRmatch < minDr ){ minDr = dRmatch; match = ip; }  		
-//		}//<<>>for( int ip; ip < nPhotons; ip++ )
-//		if( dRmatch < 0.3 ){
-//			auto pPt = (*phoPt)[match];
-//			auto oPt = (*ootPhoPt)[io];
-//			if( oPt > pPt ) phoExcluded[match] = true; 
-//			else ootPhoExcluded[io] = true;
-//		}//<<>>if( dRmatch < 0.3 )
-//	}//<<>>for( int io = 0; io < nOotPhotons; io++ )
-//
-//	for( int io = 0; io < nOotPhotons; io++ ){ hist1d[300]->Fill(3); if( ootPhoExcluded[io] ) hist1d[300]->Fill(5); else hist1d[300]->Fill(4); }
-//	for( int ip = 0; ip < nPhotons; ip++ ){ hist1d[300]->Fill(0); if( phoExcluded[ip] ) hist1d[300]->Fill(1); else hist1d[300]->Fill(2); }
+    if( DEBUG ) std::cout << "Finding oot/ged photon matches " << std::endl;
+	//----------------- oot/ged photon matching ------------------
+
+    b_nPhotons->GetEntry(entry);   //!
+    b_phoPt->GetEntry(entry);   //!
+    b_phoPhi->GetEntry(entry);   //!
+    b_phoEta->GetEntry(entry);   //!
+    b_nOotPhotons->GetEntry(entry);   //!
+    b_ootPhoPt->GetEntry(entry);   //!
+    b_ootPhoPhi->GetEntry(entry);   //!
+    b_ootPhoEta->GetEntry(entry);   //!
+
+	vector<bool> phoExcluded(nPhotons+1,false);
+    vector<bool> ootPhoExcluded(nOotPhotons+1,false);
+
+	for( int io = 0; io < nOotPhotons; io++ ){
+		double minDr(0.5);
+		double dRmatch(10.0);
+		int match(-1);
+       	auto oEta = (*ootPhoEta)[io];
+       	auto oPhi = (*ootPhoPhi)[io];
+		for( int ip = 0; ip < nPhotons; ip++ ){
+           	auto pEta = (*phoEta)[ip];
+           	auto pPhi = (*phoPhi)[ip];
+			dRmatch = deltaR( pEta, oEta, pPhi, oPhi );
+			if( dRmatch < minDr ){ minDr = dRmatch; match = ip; }  		
+		}//<<>>for( int ip; ip < nPhotons; ip++ )
+		if( dRmatch < 0.3 ){
+			auto pPt = (*phoPt)[match];
+			auto oPt = (*ootPhoPt)[io];
+			if( oPt > pPt ) phoExcluded[match] = true; 
+			else ootPhoExcluded[io] = true;
+		}//<<>>if( dRmatch < 0.3 )
+	}//<<>>for( int io = 0; io < nOotPhotons; io++ )
+
+	for( int io = 0; io < nOotPhotons; io++ ){ hist1d[300]->Fill(3); if( ootPhoExcluded[io] ) hist1d[300]->Fill(5); else hist1d[300]->Fill(4); }
+	for( int ip = 0; ip < nPhotons; ip++ ){ hist1d[300]->Fill(0); if( phoExcluded[ip] ) hist1d[300]->Fill(1); else hist1d[300]->Fill(2); }
 
     if( DEBUG ) std::cout << "Finding photons" << std::endl;
     //----------------- photons ------------------
 	
-    b_nPhotons->GetEntry(entry);   //!
+    //b_nPhotons->GetEntry(entry);   //!
     b_phoSeedTOFTime->GetEntry(entry);   //!
-    b_phoExcluded->GetEntry(entry);   //!
-    b_phoIsOotPho->GetEntry(entry);   //!
     b_phoCMeanTime->GetEntry(entry);   //!
     b_phoSc3dEx->GetEntry(entry);   //!
     b_phoSc3dEy->GetEntry(entry);   //!
@@ -1063,10 +1042,10 @@ void makehists::eventLoop( Long64_t entry ){
     b_phoSc2dEv->GetEntry(entry);   //!
     b_phoSc2dEslope->GetEntry(entry);   //!
     b_phoSc2dEchisp->GetEntry(entry);   //!
-    b_phoPt->GetEntry(entry);   //!
+    //b_phoPt->GetEntry(entry);   //!
     b_phoEnergy->GetEntry(entry);   //!
-    b_phoPhi->GetEntry(entry);   //!
-    b_phoEta->GetEntry(entry);   //!
+    //b_phoPhi->GetEntry(entry);   //!
+    //b_phoEta->GetEntry(entry);   //!
     b_phoPx->GetEntry(entry);   //!
     b_phoPy->GetEntry(entry);   //!
     b_phoPz->GetEntry(entry);   //!
@@ -1147,35 +1126,22 @@ void makehists::eventLoop( Long64_t entry ){
     b_genPhoPz->GetEntry(entry);
     b_genPhoPdgId->GetEntry(entry);
 	b_genPhoLLP->GetEntry(entry);
-	b_genPhoDr->GetEntry(entry);   //!
 
-
-    if( DEBUG ) std::cout << " - Looping over for " << nPhotons << " photons" << std::endl;
+    if( DEBUG ) std::cout << " - looping photons" << std::endl;
     for( int it = 0; it < nPhotons; it++ ){
 
-		auto isCmb = not (*phoExcluded)[it];
+		auto isCmb = not phoExcluded[it];
         //auto isCmb = phoExcluded[it];
         auto isLLP = (*genPhoLLP)[it];
-		auto isOOT = (*phoIsOotPho)[it];
-		auto isEXO = ( isLLP == 0 )?false:true;
 
-        hist1d[132]->Fill(1);
-		if( isLLP ) hist1d[132]->Fill(2);
-        if( isOOT ) hist1d[132]->Fill(3);
-        if( isCmb ) hist1d[132]->Fill(4);
-
-		if( DEBUG ) std::cout << " -- pho id" << std::endl;
 		auto rhIso = (*phoEcalRHSumEtConeDR04)[it] < ( 0.006*(*phoPt)[it] + 4.2 );
 		auto hcalTowIso = (*phoHcalTowerSumEtBcConeDR04)[it] < ( 0.0025*(*phoPt)[it] + 2.2 );
-        if( DEBUG ) std::cout << " -- pho id 1" << std::endl;
 		auto hcTrkIsoL = (*phoTrkSumPtSolidConeDR04)[it] < ( 0.001*(*phoPt)[it] + 3.5 ); //hallow cone track iso
         auto hcTrkIsoT = (*phoTrkSumPtSolidConeDR04)[it] < ( 0.001*(*phoPt)[it] + 2 ); //hallow cone track iso
-        if( DEBUG ) std::cout << " -- pho id 2" << std::endl;
         auto hadOverE = (*phohadTowOverEM)[it] < 0.05;
         auto sigmaIeieEE = (*phoSigmaIEtaIEta)[it] < 0.03; // tight only EE
         auto sigmaIeieEB = (*phoSigmaIEtaIEta)[it] < 0.013; // tight only EB
 
-        if( DEBUG ) std::cout << " -- pho id set cuts" << std::endl;
 		auto baseCut = rhIso && hcalTowIso && hadOverE;
 		auto looseCut = baseCut && hcTrkIsoL;
 		auto tightCut = baseCut && hcTrkIsoT;
@@ -1184,9 +1150,8 @@ void makehists::eventLoop( Long64_t entry ){
 
 		auto phoClass = tightCut?3:looseCut?2:1;
 		hist1d[122]->Fill( phoClass );//122
-		//hist2d[256]->Fill(looseCut,tightCut);
+		hist2d[256]->Fill(looseCut,tightCut);
 
-		if( DEBUG ) std::cout << " -- pho rechits" << std::endl;
 		auto nrh = ((*phoRhIds)[it]).size();
         auto phoClstrR9 = clstrR9( (*phoRhIds)[it] );
 
@@ -1203,7 +1168,7 @@ void makehists::eventLoop( Long64_t entry ){
         //auto usePho = true;
 		//auto usePho = not isLLP && isFake;
         //auto usePho = not isLLP && isLoose;
-        //auto usePho = not isLLP && isLoose && isEB && isTightEB;
+        auto usePho = not isLLP && isLoose && isEB && isTightEB;
         //auto usePho = isLLP && isFake;
         //auto usePho = isLLP && isLoose && isEB && isTightEB;
         //auto usePho = not isLLP && isLoose && phoExcluded[it];
@@ -1211,15 +1176,6 @@ void makehists::eventLoop( Long64_t entry ){
         //auto usePho = isLoose && isEB && isTightEB && isClR9r46;
         //auto usePho = isLoose && isEB && isTightEB && isClR9r68;
 
-        //auto usePho = isLoose && isEB && isTightEB && isCmb;
-        auto usePho = isLoose && isEB && isTightEB && not isCmb;
-		//auto usePho = isLoose && isEB && isTightEB && isCmb && isEXO;
-		//auto usePho = isLoose && isEB && isTightEB && isCmb && isOOT;
-        //auto usePho = isLoose && isEB && isTightEB && isCmb && isOOT && isEXO;
-		//auto usePho = isLoose && isEB && isTightEB && not isCmb;
-
-
-		if( DEBUG ) std::cout << " -- photons # " << it << " isLLP " << isLLP << " isOOT " << isOOT << " isCmb " << isCmb << std::endl;
 		if( usePho ) { //----------------------------------- 
 
 		//hist3d[0]->Fill( ((*phoRhIds)[it]).size(), phoClstrR9, phoClass ); 		
@@ -1228,17 +1184,22 @@ void makehists::eventLoop( Long64_t entry ){
         //if( phoClass > 2 ){ }//tightCut?3:looseCut?2:1
         hist2d[218]->Fill( nrh, phoClstrR9 ); 
 		hist2d[225]->Fill( nrh, (*phoR9)[it]);
+        if( isCmb ) { hist2d[317]->Fill( nrh, phoClstrR9 ); hist2d[324]->Fill( nrh, (*phoR9)[it]);}
 
 
 		//if( phoClass < 3 ) continue;
 
 		hist1d[102]->Fill( phoClstrR9 );
+		if( isCmb ) hist1d[221]->Fill( phoClstrR9 );
 		hist2d[223]->Fill( (*phoR9)[it], phoClstrR9 );
+        if( isCmb ) hist2d[322]->Fill( (*phoR9)[it], phoClstrR9 ); 
 
-		if( DEBUG ) std::cout << " -- pho time" << std::endl;
         hist1d[119]->Fill( (*phoCMeanTime)[it] );//c mean
         hist1d[120]->Fill( (*phoSeedTOFTime)[it] );//lead time 
         hist1d[121]->Fill( (*phoCMeanTime)[it] - (*phoSeedTOFTime)[it] );//diff
+        if( isCmb ) hist1d[218]->Fill( (*phoCMeanTime)[it] );//c mean
+        if( isCmb ) hist1d[219]->Fill( (*phoSeedTOFTime)[it] );//lead time 
+        if( isCmb ) hist1d[220]->Fill( (*phoCMeanTime)[it] - (*phoSeedTOFTime)[it] );//diff
 
 		// count only rhs above a certian energy threshold?
 		auto goodRhCnt = nrh > 2;
@@ -1248,12 +1209,17 @@ void makehists::eventLoop( Long64_t entry ){
         if( (*phoSc3dEx)[it] != -9 ){
             auto epanlge = getAngle( (*phoSc3dEx)[it], (*phoSc3dEy)[it] );
             hist1d[104]->Fill(epanlge);//etaphi angle
+            if( isCmb ) hist1d[203]->Fill(epanlge);//etaphi angle
             auto ephypo3D = hypo( (*phoSc3dEx)[it], (*phoSc3dEy)[it] );
             auto etanlge = getAngle( ephypo3D, (*phoSc3dEz)[it] );
             hist1d[105]->Fill(etanlge);//etatim angle
+			if( isCmb ) hist1d[105]->Fill(etanlge);//etatim angle
             hist2d[211]->Fill( (*phoSc3dEx)[it], (*phoSc3dEy)[it] );
+			if( isCmb ) hist2d[310]->Fill( (*phoSc3dEx)[it], (*phoSc3dEy)[it] );
             hist2d[212]->Fill( (*phoSc3dEx)[it], (*phoSc3dEz)[it] );
+			if( isCmb ) hist2d[311]->Fill( (*phoSc3dEx)[it], (*phoSc3dEz)[it] );
             hist1d[115]->Fill( (*phoSc3dEv)[it] );
+			if( isCmb ) hist1d[214]->Fill( (*phoSc3dEv)[it] );
         }//<<>>if( phoSCEigen3D[0] != -999 )
         //if( (*phoSc2dEx)[it] != -9 ){
         //    auto sphanlge = getAngle( (*phoSc2dEx)[it], (*phoSc2dEy)[it] );
@@ -1266,9 +1232,11 @@ void makehists::eventLoop( Long64_t entry ){
 		if( DEBUG ) std::cout << " - looping photons : calc 2D Eigans" << std::endl;
 
         hist1d[103]->Fill(nrh);
+		if( isCmb ) hist1d[202]->Fill(nrh);
 
 		auto isPho = ((*genPhoPdgId)[it] == 22)?1:0; 
-        //hist2d[255]->Fill(isPho,(*genPhoLLP)[it]);
+        hist2d[255]->Fill(isPho,(*genPhoLLP)[it]);
+        if( isCmb ) hist2d[303]->Fill(isPho,(*genPhoLLP)[it]);
 
         if( DEBUG ) std::cout << " - looping photons : making ebee maps" << std::endl;
 		auto doEPMap = nMaps < 18 && isEB;
@@ -1316,73 +1284,85 @@ void makehists::eventLoop( Long64_t entry ){
 	        if( useEigan ){
                 auto sphanlge = getAngle( phoEigens2D[0], phoEigens2D[1] );
                 hist1d[127]->Fill( sphanlge );//eliptical angle  Eigan Rotation Angle
+                if( isCmb ) hist1d[226]->Fill( sphanlge );//eliptical angle
                 hist1d[106]->Fill( phoEigens2D[7] );//eliptical angle  Eta Phi Angle 2D : algined
+                if( isCmb ) hist1d[205]->Fill( phoEigens2D[7] );//eliptical angle
             	hist2d[210]->Fill( phoEigens2D[21]*phoEigens2D[0], phoEigens2D[21]*phoEigens2D[1] );
+                if( isCmb ) hist2d[309]->Fill( phoEigens2D[21]*phoEigens2D[0], phoEigens2D[21]*phoEigens2D[1] );
             	hist1d[113]->Fill( phoEigens2D[2] ); 
-                //hist1d[129]->Fill( phoEigens2D[18] );
+                if( isCmb ) hist1d[212]->Fill( phoEigens2D[2] );
+                hist1d[129]->Fill( phoEigens2D[18] );
+                if( isCmb ) hist1d[228]->Fill( phoEigens2D[18] );
 				hist1d[114]->Fill(phoEigens2D[3]); // aligned slope
+                if( isCmb ) hist1d[213]->Fill(phoEigens2D[3]);
                 hist1d[117]->Fill(phoEigens2D[5]); // TA slope
+                if( isCmb ) hist1d[216]->Fill(phoEigens2D[5]);
 				hist2d[200]->Fill((*phoEta)[it],phoEigens2D[3]); 
+                if( isCmb ) hist2d[300]->Fill((*phoEta)[it],phoEigens2D[3]);
                 hist2d[202]->Fill((*phoEta)[it],phoEigens2D[5]);
+                if( isCmb ) hist2d[302]->Fill((*phoEta)[it],phoEigens2D[5]);
 				hist2d[201]->Fill((*phoEta)[it],phoEigens2D[2]);
+                if( isCmb ) hist2d[301]->Fill((*phoEta)[it],phoEigens2D[2]);
 				hist1d[123]->Fill(phoEigens2D[10]);
+                if( isCmb ) hist1d[222]->Fill(phoEigens2D[10]);
 				hist1d[124]->Fill(phoEigens2D[11]);
+                if( isCmb ) hist1d[223]->Fill(phoEigens2D[11]); 
 				hist1d[125]->Fill(phoEigens2D[12]);
+                if( isCmb ) hist1d[224]->Fill(phoEigens2D[12]);
 				hist1d[126]->Fill(phoEigens2D[13]);
+                if( isCmb ) hist1d[225]->Fill(phoEigens2D[13]);
 				hist2d[219]->Fill( phoEigens2D[10], phoEigens2D[11] );
+                if( isCmb ) hist2d[318]->Fill( phoEigens2D[10], phoEigens2D[11] );
                 hist2d[220]->Fill( phoEigens2D[5], phoEigens2D[10] );
+                if( isCmb ) hist2d[319]->Fill( phoEigens2D[5], phoEigens2D[10] );
                 hist2d[221]->Fill( phoEigens2D[5], phoEigens2D[11] );
+                if( isCmb ) hist2d[320]->Fill( phoEigens2D[5], phoEigens2D[11] );
                 hist2d[222]->Fill( phoEigens2D[11], phoClstrR9 );
+                if( isCmb ) hist2d[321]->Fill( phoEigens2D[11], phoClstrR9 );
 				hist2d[226]->Fill( (*phoEta)[it], phoEigens2D[7] ); 
+				if( isCmb ) hist2d[325]->Fill( (*phoEta)[it], phoEigens2D[7] );
                 hist2d[227]->Fill( (*phoPhi)[it], phoEigens2D[7] );
+                if( isCmb ) hist2d[326]->Fill( (*phoPhi)[it], phoEigens2D[7] );
                 hist2d[228]->Fill( phoEigens2D[7], phoEigens2D[2] );
+                if( isCmb ) hist2d[327]->Fill( phoEigens2D[7], phoEigens2D[2] );
                 hist2d[229]->Fill( phoEigens2D[9], phoEigens2D[5] );
+                if( isCmb ) hist2d[328]->Fill( phoEigens2D[7], phoEigens2D[5] );
                 hist2d[232]->Fill( phoEigens2D[7], phoEigens2D[9] );
                 hist2d[233]->Fill( phoEigens2D[3], phoEigens2D[5] );
                 hist2d[234]->Fill( phoEigens2D[7], phoEigens2D[3] );
                 hist2d[230]->Fill( phoClstrR9, phoEigens2D[2] );
+                if( isCmb ) hist2d[329]->Fill( phoClstrR9, phoEigens2D[2] );
                 hist2d[231]->Fill( phoClstrR9, phoEigens2D[5] );
-
-                hist1d[133]->Fill( phoEigens2D[18] );
-                hist1d[134]->Fill( phoEigens2D[22] );
-				auto geoRotAngle = getAngle( phoEigens2D[16], phoEigens2D[17] );
-                hist1d[135]->Fill( geoRotAngle );
-                hist2d[235]->Fill( (*phoEta)[it], geoRotAngle );
-                hist2d[236]->Fill( (*phoPhi)[it], geoRotAngle );
-                hist2d[237]->Fill( geoRotAngle, phoEigens2D[18] );
-                hist2d[238]->Fill( phoEigens2D[9], phoEigens2D[22] );
-                hist2d[239]->Fill( geoRotAngle, phoEigens2D[9] );
-                hist2d[240]->Fill( phoEigens2D[3], phoEigens2D[22] );
-                hist2d[241]->Fill( geoRotAngle, phoEigens2D[3] );
+                if( isCmb ) hist2d[330]->Fill( phoClstrR9, phoEigens2D[5] );
 
 			}//<<>>if( phoEigens2D[3] != -9 )
 		}//<<>>if( phoIsEB && tightEB )
 	
 		if( DEBUG ) std::cout << " -- looping photons : filling ids" << std::endl;
     	hist1d[107]->Fill( (*phoIsPixelSeed)[it] );
+        if( isCmb ) hist1d[206]->Fill( (*phoIsPixelSeed)[it] );
         hist1d[108]->Fill( (*phoHadOverEM)[it] );
+        if( isCmb ) hist1d[207]->Fill( (*phoHadOverEM)[it] );
         hist1d[109]->Fill( (*phoR9)[it] );
 		hist1d[128]->Fill( (*phoR9)[it] );
+        if( isCmb ){ hist1d[208]->Fill( (*phoR9)[it] ); hist1d[227]->Fill( (*phoR9)[it] ); }
         hist1d[110]->Fill( (*phoMipTotEnergy)[it] );
+        if( isCmb ) hist1d[209]->Fill( (*phoMipTotEnergy)[it] );
         hist1d[111]->Fill( (*phoEcalRHSumEtConeDR04)[it] );
+        if( isCmb ) hist1d[210]->Fill( (*phoEcalRHSumEtConeDR04)[it] );
         hist1d[112]->Fill( (*phoHcalTwrSumEtConeDR04)[it] );
+        if( isCmb ) hist1d[211]->Fill( (*phoHcalTwrSumEtConeDR04)[it] );
 
         if( DEBUG ) std::cout << " -- looping photons : filling gen" << std::endl;
         hist1d[100]->Fill( (*genPhoPt)[it] );
-
-		fillTH1( (*genPhoDr)[it], hist1d[130]); //->Fill( (*genPhoDr)[it] );
-        fillTH1( abs((*genPhoPdgId)[it]), hist1d[131]);
-		auto genParentExoID = 98;
-		if( abs((*genPhoLLP)[it]) > 2000000 ) genParentExoID = abs((*genPhoLLP)[it]) - 2000000 + 200;
-		else if( abs((*genPhoLLP)[it]) > 1000000 ) genParentExoID = abs((*genPhoLLP)[it]) - 1000000 + 100;
-		if( abs((*genPhoPdgId)[it]) == 0 ) genParentExoID = 95;
-        hist1d[101]->Fill( genParentExoID );
+        if( isCmb ) hist1d[200]->Fill( (*genPhoPt)[it] );
+		fillTH1((*genPhoPdgId)[it],hist1d[101]);
+        if( isCmb ) fillTH1((*genPhoPdgId)[it],hist1d[201]);
 
         }//<<>>if( usePho ) { //----------------------------------- 
 
     }//<<>>for( int it = 0; it < nPhotons; it++ )
 
-/*
     if( DEBUG ) std::cout << "Finding ootphotons" << std::endl;
 	//-------------- OOTPhotons ----------------------------
 
@@ -1740,10 +1720,9 @@ void makehists::eventLoop( Long64_t entry ){
         }//<<>>if( usePho ) { //----------------------------------- 
 
 	}//<<>>for( int it = 0; it < nOotPhotons; it++ )
-*/
 
-	if( false ) { // electrons lock
     if( DEBUG ) std::cout << "Finding electrons" << std::endl;
+	if( false ) { // electrons lock
 	//-------- electrons --------------------------------------
 	
     b_nElectrons->GetEntry(entry);   //!
@@ -1778,9 +1757,9 @@ void makehists::eventLoop( Long64_t entry ){
 
 	}//<<>>if( false ) { // electrons lock
 
-	//if( true ) { // JETS lock
-    if( false ) { // JETS lock
     if( DEBUG ) std::cout << "Finding pfjets" << std::endl;
+	if( true ) { // JETS lock
+    //if( false ) { // JETS lock
 	//--------- jets --------------------------
 	
 	//// ---  base info  ----
@@ -2270,34 +2249,34 @@ void makehists::endJobs(){
 
     thresDivTH2D( hist2d[206], hist2d[207], 0 );
     thresDivTH2D( hist2d[208], hist2d[209], 0 );
-    //thresDivTH2D( hist2d[257], hist2d[258], 0 );
-    //thresDivTH2D( hist2d[259], hist2d[260], 0 );
+    thresDivTH2D( hist2d[257], hist2d[258], 0 );
+    thresDivTH2D( hist2d[259], hist2d[260], 0 );
     profileTH2D( hist2d[215], hist1d[116], hist1d[118] );
-    //profileTH2D( hist2d[263], hist1d[165], hist1d[167] );
+    profileTH2D( hist2d[263], hist1d[165], hist1d[167] );
 
     normTH2D(hist2d[100]);
     normTH2D(hist2d[121]);
     normTH2D(hist2d[126]);
     normTH2D(hist2d[127]);
 
-    //normTH2D(hist2d[251]);
+    normTH2D(hist2d[251]);
     normTH2D(hist2d[202]);
-    //normTH2D(hist2d[302]);
+    normTH2D(hist2d[302]);
 
     normTH2D(hist2d[201]);
-    //normTH2D(hist2d[254]);
-    //normTH2D(hist2d[301]);
+    normTH2D(hist2d[254]);
+    normTH2D(hist2d[301]);
 
     normTH2D(hist2d[200]);
-    //normTH2D(hist2d[300]);
-    //normTH2D(hist2d[253]);
+    normTH2D(hist2d[300]);
+    normTH2D(hist2d[253]);
 
     normTH2D(hist2d[226]);
     normTH2D(hist2d[227]);
-    //normTH2D(hist2d[276]);
-    //normTH2D(hist2d[277]);
-    //normTH2D(hist2d[325]);
-    //normTH2D(hist2d[326]);
+    normTH2D(hist2d[276]);
+    normTH2D(hist2d[277]);
+    normTH2D(hist2d[325]);
+    normTH2D(hist2d[326]);
 
 }//<<>>void makehists::endJobs()
 
@@ -2336,8 +2315,8 @@ void makehists::initHists(){
     auto clsphtrn = 4;
 
 	// time profile maps
-    auto cwdiv = 1000;
-    auto cwtrn = 5;
+    auto cwdiv = 1200;
+    auto cwtrn = 30;
 
 	// time cl slope plots
     auto slmax = 2;
@@ -2434,10 +2413,10 @@ void makehists::initHists(){
     hist1d[61] = new TH1D("jetEginValueSph", "jetEginValueSph", 150, 0.4, 1.1);
 
 
-	//----- photons 100 - 349
+	//----- photons 100 - 149
 
     hist1d[100] = new TH1D("genPhoPt", "genPhoPt;Pt [GeV]",500,0,1000);
-    hist1d[101] = new TH1D("genPhoPdgId", "genPhoPdgId;PdgId",130,90,220);
+    hist1d[101] = new TH1D("genPhoPdgId", "genPhoPdgId;PdgId",50,0,50);
 
     hist1d[102] = new TH1D("phoClstrR9", "phoClstrR9", 100, 0, 1);
 
@@ -2477,16 +2456,8 @@ void makehists::initHists(){
     hist1d[127] = new TH1D("phoEiganRotAngle","phoEiganRotAngle",70,0,7);
 
     hist1d[128] = new TH1D("phoR9_zoom", "phoR9_zoom", 200, 0.8, 1);
-    //hist1d[129] = new TH1D("phoGeoEginValueSph", "phoGeoEginValueSph", 150, 0.4, 1.1);
-    hist1d[130] = new TH1D("phoGenDr", "phoGenDr", 150, 0, 0.15 );
-    hist1d[131] = new TH1D("phoGenPdgId", "phoGenPdgId", 50, 0, 50 );
-    hist1d[132] = new TH1D("phoType", "phoType( 1 pho; 2 llp; 3 oot; 4 cmb )", 6,0,5);
+    hist1d[129] = new TH1D("phoGeoEginValueSph", "phoGeoEginValueSph", 150, 0.4, 1.1);
 
-    hist1d[133] = new TH1D("phoGeoEginValueSph", "phoGeoEginValueSph", 150, 0.4, 1.1);
-    hist1d[134] = new TH1D("phoGeoEginSlopeSph", "phoGeoEginSlopeSph", 20000, -100, 100);
-    hist1d[135] = new TH1D("phoGeoEiganRotAngle","phoGeoEiganRotAngle",70,0,7);
-
-/*
 	//----- oot photons 150 - 199
 
     hist1d[150] = new TH1D("genOOTPhoPt", "genOOTPhoPt;Pt [GeV]",250,0,1000);
@@ -2574,7 +2545,6 @@ void makehists::initHists(){
 
     hist1d[227] = new TH1D("cmbPhoR9_zoom", "cmbPhoR9_zoom", 200, 0.8, 1);
     hist1d[228] = new TH1D("cmbPhoGeoEginValueSph", "cmbPhoGeoEginValueSph", 150, 0.4, 1.1);
-*/
 
 	//------  electrons 350 - 349
 	
@@ -2725,7 +2695,7 @@ void makehists::initHists(){
     hist2d[173] = new TH2D("jet3DEgnxy", "jet3DEgn x,y;x;y", 200, -5, 5, 200, -5, 5);
     hist2d[174] = new TH2D("jet3DEgnxz", "jet3DEgn x,z;x;z", 200, -5, 5, 200, -5, 5);
 
-	//--- Photons 200 - 349 -------------------------------------------
+	//--- Photons 200 - 249 -------------------------------------------
     hist2d[200] = new TH2D( "phoEta_Slope", "Photon Eta Vs Slope;Eta;Slope [ps/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
     hist2d[201] = new TH2D( "phoEta_EV2D", "Photon Eta Vs EiganValue2D;Eta;EiganValue",60, -1.5, 1.5, 150, 0.4, 1.1);
     hist2d[202] = new TH2D( "phoEta_UnCorSlope", "Photon Eta Vs Slope;Eta;UnCorSlope [ps/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
@@ -2773,15 +2743,6 @@ void makehists::initHists(){
     hist2d[233] = new TH2D("phoRotSlope_slope","Photon rotEiganSlope v eiganSlope;rotSlope;Slope",sldiv, slmin, slmax,sldiv, slmin, slmax);
     hist2d[234] = new TH2D("phoRotAngle_rotslope","Photon rotEignAngle v rotSlope;rotAngle;rotSlope",70,0,7,sldiv, slmin, slmax);
 
-    hist2d[235] = new TH2D("phoGeoEignAngleUncr_eta","Photon GeoEignAngleNoCor v Eta;Eta;Angle",60,-1.5,1.5,70,0,7);
-    hist2d[236] = new TH2D("phoGeoEignAngleUncr_phi","Photon GeoEignAngleNoCor v Phi;Phi;Angle",140,-3.5,3.5,70,0,7);
-    hist2d[237] = new TH2D("phoGeoEignAngleUncr_value","Photon GeoEignAngleNoCor v eiganValue;Angle;Value",70,0,7,50,0.5,1);
-    hist2d[238] = new TH2D("phoGeoEignAngleUncr_slope","Photon GeoEignAngleNoCor v eiganSlope;Angle;Slope",70,0,7,sldiv, slmin, slmax);
-    hist2d[239] = new TH2D("phoGeoRotAngle_Angle","Photon rotGeoAngle v Angle;rotAngle;Angle",70,0,7,70,0,7);
-    hist2d[240] = new TH2D("phoGeoRotSlope_slope","Photon rotGeoEiganSlope v eiganSlope;rotSlope;Slope",sldiv, slmin, slmax,sldiv, slmin, slmax);
-    hist2d[241] = new TH2D("phoGeoRotAngle_rotslope","Photon rotGeoEignAngle v rotSlope;rotAngle;rotSlope",70,0,7,sldiv, slmin, slmax);
-
-/*
 	// ---  oot photons 250 - 299 -------------------------------------------
     //hist2d[250] = new TH2D( "ootPhoEta_Slope", "ootPhoton Eta Vs Slope;Eta;Slope [ps/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
     hist2d[251] = new TH2D( "ootPhoEta_UnCorSlope", "ootPhoton Eta Vs Slope;Eta;UnCorSlope [ps/cm]", 30, -1.5, 1.5, sldiv/2, slmin, slmax);
@@ -2869,7 +2830,6 @@ void makehists::initHists(){
 
     hist2d[329] = new TH2D("cmbPhoClR9_value","cmbPhoton ClR9 v eiganValue;ClR9;Value",100,0,1,50,0.5,1);
     hist2d[330] = new TH2D("cmbPhoClR9_slope","cmbPhoton ClR9 v eiganSlope;ClR9;Slope",100,0,1,sldiv, slmin, slmax);
-*/
 
 	//--- rechit collections 350 - 399 -------------------------------------------------
     hist2d[350] = new TH2D("ebRhTime_Energy", "ebRhTimevEnergy;Time [ns];Energy [GeV]", jtdiv*2, -1*jtran*2, jtran*2, 1000, 0, 1000 );
@@ -2901,10 +2861,10 @@ int main ( int argc, char *argv[] ){
 
     //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
     //else {
-                auto indir = "LLPGamma/llpga_GMSB_AOD_v55/"; //argv[1];
+                auto indir = "LLPGamma/llpga_GMSB_AOD_v53/"; //argv[1];
                 //auto indir = "LLPGamma/llpga_GJets_AOD_v53/";
 
-                auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v55_Full.txt"; //argv[2];
+                auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v53_Full.txt"; //argv[2];
                 //auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v53_Full.txt";
 
                 ///auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v53_V12_3th_notLLP_Tight_Excluded_Hists.root"; //argv[3];
@@ -2914,10 +2874,10 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v53_V22_3th_Loose_tEB_notLLP_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v53_V22_10th_Loose_tEB_ClR9r68_Hists.root";
             	///auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_v53_V12_3th_notLLP_Tight_Excluded_Hists.root"; //argv[3];
-                auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v55_V23_5th_Loose_tEB_notCmb_Hists.root";
+                auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v53_V22_3th_Jets2_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_v53_V22_3th_Jets2_Hists.root";
 
-				int pct = 5;
+				int pct = 3;
 				makehists base;
                 base.llpgana_hist_maker( indir, infilename, outfilename, pct );
     //}

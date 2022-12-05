@@ -518,17 +518,25 @@ hl_stat_test = [
 ]
 
 # jet time plots
-jdt_hist_dir='/home/t3-ku/jaking/llpgamma/CMSSW_10_6_20/src/LLPgamma/LLPgammaAnalyzer/test/'
+#jdt_hist_dir='/home/t3-ku/jaking/llpgamma/CMSSW_10_6_20/src/LLPgamma/LLPgammaAnalyzer/test/'
+jdt_hist_dir='/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/test/root_files_llpa/'
+jdt_llp_dir='/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/'
 jdt_hist_file='llpgana_t35_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root'
-jdt_hist='tree/jetcmudtbc'
+jdt_hist_file1='llpgana_mc_AODSIM_GMSB_AOD_v53_V22_3th_Jets2_Hists.root'
+jdt_hist_file2='llpgana_mc_AODSIM_GJets_AOD_v53_V22_3th_Jets2_Hists.root'
+jdt_hist='tree/jetcmudtsc'
 
 gres_hist_dir='kucc/dispho_sk_kurhs_v25_cc3nm2_Run2018A_316241-316457_glo_16092021_1741/'
 gres_hist_file='mini_e5_deltaT_vs_Global_EBEB_Full_Inclusive.root'
 gres_hist='tdc_Hist'
 
 hl_jdt_t35_comp = [
-   ["jetcmudtbc","tree",jdt_hist_dir+jdt_hist_file,"Converse Jets "],
-   ["tdc_Hist","",gres_hist_dir+gres_hist_file,"Ratio Z->ee"],
+   #["jetcmudtbc","tree",jdt_hist_dir+jdt_hist_file,"Converse Jets "],
+   #["tdc_Hist","",gres_hist_dir+gres_hist_file,"Ratio Z->ee"],
+   ["jetcmudtbc","tree",jdt_hist_dir+jdt_hist_file,"#splitline{DiJet}{#splitline{JetHT}{2018A UL}}"],
+   #["tdc_Hist","",gres_hist_dir+gres_hist_file,"#splitline{Z->ee}{#splitline{EGamma}{316241-316457}}"],
+   ["jetcmudtsc","",jdt_llp_dir+jdt_hist_file1,"#splitline{DiJet}{#splitline{GMSB}{}}"],
+   #["jetcmudtsc","",jdt_llp_dir+jdt_hist_file2,"#splitline{DiJet}{#splitline{GJets}{}}"],
 ]
 
 #lhc plots 

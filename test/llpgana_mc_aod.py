@@ -48,7 +48,9 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v6.root' # adding photon information
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v7.root' # adding ootphoton information
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v8.root' #  added genparticle info for photons, changed genjet to best dr match
-outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v9.root' # modded genpart to match only photons, mom count on genpart collection
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v10.root' # modded genpart to match only photons, mom count on genpart collection
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v11.root' # combined oot & ged phtons into single collection, modded gen particle llp is coding
+outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v12.root' # modifed genpart to look for susy llp particles, included met vars in output
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -80,8 +82,8 @@ process.MessageLogger.destinations = ['cout', 'cerr']
 #process.MessageLogger.cerr.FwkReport.reportEvery = 1
 #process.MessageLogger.cerr.FwkReport.reportEvery = 10
 #process.MessageLogger.cerr.FwkReport.reportEvery = 100
-#process.MessageLogger.cerr.FwkReport.reportEvery = 1000
-process.MessageLogger.cerr.FwkReport.reportEvery = 10000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+#process.MessageLogger.cerr.FwkReport.reportEvery = 10000
 
 ## Define the input source
 aodpath_1k_450_100k = '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-1000_MFF-450_CTau-100000mm_TuneCP5_14TeV_pythia8/AODSIM/110X_mcRun3_2021_realistic_v6-v2/'
