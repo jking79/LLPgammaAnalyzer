@@ -2,6 +2,8 @@ import subprocess
 import sys
 import os
 
+# uses python3
+
 def bash( bashCommand ):
 	process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 	#process = subprocess.Popen(bashCommand.split())
@@ -22,8 +24,8 @@ mdis = '/store/user/lpcsusylep/jaking/'
 eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'LLPGamma/llpga_GMSB_AOD_v48/'
 #command = eosll+mspc+'A/'
-command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v55/'
-#command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v53/'
+command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v58/'
+#command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v57/'
 #command = eosll+mspc+'ecalTiming/'
 #command = eosll+mdis+'ecalTiming/EGamma/'
 #command = eosll+mspc+'EGamma/'

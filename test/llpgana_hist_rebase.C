@@ -1,14 +1,14 @@
-#define llpganna_hist_base_cxx
-#include "llpganna_hist_base.h"
+#define llpgana_hist_rebase_cxx
+#include "llpgana_hist_rebase.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
 
-void llpganna_hist_base::Loop()
+void llpgana_hist_rebase::Loop()
 {
 //   In a ROOT session, you can do:
-//      root> .L llpganna_hist_base.C
-//      root> llpganna_hist_base t
+//      root> .L llpgana_hist_rebase.C
+//      root> llpgana_hist_rebase t
 //      root> t.GetEntry(12); // Fill t data members with entry number 12
 //      root> t.Show();       // Show values of entry 12
 //      root> t.Show(16);     // Read and show values of entry 16

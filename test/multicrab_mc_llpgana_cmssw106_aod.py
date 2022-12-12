@@ -61,8 +61,8 @@ def docrab( dataset ):
         #inputJSON    = 'golden2016.json'
         #inputJSON    = 'golden2017.json'
         #inputJSON    = 'Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.txt'
-        inptCfgEB    = 'fullinfo_detids_EB.txt'
-        inptCfgEE    = 'fullinfo_detids_EE.txt'
+        #inptCfgEB    = 'fullinfo_detids_EB.txt'
+        #inptCfgEE    = 'fullinfo_detids_EE.txt'
 
         #--------------------------------------------------------
         # This is the base config:
@@ -86,7 +86,7 @@ def docrab( dataset ):
         #config.Data.unitsPerJob  =  5000 # MC GJet
 
         config.JobType.allowUndistributedCMSSW = True
-        config.JobType.inputFiles  = [ inptCfgEB, inptCfgEE ]
+        #config.JobType.inputFiles  = [ inptCfgEB, inptCfgEE ]
         config.Data.publication    = False
         #config.Site.storageSite    = 'T2_US_Nebraska'
         config.Site.storageSite    = 'T3_US_FNALLPC'
@@ -152,13 +152,18 @@ def docrab( dataset ):
             #trial          = "llpga_GJets_AOD_v53" # fixed ootpho rh collection ?
             #trial          = "llpga_GMSB_AOD_v53"
             #trial          = "llpga_GMSB_AOD_v54" # extend gen particle isLLp to inlude all exotics and return pdgID of exotic
-            trial          = "llpga_GMSB_AOD_v55" # consolidated ged&oot photons
+            #trial          = "llpga_GMSB_AOD_v55" # consolidated ged&oot photons
+            #trial          = "llpga_GMSB_AOD_v56" # reworked genparticles, added corrected met, opened up oot photon gen match
+            #trial          = "llpga_GMSB_AOD_v57" # add correctd photon eta/phi for oot photons on gen particle match
+            #trial          = "llpga_GJets_AOD_v57"
+            trial          = "llpga_GMSB_AOD_v58" # reduced footprint ( no jet stuff ) , changed gen stablity criteria
 
             #config.Data.outLFNDirBase  = "/store/user/jaking/LLPGamma/"+trial+"/"
             config.Data.outLFNDirBase  = "/store/group/lpcsusylep/jaking/LLPGamma/"+trial+"/"
             config.General.requestName   = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra+"_request"
             config.Data.outputDatasetTag = trial+"_"+primaryDataset+"_"+dataset+"_"+runEra
 
+#-----------------------------------------------------------------------------------------------------------------------------
 #>>>>>>>>>>>>>>>>>>>     #2018   #globalTag=106X_dataRun2_v28
             #config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v28','outputFileName=output.root']
 #>>>>>>>>>>>>>>>>>>>	    #2017   #globalTag=106X_dataRun2_v20
@@ -169,12 +174,14 @@ def docrab( dataset ):
 #>>>>>>>>>>>>>>>>>>>     #MC Run3  #globalTag=112X_mcRun3_2021_realistic_v16  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
             ##config.JobType.pyCfgParams   = ['globalTag=112X_mcRun3_2021_realistic_v16','outputFileName=output.root']
 
-#>>>>>>>>>>>>>>>>>>>     #MC GMSB 17  #globalTag=94X_mc2017_realistic_v14  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC  >>>>>>>>>>>>>
+#-----------------------------------------------------------------------------------------------------------------------------
+#>>>>>>>>>>>>>>>>>>>     #MC GMSB RunIIFall17DRPremix  #globalTag=94X_mc2017_realistic_v14  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC >
             config.JobType.pyCfgParams   = ['globalTag=94X_mc2017_realistic_v14','outputFileName=output.root']
             ##config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v28','outputFileName=output.root','hasGenInfo=True']
-#>>>>>>>>>>>>>>>>>>>     #MC RunIISummer20UL18RECO
+#>>>>>>>>>>>>>>>>>>>     #MC GJets RunIISummer20UL18RECO  !!!!! CHANGE UNITS PER JOB !!!!!!!
             #config.JobType.pyCfgParams   = ['globalTag=106X_upgrade2018_realistic_v11_L1v1','outputFileName=output.root','hasGenInfo=True']
 
+#-----------------------------------------------------------------------------------------------------------------------------
             config.Data.inputDataset     = inDO[0]
             # Submit.
             try:
@@ -406,16 +413,16 @@ def run_multi():
 
         dsGJET = [
 
-            ['/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-4cores5k_106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            #['/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            #['/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-4cores5k_106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
             ['/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
             ['/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
-            ['/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
             ['/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM']
 
 		]
 
-        runDataset = dsGMSB
-        #runDataset = dsGJET
+        runDataset = dsGMSB # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
+        #runDataset = dsGJET # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
         for dataset in runDataset :
 		    docrab( dataset )
 
