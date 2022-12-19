@@ -25,9 +25,8 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'LLPGamma/llpga_GMSB_AOD_v48/'
 #command = eosll+mspc+'A/'
 #command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v58/'
-#command = eosll+mdis+'/ecalTiming/tt_KUCCRes_126_Test/EGamma/'
+command = eosll+mdis+'/ecalTiming/tt_KUCCRes_126_Test/EGamma/'
 #command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v57/'
-command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v58/'
 #command = eosll+mspc+'ecalTiming/'
 #command = eosll+mdis+'ecalTiming/EGamma/'
 #command = eosll+mspc+'EGamma/'
@@ -90,7 +89,7 @@ for thesubdir in subdirlist1 :
 		command3 = command+thesubdir+subdir+'/'
 		subdir3 = bashout( command3 ).rstrip().splitlines()
 		for subsubdir in subdir3 : 
-			subdirlist2.append(thesubdir+subdir+'/'+subsubdir+'/0000/')
+			subdirlist2.append(thesubdir+subdir+'/'+subsubdir+'/')
 
 
 if debug : print( subdirlist2 )

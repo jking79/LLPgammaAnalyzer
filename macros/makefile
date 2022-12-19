@@ -14,6 +14,7 @@ LFLAGS = -L$(RTLOC)$(RTVRS)/lib
 
 p1=hist_maker_aodsim_test
 p2=hist_maker_aodsim
+p3=wc_ku_InterCali_aveRecHit_isoot_kucc_fliter_red
 
 all: $(p2) 
 #$(p2) $(p3) $(p6) $(p22)
@@ -25,3 +26,5 @@ $(p1): $(p1).cpp
 $(p2): $(p2).cpp
 	$(CC) -o $(p2).obj $(p2).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
 
+$(p3): $(p3).cpp
+	$(CC) -o $(p3).obj $(p3).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)

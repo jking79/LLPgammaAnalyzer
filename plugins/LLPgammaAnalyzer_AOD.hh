@@ -531,7 +531,7 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         std::vector<std::vector<uInt>> phoRhIds;
 
         uInt                nPhotons;
-		std::vector<float> phoPt, phoEnergy, phoPhi, phoEta, phoPx, phoPy, phoPz;
+		std::vector<float>  phoPt, phoEnergy, phoPhi, phoEta, phoPx, phoPy, phoPz;
         std::vector<bool>   phoIsOotPho, phoExcluded;
 
         std::vector<float>  phoSeedTOFTime, phoCMeanTime;
@@ -1106,7 +1106,8 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
 
     const auto rhMatch       (const EcalRecHit rhx, const EcalRecHit rhy){ return getRawID(rhx) == getRawID(rhy);}
     const auto dupRhFnd      (const rhGroup x, const rhGroup y){for(auto rhx : x ){for(auto rhy : y ){if(rhMatch(rhx,rhy)){ return true;}}} return false;}
-    const auto isRhGrpEx(const rhGroup x){int s=x.size();for( int i=0;i<s;i++){for( int j=i+1;j<s;j++){if(rhMatch(x[i],x[j])) return false;}} return true;}
+    const auto isRhGrpEx	 (const rhGroup x){int s=x.size();for( int i=0;i<s;i++){
+									for( int j=i+1;j<s;j++){if(rhMatch(x[i],x[j])) return false;}} return true;}
     const auto getRhGrpEnr   (const rhGroup x){float e(0.0);for( auto ix : x ){e+=ix.energy();} return e;}
     const auto getDupCnt     (const vector<rhGroup> x){ int c=0; int s=x.size();
     								for( int a=0;a<s;a++){for( int b=a+1;b<s;b++){if(dupRhFnd(x[a],x[b]))c++;}} return c;}
