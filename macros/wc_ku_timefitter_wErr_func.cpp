@@ -307,7 +307,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GHist2D = (TH2D*)fInFile->Get(f2DGHistName.c_str());
   // save to output
   fOutFile->cd();
-  Hist2D->Write(Hist2D->GetName(),TObject::kWriteDelete);
+  //Hist2D->Write(Hist2D->GetName(),TObject::kWriteDelete);
   //GHist2D->Write(GHist2D->GetName(),TObject::kWriteDelete);
 
   // Init time fits
@@ -381,7 +381,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   const auto xbins = &fXBins[0];
   //TH1F * TimeFitter::SetupHist(const TString & ytitle, const TString & yextra, const TString & label) 
   //ResultsMap["chi2ndf"]  = TimeFitter::SetupHist("#chi^{2}/NDF","chi2ndf",label);
-  auto chi2ndfName = label+"_chi2ndf";
+  auto chi2ndfName = inplotname+"_chi2ndf";
   //auto gchi2ndfName = glabel+"_chi2ndf";
   auto chi2ndfTitle = fTitle+" "+"#chi^{2}/NDF."+";"+fXTitle+";"+"#chi^{2}/NDF.";
   ResultsMap["chi2ndf"]  = new TH1F(chi2ndfName.c_str(),chi2ndfName.c_str(),fNBinsX,xbins);
@@ -389,7 +389,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["chi2ndf"]  = new TH1F(gchi2ndfName.c_str(),chi2ndfName.c_str(),fNBinsX,xbins);
   //GResultsMap["chi2ndf"]->Sumw2();
   //ResultsMap["chi2prob"] = TimeFitter::SetupHist("#chi^{2} Prob.","chi2prob",label);
-  auto chi2probName = label+"_chi2prob";
+  auto chi2probName = inplotname+"_chi2prob";
   //auto gchi2probName = glabel+"_chi2prob";
   auto chi2probTitle = fTitle+" "+"#chi^{2} Prob."+";"+fXTitle+";"+"#chi^{2} Prob.";
   ResultsMap["chi2prob"] = new TH1F(chi2probName.c_str(),chi2probTitle.c_str(),fNBinsX,xbins);
@@ -397,7 +397,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["chi2prob"] = new TH1F(gchi2probName.c_str(),chi2probTitle.c_str(),fNBinsX,xbins);
   //GResultsMap["chi2prob"]->Sumw2();
   auto mutext = "#mu("+fTimeText+") [ns]";
-  auto muName = label+"_mu";
+  auto muName = inplotname+"_mu";
   //auto gmuName = glabel+"_mu";
   auto muTitle = fTitle+" "+mutext+";"+fXTitle+";"+mutext;
   //ResultsMap["mu"]       = TimeFitter::SetupHist(mutext,"mu",label);
@@ -406,7 +406,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["mu"] = new TH1F(gmuName.c_str(),muTitle.c_str(),fNBinsX,xbins);
   //GResultsMap["mu"]->Sumw2();
   auto sigtext = "#sigma("+fTimeText+") [ns]";
-  auto sigName = label+"_sigma";
+  auto sigName = inplotname+"_sigma";
   //auto gsigName = glabel+"_sigma";
   auto sigTitle = fTitle+" "+sigtext+";"+fXTitle+";"+sigtext;
   //ResultsMap["sigma"]    = TimeFitter::SetupHist(sigtext,"sigma",label);
@@ -415,7 +415,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["sigma"] = new TH1F(gsigName.c_str(),sigTitle.c_str(),fNBinsX,xbins);
   //GResultsMap["sigma"]->Sumw2();
   auto occtext = "#occ("+fTimeText+")";
-  auto occName = label+"_occ";
+  auto occName = inplotname+"_occ";
   //auto goccName = glabel+"_occ";
   auto occTitle = fTitle+" "+occtext+";"+fXTitle+";"+occtext;
   //ResultsMap["occ"]       = TimeFitter::SetupHist(occtext,"occ",label);
@@ -424,7 +424,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["occ"] = new TH1F(goccName.c_str(),occTitle.c_str(),fNBinsX,xbins);
   //GResultsMap["occ"]->Sumw2();
   auto rmstext = "#rms("+fTimeText+")";
-  auto rmsName = label+"_rms";
+  auto rmsName = inplotname+"_rms";
   //auto grmsName = glabel+"_rms";
   auto rmsTitle = fTitle+" "+rmstext+";"+fXTitle+";"+rmstext;
   //ResultsMap["rms"]       = TimeFitter::SetupHist(occtext,"occ",label);
@@ -554,7 +554,8 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   fit->Write(fit->GetName(),TObject::kWriteDelete);
   //c1->Print( "test.png" );
   //.......................................
-  DumpFitInfo(FitInfo, fOutFileText, fXBins);
+  std::string fOutFileLogText = fOutFileText + inplotname;
+  DumpFitInfo(FitInfo, fOutFileLogText, fXBins);
 
   //.......................................
   //DeleteInfo(FitInfo);
@@ -595,7 +596,8 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
 
 }//<<>>void runTimeFitter(......
 
-//********************************  the Main function *******************************************
+/*
+//k********************************  the Main function *******************************************
 int main ( int argc, char *argv[] ){
 
         //if( argc != 7 ) { std::cout << "Insufficent arguments." << std::endl; }
@@ -616,4 +618,4 @@ int main ( int argc, char *argv[] ){
         return 1;
 
 }//<<>>int main ( int argc, char *argv[] )
-
+*/

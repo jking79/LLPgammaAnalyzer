@@ -102,7 +102,7 @@ void SetupDetIDsEE( std::map<UInt_t,DetIDStruct> &DetIDMap )
 }
 
 
-void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelist, string outfilename, int srun, int erun ){
+void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string outfilename ){
 
     const int  nAlgos = 2; // Mini, MfootCCStc
     //const int  nPhotons = 4;
@@ -205,14 +205,30 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelist, string out
          //TBranch        *b_resCCtime;   //!
          //TBranch        *b_resTOF;   //!
 
-    	 std::ifstream infile(infilelist);
-    	 std::string str;
-     
+
+    	std::ifstream infilelist(infilelistname);
+    	std::string infilestr;
+    	while (std::getline(infilelist,infilestr)){
+
+        	std::stringstream ss(infilestr);
+        	std::string infilename;
+        	std::string srunstr;
+        	std::string erunstr;
+        	ss >> infilename >> srunstr >> erunstr;
+        	std::cout << "open input file : " << infilename << std::endl;
+        	std::cout << "For Run " << srunstr << " to Run " << erunstr << std::endl;
+        	auto srun = std::stoi(srunstr);
+        	auto erun = std::stoi(erunstr);
+
+
+
+    	 std::ifstream infile(infilename);
+    	 std::string instr;
          auto fInTree = new TChain(treename.c_str());
          std::cout << "Adding files to TChain." << std::endl;
-         while (std::getline(infile,str)){
+         while (std::getline(infile,instr)){
 			const std::string eosdir("root://cmseos.fnal.gov//store/user/");
-			auto tfilename = eosdir + indir + str;
+			auto tfilename = eosdir + indir + instr;
          	//auto tfilename = indir + "/" + str;
          	std::cout << "--  adding file: " << tfilename << std::endl;
          	fInTree->Add(tfilename.c_str());
@@ -276,6 +292,8 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelist, string out
          }  //  end entry loop
 	delete fInTree;
 
+    } // while (std::getline(infilelist,infiles))
+
     //double  norm[nAlgos] = { normRtStc, normRtOOTStc };
     std::map<UInt_t,Float_t> *  icmaps[nAlgos] = {&sumXtalMiniRecTime, &sumXtalCCStcRecTime };
     std::map<UInt_t,UInt_t> *  nicmaps[nAlgos] = {&numXtalMiniRecTime, &numXtalCCStcRecTime };
@@ -338,16 +356,18 @@ int main ( int argc, char *argv[] ){
 
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
-                auto indir = "lpcsusylep/jaking/ecalTiming/tt_KUCCRes_126_Test/EGamma/"; //argv[1];
-                auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
-                auto outfilename = "tt_KUCCRes_126_Test_Cali.root"; //argv[3];
+                //auto indir = "lpcsusylep/jaking/ecalTiming/tt_KUCCRes_126_Test/EGamma/"; //argv[1];
+                auto indir = "jaking/ecalTiming/EGamma/";
+                ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
+                ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
+                //auto infilelist = "egamma_run352400-run358400_califilelist.txt";
+                //auto infilelist = "egamma_run22C_partial_126_gammares_v2a_califilelist.txt";
+                auto infilelist = "egamma_run18A_316000-316499_126_gammares_v2a_califilelist.txt";
+                //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
+                //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
+                auto outfilename = "st_RatioRes_126_v2a_run2018A_316000-316499_Cali.root"; //argv[3];
 
-				auto srun = 0;
-				//auto srun = 327239;
-				auto erun = 999999;
-				//auto erun = 356514;
-
-                wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename, srun, erun );
+                wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}
         return 1;
 }

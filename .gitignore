@@ -1,6 +1,7 @@
 macros/trplots/trash/
 macros/trplots/makedisplayplots/downloads/
 macros/trplots/downloaded/
+macros/trplots/makedisplayplots/run3/
 test/myworkingArea/
 test/oldWorkingFiles
 test/oldWorkingArea/
@@ -10,6 +11,7 @@ test/oldworkingArea/
 /test/myWorkSpace/
 *.root
 *.pyc
+*.obj
 *.log
 *.png
 *.pdf
