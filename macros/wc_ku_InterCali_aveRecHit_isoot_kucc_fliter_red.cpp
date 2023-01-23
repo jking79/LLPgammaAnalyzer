@@ -357,15 +357,17 @@ int main ( int argc, char *argv[] ){
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
                 //auto indir = "lpcsusylep/jaking/ecalTiming/tt_KUCCRes_126_Test/EGamma/"; //argv[1];
-                auto indir = "jaking/ecalTiming/EGamma/";
+                auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
                 ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
                 ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
                 //auto infilelist = "egamma_run352400-run358400_califilelist.txt";
                 //auto infilelist = "egamma_run22C_partial_126_gammares_v2a_califilelist.txt";
-                auto infilelist = "egamma_run18A_316000-316499_126_gammares_v2a_califilelist.txt";
+                //auto infilelist = "egamma_run18A_316000-316499_126_gammares_v2a_califilelist.txt";
+                auto infilelist = "egamma_run22A_352400-358400_126_gammares_v2a_califilelist.txt";
                 //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
                 //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
-                auto outfilename = "st_RatioRes_126_v2a_run2018A_316000-316499_Cali.root"; //argv[3];
+                //auto outfilename = "st_RatioRes_126_v2a_run2018A_316000-316499_Cali.root"; //argv[3];
+                auto outfilename = "tt_KUCCRes_126_v2a_run2022A_352400-358400_Cali.root"; //argv[3];
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}

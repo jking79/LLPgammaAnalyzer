@@ -847,4 +847,9 @@ hl_ul_r2_gi = [
      ["GData_sigma","",mini_ul_16_gi+gitfr,"2016"],
 ]
 
+mini_r3_18test='run3/gres_r18a_316000-316499_part/egres_Run2018A_316000-316499_126_v2a_resplots.root'
+
+hl_r3_18A_test = [
+     ["SRO_Data_Hist_sigma","",mini_r3_18test,"2018A"],
+]
 

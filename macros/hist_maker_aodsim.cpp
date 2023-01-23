@@ -253,12 +253,11 @@ void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
         auto stdv = phist->GetStdDev();
         //auto error = phist->GetMeanError();
         auto norm = phist->GetBinContent(phist->GetMaximumBin());
-        auto high = mean + 0.2*stdv;
-        //auto high = 0.2;
-        auto low = mean - 0.2*stdv;
-        //auto low = -0.2;
+		auto width = 2.0;
+        auto high = mean + width*stdv;
+        auto low = mean - width*stdv;
         //std::cout << " - Profile: m " << mean << " s " << stdv << " h " << high << " l " << low << " n " << norm << std::endl;
-        if( abs(stdv) > 0.01 && abs(norm) > 1 ){
+        if( std::abs(stdv) < 5.0 && std::abs(norm) > 0 ){
             auto tmp_form = new TFormula("tmp_formula","[0]*exp(-0.5*((x-[1])/[2])**2)");
             auto tmp_fit  = new TF1("tmp_fit",tmp_form->GetName(),low,high);
             //auto tmp_fit  = new TF1("tmp_fit","crystalball",low,high);
@@ -284,7 +283,7 @@ void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
             //std::cout << " - Profile: fm " << fmean << " fChi2 " << fProb  << " e " << error << " fNdf " << fNdf << std::endl;
 
             // set new contents
-            if( fNdf > 0 && fProb > 0.05 && error < 1.0 ){
+            if( error < 2.0 && std::abs(fmean) < 10.0 ){
                 //auto fChi2Ndf = fChi2/fNdf;
                 fithist->SetBinContent( ibinX, fProb );
                 fithist->SetBinError( ibinX, 0 );
@@ -474,30 +473,25 @@ vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> z
 
     int index(2);
     int index2(2);
-    if( (eginVal(0) >= eginVal(1)) && (eginVal(0) >= eginVal(2)) ){
+    if( (eginVal[0] >= eginVal[1]) && (eginVal[0] >= eginVal[2]) ){
         index = 0;
-        if( eginVal(1) >= eginVal(2) ) index2 = 1;
-        if( (eginVal(0) == eginVal(1)) && (eginVal(0) == eginVal(2)) ) std::cout << " -- rhGrp is Spherical" << std::endl;
-    } else if( eginVal(1) >= eginVal(2) ) {
+        if( eginVal[1] >= eginVal[2] ) index2 = 1;
+        if( (eginVal[0] == eginVal[1]) && (eginVal[0] == eginVal[2]) ); // std::cout << " -- rhGrp is Spherical" << std::endl;
+    } else if( eginVal[1] >= eginVal[2] ) {
         index = 1;
-        if( eginVal(0) >= eginVal(2) ) index2 = 0;
-        if( eginVal(1) == eginVal(2) ) std::cout << " -- rhGrp is a Flatend Sphere" << std::endl;
-    } else { if( eginVal(0) >= eginVal(1) ) index2 = 0; else index2 = 1; } //<<>>if( (eginVal(0) >= eginVal(1)) && (eginVal(0) >= eginVal(2)) )
+        if( eginVal[0] >= eginVal[2] ) index2 = 0;
+        if( eginVal[1] == eginVal[2] ) ; //std::cout << " -- rhGrp is a Flatend Sphere" << std::endl;
+    } else { if( eginVal[0] >= eginVal[1] ) index2 = 0; else index2 = 1; } //<<>>if( (eginVal[0] >= eginVal[1]) && (eginVal[0] >= eginVal[2]) )
     //std::cout << "Largest Eigin Value Found" << std::endl; 
-    
     auto index3 = 3 - index - index2;
-    //auto ev23hypo = hypo(eginVal[index2], eginVal[index3]);
-    //auto ev1Shypo = hypo(eginVal[index], ev23hypo);
-    //auto speginval = eginVal[index]/(eginVal[index]+ev23hypo);
-    auto speginval = eginVal[index]/(eginVal[index]+eginVal[index2]);
-    //auto speginval = eginVal[index]/(eginVal[index]+eginVal[index3]); 
 
-    auto ex = eginVec(index,0);
-    auto ey = eginVec(index,1);
-    auto ez = eginVec(index,2);
-    auto ev = speginval; //eginVal(index);
-    auto ev2 = eginVal(index2)/(eginVal(index2)+hypo(eginVal[index], eginVal[index3]));
-	auto ev3 = eginVal(index3)/(eginVal(index3)+hypo(eginVal[index], eginVal[index2]));
+    auto ex  = eginVec(index,0);
+    auto ey  = eginVec(index,1);
+    auto ez  = eginVec(index,2);
+    auto ev  = eginVal[index]/(eginVal[index]+eginVal[index2]); // z vs c oval
+    auto ev2 = eginVal[index2]/(eginVal[index2]+hypo(eginVal[index], eginVal[index3])); // c vs zt oval
+	auto ev3 = eginVal[index3]/(eginVal[index3]+hypo(eginVal[index], eginVal[index2])); // t vs zc oval
+    auto ev4 = eginVal[index2]/(eginVal[index3]+eginVal[index2]); // z vs c oval
     //std::cout << "Eigin Angles Found" << std::endl;
     
     results.push_back(ex);//0
@@ -506,6 +500,7 @@ vector<float> getRhGrpEigen( vector<float> xs, vector<float> ys, vector<float> z
     results.push_back(ev);//3
     results.push_back(ev2);//4
     results.push_back(ev3);//5
+    results.push_back(eginVal[index]);//6
     
     return results;
 }//<<>>vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen3D( vector<float> xs, vector<float> ys, vector<float> zs, vector<float> wts )
@@ -614,7 +609,6 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
 
     float N(3.64);
     float C(0.3000);
-    //float twoPI(2*PI);
 
     vector<float> egwts;
     vector<float> etas;
@@ -625,13 +619,12 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
     vector<float> ebtimes;
     vector<float> angles;
     vector<float> zcAngles;
-    //vector<float> energies;
     vector<float> reswts;
 	vector<float> tvar;
-    //float sumenergy = 0;
     vector<float> emepReturn(8,-9);
 
 	// --------- prepare inputs for eigan calcs --------------------------
+	//std::cout << " getRhGrpEigen_sph 1, ";
 
     auto nRecHits = rechitids.size();
 	if( nRecHits < 5 ) return emepReturn;
@@ -662,6 +655,7 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
         }//<<>>if( idinfo.ecal == ECAL::EB )
     }//<<>>for( uInt it(0); it < rechits.size(); it++ )
 
+    //std::cout << "2, ";
     auto meta = mean(etas,reswts);
     auto mphi = meanIPhi(phis,reswts);
     auto mtime = mean(ebtimes,reswts);
@@ -679,17 +673,33 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
     vector<float> lzs;
     vector<float> lcs;
     vector<float> lts;
+    vector<float> ltds;
     vector<float> nolts;
 
     //std::cout << "In getRhGrpEigen_sph w/ meta " << meta << " : mphi " << mphi << " : mt " << mtime << std::endl;
 
+	float minDr(100.0);
+	float vslz(0.0);
+	float vslc(0.0);
+    float vs3lz(0.0);
+    float vs3lc(0.0);
+    float vs3lt(0.0);
     for( uInt it(0); it < ebtimes.size(); it++ ){
 
+        float ltim = ebtimes[it]-mtime;
+        lts.push_back(ltim);
+		auto ltd = ltim*SOL;
+        ltds.push_back(ltd);
+		//auto ltdreswt = ltd*reswts[it];
+		auto lt2reswt = ltim*ltim*reswts[it];
+        egwts.push_back(lt2reswt);
+        nolts.push_back(0.0);
+
+		// historical - no  longer used
         float leta = etas[it]-meta;
 		letas.push_back(leta);
         float lphi = dltIPhi(phis[it],mphi);
         lphis.push_back(lphi);
-        if( leta < 1 && lphi < 1 ) continue;
         float angle = getAngle( leta, lphi );
         angles.push_back(angle);
 
@@ -701,159 +711,131 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
         float zcAngle = std::atan2(lc,lz);
 		zcAngles.push_back(zcAngle);
 
-        float ltim = ebtimes[it]-mtime;
-        lts.push_back(ltim);
-        nolts.push_back(0.0);
-        egwts.push_back(ltim*ltim*reswts[it]);
+		auto dr = hypo(lz,lc);
+		auto drt = hypo(ltd,dr);
+		if( dr < minDr ) minDr = dr;
+
+		auto sqrtlt2reswt = std::sqrt(lt2reswt);
+		auto sqrtreswt = std::sqrt(reswts[it]);
+        vs3lz += lz*sqrtlt2reswt/drt;
+        vs3lc += lc*sqrtlt2reswt/drt;
+        vs3lt += ltd*sqrtreswt/drt;
+        vslz += lz*sqrtlt2reswt/dr;
+        vslc += lc*sqrtlt2reswt/dr;
+		//if( (std::abs(lz) < minDl) && (std::abs(lc) < minDl) ) reswts[it] = 0;
+
+
 
     }//<<>>for( uInt it(0); it < ebtimes.size(); it++ )
 
 	// --------------  get eigan values and vectors ---------------------------------------
+    //std::cout << "3, ";
 
-    //auto epEigens =  getRhGrpEigen( angles, egwts );//0 x, 1 y, 2 values
     auto eigens =  getRhGrpEigen( zcAngles, egwts );//0 x, 1 y, 2 values
-    auto eigens3 =  getRhGrpEigen( lzs, lcs, lts, reswts );//0 x, 1 y, 2 values
+	//auto d2dot = eigens[0]*vslz + eigens[1]*vslc;
+	//if( d2dot < 0 ){ eigens[0] *= -1; eigens[1] *= -1; }
+    auto eigens3 =  getRhGrpEigen( lzs, lcs, ltds, reswts );//0 x, 1 y, 2 values
+    //auto d3dot = eigens3[0]*vs3lz + eigens3[1]*vs3lc + eigens3[2]*vs3lt;
+    //if( d3dot < 0 ){ eigens3[0] *= -1; eigens3[1] *= -1; eigens3[2] *= -1; }
     auto geoeigens =  getRhGrpEigen( zcAngles, reswts );//0 x, 1 y, 2 values
-    auto geoeigens3 =  getRhGrpEigen( lzs, lcs, nolts, reswts );//0 x, 1 y, 2 values
+    //auto geoddot = geoeigens[0]*vslz + geoeigens[1]*vslc;
+    //if( geoddot < 0 ){ geoeigens[0] *= -1; geoeigens[1] *= -1; }
+    ////auto geoeigens3 =  getRhGrpEigen( lzs, lcs, nolts, reswts );//0 x, 1 y, 2 values
 
 	// --------------  get eigan vector angles ------------------------------------------ 
+    //std::cout << "4, ";
 
-    auto rotangle = getAngle(eigens[0], eigens[1]);
-    //float eignsin = std::sin(rotangle);
+    float rotangle = getAngle(eigens[0], eigens[1]);
     float e2sin = eigens[1];
-    //float eigncos = std::cos(rotangle);
     float e2cos = eigens[0];
-	float rot3angle = getAngle(eigens3[0], eigens3[1]);
-
-    //auto orgrota = rotangle;
-    //auto orgsin = eignsin;
-    //auto orgcos = eigncos;
-
-    // ----------------------
-    // aligning slope along eigan vector to point same direction
-    // ----------------------
-    float ltsum(0.0);
-    float gltsum(0.0);
-    int slopeCorr(1);
-	float egflip(1);
-    float gegflip(1);
-    for( uInt it(0); it < egwts.size(); it++ ){
-
-        //float leta = etas[it] - meta;
-        //float lphi = dltIPhi(phis[it],mphi);
-        //float lz = zs[it]-mz;
-        //float lc = mr*(std::atan2(ys[it],xs[it])-ma);
-        //float ltime = ebtimes[it]-mtime;
-        auto epxcor = e2cos*(letas[it]) - e2sin*(lphis[it]);
-        auto xcor = e2cos*(lzs[it]) - e2sin*(lcs[it]);
-        //if( xcor > 0 ) ltsum += ltime*reswts[it];
-        ltsum += lts[it]*(reswts[it])/xcor;
-        //ltsum += lts[it]/xcor;
-        auto gxcor = (geoeigens[0])*(lzs[it]) - (geoeigens[1])*(lcs[it]);
-        gltsum += lts[it]*(reswts[it])/gxcor;
-
-    }//<<>>for( uInt it(0); it < egwts.size(); it++ )
-
-    //if( ltsum/totRes < 0 ){
-    if( ltsum < 0 ){
-
-		egflip = -1;
-        //rotangle = getAngle(-1*eigens[0], -1*eigens[1]);
-        //eignsin = std::sin(rotangle);
-        //eignsin = -1*eigens[1];
-        //eigncos = std::cos(rotangle);
-        //eigncos = -1*eigens[0];
-        //slopeCorr = -1;
-
-    }//if( ebp && ebn && ltsum < 0 )
-	if( gltsum < 0 ) gegflip = -1;
+    float rot3angle = getAngle(eigens3[0], eigens3[1]);
+    float e3sin = std::sin(rot3angle);
+    float e3cos = std::cos(rot3angle);
+    float rotgangle = getAngle(geoeigens[0], geoeigens[1]);
+    float egsin = std::sin(rotgangle);
+    float egcos = std::cos(rotgangle);
 
     // -----------------------------------------
     // finding nemo ( slope )
     // -----------------------------------------
+    //std::cout << "6, ";
 
     auto nWts = reswts.size();
 
     vector<float> xs1;
-    vector<float> xs2;
+    vector<float> xs3;
     vector<float> xsgeo;
     vector<float> slvars1;
-    vector<float> slvars2;
+    vector<float> slvars3;
     vector<float> slvarsgeo;
     float xsum1(0.0);
-    float xsum2(0.0);
+    float xsum3(0.0);
     float xsumgeo(0.0);
-    //float adj(2.2);
-	float adj(1.0);
 
     auto dsxcor = e2cos*(2.2) - e2sin*(2.2);
-    //auto dxcor = orgcos*(2.2) - orgsin*(2.2);
+    auto d3xcor = e3cos*(2.2) - e3sin*(2.2);
     auto dgxcor = (geoeigens[0])*(2.2) - (geoeigens[1])*(2.2);
-    auto sxcorvar = sq2(dsxcor)/12;
-    //auto xcorvar = sq2(dxcor)/12;
-    auto gxcorvar = sq2(dgxcor)/12;
+    auto xscorvar = sq2(dsxcor)/12;
+    auto x3corvar = sq2(d3xcor)/12;
+    auto xgcorvar = sq2(dgxcor)/12;
 
 	// for pairs method
     vector<float> plzs;
     vector<float> plcs;
-    vector<float> plws;
+    //vector<float> plws;
+    vector<float> pl3zs;
+    vector<float> pl3cs;
     vector<float> plgzs;
+    vector<float> plgcs;
 
+    //std::cout << "7, ";
+    for( uInt it(0); it < lzs.size(); it++ ){
 
-    for( uInt it(0); it < nWts; it++ ){
+        auto xscor = e2cos*lzs[it] - e2sin*lcs[it];
+        auto yscor = e2sin*lzs[it] + e2cos*lcs[it];
+        auto x3cor = e3cos*lzs[it] - e3sin*lcs[it];
+        auto y3cor = e3sin*lzs[it] + e3cos*lcs[it];
+        auto xgcor = egcos*lzs[it] - egsin*lcs[it];
+        auto ygcor = egsin*lzs[it] + egcos*lcs[it];
 
-        auto epsxcor = e2cos*(letas[it]*adj) - e2sin*(lphis[it]*adj);
-        auto epsycor = e2sin*(letas[it]*adj) + e2cos*(lphis[it]*adj);
-        //auto epxcor = (orgcos*(letas[it]*adj) - orgsin*(lphis[it]*adj));
-        //auto epycor = orgsin*(letas[it]*adj) + orgcos*(lphis[it]*adj);
+		// for pairs method && histogram maps
+		plzs.push_back(xscor);
+		plcs.push_back(yscor);
+        pl3zs.push_back(x3cor);
+        pl3cs.push_back(y3cor);
+        plgzs.push_back(xgcor);
+        plgcs.push_back(ygcor);
 
-        auto sxcor = e2cos*(lzs[it]*adj) - e2sin*(lcs[it]*adj);
-        auto sycor = e2sin*(lzs[it]*adj) + e2cos*(lcs[it]*adj);
-        //auto xcor = (orgcos*(lzs[it]*adj) - orgsin*(lcs[it]*adj));
-        //auto ycor = orgsin*(lzs[it]*adj) + orgcos*(lcs[it]*adj);
-        auto gxcor = ((geoeigens[0])*(lzs[it]*adj) - (geoeigens[1])*(lcs[it]*adj));
-        auto gycor = (geoeigens[1])*(lzs[it]*adj) + (geoeigens[0])*(lcs[it]*adj);
+        //if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
+        //                        << " : xsor " << xscor << " : ycor " << yscor << " : dt " << egwts[it] << std::endl;
+        //if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
+        //                        << " : sxcor " << x3cor << " : sycor " << y3cor << " : dt " << egwts[it] << std::endl;
 
-		plzs.push_back(sxcor);
-		plcs.push_back(sycor);
-        plgzs.push_back(gxcor);
-		//plws.push_back(
-		//plts.push_back(ebtimes[it1]);
-
-        if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
-                                << " : xcor " << xcor << " : ycor " << ycor << " : dt " << egwts[it] << std::endl;
-        if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
-                                << " : sxcor " << sxcor << " : sycor " << sycor << " : dt " << egwts[it] << std::endl;
-
-        auto fill = lts[it]*reswts[it];
-        hist2d73->Fill(sxcor,sycor,fill);
-        hist2d74->Fill(sxcor,sycor,reswts[it]);
-        hist2d75->Fill(lzs[it],lcs[it],fill);
-        hist2d76->Fill(lzs[it],lcs[it],reswts[it]);
-        hist2d86->Fill(sycor,lts[it],reswts[it]);
-        hist2d87->Fill(sxcor,lts[it],reswts[it]);
-
-        auto sl1 = (lts[it])/(sxcor);//*slopeCorr;
-        //auto sl2 = (lts[it])/(xcor);//*slopeCorr;
-        auto slg = (lts[it])/(gxcor);//*slopeCorr;
-        xs1.push_back(egflip*sl1);
-        xs2.push_back(sl1);
+		// calc slope info
+        auto sl1 = (lts[it])/(xscor);//*slopeCorr;
+        auto sl3 = (lts[it])/(x3cor);//*slopeCorr;
+        auto slg = (lts[it])/(xgcor);//*slopeCorr;
+        xs1.push_back(sl1);
+        xs3.push_back(sl3);
         xsgeo.push_back(slg);
-
-		slvars1.push_back(1/((tvar[it]+mtvar+sq2(sl1)*sxcorvar*(1.0+(1.0/nWts)))/sq2(sxcor)));
-        //slvars2.push_back(1/((tvar[it]+mtvar+sq2(sl2)*sxcorvar*(1.0+(1.0/nWts)))/sq2(sxcor)));
-        slvarsgeo.push_back(1/((tvar[it]+mtvar+sq2(slg)*gxcorvar*(1.0+(1.0/nWts)))/sq2(gxcor)));
-		xsum1 += egflip*sl1*slvars1[it];
-        xsum2 += sl1*slvars1[it];
+		slvars1.push_back(1/((tvar[it]+mtvar+sq2(sl1)*xscorvar*(1.0+(1.0/nWts)))/sq2(xscor)));
+        slvars3.push_back(1/((tvar[it]+mtvar+sq2(sl3)*x3corvar*(1.0+(1.0/nWts)))/sq2(x3cor)));
+        slvarsgeo.push_back(1/((tvar[it]+mtvar+sq2(slg)*xgcorvar*(1.0+(1.0/nWts)))/sq2(xgcor)));
+		xsum1 += sl1*slvars1[it];
+        xsum3 += sl3*slvars3[it];
         xsumgeo += slg*slvarsgeo[it];
 
     }//<<>>for( uInt it(0); it < wts.size(); it++ )
 
 //===================================================================
+    //std::cout << "8, ";
 
-	vector<float> pzs1;
-    vector<float> plrs;
-    float plsum(0.0);
+	vector<float> pszs1;
+    vector<float> plsrs;
+    float plssum(0.0);
+    vector<float> p3zs1;
+    vector<float> pl3rs;
+    float pl3sum(0.0);
     vector<float> pgzs1;
     vector<float> plgrs;
     float plgsum(0.0);
@@ -865,128 +847,155 @@ vector<float> makehists::getRhGrpEigen_sph( vector<float> times, vector<uInt> re
     for( uInt it1(0); it1 < plzs.size(); it1++ ){
         for( uInt it2(it1); it2 < plzs.size(); it2++ ){
 
+			auto minDz = 1.1;
             auto plz = plzs[it1]-plzs[it2];
-			if( plz < 2.2 ) continue;
+			if( std::abs(plz) < minDz ) plz = 999;
+            auto pl3z = pl3zs[it1]-pl3zs[it2];
+            if( std::abs(pl3z) < minDz ) pl3z = 999;
+            auto plgz = plgzs[it1]-plgzs[it2];
+            if( std::abs(plgz) < minDz ) plgz = 999;
         	//auto plc = plcs[it1]-plcs[it2]; 
             auto pltime = ebtimes[it1]-ebtimes[it2];
  
-			auto psl = pltime/plz;
-			pzs1.push_back(psl);
-			
-			auto plr1 = 1/((tvar[it1]+mtvar+sq2(psl)*sxcorvar*(1.0+(1.0/nWts)))/sq2(plzs[it1]));	
-            auto plr2 = 1/((tvar[it2]+mtvar+sq2(psl)*sxcorvar*(1.0+(1.0/nWts)))/sq2(plzs[it2]));
-			auto gaplr = std::sqrt(plr1*plr2);
+			if( plz != 999 ){
+            	auto psl = pltime/plz;
+            	pszs1.push_back(psl);
+				auto gaplr = std::sqrt(slvars1[it1]*slvars1[it2]);
+				plsrs.push_back( gaplr );
+				plssum += psl*gaplr;
+			}//<<>>if( plz != 999 )
 
-			plrs.push_back( gaplr );
-			plsum += psl*gaplr;
+            if( pl3z != 999 ){
+            	auto p3sl = pltime/pl3z;
+            	p3zs1.push_back(p3sl);
+            	auto gaplr = std::sqrt(slvars3[it1]*slvars3[it2]);
+            	pl3rs.push_back( gaplr );
+            	pl3sum += p3sl*gaplr;
+            }//<<>>if( plz != 999 )
 
-           //egwts.push_back(ltim*ltim*reswts[it]);i
-
-        }//<<>>for( uInt it2(it1); it2 < ebtimes.size(); it2++ )
-    }//<<>>for( uInt it1(0); it1 < ebtimes.size(); it1++ )
-
-    //============================================================
-    // piars geo method set up
-    //============================================================
-
-    for( uInt it1(0); it1 < plgzs.size(); it1++ ){
-        for( uInt it2(it1); it2 < plgzs.size(); it2++ ){
-
-            auto plz = plgzs[it1]-plgzs[it2];
-            if( plz < 2.2 ) continue;
-            //auto plc = plcs[it1]-plcs[it2]; 
-            auto pltime = ebtimes[it1]-ebtimes[it2];
-
-            auto psl = pltime/plz;
-            pgzs1.push_back(psl);
-
-            auto plr1 = 1/((tvar[it1]+mtvar+sq2(psl)*sxcorvar*(1.0+(1.0/nWts)))/sq2(plgzs[it1]));
-            auto plr2 = 1/((tvar[it2]+mtvar+sq2(psl)*sxcorvar*(1.0+(1.0/nWts)))/sq2(plgzs[it2]));
-            auto gaplr = std::sqrt(plr1*plr2);
-
-            plgrs.push_back( gaplr );
-            plgsum += psl*gaplr;
-
-           //egwts.push_back(ltim*ltim*reswts[it]);i
+            if( plgz != 999 ){
+            	auto pgsl = pltime/plgz;
+            	pgzs1.push_back(pgsl);
+            	auto gaplr = std::sqrt(slvarsgeo[it1]*slvarsgeo[it2]);
+            	plgrs.push_back( gaplr );
+            	plgsum += pgsl*gaplr;
+            }//<<>>if( plz != 999 )
 
         }//<<>>for( uInt it2(it1); it2 < ebtimes.size(); it2++ )
     }//<<>>for( uInt it1(0); it1 < ebtimes.size(); it1++ )
 
 //--------------------------------------------------------------------
+    //std::cout << "9, ";
+
+
+    //find eigan vecgtor aligment
+    float eigensOld2d0(eigens[0]), eigensOld2d1(eigens[1]);
+    if( xsum1 < 0 ){ eigensOld2d0 *= -1; eigensOld2d1 *= -1; xsum1 = std::abs(xsum1);}
+    if( plssum < 0 ){ eigens[0] *= -1; eigens[1] *= -1; plssum = std::abs(plssum);}
+    if( pl3sum < 0 ){ eigens3[0] *= -1; eigens3[1] *= -1; eigens3[2] *= -1; pl3sum = std::abs(pl3sum);}
+    if( plgsum < 0 ){ geoeigens[0] *= -1; geoeigens[1] *= -1; plgsum = std::abs(plgsum);}
+
 
 	// -----------   compute final outputs --------------------------------
 
-    auto ebside = (mz > 0)?1:-1;
-    auto taflip = ((eigens[0] > 0)?1:-1)*ebside;
+    auto ebside = ( mz > 0 ) ? 1 : -1;
+    auto taflip = ( ((std::abs(mz) < std::abs(vtxZ)) && (mz*vtxZ > 0) ) ? -1 : 1 )*ebside;
 
+	//2d egians slope
     auto nXSum = xs1.size();
 	auto totSloRes1 = accum(slvars1);
-    //auto slope1 = xsum1/totRes;
     auto slope1 = xsum1/totSloRes1;
     auto slope1err = std::sqrt(1/totSloRes1);
-    //auto varsl = var(xs1,slope1,reswts,totRes);
     auto varsl = var(xs1,slope1,slvars1,totSloRes1);
     auto chi1 = chisq(xs1,slope1,varsl);
 	auto slchi2v1 = chisqv(xs1,slope1,slvars1,varsl);//?????????????????
-    //chisqr probs
     auto chi2pf1 = 1 - TMath::Prob(chi1, nWts);
 
-    //auto slope2 = xsum2/totRes;
-    auto totSloRes2 = accum(slvars2);
-    auto slope2 = taflip*xsum2/totSloRes2;
-    auto slope2err = std::sqrt(1/totSloRes2);
-    //auto vars2 = var(xs2,slope2,reswts,totRes);
-    auto vars2 = var(xs2,slope2,slvars2,totSloRes2);
-    auto chi2 = chisq(xs2,slope2,vars2);
-    auto slchi2v2 = chisqv(xs2,slope2,slvars2,vars2);//?????????????????
-	//chisqr probs
-    auto chi2pf2 = 1 - TMath::Prob(chi2, nWts);
+	// 3d eigan slope
+    auto totSloRes3 = accum(pl3rs);
+    auto slope3 = pl3sum/totSloRes3;
+    auto slope3err = std::sqrt(1/totSloRes3);
 
-	//geo slope
+	//geo eigan slope
     auto totSloResGeo = accum(plgrs);
     auto slopeg = plgsum/totSloResGeo;
     auto slopegerr = std::sqrt(1/totSloResGeo);
 
 	//pairs slope
-    auto totSloResPrs = accum(plrs);
-    auto slopeprs = plsum/totSloResPrs;
+    auto totSloResPrs = accum(plsrs);
+    auto slopeprs = plssum/totSloResPrs;
     auto slopeprserr = std::sqrt(1/totSloResPrs);
 
-	// eigan3
-	auto angle3d = getAngle(eigens3[0],eigens3[1]);
-	//auto slopeAngle3d = getAngle(eigens3[2],hypo(eigens3[0],eigens3[1]));
-    auto slope3d = eigens3[2]/hypo(eigens3[0],eigens3[1]);
+    // eigan3d angle slope
+    auto angle3d = getAngle(eigens3[0],eigens3[1]);
+    auto hypo3d02 = hypo(eigens3[0],eigens3[2]);
+    auto hypo3d01 = hypo(eigens3[0],eigens3[1]);
+    auto hypo3d12 = hypo(eigens3[1],eigens3[2]);
+    auto slope3d = 100*(eigens3[2]/hypo3d01)/SOL;
 
+	// Fill Histograms
+	for( uInt it(0); it < lzs.size(); it++ ){
+
+        //plzs.push_back(xscor);
+        //plcs.push_back(yscor);
+        //pl3zs.push_back(x3cor);
+        //pl3cs.push_back(y3cor);
+        //plgzs.push_back(xgcor);
+        //plgcs.push_back(ygcor);
+        if( reswts[it] == 0 ) continue;
+		auto sqrtwt = std::sqrt(reswts[it]);
+		auto wichsum = plssum;
+        //auto wichsum = xsum1;
+        auto xcor = ( wichsum < 0 ) ? -1*plzs[it] : plzs[it];
+        auto ycor = ( wichsum < 0 ) ? -1*plcs[it] : plcs[it];
+        auto fill = lts[it]*sqrtwt;
+        hist2d73->Fill(xcor,ycor,fill);
+        hist2d74->Fill(xcor,ycor,sqrtwt);
+        hist2d75->Fill(lzs[it],lcs[it],fill);
+        hist2d76->Fill(lzs[it],lcs[it],sqrtwt);
+        hist2d86->Fill(ycor,lts[it],sqrtwt);
+        hist2d87->Fill(xcor,lts[it],sqrtwt);
+
+	}//<<>>for( uInt it(0); it < lzs.size(); it++ )
+
+	// Fill results vector
+    // std::cout << "10, ";
 	// eigens 0 = vector x, 1 = vector y, 2 = vector mag
     eigens.push_back(slope1);//3  aligned slope
     eigens.push_back(chi2pf1);//4 aligned slope chi sqr prob
-    eigens.push_back(slope2);//5 unaligned slope ( uslope )
-    eigens.push_back(chi2pf2);//6 uslope chi sqr prob
+    eigens.push_back(slope3);//5 3d pairs slope
+    eigens.push_back(0);//6 
     eigens.push_back(rotangle);//7 aligned rotation angle
     eigens.push_back(nXSum);//8 # of entries ( rechits )
-    eigens.push_back(orgrota);//9 unaligned rotation angle
+    eigens.push_back(rot3angle);//9 3d rotation angle
     eigens.push_back(std::sqrt(varsl));//10 stdev aligned slope
     eigens.push_back(slope1err);//11 err aligned slope
-    eigens.push_back(std::sqrt(vars2));//12 stdev unaligned slope
-    eigens.push_back(slope2err);//13 errr unaligned slope
+    eigens.push_back(0);//12 
+    eigens.push_back(slope3err);//13 errr unaligned slope
     eigens.push_back(slchi2v1);//14 chisqr like gof aligned slope
-    eigens.push_back(slchi2v2);//15 chisqr like gof unaligned slope
+    eigens.push_back(minDr);//15 
     eigens.push_back(geoeigens[0]);//16 geoeigan x vec
     eigens.push_back(geoeigens[1]);//17 geoeigan y vec
     eigens.push_back(geoeigens[2]);//18 geoeigan mag vec
     eigens.push_back(ebside);//19 EB side
     eigens.push_back(taflip);//20 towards(+)/away(-) slope sign flip
-    eigens.push_back(egflip);//21 eigan vector slope aligment flip
+    eigens.push_back(0);//21
     eigens.push_back(slopeg);//22 geoeigan slope
     eigens.push_back(slopegerr);//23 geoeigan slope error
     eigens.push_back(slopeprs);//24 pairs slope method
     eigens.push_back(slopeprserr);//25 pairs slope method error
-    eigens.push_back(gegflip);//26 geo eigan vector slope aligment flip
+    eigens.push_back(0);//26
     eigens.push_back(slope3d);//27 slope from 3d major eiganvector in "time" deminsion
     eigens.push_back(eigens3[5]);//28 "scaled magnitude" of 3d eiganvalue3
     eigens.push_back(angle3d);//29 rotation angle for eigan 3d
+    eigens.push_back(eigens3[0]);//30 ev x	"z"
+    eigens.push_back(eigens3[1]);//31 ev y	"c"
+    eigens.push_back(eigens3[2]);//32 ev z  "time"
+    eigens.push_back(eigens3[6]);//33 3dEV
+    eigens.push_back(eigens3[5]);//34 3d Time EV
 	//std::cout << "Slope egin : " << slope1 << " " << chi2pf1 << " " << rotangle << " " << std::sqrt(varsl) << " " << slope1err << std::endl;
 
+    //std::cout << " Done" << std::endl;;
     return eigens;
 }//>>>>vector<float> LLPgammaAnalyzer_AOD::getRhGrpEigen_sph( vector<float> times, rhGroup rechits ){
 
@@ -1009,13 +1018,13 @@ void makehists::llpgana_hist_maker( std::string indir, std::string infilelist, s
     std::string str;
 	int cnt = 1;
     while (std::getline(infile,str)){
-		std::cout << "--  for Fine #" << cnt << " moduls " << cnt%pct << " ";
+		//std::cout << "--  for Fine #" << cnt << " moduls " << cnt%pct << " ";
 		if( cnt%pct == 0 ){ 
-        auto tfilename = eosdir + indir + str;
-        std::cout << "--  adding file: " << tfilename << std::endl;
-        fInTree->Add(tfilename.c_str());
+        	auto tfilename = eosdir + indir + str;
+        	//std::cout << "--  adding file: " << tfilename << std::endl;
+        	fInTree->Add(tfilename.c_str());
 		}//<<>>if( cnt%4 == 0 ){
-		else std::cout << " do not add file" << std::endl;
+		//else std::cout << " do not add file" << std::endl;
 		cnt++;
     }//<<>>while (std::getline(infile,str))
 
@@ -1187,6 +1196,7 @@ void makehists::eventLoop( Long64_t entry ){
 		auto isClR9r46 = phoClstrR9 > 0.4 && phoClstrR9 < 0.6;
         auto isClR9r68 = phoClstrR9 > 0.6 && phoClstrR9 < 0.8;
         auto isClR9r26 = phoClstrR9 > 0.2 && phoClstrR9 < 0.6;
+        auto isClR9lt0p7 = phoClstrR9 < 0.7;
 
         auto goodRhCnt = nrh > 14;
 
@@ -1203,6 +1213,7 @@ void makehists::eventLoop( Long64_t entry ){
         //auto usePho = isLoose && isEB && isTightEB && isClR9r68;
 
         auto usePho = isLoose && isEB && isTightEB && isCmb;
+        //auto usePho = isLoose && isEB && isTightEB && isCmb && isClR9lt0p7;
         //auto usePho = isLoose && isEB && isTightEB && not isCmb;
 		//auto usePho = isLoose && isEB && isTightEB && isCmb && isLLP;
 		//auto usePho = isLoose && isEB && isTightEB && isCmb && isOOT;
@@ -1308,12 +1319,10 @@ void makehists::eventLoop( Long64_t entry ){
 			auto tofTimes = getLeadTofRhTime( (*phoRhIds)[it], vtxX, vtxY, vtxZ );
 			auto phoEigens2D = getRhGrpEigen_sph( tofTimes, (*phoRhIds)[it], hist2d[206], hist2d[207], hist2d[208], hist2d[209], hist2d[214],  hist2d[215] );
 
-            auto eig1way = phoEigens2D[21];
-            auto geig1way = phoEigens2D[26];
             auto eigtaf = phoEigens2D[20];
-			auto rotAngle = getAngle( eig1way*phoEigens2D[0], eig1way*phoEigens2D[1] );
-			auto sphanlge = getAngle( phoEigens2D[0], phoEigens2D[1] );
-			auto geoRotAngle = getAngle( geig1way*phoEigens2D[16], geig1way*phoEigens2D[17] );
+			auto rotAngle = getAngle( phoEigens2D[0], phoEigens2D[1] );
+			auto rot3DAnlge = phoEigens2D[9];// : (((phoEigens2D[9] + PI) < 2*PI) ? phoEigens2D[9] + PI : phoEigens2D[9] - PI);
+			auto geoRotAngle = getAngle( phoEigens2D[16], phoEigens2D[17] );
 
             auto notAnglePeak1 = rotAngle > 0.2 && geoRotAngle > 0.2;
             auto notAnglePeak2 = (rotAngle < 1.4 || rotAngle > 1.8) && (geoRotAngle < 1.4 || geoRotAngle > 1.8);
@@ -1322,38 +1331,59 @@ void makehists::eventLoop( Long64_t entry ){
             auto notAnglePeak5 = rotAngle < 6.1 && geoRotAngle < 6.1;
 			auto notAnglePeak = notAnglePeak1 && notAnglePeak2 && notAnglePeak3 && notAnglePeak4 && notAnglePeak5;
 
-			//auto slope = phoEigens2D[24];
-            auto slope = phoEigens2D[27];
-			auto goodEigan = slope != -9;
+			auto evalue2d = phoEigens2D[2];
+            auto evaluegeo = phoEigens2D[18];
+            auto geoslope = phoEigens2D[22];
+			auto slope = phoEigens2D[3];// 24 -> pairs 2d slope, 3 -> old slope, 5 -> pairs 3d slope
+            //auto slope = phoEigens2D[27];
+			auto goodEigan = true; //slope != -9;
             //gevents++;
             auto useEigan = goodEigan;
 			//auto useEigan = goodEigan && notAnglePeak;
 
 	        if( useEigan ){
 
+				hist1d[136]->Fill( phoEigens2D[0] );
+                hist1d[137]->Fill( phoEigens2D[1] );
+                hist1d[138]->Fill( phoEigens2D[16] );
+                hist1d[139]->Fill( phoEigens2D[17] );
+                hist1d[140]->Fill( phoEigens2D[15] );
+
+                hist1d[141]->Fill( phoEigens2D[30] );
+                hist1d[142]->Fill( phoEigens2D[31] );
+                hist1d[143]->Fill( phoEigens2D[32] );
+                hist1d[144]->Fill( phoEigens2D[33] );
+                hist1d[145]->Fill( phoEigens2D[34] );
+
+				hist2d[222]->Fill( phoClstrR9, phoEigens2D[15] );
+
                 if( DEBUG ) std::cout << " -- start eigan hists fill p0:" << std::endl;
-                hist1d[127]->Fill( sphanlge );//eliptical angle  Eigan Rotation Angle
-                hist1d[106]->Fill( rotAngle );//eliptical angle  Eta Phi Angle 2D : algined
-            	hist2d[210]->Fill( eig1way*phoEigens2D[0], eig1way*phoEigens2D[1] );
-            	hist1d[113]->Fill( phoEigens2D[2] ); 
+                hist1d[127]->Fill( rotAngle );//eliptical angle  Eigan Rotation Angle
+                hist1d[106]->Fill( rot3DAnlge );//eliptical angle  Eta Phi Angle 2D : algined
+                hist2d[203]->Fill( rotAngle, rot3DAnlge );
+            	hist2d[210]->Fill( phoEigens2D[0], phoEigens2D[1] );
+                hist2d[211]->Fill( phoEigens2D[30], phoEigens2D[31] );
+                hist2d[212]->Fill( phoEigens2D[30], phoEigens2D[32] );
+                hist2d[213]->Fill( phoEigens2D[31], phoEigens2D[32] );
+            	hist1d[113]->Fill( evalue2d ); 
                 if( DEBUG ) std::cout << " -- start eigan hists fill p0a:" << std::endl;
-                //hist1d[129]->Fill( phoEigens2D[18] );
-				hist1d[114]->Fill(geig1way*slope); // aligned slope
+                //hist1d[129]->Fill( evaluegeo );
+				hist1d[114]->Fill(slope); // rot way slope aligned
                 hist1d[117]->Fill(eigtaf*slope); // TA slope
-				hist2d[200]->Fill((*phoEta)[it],geig1way*slope); 
-                hist2d[202]->Fill((*phoEta)[it],eigtaf*slope);
-				hist2d[201]->Fill((*phoEta)[it],phoEigens2D[2]);
+				hist2d[200]->Fill((*phoEta)[it],eigtaf*slope); 
+                hist2d[202]->Fill((*phoEta)[it],eigtaf*phoEigens2D[27]);//3d vector slope
+				hist2d[201]->Fill((*phoEta)[it],evalue2d);
                 if( DEBUG ) std::cout << " -- start eigan hists fill p0b:" << std::endl;
 				hist1d[123]->Fill(phoEigens2D[10]);
 				hist1d[124]->Fill(phoEigens2D[25]);
-				hist1d[125]->Fill(phoEigens2D[12]);
-				hist1d[126]->Fill(phoEigens2D[25]);
+				//hist1d[125]->Fill(phoEigens2D[12]);
+				//hist1d[126]->Fill(phoEigens2D[25]);
                 if( DEBUG ) std::cout << " -- start eigan hists fill p0c:" << std::endl;
-				hist2d[219]->Fill( phoEigens2D[10], phoEigens2D[25] );
-                hist2d[220]->Fill( eigtaf*slope, phoEigens2D[10] );
-                hist2d[221]->Fill( eigtaf*slope, phoEigens2D[25] );
+				//hist2d[219]->Fill( phoEigens2D[10], phoEigens2D[25] );
+                //hist2d[220]->Fill( eigtaf*phoEigens2D[24], phoEigens2D[10] );
+                //hist2d[221]->Fill( eigtaf*phoEigens2D[24], phoEigens2D[25] );
                 if( DEBUG ) std::cout << " -- start eigan hists fill p0d:" << std::endl;
-                hist2d[222]->Fill( phoEigens2D[25], phoClstrR9 );
+                //hist2d[222]->Fill( phoEigens2D[25], phoClstrR9 );
 				//hist2d[]->Fill( (*phoEta)[it], rotAngle ); 
                 //hist2d[]->Fill( (*phoPhi)[it], rotAngle );
                 //hist2d[]->Fill( rotAngle, phoEigens2D[2] );
@@ -1361,40 +1391,40 @@ void makehists::eventLoop( Long64_t entry ){
                 if( DEBUG ) std::cout << " -- eigan hists fill p1:" << std::endl;
 
                 hist2d[232]->Fill( phoClstrR9, rotAngle );
-                hist2d[233]->Fill( phoEigens2D[2], eigtaf*slope );
-                hist2d[235]->Fill( rotAngle, phoEigens2D[2] );
+                hist2d[233]->Fill( evalue2d, eigtaf*slope );
+                hist2d[235]->Fill( rotAngle, evalue2d );
                 hist2d[234]->Fill( rotAngle, eigtaf*slope );
-                hist2d[230]->Fill( phoClstrR9, phoEigens2D[2] );
+                hist2d[230]->Fill( phoClstrR9, evalue2d );
                 hist2d[231]->Fill( phoClstrR9, eigtaf*slope );
 
-                hist1d[133]->Fill( phoEigens2D[18] );
-                hist1d[134]->Fill( phoEigens2D[22] );
+                hist1d[133]->Fill( evaluegeo );
+                hist1d[134]->Fill( geoslope );
                 hist1d[135]->Fill( geoRotAngle );
                 if( DEBUG ) std::cout << " -- eigan hists fill p2:" << std::endl;
 
-                hist2d[236]->Fill( phoEigens2D[18], rotAngle );
-                hist2d[237]->Fill( eigtaf*phoEigens2D[22], rotAngle );
-                hist2d[238]->Fill( eigtaf*phoEigens2D[22], phoEigens2D[2] );
+                hist2d[236]->Fill( evaluegeo, rotAngle );
+                hist2d[237]->Fill( eigtaf*geoslope, rotAngle );
+                hist2d[238]->Fill( eigtaf*geoslope, evalue2d );
                 hist2d[239]->Fill( geoRotAngle, rotAngle );
-                hist2d[240]->Fill( eigtaf*phoEigens2D[22], eigtaf*slope );
+                hist2d[240]->Fill( eigtaf*geoslope, eigtaf*slope );
                 hist2d[241]->Fill( geoRotAngle, eigtaf*slope );
-                hist2d[242]->Fill( geoRotAngle, phoEigens2D[2] );
-                hist2d[243]->Fill( phoEigens2D[18], phoEigens2D[2] );
-                hist2d[244]->Fill( phoEigens2D[18], eigtaf*slope );
+                hist2d[242]->Fill( geoRotAngle, evalue2d );
+                hist2d[243]->Fill( evaluegeo, evalue2d );
+                hist2d[244]->Fill( evaluegeo, eigtaf*slope );
 
                 if( DEBUG ) std::cout << " -- eigan hists fill p3:" << std::endl;
-                hist2d[245]->Fill( geoRotAngle, phoEigens2D[18] );
-                hist2d[246]->Fill( geoRotAngle, eigtaf*phoEigens2D[22] );
-                hist2d[247]->Fill( phoClstrR9, phoEigens2D[18] );
-                hist2d[248]->Fill( phoClstrR9, eigtaf*phoEigens2D[22] );
+                hist2d[245]->Fill( geoRotAngle, evaluegeo );
+                hist2d[246]->Fill( geoRotAngle, eigtaf*geoslope );
+                hist2d[247]->Fill( phoClstrR9, evaluegeo );
+                hist2d[248]->Fill( phoClstrR9, eigtaf*geoslope );
                 hist2d[249]->Fill( phoClstrR9, geoRotAngle );
-                hist2d[250]->Fill( phoEigens2D[18], eigtaf*phoEigens2D[22] );
+                hist2d[250]->Fill( evaluegeo, eigtaf*geoslope );
 
 				hist2d[224]->Fill( nrh, rotAngle );
-				hist2d[226]->Fill( nrh, phoEigens2D[2] );
+				hist2d[226]->Fill( nrh, evalue2d );
                 hist2d[227]->Fill( nrh, eigtaf*slope );
-                hist2d[228]->Fill( nrh, eigtaf*phoEigens2D[22] );
-                hist2d[229]->Fill( nrh, phoEigens2D[18] );
+                hist2d[228]->Fill( nrh, eigtaf*geoslope );
+                hist2d[229]->Fill( nrh, evaluegeo );
                 hist2d[217]->Fill( nrh, geoRotAngle );
 
 			}//<<>>if( phoEigens2D[3] != -9 )
@@ -1933,27 +1963,39 @@ void makehists::getBranches( Long64_t entry ){
 
 void makehists::endJobs(){
 
+/* 1D jets 0-99
+
     normTH1D(hist1d[3]);
     normTH1D(hist1d[4]);
     normTH1D(hist1d[34]);
     normTH1D(hist1d[35]);
-    normTH1D(hist1d[256]);
     normTH1D(hist1d[38]);
     normTH1D(hist1d[39]);
     normTH1D(hist1d[36]);
     normTH1D(hist1d[37]);
     normTH1D(hist1d[32]);
     normTH1D(hist1d[33]);
+*/
+
+/* 1D cljets 250 - 299
+
+    normTH1D(hist1d[256]);
+*/
 
     thresDivTH2D( hist2d[206], hist2d[207], 0 );
     thresDivTH2D( hist2d[208], hist2d[209], 0 );
 
     profileTH2D( hist2d[215], hist1d[116], hist1d[118] );
 
+
+/* jets 0 - 199
+
     normTH2D(hist2d[100]);
     normTH2D(hist2d[121]);
     normTH2D(hist2d[126]);
     normTH2D(hist2d[127]);
+*/
+
     normTH2D(hist2d[202]);
     normTH2D(hist2d[201]);
     normTH2D(hist2d[200]);
@@ -1983,31 +2025,33 @@ void makehists::initHists(){
     //auto stdtran = 3;
 
 	// eigan cluster 2d maps
-    auto cldiv = 1200;
-    auto cltrn = 30;
+    //auto cldiv = 1200;
+    //auto cltrn = 30;
+    auto cldiv = 36;
+    auto cltrn = 19.8;
 
 	// eigan cluster 3d maps
-    auto cl3ddiv = 160;
-    auto cl3dtrn = 4;
-    auto cl3ddiv1 = 160;
-    auto cl3dtrn1 = 4;
+    //auto cl3ddiv = 160;
+    //auto cl3dtrn = 4;
+    //auto cl3ddiv1 = 160;
+    //auto cl3dtrn1 = 4;
 
 	// photon time phi - eta map
-    auto clsphdiv = 80;
-    auto clsphtrn = 4;
+    auto clsphdiv = 72/2;
+    auto clsphtrn = 19.8/2;
 
 	// time profile maps
-    auto cwdiv = 1000;
-    auto cwtrn = 5;
+    auto cwdiv = 100;
+    auto cwtrn = 5/2;
 
 	// time cl slope plots
     auto slmax = 2;
     auto slmin = -2;
-    auto sldiv = 400;
+    auto sldiv = 40;
 
     auto sl3max = 2;
     auto sl3min = -2;
-    auto sl3div = 400;
+    auto sl3div = 40;
 
     //auto chimax = 1.01;
     //auto chimin = 0.91;
@@ -2017,6 +2061,7 @@ void makehists::initHists(){
 	//------------------------------------------------------------------------------------------
     //------ 1D Hists --------------------------------------------------------------------------
 
+/*
 	//------- jets 0 - 99
 
     hist1d[0] = new TH1D("jetPt", "jetPt", 500, 0, 5000);
@@ -2093,7 +2138,7 @@ void makehists::initHists(){
     hist1d[59] = new TH1D("jetEtaTimAngle3D", "jetEtaTimAngle3D", 660, -0.2, 6.4);
     hist1d[60] = new TH1D("jetEtaPhiAngle2D", "jetEtaTimAngle2D", 660, -0.2, 6.4);
     hist1d[61] = new TH1D("jetEginValueSph", "jetEginValueSph", 150, 0.4, 1.1);
-
+*/
 
 	//----- photons 100 - 249
 
@@ -2106,7 +2151,7 @@ void makehists::initHists(){
 
     //hist1d[104] = new TH1D("phoEtaPhiAngle3D", "phoEtaPhiAngle3D", 660, -0.2, 6.4);
     //hist1d[105] = new TH1D("phoEtaTimAngle3D", "phoEtaTimAngle3D", 660, -0.2, 6.4);
-    hist1d[106] = new TH1D("phoAngle", "phoAngle", 660, -0.2, 6.4);
+    hist1d[106] = new TH1D("pho3DRotAngle", "pho3DRotAngle", 140, -0.5, 6.5);
 
     hist1d[107] = new TH1D("phoIsPixelSeed", "phoIsPixelSeed", 3, 0, 2);
     hist1d[108] = new TH1D("phoHadOverEM", "phoHadOverEM", 250, 0, 10);
@@ -2116,12 +2161,12 @@ void makehists::initHists(){
     hist1d[112] = new TH1D("phoHcalTwrSumEtConeDR04", "phoHcalTwrSumEtConeDR04", 750, 0, 750);
 
     hist1d[113] = new TH1D("phoEginValueSph", "phoEginValueSph", 150, 0.4, 1.1);
-    hist1d[114] = new TH1D("phoEginSlopeSph", "phoEginSlopeSph", 20000, -100, 100);
+    hist1d[114] = new TH1D("phoEginSlopeAP", "phoEginSlopeSph 1Way", sldiv, slmin, slmax);
     //hist1d[115] = new TH1D("phoEginValue3D", "phoEginValue3D", 110, 0, 1.1);
 
-    hist1d[116] = new TH1D("pho_etprofile", "Photon rEta Time Profile Sph", cwdiv, -1*cwtrn, cwtrn);
+    hist1d[116] = new TH1D("pho_etprofile", "Photon rEta Time Profile Sph;MajAxis [cm]", clsphdiv, -1*clsphtrn, clsphtrn);
 
-    hist1d[117] = new TH1D("phoEginUnCorSlopeSph", "phoEginUnCorSlopeSph", 20000, -100, 100);
+    hist1d[117] = new TH1D("phoEginSlopeSphTA", "phoEginSlopeSph TA", sldiv, slmin, slmax);
     hist1d[118] = new TH1D("pho_proFitEtavChi", "Profile Fit Eta v Chi2Prob Sph", cwdiv, -1*cwtrn, cwtrn );
 
     hist1d[119] = new TH1D("phoClTime", "phoTime", jtdiv, -1*jtran, jtran);
@@ -2130,12 +2175,12 @@ void makehists::initHists(){
 
     hist1d[122] = new TH1D("phoClass", "phoClass", 4, 0, 4);
 
-    hist1d[123] = new TH1D("phoSlopeVar1","phoSlopeVar1",200,0,20);
+    hist1d[123] = new TH1D("phoSlopeVar1","phoSlopeVar1",sldiv, slmin, slmax);
     hist1d[124] = new TH1D("phoSlopeErr1","phoSlopeErr1",100,0,10);
-    hist1d[125] = new TH1D("phoSlopeVar2","phoSlopeVar2",200,0,20);
-    hist1d[126] = new TH1D("phoSlopeErr2","phoSlopeErr2",100,0,10);
+    //hist1d[125] = new TH1D("phoSlopeVar2","phoSlopeVar2",200,0,20);
+    //hist1d[126] = new TH1D("phoSlopeErr2","phoSlopeErr2",100,0,10);
 
-    hist1d[127] = new TH1D("phoEiganAngle","phoEiganAngle",70,0,7);
+    hist1d[127] = new TH1D("phoRotAngle","phoRotAngle",140,-0.5,6.5);
 
     hist1d[128] = new TH1D("phoR9_zoom", "phoR9_zoom", 200, 0.8, 1);
     //hist1d[129] = new TH1D("phoGeoEginValueSph", "phoGeoEginValueSph", 150, 0.4, 1.1);
@@ -2144,8 +2189,21 @@ void makehists::initHists(){
     hist1d[132] = new TH1D("phoType", "phoType( 1 pho; 2 llp; 3 oot; 4 cmb )", 6,0,5);
 
     hist1d[133] = new TH1D("phoGeoValue", "phoGeoValue", 150, 0.4, 1.1);
-    hist1d[134] = new TH1D("phoGeoSlope", "phoGeoSlope", 20000, -100, 100);
+    hist1d[134] = new TH1D("phoGeoSlope", "phoGeoSlope", sldiv, slmin, slmax);
     hist1d[135] = new TH1D("phoGeoAngle","phoGeoAngle",70,0,7);
+
+    hist1d[136] = new TH1D("pho2DEiganV0","pho2DEiganV0",200,-1,1);
+    hist1d[137] = new TH1D("pho2DEiganV1","pho2DEiganV1",200,-1,1);
+    hist1d[138] = new TH1D("phoG2DEiganV0","phoG2DEiganV0",200,-1,1);
+    hist1d[139] = new TH1D("phoG2DEiganV1","phoG2DEiganV1",200,-1,1);
+
+    hist1d[140] = new TH1D("phoMinDr","phoMinDr",500,0,5);
+
+    hist1d[141] = new TH1D("pho3DEiganV0","pho3DEiganV0",200,-1,1);
+    hist1d[142] = new TH1D("pho3DEiganV1","pho3DEiganV1",200,-1,1);
+    hist1d[143] = new TH1D("pho3DEiganV2","pho3DEiganV2",200,-1,1);
+    hist1d[144] = new TH1D("pho3dValue","pho3dValue",100,0,1000);
+    hist1d[145] = new TH1D("pho3dTValue","pho3dTValue",100,0,1);
 
 	//------  genparticles 200 - 249
 
@@ -2153,7 +2211,7 @@ void makehists::initHists(){
     hist1d[201] = new TH1D("nGenLLPPho", "nGenLLPPho", 20, 0, 20 );
 
 	//------  cluster jet 250 - 299
-
+/*
     hist1d[250] = new TH1D("cljTime", "cljTime", jtdiv, -1*jtran, jtran);
     hist1d[251] = new TH1D("cljLeadRhTime", "cljLeadRhTime", jtdiv, -1*jtran, jtran);
     hist1d[252] = new TH1D("cljClstLeadTimeDiff", "cljClstLeadTimeDiff", jtdiv, -1*jtran, jtran);
@@ -2162,7 +2220,7 @@ void makehists::initHists(){
     hist1d[254] = new TH1D("cljDiffPt", "cljDiffPt", 1000, 0, 10);
     hist1d[255] = new TH1D("cljdPhi", "cljdPhi", 70, -3.5, 3.5);
     hist1d[256] = new TH1D("cljdtmu", "cljdtmu", jdtdiv, -1*jdtran, jdtran);
-
+*/
     //------ ecal rechits 300 - 349
     hist1d[300] = new TH1D("rhRadius", "rhRadius", 300, 128, 131);
 
@@ -2189,7 +2247,7 @@ void makehists::initHists(){
     //------ 2D Hists --------------------------------------------------------------------------
 
 	//------- jets ( time ) 0-49 ------------------------------
-
+/*
 	//hist2d[0]
     hist2d[1] = new TH2D("jetDrMuTime_pt", "jetDrMuTime_pt", jtdiv, -1*jtran, jtran, 500, 0, 500);
     hist2d[2] = new TH2D("jetDrMuTime_id", "jetDrMuTime_id", jtdiv, -1*jtran, jtran, 5, 0, 5);
@@ -2300,38 +2358,39 @@ void makehists::initHists(){
 
     hist2d[173] = new TH2D("jet3DEgnxy", "jet3DEgn x,y;x;y", 200, -5, 5, 200, -5, 5);
     hist2d[174] = new TH2D("jet3DEgnxz", "jet3DEgn x,z;x;z", 200, -5, 5, 200, -5, 5);
+*/
 
 	//--- Photons 200 - 349 -------------------------------------------
-    hist2d[200] = new TH2D( "phoEta_Slope", "Photon Eta Vs Slope;Eta;Slope [ps/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
-    hist2d[201] = new TH2D( "phoEta_EV2D", "Photon Eta Vs EiganValue2D;Eta;EiganValue",60, -1.5, 1.5, 150, 0.4, 1.1);
-    hist2d[202] = new TH2D( "phoEta_UnCorSlope", "Photon Eta Vs Slope;Eta;UnCorSlope [ps/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
-    //hist2d[203]
+    hist2d[200] = new TH2D( "phoEta_TASpSlope", "Photon Eta Vs TA Slope;Eta;Slope [ns/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
+    hist2d[201] = new TH2D( "phoEta_EV2D", "Photon Eta Vs EiganValue2D;Eta;EiganValue",60, -1.5, 1.5, 25, 0.5, 1.0);
+    hist2d[202] = new TH2D( "phoEta_TA3DSlope", "Photon Eta Vs TA 3D Slope;Eta;3dSlope [ns/cm]", 60, -1.5, 1.5, sldiv, slmin/2, slmax/2);
+	hist2d[203] = new TH2D( "phoSAngle_pho3Dangle","phoRotAngle Vs pho3DAngle",140,-0.5,6.5,140,-0.5,6.5);
 
     hist2d[204] = new TH2D("phoID_LLP", "phoIDvLLP (-1 not matched);isPho;isLLP", 3, -1, 2, 2, 0, 2);
     //hist2d[205] = new TH2D("phoIDL_T", "phoIDLvT;isLoose;isTight", 2, 0, 2, 2, 0, 2);
 
-    hist2d[206] = new TH2D("pho_tmap_rot", "Photon Time Map Rotated;rEta;rPhi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[207] = new TH2D("pho_occmap_rot", "Photon Occ Map Rotated;rEta;rPhi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[208] = new TH2D("pho_tmap", "Photon Time Map;iEta;iPhi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
-    hist2d[209] = new TH2D("pho_occmap", "Photon Occ Map;iEta;iPhi", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[206] = new TH2D("pho_tmap_rot", "Photon Time Map Rotated;MajAxis [cm];MinAxis [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[207] = new TH2D("pho_occmap_rot", "Photon Occ Map Rotated;MajAxis [cm];MinAxis [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[208] = new TH2D("pho_tmap", "Photon Time Map;Z [cm];C [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
+    hist2d[209] = new TH2D("pho_occmap", "Photon Occ Map;Z [cm];C [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
 
-    hist2d[210] = new TH2D("phoSphEgnxy", "phoSphEgn x,y;x;y", 200, -5, 5, 200, -5, 5);
-    //hist2d[211] = new TH2D("pho3DEgnxy", "pho3DEgn x,y;x;y", 200, -5, 5, 200, -5, 5);
-    //hist2d[212] = new TH2D("pho3DEgnxz", "pho3DEgn x,z;x;z", 200, -5, 5, 200, -5, 5);
-    //hist2d[213] = new TH2D("phoNRH_ClR9vID","Photon nClRecHits v clR9 v phoId;nRecHits;ClusterR9;PhotonID(fake1,loose2,tight3)",100,0,100,100,0,100);
+    hist2d[210] = new TH2D("phoSphEgnxy", "phoSphEgn z,c;z;c", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    hist2d[211] = new TH2D("pho3DEgnxy", "pho3DEgn x,y;x;y", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    hist2d[212] = new TH2D("pho3DEgnxz", "pho3DEgn x,z;x;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    hist2d[213] = new TH2D("pho3DEgnyz", "pho3DEgn y,z;y;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
 
-    hist2d[214] = new TH2D("pho_ptwtmap", "Photon Phi(x) Time(y) Wt Map Sph;rPhi;Time", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
-    hist2d[215] = new TH2D("pho_etwtmap", "Photon Eta(x) Time(y) Wt Map Sph;rEta;Time", cwdiv, -1*cwtrn, cwtrn, clsphdiv, -1*clsphtrn, clsphtrn);
+    hist2d[214] = new TH2D("pho_ptwtmap", "Photon Phi(x) Time(y) WtMap Sph;MinAxis [cm];Time [ns]", clsphdiv, -1*clsphtrn, clsphtrn, cwdiv, -1*cwtrn, cwtrn );
+    hist2d[215] = new TH2D("pho_etwtmap", "Photon Eta(x) Time(y) WtMap Sph;MajAxis [cm];Time [ns]", clsphdiv, -1*clsphtrn, clsphtrn, cwdiv, -1*cwtrn, cwtrn );
 
     //hist2d[216] = new TH2D("phoNRH_ClR9_fake","Photon Fake nClRecHits v clR9;nRecHits;ClusterR9",200,0,200,100,0,1);
     //hist2d[] = new TH2D("phoNRH_ClR9_loose","Photon Loose nClRecHits v clR9;nRecHits;ClusterR9",200,0,200,100,0,1);
     hist2d[218] = new TH2D("phoNRH_ClR9","Photon nClRecHits v clR9;nRecHits;ClusterR9",120,0,120,100,0,1);
 
-    hist2d[219] = new TH2D("phoSlopeVar1_Err1","phoSlope Var1 vs Err1;Varience;Error",250,0,25,500,0,5);
-    hist2d[220] = new TH2D("phoSlope_Var1","phoSlope Slope vs Var1;Slope;Varience",sldiv, slmin, slmax,250,0,25);
-    hist2d[221] = new TH2D("phoSlope_Err1","phoSlope Slope vs Err1;Slope;Error",sldiv, slmin, slmax,500,0,5);
+    //hist2d[219] = new TH2D("phoSlopeVar1_Err1","phoSlope Var1 vs Err1;Varience;Error",250,0,25,500,0,5);
+    //hist2d[220] = new TH2D("phoSlope_Var1","phoSlope SpSlope vs Var1;Slope;Varience",sldiv, slmin, slmax,250,0,25);
+    //hist2d[221] = new TH2D("phoSlope_Err1","phoSlope SpSlope vs Err1;Slope;Error",sldiv, slmin, slmax,500,0,5);
 
-    hist2d[222] = new TH2D("phoSlErr_ClR9","Photon Slope Err v clR9;error;ClusterR9",500,0,5,100,0,1);
+    hist2d[222] = new TH2D("phoClR9_minDr","Photon clR9 Vs minDr;ClusterR9;minDr",100,0,1,500,0,5);
     hist2d[223] = new TH2D("phoR9_ClR9","phoR9_ClR9;R9;clR9",100,0,1,100,0,1);
 
     //hist2d[] = new TH2D("phoNRH_R9_fake","Photon Fake nClRecHits v R9;nRecHits;R9",200,0,200,100,0,1);
@@ -2451,15 +2510,18 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_v58_V24_5th_Loose_tEB_isOOT_Hists.root";
 
 				//auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_v58_V24_3DEigan3_20th_Loose_tEB_Hists.root";
-                auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v58_V24_3DEiganSlope_10th_Loose_tEB_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_v58_V24_3DEiganSlope_10th_Loose_tEB_Hists.root";
+                
+                auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV58_mhV29_evtest_15th_Loose_tEB_Hists.root";
 
-				int pct =10;
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV58_mhV28_evtest5B_10th_Loose_tEB_isOOT_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV58_mhV28_evtest5B_10th_Loose_tEB_Hists.root";
+
+				int pct =15;
 				makehists base;
                 base.llpgana_hist_maker( indir, infilename, outfilename, pct );
     //}
     return 1;
 
 }//<<>>int main ( int argc, char *argv[] )
-
-
 

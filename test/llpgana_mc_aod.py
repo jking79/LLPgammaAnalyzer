@@ -55,7 +55,8 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v14.root' # added corrected met and inserted jet SC rhID groups
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v15.root' # corrected eta and phi for oot photon gen match
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v16.root' # eta/phi correction test for oot phos
-outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v17.root' # turned of jets, ect., changed genpart stablity check, slimmed output
+#outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v17.root' # turned of jets, ect., changed genpart stablity check, slimmed output
+outfilename = 'llpgana_mc_AODSIM_ntuplizer_genpartlist_v17.root' #
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 
@@ -202,7 +203,7 @@ process.source = cms.Source("PoolSource",
 
 
 ## How many events to process
-#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
+#process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(5))
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))#ST
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(500))#TTi
 #process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))#LT

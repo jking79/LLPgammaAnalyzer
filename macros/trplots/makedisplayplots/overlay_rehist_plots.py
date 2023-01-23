@@ -60,8 +60,8 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         ns=str(n)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',75,2250,2)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',125,1275,2)
-        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',75,2250,2)
-        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,2250,3)
+        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,2250,2)
+        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,2250,3)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,375,3)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',2.5,750.0,3)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',6,100,2)
@@ -78,9 +78,9 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #hfit.SetParLimits(1,0.02,1.0)
         #hfit.SetParameter(1,0.05)
         #hfit.SetParLimits(1,0.001,1.0)
-        hfit.SetParName(2,'S')
-        hfit.SetParameter(2,5.0)
-        hfit.SetParLimits(2,0.0,25.0)
+        #hfit.SetParName(2,'S')
+        #hfit.SetParameter(2,5.0)
+        #hfit.SetParLimits(2,0.0,25.0)
 
     mg = TMultiGraph();
 
@@ -222,17 +222,17 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         if dofit : 
                  paramn.append(str(abs(hfit.GetParameter(0))))
                  paramc.append(str(abs(hfit.GetParameter(1))))
-                 params.append(str(abs(hfit.GetParameter(2))))
+                 #params.append(str(abs(hfit.GetParameter(2))))
                  pne = hfit.GetParError(0)
                  pce = hfit.GetParError(1)
-                 pse = hfit.GetParError(2)
-                 #print('Fit info',paramn[n],pne,paramc[n],pce)
-                 print('Fit info',paramn[n],pne,paramc[n],pce,params[n],pse)
+                 #pse = hfit.GetParError(2)
+                 print('Fit info',paramn[n],pne,paramc[n],pce)
+                 #print('Fit info',paramn[n],pne,paramc[n],pce,params[n],pse)
                  if pne < 0.01 : pne = 0.01
                  if pce < 0.0001 : pce = 0.0001
                  parnerror.append(str(pne))
                  parcerror.append(str(pce))
-                 parserror.append(str(pse))
+                 #parserror.append(str(pse))
                  #print( 'C: ' + param + ' +/- ' + parerror )
                  #lat_param = '#color['+str(k[n])+']{N : ' + paramn[0:4] + ' #pm ' + parnerror[0:4] + ' [ns]  C : ' + paramc[0:6] + ' #pm ' + parcerror[0:6] + ' [ns]}'
                  #lat.SetTextSize(0.03);
@@ -309,7 +309,7 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
             #lat_param ='#color['+str(k[l])+']{N : '+paramn[l][0:4]+' #pm '+parnerror[l][0:4]+' [ns]  C : '+paramc[l][0:6]+' #pm '+parcerror[l][0:6]+' }'
             lat_param =	'#color['+str(k[l])+']{'
             lat_param = lat_param + 'N : '+paramn[l][0:6]+' #pm '+parnerror[l][0:6]+' [ns] '
-            lat_param = lat_param + 'S : '+params[l][0:6]+' #pm '+parserror[l][0:6]+' [ns] '
+            #lat_param = lat_param + 'S : '+params[l][0:6]+' #pm '+parserror[l][0:6]+' [ns] '
             lat_param = lat_param + 'C : '+paramc[l][0:6]+' #pm '+parcerror[l][0:6]+' [ns]}'
             lat.SetTextSize(0.03);
             lat.DrawLatex(t[3],t[4]-l*.035,lat_param);
@@ -401,6 +401,15 @@ Ic_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : i
 glo_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle + gi_legtitle }
 #---------------------------------------------------------------
 
+# run3 2018A test
+ptitle=[' 316000-316499','','#splitline{EBEB}{Same RO}'] #{GT 106X_dataRun2_v28}'
+y = [ 0.7, 0.03 ]
+x = [ 100.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_18A_test'
+dostack(hl_r3_18A_test, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
 #---------------------------------------------------------------
 # ootAmp Max/After/Before plots sigma & mu
 ptitle=[' 2018A Run 315332','','#splitline{EBEB}{}'] #{GT 106X_dataRun2_v28}']
@@ -466,7 +475,7 @@ outname = 'downloads/tr_kucc_18As_v25_talk2'
 #outname = 'downloads/tr_kucc_18As_v25_noOOTcorr_comp'
 #dostack(hl_v25_gack_18_small, outname, date, Ic_layout, ptitle,  y, x, l, t)
 #dostack(hl_v25_gack_OOTcorr_18_small, outname, date, Ic_layout, ptitle,  y, x, l, t)
-dostack(hl_v25_gack_adtvOOT_18_small, outname, date, Ic_layout, ptitle,  y, x, l, t)
+#dostack(hl_v25_gack_adtvOOT_18_small, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 #-----------------------------------------------------------------
 ptitle=[' 2018','','#splitline{EBEB}{}'] #{GT 106X_dataRun2_v28}']

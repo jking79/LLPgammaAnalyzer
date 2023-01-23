@@ -807,15 +807,22 @@ int main ( int argc, char *argv[] ){
 
         //if( argc != 7 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
-        	auto indir = "jaking/ecalTiming/EGamma/";//argv[1];
+
+        	//auto indir = "jaking/ecalTiming/EGamma/";//argv[1];
+            auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
+
             //auto infilelistname = "gres_Run2022A_infilelist.txt"; //argv[2];
             //auto infilelistname = "egres_Run2022C_355892_test_infilelist.txt";
-            auto infilelistname = "egamma_run22C_partial_126_gammares_v2a_plotfilelist.txt";
+            //auto infilelistname = "egamma_run22C_partial_126_gammares_v2a_plotfilelist.txt";
+            auto infilelistname = "egamma_run22A_352400-358400_126_gammares_v2a_plotfilelist.txt";
             //auto infilelistname = "egamma_run18A_316000-316499_126_gammares_v2a_plotfilelist.txt";
+
             //std::string outfilename = "gres_Run2022A_2dhists_test"; //argv[3];
-            std::string outfilename = "egres_Run2022C_partial_126_v2a_resplots";
+            //std::string outfilename = "egres_Run2022C_partial_126_v2a_resplots";
             //std::string outfilename = "egres_Run2022C_355892_test_resplots";
             //std::string outfilename = "egres_Run2018A_316000-316499_126_v2a_resplots";
+            std::string outfilename = "egres_Run2022A_352400-358400_126_v2a_resplots";
+
             auto tvarname = ""; //argv[4];
 			auto calimapname = "kucc"; //argv[5];
             auto isd_type = "yes"; //argv[6];

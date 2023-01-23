@@ -970,6 +970,77 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         return 0;
     
     }//<<>> void llpChase( Candidate* kid )
+
+/*
+    int llpGenChaseP( const reco::Candidate* kid, int N, int L1, int L2, int L3 ){
+
+        int nMoms = kid->numberOfMothers();
+		//std::cout << " GenPart " << N << " : " << L1 << " : " << L2 << " : " << L3 <<  " : na : " << kid->pdgId(); 
+        //std::cout << " M " << nMoms << " A " << kid << std::endl;
+        auto depth = L1 + 1;
+        for( int gmit(0); gmit < nMoms; gmit++ ){
+			llpGenChaseP(kid->mother(gmit),N,depth,L3,gmit+1);
+        }//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+        return 0;
+
+    }//<<>> void llpChase( Candidate* kid )
+*/
+
+    int llpGenChaseP( const reco::Candidate* kid, int depth ){
+        
+        int nMoms = kid->numberOfMothers();
+        if( ! nMoms ) return 999;
+        int genPartID = 1000;
+		auto kidPdgID = std::abs(kid->pdgId());
+        int wzFlag = ( kidPdgID == 23 || kidPdgID == 24 ) ? 1 : 0;
+        for( int gmit(0); gmit < nMoms; gmit++ ){
+            auto genmom = kid->mother(gmit);
+            auto momPdgID = std::abs(genmom->pdgId());
+
+			if( momPdgID == 1000022 && kidPdgID == 22 && depth == 0 ) return 1; 
+            else if( momPdgID == 1000022 ) { if( wzFlag ) return 13; else return 12; }
+            else if( momPdgID == 1000023 ){ if( wzFlag ) return 23; else return 22; }
+            else if( momPdgID == 1000025 ){ if( wzFlag ) return 33; else return 32; }
+            else if( momPdgID == 1000035 ){ if( wzFlag ) return 43; else return 42; }
+            else if( momPdgID == 1000024 && kidPdgID == 22 && depth == 0 ) return 111;
+            else if( momPdgID == 1000024 ) { if( wzFlag ) return 113; else return 112; }
+            else if( momPdgID == 1000037 ){ if( wzFlag ) return 123; else return 122; }
+            else if( (momPdgID >= 1000001 && momPdgID <= 1000006) || momPdgID == 1000021 ) return 500;
+
+            auto mGenPartID = llpGenChaseP(kid->mother(gmit),depth+1);
+            if( mGenPartID < genPartID ) genPartID = mGenPartID;
+        }//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+        return genPartID;
+
+    }//<<>> void llpChase( const reco::Candidate* kid, int wzFlag ){)
+
+    int llpGenChaseP( const reco::GenParticle kid, int depth ){
+
+        int nMoms = kid.numberOfMothers();
+        if( ! nMoms ) return 999;
+		int genPartID = 1000;
+		auto kidPdgID = std::abs(kid.pdgId());
+		int wzFlag = ( kidPdgID == 23 || kidPdgID == 24 ) ? 1 : 0;
+        for( int gmit(0); gmit < nMoms; gmit++ ){
+            auto genmom = kid.mother(gmit);
+            auto momPdgID = std::abs(genmom->pdgId()); 
+
+            if( momPdgID == 1000022 && kidPdgID == 22 && depth == 0 ) return 1;
+            else if( momPdgID == 1000022 ) { if( wzFlag ) return 13; else return 12; }
+            else if( momPdgID == 1000023 ){ if( wzFlag ) return 23; else return 22; }
+            else if( momPdgID == 1000025 ){ if( wzFlag ) return 33; else return 32; }
+            else if( momPdgID == 1000035 ){ if( wzFlag ) return 43; else return 42; }
+            else if( momPdgID == 1000024 && kidPdgID == 22 && depth == 0 ) return 111;
+            else if( momPdgID == 1000024 ) { if( wzFlag ) return 113; else return 112; }
+            else if( momPdgID == 1000037 ){ if( wzFlag ) return 123; else return 122; }
+            else if( (momPdgID >= 1000001 && momPdgID <= 1000006) || momPdgID == 1000021 ) return 500;
+
+			auto mGenPartID = llpGenChaseP(kid.mother(gmit),depth+1);
+			if( mGenPartID < genPartID ) genPartID = mGenPartID;
+        }//<<>>for( long unsigned int gmit(0); gmit < nKMother; gmit++ )
+        return genPartID;
+
+    }//<<>> void llpChase( Candidate* kid )
     
     void kidChase( std::vector<reco::CandidatePtr> kids, float vx, float vy, float vz ){
     

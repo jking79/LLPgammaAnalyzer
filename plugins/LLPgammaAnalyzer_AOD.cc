@@ -1659,19 +1659,50 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
     for( const auto electron : *electrons_ ){ felectrons.push_back(electron); }
 
 	// !!!!!!!  collect gen particles
-    if( DEBUG ) std::cout << "Collecting Gen Particles" << std::endl;
+    //if( DEBUG ) 
+	std::cout << "Collecting Gen Particles" << std::endl;
     //auto fgenXYZ0 = *genxyz0_;
     //auto fgenT0 = *gent0_;
+    int nGenPart(0);
+    std::cout << "----------------------------------------------------------------------------------------------" << std::endl;
+/*
+    for( const auto genPart : *genParticles_ ){
+
+        nGenPart++;
+		int nMoms = genPart.numberOfMothers();
+        std::cout << " GenPart " << nGenPart << " : " << genPart.isLastCopy() << " : " << genPart.pdgId();
+        std::cout << " M " << nMoms << " A " << &genPart << std::endl;
+
+    }//<<>>for(const auto& genPart : *genParticles_ )
+*/
+    std::cout << "----------------------------------------------------------------------------------------------" << std::endl;  
+    nGenPart = 0;
 	for( const auto genPart : *genParticles_ ){ 
 
+		nGenPart++;
 		if( genPart.status() == 1 ){
 		//if( genPart.isLastCopy() ){
-			fgenparts.push_back(genPart); 
-			//auto isGenLLP = llpGenChase(genPart);
-			fgenpartllp.push_back(llpGenChase(genPart));
+			fgenparts.push_back(genPart);
+			auto genPartID = llpGenChaseP(genPart,0);
+/*
+			auto genPartPdgID = genPart.pdgId();
+			bool match(false);
+			auto nGenMom = genPart.numberOfMothers();
+			if( nGenMom ){
+				auto genmom = genPart.mother(0);
+				auto momID = genmom->pdgId(); 
+				match = ( momID > 1000020 ) && ( std::abs(momID) < 1000040 );
+			}//<<>>if( nGenMom )
+			if( genPartPdgID == 22 && match ){ 
+				std::cout << " ------- Matched Ino Photon: " << genPartPdgID << " ID: " << genPartID << std::endl;
+			// }//<<>>if( genPart.pdgId() == 22 ){
+			} else if( genPartID < 400 ) std::cout << " --------- Other GenPart: " << genPartPdgID << " ID: " <<genPartID << std::endl;
+*/
+			fgenpartllp.push_back(genPartID);
 		}//<<>>if( genPart.isLastCopy() )
 
 	}//<<>>for(const auto& genPart : *genParticles_ )
+    std::cout << "Finished Collecting Gen Particles" << std::endl;
 
     //------------------------------------------------------------------------------------
 	// ----   Object processing ----------------------------------------------------------
