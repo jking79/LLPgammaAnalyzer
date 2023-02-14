@@ -20,23 +20,30 @@ def doCommand( command ):
 	return output
 
 mspc = '/store/user/jaking/'
-mdis = '/store/user/lpcsusylep/jaking/'
+mgrp = '/store/user/lpcsusylep/jaking/'
 eosll = 'eos root://cmseos.fnal.gov ls '
+
 #command = eosll+mspc+'LLPGamma/llpga_GMSB_AOD_v48/'
 #command = eosll+mspc+'A/'
-#command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v58/'
-#command = eosll+mdis+'/ecalTiming/tt_KUCCRes_126_Test/EGamma/'
-#command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v57/'
+#command = eosll+mgrp+'LLPGamma/llpga_GMSB_AOD_v59/'
+#command = eosll+mgrp+'/ecalTiming/tt_KUCCRes_126_Test/EGamma/'
+#command = eosll+mgrp+'LLPGamma/llpga_GJets_AOD_v57/'
 #command = eosll+mspc+'ecalTiming/'
-#command = eosll+mdis+'ecalTiming/EGamma/'
+#command = eosll+mgrp+'ecalTiming/EGamma/'
 #command = eosll+mspc+'EGamma/'
 #command = eosll+mspc+'ecalTiming/EGamma/'
-command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v2b/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v2b/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v4_flipped/EGamma/'
+command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v3/EGamma/'
+command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/'
+
 version = ''
 #version = '_v11_'
 #version = '_noOOTAmp_'
 #version = '_wthOOTAmp_'
+
 rootfile = '.root'
+
 #dirselect = 'HTo2LongLivedTo4b'
 #dirselect = '_newRtParams4_v26b_'
 #dirselect = '_newRtParams3_test_v26_'
@@ -49,7 +56,13 @@ rootfile = '.root'
 #dirselect = ''
 #dirselect = 'gammares_tt_kucc_126_v2a_EGamma_MINIAOD_Run2022C'
 #dirselect = 'gammares_ratio_126_v2_EGamma_MINIAOD_Run2018A-17Sep2018-v2_316000-316499_dispho'
-dirselect = 'gammares_tt_kucc_126_v2b_EGamma_MINIAOD_Run2022A-PromptReco-v1_352400-358400_dispho'
+#dirselect = 'gammares_tt_kucc_126_v2b_EGamma_MINIAOD_Run2022C'
+#dirselect = 'gammares_tt_kucc_126_v4_flipped_EGamma_MINIAOD_Run2022F'
+#dirselect = 'gammares_tt_kucc_126_v3_EGamma_MINIAOD_Run2022D-PromptReco-v2'
+#dirselect = 'gammares_tt_kucc_126_v3_EGamma_MINIAOD_Run2022D-PromptReco-v1'
+#dirselect = 'gammares_tt_kucc_126_v4_flipped_EGamma_MINIAOD_Run2022G'
+#dirselect = 'gammares_tt_kucc_126_v3_EGamma_MINIAOD_Run2022G'
+dirselect = 'gammares_tt_kucc_126_v5_phoclean'
 
 #debug = True
 debug = False
@@ -83,17 +96,19 @@ if deep :
 		#print( subdirlist1 )
 else : 
 	for mydir in targdirs:
+		#print( mydir+'/' )
 		subdirlist1.append( mydir+'/' )
 
 if debug : print( subdirlist1 )
 for thesubdir in subdirlist1 :
 	command2 = command+thesubdir+'/'
 	subdir2 = bashout( command2 ).rstrip().splitlines()
-	#print( thesubdir+subdir2+'/0000/' )
+	#print( thesubdir+subdir2 )
 	for subdir in subdir2 : 
 		command3 = command+thesubdir+subdir+'/'
 		subdir3 = bashout( command3 ).rstrip().splitlines()
 		for subsubdir in subdir3 : 
+			#print( thesubdir+subdir+'/'+subsubdir+'/' )
 			subdirlist2.append(thesubdir+subdir+'/'+subsubdir+'/')
 
 
@@ -101,7 +116,9 @@ if debug : print( subdirlist2 )
 for subdir2 in subdirlist2:
 	lists = bashout( command+subdir2 ).rstrip().splitlines()
 	for line in lists :
-		if rootfile in line : filelist.append(subdir2+line)
+		if rootfile in line : 
+			#print( subdir2+line )
+			filelist.append(subdir2+line)
 
 for thefile in filelist:
 	print( thefile )

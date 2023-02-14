@@ -554,7 +554,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   fit->Write(fit->GetName(),TObject::kWriteDelete);
   //c1->Print( "test.png" );
   //.......................................
-  std::string fOutFileLogText = fOutFileText + inplotname;
+  std::string fOutFileLogText = fOutFileText + "_" + inplotname;
   DumpFitInfo(FitInfo, fOutFileLogText, fXBins);
 
   //.......................................

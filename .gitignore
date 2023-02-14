@@ -2,13 +2,15 @@ macros/trplots/trash/
 macros/trplots/makedisplayplots/downloads/
 macros/trplots/downloaded/
 macros/trplots/makedisplayplots/run3/
+macros/llpgana_list_files/
 test/myworkingArea/
 test/oldWorkingFiles
 test/oldWorkingArea/
 test/GJetWorkSpace/
 test/GMSBWorkSpace/
 test/oldworkingArea/
-/test/myWorkSpace/
+test/myWorkSpace/
+*list.txt
 *.root
 *.pyc
 *.obj

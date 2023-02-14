@@ -157,13 +157,16 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
              IcMapErrEB[i]->Sumw2();
              string hnameDistEB( "AveXtal"+algostring[i]+"EBdist");
              string htitleDistEB( "AveXtal "+algostring[i]+" EBDist EB ");
-             IcDistEB[i] = new TH1F(hnameDistEB.c_str(),htitleDistEB.c_str(),800,-4,4);
+             IcDistEB[i] = new TH1F(hnameDistEB.c_str(),htitleDistEB.c_str(),320,-4,4);
              IcDistEB[i]->Sumw2();
              string hnameErrDistEB( "AveXtal"+algostring[i]+"EBErrdist");
              string htitleErrDistEB( "AveXtal "+algostring[i]+" EBErrDist EB ");
              IcDistErrEB[i] = new TH1F(hnameErrDistEB.c_str(),htitleErrDistEB.c_str(),200,0,0.2);
              IcDistErrEB[i]->Sumw2();
          }
+
+		 auto IcDistCompEB = new TH2F("ratiovcccomp","Ratio v CC Comp; Rt [ns]; CC [ns]",240,-3,3,240,-3,3);
+		 IcDistCompEB->Sumw2();
 
          std::cout << "Setting up DetIDs." << std::endl;
          std::map<UInt_t,DetIDStruct> DetIDMap;
@@ -178,6 +181,9 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 
     	 std::map<UInt_t,UInt_t> numXtalMiniRecTime;
     	 std::map<UInt_t,UInt_t> numXtalCCStcRecTime;
+
+		 std::map<UInt_t,Float_t> xtalMeanRtRecTime;
+         std::map<UInt_t,Float_t> xtalMeanCCRecTime;
 
          // Declaration of leaf types
          UInt_t          run;
@@ -298,31 +304,45 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
     std::map<UInt_t,Float_t> *  icmaps[nAlgos] = {&sumXtalMiniRecTime, &sumXtalCCStcRecTime };
     std::map<UInt_t,UInt_t> *  nicmaps[nAlgos] = {&numXtalMiniRecTime, &numXtalCCStcRecTime };
     std::map<UInt_t,Float_t> *  ic2maps[nAlgos] = {&sumXtal2MiniRecTime, &sumXtal2CCStcRecTime };
+	std::map<UInt_t,Float_t> *  meanMaps[nAlgos] = {&xtalMeanRtRecTime, &xtalMeanCCRecTime };
     for( auto ai = 0; ai < nAlgos; ai++ ){
          for( std::map<UInt_t,Float_t>::iterator it=(*icmaps[ai]).begin(); it!=(*icmaps[ai]).end(); ++it){
             const auto & fill_idinfo = DetIDMap[it->first];
             const auto & map_time = (((*icmaps[ai])[it->first])/((*nicmaps[ai])[it->first])) + offset; // - (drift/(icmaps[ai]->size()))) + offset;
             const auto & map_occ = (*nicmaps[ai])[it->first];
             const auto & map_err = sqrt((((*ic2maps[ai])[it->first])/map_occ - map_time*map_time)/map_occ);
-		    if( debug ) std::cout << "Fill hist for Algo " << ai << " at " << fill_idinfo.i2 << " " << fill_idinfo.i1 << " with " << map_time << " for iter " << std::endl;
+			if( debug ) std::cout << "Fill hist for Algo " << ai << " at " << fill_idinfo.i2; 
+			if( debug ) std::cout << " " << fill_idinfo.i1 << " with " << map_time << " for iter " << std::endl;
             if( fill_idinfo.ecal == ECAL::EB ){
-		   		if( debug ) std::cout << "Fill EB hist for Algo " << ai << " at " << fill_idinfo.i2 << " " << fill_idinfo.i1 << " with " << map_time << std::endl;
+		   		if( debug ) std::cout << "Fill EB hist for Algo " << ai << " at " << fill_idinfo.i2 << " "; 
+                if( debug ) std::cout << fill_idinfo.i1 << " with " << map_time << std::endl;
             	(IcMapEB[ai])->Fill( fill_idinfo.i2, fill_idinfo.i1, map_time );
                 (IcMapOccEB[ai])->Fill( fill_idinfo.i2, fill_idinfo.i1, map_occ );
                 (IcMapErrEB[ai])->Fill( fill_idinfo.i2, fill_idinfo.i1, map_err );
                 (IcDistEB[ai])->Fill(map_time);
                 (IcDistErrEB[ai])->Fill(map_err);
+				(*meanMaps[ai])[it->first] = map_time;
             } else if( fill_idinfo.ecal == ECAL::EP ){
-                if( debug ) std::cout << "Fill EP hist for Algo " << ai << " at " << fill_idinfo.i2 << " " << fill_idinfo.i1 << " with " << map_time << std::endl;
+                if( debug ) std::cout << "Fill EP hist for Algo " << ai << " at " << fill_idinfo.i2; 
+                if( debug ) std::cout << " " << fill_idinfo.i1 << " with " << map_time << std::endl;
                 (IcMapEP[ai])->Fill( fill_idinfo.i2, fill_idinfo.i1, map_time );
             } else if( fill_idinfo.ecal == ECAL::EM ){
-                if( debug ) std::cout << "Fill EM hist for Algo " << ai << " at " << fill_idinfo.i2 << " " << fill_idinfo.i1 << " with " << map_time << std::endl;
+                if( debug ) std::cout << "Fill EM hist for Algo " << ai << " at " << fill_idinfo.i2;
+                if( debug ) std::cout << " " << fill_idinfo.i1 << " with " << map_time << std::endl;
                 (IcMapEM[ai])->Fill( fill_idinfo.i2, fill_idinfo.i1, map_time );
             }//<<>>if( fill_idinfo.ecal == ECAL::EB )
          }//<<>>for( std::map<UInt_t,Float_t>::iterator it=(*icmaps[ai]).begin(); it!=(*icmaps[ai]).end(); ++it)
     }//<<>>for( auto ai = 0; ai < nAlgos; ai++ )
 
-    for( auto ai = 0; ai < nAlgos; ai++ ){ (*icmaps[ai]).clear(); (*nicmaps[ai]).clear();}
+	for( std::map<UInt_t,Float_t>::iterator it0=(*meanMaps[0]).begin(); it0!=(*meanMaps[0]).end(); ++it0){
+		bool found( false );
+		for( std::map<UInt_t,Float_t>::iterator it1=(*meanMaps[1]).begin(); it1!=(*meanMaps[1]).end(); ++it1){
+			if( it0->first == it1->first ){ IcDistCompEB->Fill(it0->second,it1->second); found = true; continue; }
+		}//<<>>for( std::map<UInt_t,Float_t>::iterator it1=(*IcMapEM[1]).begin(); it1!=(*meanMaps[1]).end(); ++it1)
+		if( not found ) IcDistCompEB->Fill(it0->second,-3);
+	}//<<>>for( std::map<UInt_t,Float_t>::iterator it=(*IcMapEM[0]).begin(); it!=(*meanMaps[0]).end(); ++it)
+
+    for( auto ai = 0; ai < nAlgos; ai++ ){ (*icmaps[ai]).clear(); (*nicmaps[ai]).clear(); (*meanMaps[ai]).clear(); }
 
     fOutFile->cd();
 
@@ -345,7 +365,10 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          delete IcMapEP[i];
          delete IcMapEM[i];
 
-    }
+    }//<<>>for( auto i = 0; i < nAlgos; i++)
+
+	IcDistCompEB->Write();
+	delete IcDistCompEB;
 
     //delete fInTree;
     delete fOutFile;
@@ -356,18 +379,86 @@ int main ( int argc, char *argv[] ){
 
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
+
                 //auto indir = "lpcsusylep/jaking/ecalTiming/tt_KUCCRes_126_Test/EGamma/"; //argv[1];
                 auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
+                //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v4_flipped/EGamma/";
+                //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v3/EGamma/";
+
                 ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
                 ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
                 //auto infilelist = "egamma_run352400-run358400_califilelist.txt";
                 //auto infilelist = "egamma_run22C_partial_126_gammares_v2a_califilelist.txt";
                 //auto infilelist = "egamma_run18A_316000-316499_126_gammares_v2a_califilelist.txt";
-                auto infilelist = "egamma_run22A_352400-358400_126_gammares_v2a_califilelist.txt";
+                //auto infilelist = "egamma_run22A_352400-358400_126_gammares_v2a_califilelist.txt";
+
+                //auto infilelist = "egamma_run3_prompt_352319_356513_126_gammares_v2b_califilelist.txt";//1
+                //auto infilelist = "egamma_run3_prompt_356514_357289_126_gammares_v2b_califilelist.txt";//2
+                //auto infilelist = "egamma_run3_prompt_357290_358883_126_gammares_v2b_califilelist.txt";//3
+                //auto infilelist = "egamma_run3_prompt_358884_359420_126_gammares_v2b_califilelist.txt";//4
+                //auto infilelist = "egamma_run3_prompt_359421_360089_126_gammares_v2b_califilelist.txt";//5
+                //auto infilelist = "egamma_run3_prompt_360090_360981_126_gammares_v2b_califilelist.txt";//6
+                //auto infilelist = "egamma_run3_prompt_361417_362522_126_gammares_v2b_califilelist.txt";//8
+                //auto infilelist = "egamma_run3_prompt_362523_362760_126_gammares_v2b_califilelist.txt";//9
+				auto infilelist = "egamma_run3_prompt_2022C_126_gammares_v2b_califilelist.txt";
+
+                //auto infilelist = "egamma_run3_prompt_357487_357733_126_gammares_v4Flip_califilelist.txt"; //D1
+                //auto infilelist = "egamma_run3_iov5_359421_360089_126_gammares_v4Flip_califilelist.txt"; //5
+                //auto infilelist = "egamma_run3_prompt_362523_362760_126_gammares_v4Flip_califilelist.txt"; //9
+                //auto infilelist = "egamma_run3_iov2_356514_357289_126_gammares_v4Flip_califilelist.txt";//2
+                //auto infilelist = "egamma_run3_prompt_357290_358883_126_gammares_v4Flip_califilelist.txt";//3
+                //auto infilelist = "egamma_run3_iov4_358884_359420_126_gammares_v4Flip_califilelist.txt";//4
+                //auto infilelist = "egamma_run3_22E_359022_360331_126_gammares_v4Flip_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov6_360090_360981_126_gammares_v4Flip_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov7_360982_361416_126_gammares_v4Flip_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov8_361417_362522_126_gammares_v4Flip_califilelist.txt";
+
+                //auto infilelist = "egamma_run3_prompt_357734_358219_126_gammares_v3_califilelist.txt";
+
+                //auto infilelist = "egamma_run3_iov2_356514_357289_126_gammares_v3_califilelist.txt"; 
+                //auto infilelist = "egamma_run3_iov3_357290_358883_126_gammares_v3_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov4_358884_359420_126_gammares_v3_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov5_359421_360089_126_gammares_v3_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov6_360090_360981_126_gammares_v3_califilelist.txt"; 
+                //auto infilelist = "egamma_run3_iov7_360982_361416_126_gammares_v3_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov8_361417_362522_126_gammares_v3_califilelist.txt";
+                //auto infilelist = "egamma_run3_iov9_362523_362760_126_gammares_v3_califilelist.txt";
+
                 //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
                 //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
                 //auto outfilename = "st_RatioRes_126_v2a_run2018A_316000-316499_Cali.root"; //argv[3];
-                auto outfilename = "tt_KUCCRes_126_v2a_run2022A_352400-358400_Cali.root"; //argv[3];
+ 
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV1_352319_356513_Cali.root"; //argv[3];
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV2_356514_357289_Cali.root"; //argv[3];
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV3_357290_358883_Cali.root"; //argv[3]; 
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022_358884_359420_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV5_359421_360089_Cali.root"; 
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022_360090_360981_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022_361417_362522_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV9_362523_362760_Cali.root";
+                auto outfilename = "tt_KUCCRes_126_v2b_run3_2022C_355794_357486_Cali.root";
+
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022E_359022_360331_Cali.root"; //E
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022_357487_357733_Cali.root";//D1 
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022_357734_358219_Cali.root";
+
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV2_356514_357289_Cali2.root"; //2
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022_357290_358883_Cali.root"; //3
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV4_358884_359420_Cali.root"; //4
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV5_359421_360089_Cali.root"; //5
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV6_360090_360981_Cali.root"; //6
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV7_360982_361416_Cali.root"; //7
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022IOV8_361417_362522_Cali.root"; //8
+                //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022_362523_362760_Cali.root"; //9
+
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV2_356514_357289_Cali.root"; //2
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV3_357290_358883_Cali.root"; //3
+        		//auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV4_358884_359420_Cali.root"; //4
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV5_359421_360089_Cali.root"; //5
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV6_360090_360981_Cali.root"; //6
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV7_360982_361416_Cali.root"; //7
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV8_361417_362522_Cali.root"; //8
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV9_362523_362760_Cali.root"; //9
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}

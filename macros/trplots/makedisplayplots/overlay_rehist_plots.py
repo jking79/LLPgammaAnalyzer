@@ -12,8 +12,8 @@ from jwk_tdr_style_py import *
 def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
 
     first = True
-    dofit = True
-    #dofit = False
+    #dofit = True
+    dofit = False
     #sxtal = True
     sxtal = False
     paramn = []
@@ -59,9 +59,10 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
     if dofit :
         ns=str(n)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',75,2250,2)
-        #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',125,1275,2)
-        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,2250,2)
-        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,2250,3)
+        #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',75,500,2)
+        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,2250,2)
+        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,500,2)
+        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',100,2250,3)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,375,3)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',2.5,750.0,3)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',6,100,2)
@@ -78,9 +79,9 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #hfit.SetParLimits(1,0.02,1.0)
         #hfit.SetParameter(1,0.05)
         #hfit.SetParLimits(1,0.001,1.0)
-        #hfit.SetParName(2,'S')
-        #hfit.SetParameter(2,5.0)
-        #hfit.SetParLimits(2,0.0,25.0)
+        hfit.SetParName(2,'S')
+        hfit.SetParameter(2,5.0)
+        hfit.SetParLimits(2,0.0,25.0)
 
     mg = TMultiGraph();
 
@@ -401,6 +402,233 @@ Ic_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : i
 glo_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle + gi_legtitle }
 #---------------------------------------------------------------
 
+# run3 2022IOV2_v5
+ptitle=[' 356514_357289 v5','','#splitline{EBEB}{Run2022IOV2}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV2_v5'
+dostack(hl_r3_22IOV2_v5, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5_nocali
+ptitle=[' 359421_360089 NoCali','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_nocali'
+#dostack(hl_r3_22IOV5_nocali, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV3_nocali
+ptitle=[' 357290_358883 NoCali','','#splitline{EBEB}{Run2022IOV3}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV3_nocali'
+#dostack(hl_r3_22IOV3_nocali, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV2_cali3
+ptitle=[' 356514_357289 cali3','','#splitline{EBEB}{Run2022IOV2}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV2_cali3'
+#dostack(hl_r3_22IOV2_cali3, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5v3
+ptitle=[' 359421_360089 v3','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_v3'
+#dostack(hl_r3_22IOV5_v3, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV3v3
+ptitle=[' 357290_358883 v3','','#splitline{EBEB}{Run2022IOV3}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV3_v3'
+#dostack(hl_r3_22IOV3_v3, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV9v4f
+ptitle=[' 362523_362760 v4f','','#splitline{EBEB}{Run2022IOV9}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV9_v4f'
+#dostack(hl_r3_22IOV9_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV8v4f
+ptitle=[' 361417_362522 v4f','','#splitline{EBEB}{Run2022IOV8}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV8_v4f'
+#dostack(hl_r3_22IOV8_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV7v4f
+ptitle=[' 360982_361416 v4f','','#splitline{EBEB}{Run2022IOV7}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV7_v4f'
+#dostack(hl_r3_22IOV7_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV6v4f
+ptitle=[' 360090_360981 v4f','','#splitline{EBEB}{Run2022IOV6}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV6_v4f'
+#dostack(hl_r3_22IOV6_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5v4f
+ptitle=[' 359421_360089 v4f','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_v4f'
+#dostack(hl_r3_22IOV5_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV3v4f
+ptitle=[' 357290_358883 v4f','','#splitline{EBEB}{Run2022IOV3}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV3_v4f'
+#dostack(hl_r3_22IOV3_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV2v4f
+ptitle=[' 356514_357289 v4f','','#splitline{EBEB}{Run2022IOV2}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV2_v4f'
+#dostack(hl_r3_22IOV2_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV9
+ptitle=[' 362523_362760','','#splitline{EBEB}{Run2022IOV9}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV9'
+#dostack(hl_r3_22IOV9, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV8
+ptitle=[' 361417_362522','','#splitline{EBEB}{Run2022IOV8}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV8'
+#dostack(hl_r3_22IOV8, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV6
+ptitle=[' 360090_360981','','#splitline{EBEB}{Run2022IOV6}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV6'
+#dostack(hl_r3_22IOV6, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5
+ptitle=[' 359421_360089 v4f','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_v4f'
+#dostack(hl_r3_22IOV5_v4f, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV3
+ptitle=[' 357290_358883','','#splitline{EBEB}{Run2022IOV3}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV3'
+#dostack(hl_r3_22IOV3, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV2
+ptitle=[' 356514_357289','','#splitline{EBEB}{Run2022IOV2}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV2'
+#dostack(hl_r3_22IOV2, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV1
+ptitle=[' 352319_356513','','#splitline{EBEB}{Run2022IOV1}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV1'
+#dostack(hl_r3_22IOV1, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022G
+ptitle=[' 362350_362760','','#splitline{EBEB}{Run2022G}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22G'
+#dostack(hl_r3_22G, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022E
+ptitle=[' 359022_360331','','#splitline{EBEB}{Run2022E}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22E'
+#dostack(hl_r3_22E, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022D
+ptitle=[' 357487_359021','','#splitline{EBEB}{Run2022D}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22D'
+#dostack(hl_r3_22D, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022C
+ptitle=[' 355794_357486','','#splitline{EBEB}{Run2022C}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22C'
+#dostack(hl_r3_22C, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022AB test
+ptitle=[' 352319-355793','','#splitline{EBEB}{Run2022AB}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+#x = [ 100.0, 2250.0 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22AB_ze'
+#outname = 'downloads/tr_hl_r3_22AB_sr'
+#dostack(hl_r3_22AB, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
 # run3 2018A test
 ptitle=[' 316000-316499','','#splitline{EBEB}{Same RO}'] #{GT 106X_dataRun2_v28}'
 y = [ 0.7, 0.03 ]
@@ -408,7 +636,7 @@ x = [ 100.0, 2250.0 ]
 l = [ 0.7,0.65,0.925,0.9 ]
 t = [0.2,0.825,0.0,0.175,0.225]
 outname = 'downloads/tr_hl_r3_18A_test'
-dostack(hl_r3_18A_test, outname, date, Ic_layout, ptitle,  y, x, l, t)
+#dostack(hl_r3_18A_test, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 #---------------------------------------------------------------
 # ootAmp Max/After/Before plots sigma & mu

@@ -1681,23 +1681,8 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
 		nGenPart++;
 		if( genPart.status() == 1 ){
-		//if( genPart.isLastCopy() ){
 			fgenparts.push_back(genPart);
 			auto genPartID = llpGenChaseP(genPart,0);
-/*
-			auto genPartPdgID = genPart.pdgId();
-			bool match(false);
-			auto nGenMom = genPart.numberOfMothers();
-			if( nGenMom ){
-				auto genmom = genPart.mother(0);
-				auto momID = genmom->pdgId(); 
-				match = ( momID > 1000020 ) && ( std::abs(momID) < 1000040 );
-			}//<<>>if( nGenMom )
-			if( genPartPdgID == 22 && match ){ 
-				std::cout << " ------- Matched Ino Photon: " << genPartPdgID << " ID: " << genPartID << std::endl;
-			// }//<<>>if( genPart.pdgId() == 22 ){
-			} else if( genPartID < 400 ) std::cout << " --------- Other GenPart: " << genPartPdgID << " ID: " <<genPartID << std::endl;
-*/
 			fgenpartllp.push_back(genPartID);
 		}//<<>>if( genPart.isLastCopy() )
 
@@ -2187,7 +2172,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
         const auto scptr = phosc.get();
         scGroup phoSCGroup{*scptr};
         //auto phoRhGroup = getRHGroup( phoSCGroup, 2.0, //hist1d[137], hist1d[138], hist1d[139] );
-        auto phoRhGroup = getRHGroup( phoSCGroup, 0.0 );//bcMinEnergy );
+        auto phoRhGroup = getRHGroup( phoSCGroup, bcMinEnergy );
         auto phoRhIdsGroup = getRhGrpIDs( phoRhGroup );
 		phoRhIds.push_back(phoRhIdsGroup);
         if( DEBUG ) std::cout << " -- gedPhotons : " << scptr << " #: " << phoRhGroup.size() << std::endl;
