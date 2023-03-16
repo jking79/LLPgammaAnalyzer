@@ -34,8 +34,14 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'ecalTiming/EGamma/'
 #command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v2b/EGamma/'
 #command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v4_flipped/EGamma/'
-command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v3/EGamma/'
-command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v3/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/'
+#command = eosll+mgrp+'ecalTiming/gammares_tt_kucc_126_v6_diag/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v7_diag_unclean/EGamma/'
+command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v11_diag/EGamma/'
+#command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/'
+
 
 version = ''
 #version = '_v11_'
@@ -62,7 +68,26 @@ rootfile = '.root'
 #dirselect = 'gammares_tt_kucc_126_v3_EGamma_MINIAOD_Run2022D-PromptReco-v1'
 #dirselect = 'gammares_tt_kucc_126_v4_flipped_EGamma_MINIAOD_Run2022G'
 #dirselect = 'gammares_tt_kucc_126_v3_EGamma_MINIAOD_Run2022G'
-dirselect = 'gammares_tt_kucc_126_v5_phoclean'
+#dirselect = 'gammares_tt_kucc_126_v5_phoclean'
+#dirselect = 'gammares_tt_kucc_126_v6_diag_EGamma_MINIAOD_Run2022C-PromptReco-v1_355794-359021_dispho'
+#dirselect = 'gammares_tt_kucc_126_v6_diag_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760_dispho'
+#dirselect = 'gammares_tt_kucc_126_v5_phoclean_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v6_diag_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v7_diag_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v7_diag_EGamma_MINIAOD_Run2018A-17Sep2018-v2_000000-999999'
+#dirselect = 'gammares_tt_kucc_126_v7_diag_unclean_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_diag_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_diag_EGamma_MINIAOD_Run2018A-17Sep2018-v2_315257-316993'
+#dirselect = 'gammares_tt_kucc_126_v10_diag_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022C-PromptReco-v1_355794-359021'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022D-PromptReco-v1_355794-359021'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022D-PromptReco-v2_355794-359021'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022E-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022F-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
+#dirselect = 'gammares_tt_kucc_126_v10_diag2_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
+dirselect = 'gammares_tt_kucc_126_v11_diag_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
+
 
 #debug = True
 debug = False
@@ -137,4 +162,4 @@ for thefile in filelist:
 	#print( '---------------------------------------------------' )
 
 	
-#print( bashout( 'hadd llpgana_HTo2LongLivedTo4b_t37MC_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root ' + theFileList ) )	
+#1print( bashout( 'hadd llpgana_HTo2LongLivedTo4b_t37MC_noele_005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2.root ' + theFileList ) )	

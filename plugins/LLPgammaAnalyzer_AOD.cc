@@ -1660,11 +1660,11 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
 	// !!!!!!!  collect gen particles
     //if( DEBUG ) 
-	std::cout << "Collecting Gen Particles" << std::endl;
+	if( DEBUG ) std::cout << "Collecting Gen Particles" << std::endl;
     //auto fgenXYZ0 = *genxyz0_;
     //auto fgenT0 = *gent0_;
     int nGenPart(0);
-    std::cout << "----------------------------------------------------------------------------------------------" << std::endl;
+    if( DEBUG ) std::cout << "----------------------------------------------------------------------------------------------" << std::endl;
 /*
     for( const auto genPart : *genParticles_ ){
 
@@ -1675,7 +1675,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
     }//<<>>for(const auto& genPart : *genParticles_ )
 */
-    std::cout << "----------------------------------------------------------------------------------------------" << std::endl;  
+    if( DEBUG ) std::cout << "----------------------------------------------------------------------------------------------" << std::endl;  
     nGenPart = 0;
 	for( const auto genPart : *genParticles_ ){ 
 
@@ -1687,7 +1687,7 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 		}//<<>>if( genPart.isLastCopy() )
 
 	}//<<>>for(const auto& genPart : *genParticles_ )
-    std::cout << "Finished Collecting Gen Particles" << std::endl;
+    if( DEBUG ) std::cout << "Finished Collecting Gen Particles" << std::endl;
 
     //------------------------------------------------------------------------------------
 	// ----   Object processing ----------------------------------------------------------
@@ -2089,6 +2089,10 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 	genPhoIdx.clear();
     genPhoDr.clear();
 
+	phoSMaj.clear();
+	phoSMin.clear();
+	phoSAlp.clear();
+
     for( const auto photon : fphotons ){
 
         phoPt.push_back(photon.pt());
@@ -2170,6 +2174,14 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 		if( DEBUG ) std::cout << " --- Proccesssing : " << photon << std::endl;
         const auto &phosc = photon.superCluster().isNonnull() ? photon.superCluster() : photon.parentSuperCluster();
         const auto scptr = phosc.get();
+		const auto &seedDetId = scptr->seed()->seed(); // seed detid
+		const auto isEB = (seedDetId.subdetId() == EcalBarrel); // which subdet
+		const auto recHits = (isEB ? recHitsEB_ : recHitsEE_);
+		const auto & ph2ndMoments = noZS::EcalClusterTools::cluster2ndMoments( *scptr, *recHits);
+		phoSMaj.push_back(ph2ndMoments.sMaj);
+      	phoSMin.push_back(ph2ndMoments.sMin);
+      	phoSAlp.push_back(ph2ndMoments.alpha);
+
         scGroup phoSCGroup{*scptr};
         //auto phoRhGroup = getRHGroup( phoSCGroup, 2.0, //hist1d[137], hist1d[138], hist1d[139] );
         auto phoRhGroup = getRHGroup( phoSCGroup, bcMinEnergy );
@@ -2369,9 +2381,10 @@ void LLPgammaAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
         eleSeedTOFTime.push_back(seedTOFTime);
         eleCMeanTime.push_back(timeStats[6]);
-        if( DEBUG ) std::cout << " - Electron 2d/3d: " << eleSCEigen2D[0] << " " << eleSCEigen2D[1] << " " << eleSCEigen2D[2] << " " << eleSCEigen2D[3] << " "
-                              << eleSCEigen2D[4] << " / " << eleSCEigen3D[0] << " " << eleSCEigen3D[1] << " " << eleSCEigen3D[2] << " " 
-                              << eleSCEigen3D[3] << " " << eleSCEigen3D[4] << " " << eleSCEigen3D[5] << " time: " << timeStats[6] << std::endl;
+        if( DEBUG ) std::cout << " - Electron 2d/3d: " << eleSCEigen2D[0] << " " << eleSCEigen2D[1] << " " << eleSCEigen2D[2] 
+					<< " " << eleSCEigen2D[3] << " " << eleSCEigen2D[4] << " / " << eleSCEigen3D[0] << " " << eleSCEigen3D[1] 
+					<< " " << eleSCEigen3D[2] << " " << eleSCEigen3D[3] << " " << eleSCEigen3D[4] << " " << eleSCEigen3D[5] 
+					<< " time: " << timeStats[6] << std::endl;
 
 	}//<<>>for( const auto electron : *electrons_ )
 	nElectrons = iElectros;
@@ -3399,6 +3412,7 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     outTree->Branch("phoHadOverEM", &phoHadOverEM);
     outTree->Branch("phoHadD1OverEM", &phoHadD1OverEM);
     outTree->Branch("phoHadD2OverEM", &phoHadD2OverEM);
+utTree->Branch("phoRhIds", &phoRhIds);
     outTree->Branch("phoHadOverEMVaid", &phoHadOverEMVaid);
     outTree->Branch("phohadTowOverEM", &phohadTowOverEM);
     outTree->Branch("phohadTowD10OverEM", &phohadTowD10OverEM);
@@ -3460,6 +3474,10 @@ void LLPgammaAnalyzer_AOD::beginJob(){
     //outTree->Branch("genPhoLLP", &genPhoLlp);
     outTree->Branch("genPhoIdx", &genPhoIdx);
     outTree->Branch("genPhoDr", &genPhoDr);
+
+    outTree->Branch("phoSMaj", &phoSMaj);
+    outTree->Branch("phoSMin", &phoSMin);
+    outTree->Branch("phoSAlp", &phoSAlp);
 
     //    uInt                nElectrons;
     //    std::vector<float>  eleSeedTOFTimes, eleCMeanTimes;

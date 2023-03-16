@@ -101,6 +101,30 @@ void SetupDetIDsEE( std::map<UInt_t,DetIDStruct> &DetIDMap )
     }
 }
 
+const auto sq2(const float x){return x*x;}
+const auto sq2(const double x){return x*x;}
+std::string addstr( std::string current, std::string input ){ return (current+input); }
+
+void fillRatioHist(TH1D* numi, TH1D* denom, TH1D* result ){
+
+    const auto nbins = numi->GetNbinsX();
+    for (auto ibin = 0; ibin <= nbins; ibin++){
+        auto nc = numi->GetBinContent(ibin);
+        auto ncer = numi->GetBinError(ibin);
+        auto dc = denom->GetBinContent(ibin);
+        auto dcer = denom->GetBinError(ibin);
+        auto ratio(0.0);
+        auto rerr(0.0);
+        if( dc > 20 ){
+            ratio = nc/dc;
+			rerr = std::sqrt( sq2(ncer/dc)-(sq2(ratio)/dc) );
+			//rerr = std::sqrt((sq2(ncer/dc)+sq2((nc/sq2(dc))*dcer))/dc);
+        }//<<>>if( dc > 0 )
+        result->SetBinContent(ibin,ratio);
+        result->SetBinError(ibin,rerr);
+    }//<<>>for (auto ibinX = 1; ibinX <= nXbins; ibinX++)
+
+}//<<>>fillRatioHist(TH1F* numi, TH1F* denom, TH1F* result )
 
 void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string outfilename ){
 
@@ -108,10 +132,12 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
     //const int  nPhotons = 4;
     const double offset = 0.0;
     const int bin_offset = 86;
-    const double ri_ecut = 5.0;
+	//const float minRhEnergy = 5.0;
+    const float minRhEnergy = 10.0;
 
 	//const bool debug = true;
     const bool debug = false;
+	const bool useEnergy = true;
 
     const string treename("tree/llpgtree");
 
@@ -168,6 +194,28 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 		 auto IcDistCompEB = new TH2F("ratiovcccomp","Ratio v CC Comp; Rt [ns]; CC [ns]",240,-3,3,240,-3,3);
 		 IcDistCompEB->Sumw2();
 
+		std::vector<std::vector<int>> crystals{{22,130},{-19,207},{59,115},{-68,64}};
+        std::vector<std::string> fHTitle{"22x130","-19x207","59x115","-68x64"};
+		auto nCrys = fHTitle.size();
+		TH1D *hist1d136[nCrys], *hist1d140[nCrys], *hist1d137[nCrys], *hist1d138[nCrys], *hist1d139[nCrys], *hist1d143[nCrys], *hist1d144[nCrys];;
+
+		for( int i = 0; i < nCrys; i++ ){
+    	hist1d136[i] = new TH1D(addstr("rhcalCCTimeby100k_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry CC Time by 100k").c_str(),2000,0,2000);
+        hist1d140[i] = new TH1D(addstr("rhcalRtTimeby100k_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry Rt Time by 100k").c_str(),2000,0,2000);
+    	hist1d137[i] = new TH1D(addstr("rhcalCntby100k_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry Cnt by 100k").c_str(),2000,0,2000);
+    	hist1d138[i] = new TH1D(addstr("rhcalRtTimeDist_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry rhcalRtTimeDist").c_str(),500,-25,25);
+    	hist1d139[i] = new TH1D(addstr("rhcalCCTimeDist_",fHTitle[i]).c_str(),addstr(fHTitle[i],"cry rhcalCCTimeDist").c_str(),500,-25,25);
+    	hist1d143[i] = new TH1D(addstr("rhcalCCAveby100k_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry CC Ave by 100k").c_str(),2000,0,2000);
+        hist1d144[i] = new TH1D(addstr("rhcalRtAveby100k_",fHTitle[i]).c_str(),addstr(fHTitle[i]," cry Rt Ave by 100k").c_str(),2000,0,2000);
+		hist1d136[i]->Sumw2();
+        hist1d140[i]->Sumw2();
+        hist1d137[i]->Sumw2();
+        hist1d138[i]->Sumw2();
+        hist1d139[i]->Sumw2();
+        hist1d143[i]->Sumw2();
+        hist1d144[i]->Sumw2();
+		}//<<>>for( int i = 0; i < nCrys; i++ )
+
          std::cout << "Setting up DetIDs." << std::endl;
          std::map<UInt_t,DetIDStruct> DetIDMap;
          SetupDetIDsEB( DetIDMap );
@@ -187,26 +235,28 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 
          // Declaration of leaf types
          UInt_t          run;
+		 ULong64_t       event;
          //UInt_t          lumi;
          vector<uInt> 	 *rhCaliID;
          vector<float>   *rhCaliRtTime;
          vector<float>   *rhCaliCCTime;
          //vector<uInt>    *resResVecRhID;
          //vector<float>   *resAmp;
-         //vector<float>   *resE;
+         vector<float>   *rhEnergy;
          //vector<float>   *resRtTime;
          //vector<float>   *resCCtime;
          //vector<float>   *resTOF;
 
          // List of branches
          TBranch        *b_run;   //!
+         TBranch        *b_event;   //!
          //TBranch        *b_lumi;   //!
          TBranch        *b_rhCaliID;   //!
          TBranch        *b_rhCaliRtTime;   //!
          TBranch        *b_rhCaliCCTime;   //!
          //TBranch        *b_resResVecRhID;   //!
          //TBranch        *b_resAmp;   //!
-         //TBranch        *b_resE;   //!
+         TBranch        *b_rhEnergy;   //!
          //TBranch        *b_resRtTime;   //!
          //TBranch        *b_resCCtime;   //!
          //TBranch        *b_resTOF;   //!
@@ -232,8 +282,9 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
     	 std::string instr;
          auto fInTree = new TChain(treename.c_str());
          std::cout << "Adding files to TChain." << std::endl;
+		 const std::string eosdir("root://cmseos.fnal.gov//store/user/jaking/");
+		 //const std::string eosdir("root://cmseos.fnal.gov//store/user/");	
          while (std::getline(infile,instr)){
-			const std::string eosdir("root://cmseos.fnal.gov//store/user/");
 			auto tfilename = eosdir + indir + instr;
          	//auto tfilename = indir + "/" + str;
          	std::cout << "--  adding file: " << tfilename << std::endl;
@@ -245,17 +296,22 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          rhCaliID = 0;
          rhCaliRtTime = 0;
          rhCaliCCTime = 0;
+   		 rhEnergy = 0;
 
          fInTree->SetBranchAddress("run", &run, &b_run);
+         fInTree->SetBranchAddress("event", &event, &b_event);
          fInTree->SetBranchAddress("rhCaliID", &rhCaliID, &b_rhCaliID);
          fInTree->SetBranchAddress("rhCaliRtTime", &rhCaliRtTime, &b_rhCaliRtTime);
          fInTree->SetBranchAddress("rhCaliCCTime", &rhCaliCCTime, &b_rhCaliCCTime);
-     
+         //if( useEnergy ) 
+		 fInTree->SetBranchAddress("rhCaliEnergy", &rhEnergy, &b_rhEnergy);
+    
          // >> calcs  <<
      
          std::cout << "Starting entry loops "<< std::endl;
          auto nEntries = fInTree->GetEntries();
 		 if( debug ) nEntries = 100;
+		 //nEntries = 1000000;
          for (Long64_t centry = 0; centry < nEntries; centry++){
 			  
      	     if( centry%100000 == 0 or centry == 0) std::cout << "Proccessed " << centry << " of " << nEntries 
@@ -266,22 +322,27 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 			 auto entry = fInTree->LoadTree(centry);
 
              b_run->GetEntry(entry);   //!
+             b_event->GetEntry(entry);   //!
              //b_lumi->GetEntry(entry);   //!
              b_rhCaliID->GetEntry(entry);   //!
              b_rhCaliRtTime->GetEntry(entry);   //!
              b_rhCaliCCTime->GetEntry(entry);   //!
              //b_resResVecRhID->GetEntry(entry);   //!
              //b_resAmp->GetEntry(entry);   //!
-             //b_resE->GetEntry(entry);   //!
+             //if( useEnergy ) 
+             if( debug ) std::cout << " - GetEntry : Energy "  << std::endl;
+			 if( useEnergy ) b_rhEnergy->GetEntry(entry);   //!
              //b_resRtTime->GetEntry(entry);   //!
              //b_resCCtime->GetEntry(entry);   //!
              //b_resTOF->GetEntry(entry);   //!
 
 			 if( run < srun || run > erun ) continue;
 
-             const auto nRecHits1 = (*rhCaliID).size(); //(cluster[ipho0])->size();
+             const auto nRecHits1 = rhCaliID->size(); //(cluster[ipho0])->size();
              if( debug ) std::cout << "Looping over first recHits"  << std::endl;
              for ( auto rh_i = 0U; rh_i < nRecHits1; rh_i++ ){
+				  auto rhe = useEnergy ? (*rhEnergy)[rh_i] : 999;	
+				  if( rhe < minRhEnergy ) continue;
                   auto id_i = (*rhCaliID)[rh_i];
                   auto Mini_t_i = (*rhCaliRtTime)[rh_i];
                   auto CCStc_t_i = (*rhCaliCCTime)[rh_i];
@@ -292,6 +353,23 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
                   sumXtalCCStcRecTime[id_i] += CCStc_t_i; 
 				  numXtalCCStcRecTime[id_i] += 1;
                   sumXtal2CCStcRecTime[id_i] += CCStc_t_i*CCStc_t_i;
+
+				auto EVPHR(1000000000.0);
+				auto rhIdInfo = DetIDMap[(*rhCaliID)[rh_i]];
+            	//auto rh22x135 = (rhIdInfo.i2 == 22) && (rhIdInfo.i1 == 135);
+				for( int i = 0; i < nCrys; i++ ){
+                auto rhsel = (rhIdInfo.i2 == (crystals[i])[0]) && (rhIdInfo.i1 == (crystals[i])[1]);
+				if( rhsel ){
+					//auto evntSel = (event/EVPHR) + (run - srun)*10;
+                    auto evntSel = run - srun;
+					if( debug ) std::cout << " eventSel  " << evntSel << " " << event << " " << run - srun << std::endl;
+            		hist1d136[i]->Fill(evntSel,(*rhCaliCCTime)[rh_i]);
+                    hist1d140[i]->Fill(evntSel,(*rhCaliRtTime)[rh_i]);
+            		hist1d137[i]->Fill(evntSel);
+            		hist1d138[i]->Fill((*rhCaliCCTime)[rh_i]);
+            		hist1d139[i]->Fill((*rhCaliRtTime)[rh_i]);
+				}//<<>>if( rh22x135 )
+				}//<<>>for( int i = 0; i < nCrys; i++ )
 
              }//<<>>for (auto i = 0U; i < nRecHits1; i++) // end loop over rechits
              if( debug ) std::cout << "RecHits Loop done "<< std::endl;
@@ -347,6 +425,19 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
     fOutFile->cd();
 
     std::cout << "Write AveXtal Rechit Time Maps" << std::endl;
+
+	for( int i = 0; i < nCrys; i++ ){
+	hist1d136[i]->Write(); 
+    hist1d140[i]->Write();
+	hist1d137[i]->Write();
+	hist1d138[i]->Write();
+	hist1d139[i]->Write();
+	fillRatioHist(hist1d136[i],hist1d137[i],hist1d143[i]);
+	hist1d143[i]->Write();
+    fillRatioHist(hist1d140[i],hist1d137[i],hist1d144[i]);
+    hist1d144[i]->Write();
+	}//<<>>for( int i = 0; i < nCrys; i++ )
+
     for( auto i = 0; i < nAlgos; i++){
 
          IcMapEB[i]->Write();
@@ -367,6 +458,16 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 
     }//<<>>for( auto i = 0; i < nAlgos; i++)
 
+	for( int i = 0; i < nCrys; i++ ){
+    delete hist1d136[i];
+    delete hist1d140[i];
+    delete hist1d137[i];
+    delete hist1d138[i];
+    delete hist1d139[i];
+    delete hist1d143[i];
+    delete hist1d144[i];
+	}//<<>>for( int i = 0; i < nCrys; i++ ){
+
 	IcDistCompEB->Write();
 	delete IcDistCompEB;
 
@@ -381,9 +482,12 @@ int main ( int argc, char *argv[] ){
         //else {
 
                 //auto indir = "lpcsusylep/jaking/ecalTiming/tt_KUCCRes_126_Test/EGamma/"; //argv[1];
-                auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
+                //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
                 //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v4_flipped/EGamma/";
                 //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v3/EGamma/";
+				//auto indir = "ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/";
+				//auto indir = "ecalTiming/gammares_tt_kucc_126_v10_diag/EGamma/";
+                auto indir = "ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
 
                 ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
                 ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
@@ -400,7 +504,7 @@ int main ( int argc, char *argv[] ){
                 //auto infilelist = "egamma_run3_prompt_360090_360981_126_gammares_v2b_califilelist.txt";//6
                 //auto infilelist = "egamma_run3_prompt_361417_362522_126_gammares_v2b_califilelist.txt";//8
                 //auto infilelist = "egamma_run3_prompt_362523_362760_126_gammares_v2b_califilelist.txt";//9
-				auto infilelist = "egamma_run3_prompt_2022C_126_gammares_v2b_califilelist.txt";
+				//auto infilelist = "egamma_run3_prompt_2022C_126_gammares_v2b_califilelist.txt";
 
                 //auto infilelist = "egamma_run3_prompt_357487_357733_126_gammares_v4Flip_califilelist.txt"; //D1
                 //auto infilelist = "egamma_run3_iov5_359421_360089_126_gammares_v4Flip_califilelist.txt"; //5
@@ -424,6 +528,18 @@ int main ( int argc, char *argv[] ){
                 //auto infilelist = "egamma_run3_iov8_361417_362522_126_gammares_v3_califilelist.txt";
                 //auto infilelist = "egamma_run3_iov9_362523_362760_126_gammares_v3_califilelist.txt";
 
+                //auto infilelist = "egamma_run3_IOV5_359421_360089_126_gammares_v7_califilelist.txt";
+				//auto infilelist = "egamma_run3_Run2018A_Full_126_gammares_v7_califilelist.txt";
+
+				//auto infilelist = "egamma_run3_iov9_362523_362760_126_gammares_diag_v10_califilelist.txt";
+
+				//auto infilelist = "tt_run3_2022C_Prompt_355794_359021_126_gammares_v10_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2022D1_Prompt_355794_359021_126_gammares_v10_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2022D2_Prompt_355794_359021_126_gammares_v10_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2022E_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
+                auto infilelist = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2022G_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
+
                 //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
                 //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
                 //auto outfilename = "st_RatioRes_126_v2a_run2018A_316000-316499_Cali.root"; //argv[3];
@@ -436,7 +552,7 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022_360090_360981_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022_361417_362522_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022IOV9_362523_362760_Cali.root";
-                auto outfilename = "tt_KUCCRes_126_v2b_run3_2022C_355794_357486_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v2b_run3_2022C_355794_357486_Cali.root";
 
                 //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022E_359022_360331_Cali.root"; //E
                 //auto outfilename = "tt_KUCCRes_126_v4Flip_run3_2022_357487_357733_Cali.root";//D1 
@@ -454,11 +570,23 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV2_356514_357289_Cali.root"; //2
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV3_357290_358883_Cali.root"; //3
         		//auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV4_358884_359420_Cali.root"; //4
-                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV5_359421_360089_Cali.root"; //5
+                //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV5_359421_360089_Cali_v2.root"; //5
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV6_360090_360981_Cali.root"; //6
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV7_360982_361416_Cali.root"; //7
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV8_361417_362522_Cali.root"; //8
                 //auto outfilename = "tt_KUCCRes_126_v3_run3_2022IOV9_362523_362760_Cali.root"; //9
+
+                //auto outfilename = "tt_KUCCRes_126_v7_run3_2022IOV5_359421_360089_Cali_10GeV_v5.root"; //5
+				//auto outfilename = "tt_KUCCRes_126_v7_run3_2018A_Full_Cali_v4.root";
+
+				//auto outfilename = "tt_KUCCRes_126_v10diag_run3_2022IOV9_362523_362760_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022C_Prompt_355794_359021_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022D1_Prompt_355794_359021_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022D2_Prompt_355794_359021_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022E_Prompt_359022_362760_Cali.root";
+                auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022F_Prompt_359022_362760_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022G_Prompt_359022_362760_Cali.root";
+
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}

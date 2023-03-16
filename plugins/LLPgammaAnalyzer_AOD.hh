@@ -420,7 +420,7 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	std::vector<int>    jetKidPdgID, jetKidCharge, jetKid3Charge, jetPHM, jetELM;
       	std::vector<uInt>   jetRecHitId;
       	std::vector<bool>   jetKidLLP;
-      	std::vector<float> jetKidMass, jetKidVx, jetKidVy, jetKidVz;
+      	std::vector<float>  jetKidMass, jetKidVx, jetKidVy, jetKidVz;
       	std::vector<float>  jetKidE, jetKidPt, jetKidPhi, jetKidEta, jetKidTime, jetKidMedTime;
       	std::vector<float>  jetNHF, jetNEMF, jetCHF, jetCEMF, jetMUF, jetNHM, jetCHM, jetPHE, jetPHEF;
       	std::vector<float>  jetELE, jetELEF, jetMUE;
@@ -435,9 +435,9 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         std::vector<float>  sJetScEnergy, sJetScPhEnergy, sJetScRhEnergy, jetScEMF;
         std::vector<rhIdGroup> jetScRhIds;
 
-        std::vector<rhIdGroup> jetBcRhIds;
         std::vector<uInt>   jetBcTimesCnt, jetBcRhCnt, jetBcGrpCnt;
         std::vector<float>  jetBcSumRHEnr, jetBcEMFr; 
+        std::vector<rhIdGroup> jetBcRhIds;
 
         std::vector<float>  jetImpactAngle;
         std::vector<float>  jetSc3dEx, jetSc3dEy, jetSc3dEz, jetSc3dEv, jetSc3dEslope, jetSc3dEchisp;
@@ -452,11 +452,11 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
 
         uInt                nCaloJets;
 		std::vector<uInt>   cljBcCnt;
-        std::vector<float> cljPt, cljEnergy, cljPhi, cljEta, cljPx, cljPy, cljPz, cljEMFrac;
+        std::vector<float>  cljPt, cljEnergy, cljPhi, cljEta, cljPx, cljPy, cljPz, cljEMFrac;
         std::vector<float>  cljSeedTOFTime, cljCMeanTime, cljCDrMeanTime;
-        std::vector<rhIdGroup> cljRhIds;
         std::vector<float>  cljBc3dEx, cljBc3dEy, cljBc3dEz, cljBc3dEv, cljBc3dEslope, cljBc3dEchisp;
         std::vector<float>  cljBc2dEx, cljBc2dEy, cljBc2dEv, cljBc2dEslope, cljBc2dEchisp;
+        std::vector<rhIdGroup> cljRhIds;
 
          // genJets
         const edm::InputTag genJetsTag;
@@ -481,11 +481,11 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
      
         uInt                nElectrons;
         std::vector<int> 	eleCharge;
-        std::vector<float> elePt, eleEnergy, elePhi, eleEta, elePx, elePy, elePz;
-        std::vector<rhIdGroup> eleRhIds;
+        std::vector<float>  elePt, eleEnergy, elePhi, eleEta, elePx, elePy, elePz;
         std::vector<float>  eleSeedTOFTime, eleCMeanTime;
         std::vector<float>  eleSc3dEx, eleSc3dEy, eleSc3dEz, eleSc3dEv, eleSc3dEslope, eleSc3dEchisp;
         std::vector<float>  eleSc2dEx, eleSc2dEy, eleSc2dEv, eleSc2dEslope, eleSc2dEchisp; 
+        std::vector<rhIdGroup> eleRhIds;
 
       	// muons
       	const edm::InputTag muonsTag;
@@ -554,12 +554,14 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         std::vector<float>  phoTrkSumPtSolidConeDR04, phoTrkSumPtHollowConeDR04;
         std::vector<int>    phoNTrkSolidConeDR04, phoNTrkHollowConeDR04;
 
+		std::vector<float>  phoSMaj, phoSMin, phoSAlp;
+
 		// genPhotons
 
 //        std::vector<float> genPhoPt, genPhoEnergy, genPhoPhi, genPhoEta, genPhoPx, genPhoPy, genPhoPz, genPhoDr;
 //        std::vector<int>    genPhoIdx, genPhoPdgId, genPhoLlp;
 
-        std::vector<float> genPhoDr;
+        std::vector<float>  genPhoDr;
         std::vector<int>    genPhoIdx;
 
       	// ootPhotons

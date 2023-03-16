@@ -17,6 +17,7 @@ p2=hist_maker_aodsim
 p3=wc_ku_InterCali_aveRecHit_isoot_kucc_fliter_red
 p4=wc_ku_plot2dResolution_wGausErr_mf
 p5=wc_ku_timefitter_wErr
+p6=hist_maker_egammares_diag
 
 all: $(p2) 
 #$(p2) $(p3) $(p6) $(p22)
@@ -36,3 +37,6 @@ $(p4): $(p4).cpp
 
 $(p5): $(p5).cpp
 	$(CC) -o $(p5).obj $(p5).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+
+$(p6): $(p6).cpp
+	$(CC) -o $(p6).obj $(p6).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)

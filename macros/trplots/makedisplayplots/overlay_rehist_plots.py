@@ -61,10 +61,10 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',75,2250,2)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',75,500,2)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,2250,2)
-        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,500,2)
-        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',100,2250,3)
+        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] ) )',100,700,2)
+        hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',100,750,3)
         #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',75,375,3)
-        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',2.5,750.0,3)
+        #hfit = TF1('hfits','sqrt( ( ([0]*[0])/(x*x) )+( 2*[1]*[1] )+( ([2]*[2])/(x) ) )',100,750,0,3)
         #hfit = TF1('hfits','sqrt((([0]*[0])/(x*x))+(2*[1]*[1]))',6,100,2)
         hfit.SetParName(0,'N')
         hfit.SetParameter(0,40.0)
@@ -99,10 +99,10 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         else : hist = tree+'/'+histname
  
         orighist = f1[n].Get(hist)
-        nbins = 15 #orighist.GetNbinsX()
-        low = 0.0 #orighist.GetMinimumBin()
-        high = 100.0 #orighist.GetMaximumBin()
-        bscale = (high-low)/(10*nbins)
+        #nbins = 15 #orighist.GetNbinsX()
+        #low = 0.0 #orighist.GetMinimumBin()
+        #high = 100.0 #orighist.GetMaximumBin()
+        #bscale = (high-low)/(10*nbins)
         #print('Find Bins',nbins,low,high,bscale) 
         htitle = 'hist' + str(n)
         #mybins = array([0,2,4,6,8,10,12,14,16,20,24,30,38,52,68,100],dtype='float64')
@@ -118,8 +118,8 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #binwidths = [ 12.5,12.5,12.5,12.5,25.0,25.0,25.0,25.0,50.0,62.5,175.0,650.0]
         #mybins = [100, 125, 150, 175, 225, 275, 325, 375, 475, 600, 950, 2250]
         #mybins = [75, 150, 175, 225, 275, 325, 375, 475, 600, 950, 2250]
-        mybins = [ 0, 75, 125, 175, 225, 275, 325, 375, 425, 500, 700, 2250, 9000]
-        binwidths = [ 37.5,25.0,25.0,25.0,25.0,25.0,25.0,25.0,37.5,100.0,775.0,3375.0]
+        #mybins = [ 0, 75, 125, 175, 225, 275, 325, 375, 425, 500, 700, 2250, 9000]
+        #binwidths = [ 37.5,25.0,25.0,25.0,25.0,25.0,25.0,25.0,37.5,100.0,775.0,3375.0]
         #mybins = [ 0, 75, 125, 175, 225, 275, 325, 375, 425, 500, 700, 2250, 9000]
         #binwidths = [ 37.5,25.0,25.0,25.0,25.0,25.0,25.0,25.0,37.5,100.0,775.0,3375.0]
         #mybins = [ 0, 7.5, 12.5, 17.5, 22.5, 27.5, 32.5, 37.5, 42.5, 50.0, 70.0, 225.0, 900.0]
@@ -132,11 +132,12 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #mybins = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10]
         #mybins = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
         #binwidths = [0.5,0.5,0.5,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25]
-        numExcludeBins = 0
+        #numExcludeBins = 0
 
         #binwidths = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]        
 
-        lenmybins = len(mybins) - numExcludeBins
+        #lenmybins = len(mybins) - numExcludeBins
+        lenmybins = int(orighist.GetNbinsX())
         #lenmybins = 16
         #myhist = TH1D(htitle,"",150,low,high)
         #h1.append(TGraphErrors(lenmybins))
@@ -144,12 +145,14 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         #h1.append(TH2D(htitle,"",(10*nbins),low,high,240,0,2.4))
         #h1.append(TH1F(htitle,"",len(mybins)-1,mybins))
 
-        for bn in range( 2,lenmybins-1):
+        for bn in range( 1,lenmybins):
             #binval = float(orighist.GetBinContent(bn))*binwidths[bn-1]*2
             binval = float(orighist.GetBinContent(bn))
             #binerr = 0.0
             binerr = float(orighist.GetBinError(bn))
             binmid = float(orighist.GetBinCenter(bn))
+            binwidth = float(orighist.GetBinWidth(bn))
+            binstart = float(orighist.GetBinLowEdge(bn))
             #binmid = thebinmid[n][bn-1]  #float(orighist.GetBinCenter(bn))
             #if binval > 0.0 :     
             if True :
@@ -158,12 +161,12 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
                     binval = binval/sqrt(2)
                 h1[n].SetPoint(bn,binmid,binval)
                 #ebin = int(binmid/bscale)+1
-                widtherr = binwidths[bn-1]/sqrt(3)
+                widtherr = (binwidth/2)/sqrt(3)
                 #widtherr = 0.0004
                 #widtherr = (0.25)/sqrt(3)
                 #widtherr = thebinerror[n][bn-1] #binwidths[bn-1]/sqrt(3)
                 h1[n].SetPointError(bn,widtherr,binerr)
-                print('Fill bin',bn,'at',binmid,'with',binval,'err',widtherr,'by',binerr,'for:',mybins[bn-1],'to',mybins[bn],'width',binwidths[bn-1]) 
+                print('Fill bin',bn,'at',binmid,'with',binval,'err',widtherr,'by',binerr,'for:',binstart,'to',binstart+binwidth,'width',binwidth) 
                 #print('Fill bin',bn,'at',binmid,'with',binval,'for',ebin,'with',binerr)  
         #h1[n].SetPoint(lenmybins,10000,0.001)
 #       h1.append(f1[n].Get(hist))
@@ -223,17 +226,17 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         if dofit : 
                  paramn.append(str(abs(hfit.GetParameter(0))))
                  paramc.append(str(abs(hfit.GetParameter(1))))
-                 #params.append(str(abs(hfit.GetParameter(2))))
+                 params.append(str(abs(hfit.GetParameter(2))))
                  pne = hfit.GetParError(0)
                  pce = hfit.GetParError(1)
-                 #pse = hfit.GetParError(2)
-                 print('Fit info',paramn[n],pne,paramc[n],pce)
-                 #print('Fit info',paramn[n],pne,paramc[n],pce,params[n],pse)
+                 pse = hfit.GetParError(2)
+                 #print('Fit info',paramn[n],pne,paramc[n],pce)
+                 print('Fit info',paramn[n],pne,paramc[n],pce,params[n],pse)
                  if pne < 0.01 : pne = 0.01
                  if pce < 0.0001 : pce = 0.0001
                  parnerror.append(str(pne))
                  parcerror.append(str(pce))
-                 #parserror.append(str(pse))
+                 parserror.append(str(pse))
                  #print( 'C: ' + param + ' +/- ' + parerror )
                  #lat_param = '#color['+str(k[n])+']{N : ' + paramn[0:4] + ' #pm ' + parnerror[0:4] + ' [ns]  C : ' + paramc[0:6] + ' #pm ' + parcerror[0:6] + ' [ns]}'
                  #lat.SetTextSize(0.03);
@@ -310,7 +313,7 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
             #lat_param ='#color['+str(k[l])+']{N : '+paramn[l][0:4]+' #pm '+parnerror[l][0:4]+' [ns]  C : '+paramc[l][0:6]+' #pm '+parcerror[l][0:6]+' }'
             lat_param =	'#color['+str(k[l])+']{'
             lat_param = lat_param + 'N : '+paramn[l][0:6]+' #pm '+parnerror[l][0:6]+' [ns] '
-            #lat_param = lat_param + 'S : '+params[l][0:6]+' #pm '+parserror[l][0:6]+' [ns] '
+            lat_param = lat_param + 'S : '+params[l][0:6]+' #pm '+parserror[l][0:6]+' [ns] '
             lat_param = lat_param + 'C : '+paramc[l][0:6]+' #pm '+parcerror[l][0:6]+' [ns]}'
             lat.SetTextSize(0.03);
             lat.DrawLatex(t[3],t[4]-l*.035,lat_param);
@@ -402,6 +405,87 @@ Ic_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : i
 glo_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle + gi_legtitle }
 #---------------------------------------------------------------
 
+# run3 2022G2_v10
+ptitle=[' 362350_362700 v10','','#splitline{EBEB}{Run2022G}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 600.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22G2_v10'
+dostack(hl_r3_22G2_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022E_v10
+ptitle=[' 359022_362760 v10','','#splitline{EBEB}{Run2022E}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 600.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22E_v10'
+#dostack(hl_r3_22E_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022D2_v10
+ptitle=[' 357800_358200 v10','','#splitline{EBEB}{Run2022D2}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 600.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22D2_v10'
+#dostack(hl_r3_22D2_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022D1_v10
+ptitle=[' 357600_357700 v10','','#splitline{EBEB}{Run2022D1}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 600.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22D1_v10'
+#dostack(hl_r3_22D1_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022F2_v10
+ptitle=[' 360332-362180','','#splitline{EBEB}{Run2022F}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.25]
+outname = 'downloads/tr_hl_r3_22F2_v10'
+#dostack(hl_r3_22F2_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022C_v10
+ptitle=[' 356800_357250 v10','','#splitline{EBEB}{Run2022C}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 600.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22C_v10'
+#dostack(hl_r3_22C_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run2_2018A_v7_v5
+ptitle=[' 352400-358400 v7 v5','','#splitline{EBEB}{Run2018A}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r2_2018A_v7_v5'
+#dostack(hl_r2_2018A_v7_v5, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5_v5_v4
+ptitle=[' 359421_360089 v5 v4','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.6, 0.05 ]
+x = [ 100.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_v5_v4'
+#dostack(hl_r3_22IOV5_v5_v4, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022IOV5_v5e1
+ptitle=[' 359421_360089 v5e1','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 2.0, 0.05 ]
+x = [ 75.0, 2250.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_22IOV5_v5e1'
+#dostack(hl_r3_22IOV5_v5e1, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
 # run3 2022IOV2_v5
 ptitle=[' 356514_357289 v5','','#splitline{EBEB}{Run2022IOV2}'] #{GT 106X_dataRun2_v28}'
 y = [ 2.0, 0.05 ]
@@ -409,7 +493,7 @@ x = [ 75.0, 2250.0 ]
 l = [ 0.7,0.65,0.925,0.9 ]
 t = [0.2,0.825,0.0,0.175,0.225]
 outname = 'downloads/tr_hl_r3_22IOV2_v5'
-dostack(hl_r3_22IOV2_v5, outname, date, Ic_layout, ptitle,  y, x, l, t)
+#dostack(hl_r3_22IOV2_v5, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 # run3 2022IOV5_nocali
 ptitle=[' 359421_360089 NoCali','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'

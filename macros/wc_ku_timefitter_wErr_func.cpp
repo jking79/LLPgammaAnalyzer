@@ -35,6 +35,49 @@
 //#include "CommonTimeFit.cpp"
 #include "wc_ku_gausTimeFit.cpp"
 
+// set bins helper function
+
+std::string RemoveDelim(std::string tmp, const std::string & delim){return tmp.erase(tmp.find(delim),delim.length());}
+
+void setBins(std::string & str, std::vector<Double_t> & bins, Bool_t & var_bins){
+
+    if(str.find("CONSTANT") != std::string::npos){
+
+        var_bins = false;
+        str = RemoveDelim(str,"CONSTANT");
+        Int_t nbins = 0; Double_t low = 0.f, high = 0.f;
+        std::stringstream ss(str);
+        ss >> nbins >> low >> high;
+        Double_t bin_width = (high-low)/nbins;
+        //std::cout << "Setting Const bins : ";
+        for (Int_t ibin = 0; ibin <= nbins; ibin++){
+            //std::cout << low+ibin*bin_width << " ";
+            bins.push_back(low+ibin*bin_width);
+        }//<<>.for (Int_t ibin = 0; ibin <= nbins; ibin++)
+        //std::cout << std::endl;
+
+    } else if(str.find("VARIABLE") != std::string::npos) {
+
+        var_bins = true;
+        str = RemoveDelim(str,"VARIABLE");
+        Float_t bin_edge;
+        std::stringstream ss(str);
+        //std::cout << "Setting Var bins : ";
+        while(ss >> bin_edge){
+            //std::cout << bin_edge << " ";
+            bins.push_back(bin_edge);
+        }//<<>>while (ss >> bin_edge)
+        //std::cout << std::endl;
+
+    } else {
+
+        std::cerr << "Aye... bins are either VARIABLE or CONSTANT! Exiting..." << std::endl;
+        exit(1);
+
+    }//<<>>if      (str.find("CONSTANT") != std::string::npos)
+
+}//<<>>void setBins(std::string & str, std::vector<Double_t> & bins, Bool_t & var_bins)
+
 // fit struct
 struct FitStruct{
  
@@ -115,7 +158,7 @@ void DumpFitInfo(FitStruct & DataInfo, const std::string & outfiletext, std::vec
 
   dumpfile << space.c_str() << std::endl;
 
-  auto fNBinsX = fXBins.size()-1;
+  auto fNBinsX = fXBins.size() - 1;
   for (auto ibinX = 1; ibinX <= fNBinsX; ibinX++){
 
     std::cout << "Dumping Info for " << ibinX << " of " << fNBinsX << " bins. " << std::endl;
@@ -197,7 +240,7 @@ void DumpFitInfo(FitStruct & DataInfo, const std::string & outfiletext, std::vec
 
 //************** Primary function *************************************************************************************
 void runTimeFitter(const std::string & infilename, const std::string & plotconfig, const std::string & miscconfig,
-		   const std::string & timefitconfig, const std::string & era, const std::string & outfiletext, const std::string & inplotname){
+		   const std::string & timefitconfig, const std::string & era, const std::string & outfiletext, const std::string & inplotname, std::string xbinstr ){
 
 //----header------------------------------------------
 
@@ -218,7 +261,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   std::string fTitle;
   std::string fXTitle;
   //std::vector<Double_t> fXBins;
-  Int_t fNBinsX;
+  Int_t fNBinsX(0);
   //Bool_t fXVarBins;
 
   // var fit config
@@ -258,13 +301,15 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   fTitle = "#Delta(Photon Seed Time) [ns] vs. A_{eff}/#sigma_{n} (EBEB)";
   fXTitle = "A_{eff}/#sigma_{n} (EBEB)";
   //std::string xbinstr  = "VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 950 2250";
-  //Common::SetupBins(xbinstr,fXBins,fXVarBins);
+  std::vector<Double_t> fXBins;
+  Bool_t fXVarBins = false;//dummy not used
+  setBins(xbinstr,fXBins,fXVarBins);
   //std::vector<Double_t> fXBins{75.0,100.0,125.0,150.0,175.0,225.0,275.0,325.0,375.0,475.0,600.0,950.0,2250.0};
   //std::vector<Double_t> fXBins{100.0,125.0,150.0,175.0,225.0,275.0,325.0,375.0,475.0,600.0,950.0,2250.0};
   //std::vector<Double_t> fXBins{75.0,150.0,175.0,225.0,275.0,325.0,375.0,475.0,600.0,950.0,2250.0,4500.0};
   //std::vector<Double_t> fXBins{75.0,150.0,175.0,225.0,275.0,325.0,375.0,475.0,600.0,950.0,2250.0,9000.0};
-  std::vector<Double_t> fXBins{0.0,75.0,125.0,175.0,225.0,275.0,325.0,375.0,425.0,500.0,700.0,2250.0,9000.0};
-  fNBinsX = fXBins.size()-1;
+  //std::vector<Double_t> fXBins{0.0,75.0,125.0,175.0,225.0,275.0,325.0,375.0,425.0,500.0,700.0,2250.0,9000.0};
+  fNBinsX = fXBins.size();
   std::string ftstr = "Gaus1core";
   SetupTimeFitType(ftstr,fTimeFitType);
   fRangeLow = 2.0f;
@@ -434,7 +479,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GResultsMap["rms"]->Sumw2();
 
   // set bin content!
-  for (auto ibinX = 1; ibinX <= fNBinsX; ibinX++){ 
+  for (auto ibinX = 1; ibinX < fNBinsX; ibinX++){ 
     // get time fit
     auto & TimeFit = TimeFitStructMap[ibinX];
     //auto & GTimeFit = GTimeFitStructMap[ibinX];
@@ -457,7 +502,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
     //std::cout << "sigma: " << result.sigma ;
     //std::cout << "Sigma ( err hist: " << err << " sig: " << sgerr << " n: " << nerr << " m: " << merr << " )";
     std::cout << " Bin " << ibinX  <<  " : " << fXBins[ibinX-1] << "-" << fXBins[ibinX]; 
-	std::cout << " : no guass: " << result.sigma-estTOF << " err: " << result.esigma << " "; 
+	std::cout << " : no guass: " << result.sigma-estTOF << " err: " << result.esigma << std::endl; 
 	//std::cout << " :: w/ guass:" << gresult.sigma << " err:" << gresult.esigma << std::endl;
 	//auto fserr = gresult.esigma * 8;
 	//if( ibinX == 1 ) fserr = gresult.esigma * 12;
@@ -573,7 +618,7 @@ void runTimeFitter(const std::string & infilename, const std::string & plotconfi
   //GFitInfo.ResultsMap.clear();
   // loop over good bins to delete things
   //auto & TimeFitStructMap = FitInfo.TimeFitStructMap;
-  for (auto ibinX = 1; ibinX <= fNBinsX; ibinX++){
+  for (auto ibinX = 1; ibinX < fNBinsX; ibinX++){
     // get pair input
     auto & TimeFit = TimeFitStructMap[ibinX];
     //auto & GTimeFit = GTimeFitStructMap[ibinX];

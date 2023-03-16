@@ -884,6 +884,101 @@ egres_r3_22IOV3_nocali='r3_2022_resoplts/egres_Run2022IOV3_357290_358883_nocali/
 egres_r3_22IOV5_nocali='r3_2022_resoplts/egres_Run2022IOV5_359421_360089_nocali/egres_Run2022IOV5_359421_360089_nocali_126_v2b_resplots.root'
 
 egres_r3_22IOV2_v5='r3_2022_resoplts/egres_Run2022IOV2_356514_357289_v5_plots/egres_Run2022IOV2_356514_357289_126_v5_resplots.root'
+egres_r3_22IOV5_v5e1='r3_2022_resoplts/egres_Run2022IOV5_359421_360089_v5e1_plots/egres_Run2022IOV5_359421_360089_126_v5e1_resplots.root'
+egres_r3_22IOV5_v5_v3='r3_2022_resoplts/egres_Run2022IOV5_359421_360089_v5_plots_v3/egres_Run2022IOV5_359421_360089_126_v5_resplots_v3.root'
+egres_r3_22IOV5_v5_v4='r3_2022_resoplts/egres_Run2022IOV5_359421_360089_v5_plots_v4/egres_Run2022IOV5_359421_360089_126_v5_resplots_v4.root'
+
+egres_r2_2018A_v7_v5='r3_2022_resoplts/egres_Run2022A_352400-358400_v7_plots_v5/egres_Run2018A_100000_999999_126_v7_resplots_v5.root'
+
+egres_r3_22C_v10='r3_2022_resoplts/egres_Run2022C_356800_357250_v10_plots/egres_Run2018C_356800_357250_126_v10_resplots.root'
+egres_r3_22D1_v10='r3_2022_resoplts/egres_Run2022D1_357600_357700_v10_plots/egres_Run2018D1_356800_357250_126_v10_resplots.root'
+egres_r3_22D2_v10='r3_2022_resoplts/egres_Run2022D2_357800_358200_v10_plots/egres_Run2018D2_357800_358200_126_v10_resplots.root'
+egres_r3_22E_v10='r3_2022_resoplts/egres_Run2022E_359022_362760_v10_plots/egres_Run2018E_359022_362760_126_v10_resplots.root'
+egres_r3_22F_v10='r3_2022_resoplts/egres_Run2022F_361100_361400_v10_plots/egres_Run2018F_361100_361400_126_v10_resplots.root'
+egres_r3_22F2_v10='r3_2022_resoplts/egres_Run2022F_360332_362180_v10_plots/egres_Run2018F_360332_362180_126_v10_resplots.root'
+egres_r3_22G_v10='r3_2022_resoplts/egres_Run2022G_362550_362700_v10_plots/egres_Run2018G_362550_362700_126_v10_resplots.root'
+egres_r3_22G2_v10='r3_2022_resoplts/egres_Run2022G_362350_362700_v10_plots/egres_Run2018G_362350_362700_126_v10_resplots.root'
+
+hl_r3_22G2_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22G2_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22G2_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22G2_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22G2_v10,"ZEE CC"],
+]
+
+hl_r3_22E_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22E_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22E_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22E_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22E_v10,"ZEE CC"],
+]
+
+hl_r3_22D2_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22D2_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22D2_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22D2_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22D2_v10,"ZEE CC"],
+]
+
+hl_r3_22D1_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22D1_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22D1_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22D1_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22D1_v10,"ZEE CC"],
+]
+
+hl_r3_22F2_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22F2_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22F2_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22F2_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22F2_v10,"ZEE CC"],
+]
+
+hl_r3_22C_v10 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22C_v10,"SRU RT"],
+    #["DRO_Data_Hist_sigma","",egres_r3_22C_v10,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22C_v10,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"SRU CC"],
+    #["DRO_CC_Data_Hist_sigma","",egres_r3_22C_v10,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22C_v10,"ZEE CC"],
+]
+
+hl_r2_2018A_v7_v5 = [
+    ["SRO_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"SRU RT"],
+    ["DRO_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"SRU CC"],
+    ["DRO_CC_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r2_2018A_v7_v5,"ZEE CC"],
+]
+
+hl_r3_22IOV5_v5e1 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"SRU RT"],
+    ["DRO_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"SRU CC"],
+    ["DRO_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5e1,"ZEE CC"],
+]
+
+hl_r3_22IOV5_v5_v4 = [
+    ["SRO_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"SRU RT"],
+    ["DRO_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"DRU RT"],
+    ["ZEE_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"ZEE RT"],
+    ["SRO_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"SRU CC"],
+    ["DRO_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"DRU CC"],
+    ["ZEE_CC_Data_Hist_sigma","",egres_r3_22IOV5_v5_v4,"ZEE CC"],
+]
 
 hl_r3_22IOV2_v5 = [
     ["SRO_Data_Hist_sigma","",egres_r3_22IOV2_v5,"SRU RT"],

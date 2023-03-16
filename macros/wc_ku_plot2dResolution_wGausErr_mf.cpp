@@ -51,8 +51,6 @@ struct DetIDStruct
   Int_t ecal; // EB, EM, EP
 };
 
-std::string RemoveDelim(std::string tmp, const std::string & delim){return tmp.erase(tmp.find(delim),delim.length());}
-
 void SetupDetIDsEB( std::map<UInt_t,DetIDStruct> &DetIDMap )
 {
     const std::string detIDConfigEB(ecal_config_path+"fullinfo_detids_EB.txt");
@@ -128,6 +126,10 @@ void NormX(TH2F *& hist){ 	//, const Bool_t isUp, const Bool_t varBinsX, const B
 	}
 }
 
+/* //  defined in wc_ku_timefitter_wErr_func.cpp so commented out hee
+
+std::string RemoveDelim(std::string tmp, const std::string & delim){return tmp.erase(tmp.find(delim),delim.length());}
+
 void setBins(std::string & str, std::vector<Double_t> & bins, Bool_t & var_bins){
 
   	if(str.find("CONSTANT") != std::string::npos){
@@ -166,6 +168,7 @@ void setBins(std::string & str, std::vector<Double_t> & bins, Bool_t & var_bins)
 	}//<<>>if      (str.find("CONSTANT") != std::string::npos)
 
 }//<<>>void setBins(std::string & str, std::vector<Double_t> & bins, Bool_t & var_bins)
+*/
 
 void scaleHist(TH2F *& hist, const Bool_t isUp, const Bool_t varBinsX, const Bool_t varBinsY){
 
@@ -195,7 +198,8 @@ void scaleHist(TH2F *& hist, const Bool_t isUp, const Bool_t varBinsX, const Boo
 }//<<>>void scaleHist(TH2D *& hist, const Bool_t isUp, const Bool_t varBinsX, const Bool_t varBinsY)
 
 //void plot2dResolution( string indir, string infilelistname, string outfilename, string tvarname, string calimapname, string isd_type, int brun, int erun, int leta, int heta  ){
-void plot2dResolution( string indir, string infilelistname, string outfilename, string tvarname, string calimapname, string isd_type ){
+void plot2dResolution( std::string indir, std::string infilelistname, std::string outfilename, std::string tvarname, std::string calimapname, 
+						std::string isd_type, bool useAmp, std::string xbinstr ){
 
 	bool debug = false;
     //bool debug = true;
@@ -267,14 +271,14 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
     string fTitle6("#Delta(Photon Seed Time) [ns] vs iPhi");
     string fXTitle("A_{eff}/#sigma_{n} (EBEB)");
     std::vector<Double_t> fXBins;
-    Bool_t fXVarBins = false;
+    Bool_t fXVarBins = false;//dummy not used
     //string xbinstr("VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 750 950 1275 1700 2250");
-    string xbinstr("VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 950 2250");
-    int nMyBins = 13;
+    //string xbinstr("VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 950 2250");
+    //int nMyBins = 13;
     //std::vector<TString> fXLabels;
     string fYTitle("#Delta(Photon Seed Time) [ns] (EBEB)");
     std::vector<Double_t> fYBins;
-    Bool_t fYVarBins = false;
+    Bool_t fYVarBins = false;//diummy not used;
     //string ybinstr("CONSTANT 1920 -3 3");
     string ybinstr("CONSTANT 600 -3 3");
     //std::vector<TString> fYLabels;
@@ -288,11 +292,13 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
 
     setBins(xbinstr,fXBins,fXVarBins);
     setBins(ybinstr,fYBins,fYVarBins);
+
     //Common::SetupBins(xetabinstr,fXetaBins,fXVarBins);
     //Common::SetupBins(yetabinstr,fYetaBins,fYVarBins);
 
     const auto xbins = &fXBins[0];
     const auto ybins = &fYBins[0];
+    int nMyBins = fXBins.size()-1;
 
     int tdiv = 600;
     float tstart = -3.0;
@@ -344,6 +350,11 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
     theHistCCLS->GetXaxis()->SetTitle(fXTitle.c_str());
     theHistCCLS->GetYaxis()->SetTitle(fYTitle.c_str());
     theHistCCLS->GetZaxis()->SetTitle(fZTitle.c_str());
+    auto lochistscc = locsname+"CC_"+histnames;
+    auto theSHistCCLS = new TH2F(lochistscc.c_str(),fTitle.c_str(), 2250, 0, 2250, tdiv, tstart, tend);
+    theSHistCCLS->GetXaxis()->SetTitle(fXTitle.c_str());
+    theSHistCCLS->GetYaxis()->SetTitle(fYTitle.c_str());
+    theSHistCCLS->GetZaxis()->SetTitle(fZTitle.c_str());
 
 	// local diffrnent
     auto locdhist = locdname+histname;
@@ -660,10 +671,10 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
 			if(debug) std::cout << "delta seedTOF: " << to_string(dTOF) 
 								//<< " 0: " << to_string(phoseedTOF_0) << " 1: "  << to_string(phoseedTOF_1) 
 								<< std::endl;
-            double leffa0 = (*resAmp)[0]; //(phoseedE_0/phoseedadcToGeV_0)/phoseedpedrms12_0;
-            double leffa1 = (*resAmp)[1]; //(phoseedE_1/phoseedadcToGeV_1)/phoseedpedrms12_1;
-            double geffa0 = (*resAmp)[2]; //(phoseedE_0/phoseedadcToGeV_0)/phoseedpedrms12_0;
-            double geffa1 = (*resAmp)[3]; //(phoseedE_1/phoseedadcToGeV_1)/phoseedpedrms12_1;
+            double leffa0 = useAmp ? (*resAmp)[0] : (*resE)[0]; //(phoseedE_0/phoseedadcToGeV_0)/phoseedpedrms12_0;
+            double leffa1 = useAmp ? (*resAmp)[1] : (*resE)[1]; //(phoseedE_1/phoseedadcToGeV_1)/phoseedpedrms12_1;
+            double geffa0 = useAmp ? (*resAmp)[2] : (*resE)[2]; //(phoseedE_0/phoseedadcToGeV_0)/phoseedpedrms12_0;
+            double geffa1 = useAmp ? (*resAmp)[3] : (*resE)[3]; //(phoseedE_1/phoseedadcToGeV_1)/phoseedpedrms12_1;
             double lxfill = (leffa0*leffa1)/sqrt(pow(leffa0,2)+pow(leffa1,2));
             double gxfill = (geffa0*geffa1)/sqrt(pow(geffa0,2)+pow(geffa1,2));
             double timeErr0 = 0; //phoseedtimeErr_0/25.0;
@@ -679,12 +690,14 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
             auto ge_cut = ((*resE)[2]>=10)&&((*resE)[2]<=120)&&((*resE)[3]>=10)&&((*resE)[3]<=120);
 	        auto leta_cut = (L0EB == ECAL::EB)&&(L1EB == ECAL::EB);
             auto geta_cut = (G0EB == ECAL::EB)&&(G1EB == ECAL::EB);
+            auto goodLocTime = (*resRtTime)[0] != 0 && (*resRtTime)[1] != 0 && (*resCCTime)[0] != 0 && (*resCCTime)[1] != 0;
+            auto goodGloTime = (*resRtTime)[2] != 0 && (*resRtTime)[3] != 0 && (*resCCTime)[2] != 0 && (*resCCTime)[3] != 0;
 			auto goodLocRHs = (*resRhID)[0] != 0 && (*resRhID)[1] != 0;
             auto goodGloRHs = (*resRhID)[2] != 0 && (*resRhID)[3] != 0;
 
 			auto isd_cut = idinfoL0.TT == idinfoL1.TT; // true = same, fasle = different
-	        auto levent_good = le_cut && leta_cut && goodLocRHs;
-            auto gevent_good = ge_cut && geta_cut && goodGloRHs;
+	        auto levent_good = le_cut && leta_cut && goodLocRHs && goodLocTime;
+            auto gevent_good = ge_cut && geta_cut && goodGloRHs && goodGloTime;
 
             if( levent_good ) goodlev++;
             if( goodLocRHs ) goodlin++;
@@ -703,6 +716,7 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
 				theHistLS->Fill(lxfill,lyfill);
                 theHistCCLS->Fill(lxfill,lccyfill);
 				theSHistLS->Fill(lxfill,lyfill);
+                theSHistCCLS->Fill(lxfill,lccyfill);
 				theOthHistLS->Fill(leffa0,lyfill);
 				for( auto i = 0; i < nRand; i++ ){ 
 					//virtual Double_t	Gaus(Double_t mean = 0, Double_t sigma = 1)
@@ -767,6 +781,7 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
     theHistCCLS->Write();
     theGHistLS->Write();
     theSHistLS->Write();
+	theSHistCCLS->Write();
     theOthHistLS->Write();
     theEffaHistLS->Write();
     thetdHistLS->Write();
@@ -784,6 +799,7 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
     delete theHistCCLS;
     delete theGHistLS;
     delete theSHistLS;
+    delete theSHistCCLS;
     delete theOthHistLS;
     delete theEffaHistLS;
     delete thetdHistLS;
@@ -813,6 +829,16 @@ void plot2dResolution( string indir, string infilelistname, string outfilename, 
 
 int main ( int argc, char *argv[] ){
 
+
+		//[1,1,1,1, 1, 1, 1, 1, 2, 2, 3, 4, 7, 8, 16]
+		// 1 2 3 4  5  6  7  8  9  10 11 12 13 14 15
+    	std::string xbinstr("VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 950 2250 9000"); 
+   		//std::string xbinstr("VARIABLE 0 75 100 125 150 175 200 225 250 275 325 375 450 550 725 925 1325 1700 2250"); 
+    	//std::string xbinstr("VARIABLE 0 75 100 125 150 175 225 275 325 375 475 600 750 950 1275 1700 2250");
+		bool useAmp(true);
+        //std::string xbinstr("VARIABLE 0 10 12 14 16 18 20 22 24 26 30 34 40 48 62 78 120");
+        //bool useAmp(false);
+
         //if( argc != 7 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
 
@@ -820,7 +846,10 @@ int main ( int argc, char *argv[] ){
             //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v2b/EGamma/";
             //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v4_flipped/EGamma/";
             //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v3/EGamma/";
-            auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/";
+            //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/";
+        	//auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/";
+            //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v7_diag_unclean/EGamma/";
+            auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
 
             //auto infilelistname = "gres_Run2022A_infilelist.txt"; //argv[2];
             //auto infilelistname = "egres_Run2022C_355892_test_infilelist.txt";
@@ -862,7 +891,16 @@ int main ( int argc, char *argv[] ){
             //auto infilelistname = "egamma_run22IOV3_357290_358883_nocali_126_gammares_v2b_plotfilelist.txt";
             //auto infilelistname = "egamma_run22IOV5_359421_360089_nocali_126_gammares_v2b_plotfilelist.txt";
 
-            auto infilelistname = "egamma_run22IOV2_356514_357289_126_gammares_v5_plotfilelist.txt";
+            //auto infilelistname = "egamma_run22IOV2_356514_357289_126_gammares_v5_plotfilelist.txt";
+            //auto infilelistname = "egamma_run22IOV5_359421_360089_126_gammares_v5_plotfilelist.txt";
+            //auto infilelistname = "egamma_run2018A_100000_999999_126_gammares_v7_plotfilelist.txt";
+
+            //auto infilelistname = "tt_run3_2022C_Prompt_355794_359021_126_gammares_v10_reso_plotfilelist.txt";
+            //auto infilelistname = "tt_run3_2022D1_Prompt_355794_359021_126_gammares_v10_reso_plotfilelist.txt";
+            //auto infilelistname = "tt_run3_2022D2_Prompt_355794_359021_126_gammares_v10_reso_plotfilelist.txt";
+            //auto infilelistname = "tt_run3_2022E_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
+            auto infilelistname = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
+            //auto infilelistname = "tt_run3_2022G_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
 
             //std::string outfilename = "gres_Run2022A_2dhists_test"; //argv[3];
             //std::string outfilename = "egres_Run2022C_partial_126_v2a_resplots";
@@ -904,7 +942,16 @@ int main ( int argc, char *argv[] ){
             //std::string outfilename = "egres_Run2022IOV3_357290_358883_nocali_126_v2b_resplots";
             //std::string outfilename = "egres_Run2022IOV5_359421_360089_nocali_126_v2b_resplots";
 
-            std::string outfilename = "egres_Run2022IOV2_356514_357289_126_v5_resplots";
+            //std::string outfilename = "egres_Run2022IOV2_356514_357289_126_v5_resplots";
+            //std::string outfilename = "egres_Run2022IOV5_359421_360089_126_v5_resplots_v5";
+            //std::string outfilename = "egres_Run2018A_100000_999999_126_v7_resplots_v5";
+
+            //std::string outfilename = "egres_Run2018C_356800_357250_126_v10_resplots";
+            //std::string outfilename = "egres_Run2018D1_357600_357700_126_v10_resplots";
+            //std::string outfilename = "egres_Run2018D2_357800_358200_126_v10_resplots";
+            //std::string outfilename = "egres_Run2018E_359022_362760_126_v10_resplots";
+            std::string outfilename = "egres_Run2018F_360332_362180_126_v10_resplots";
+            //std::string outfilename = "egres_Run2018G_362350_362700_126_v10_resplots";
 
             auto tvarname = ""; //argv[4];
 			auto calimapname = "kucc"; //argv[5];
@@ -913,14 +960,14 @@ int main ( int argc, char *argv[] ){
             //auto erun = std::stoi(argv[8]);
             //auto leta = std::stoi(argv[9]);
             //auto heta = std::stoi(argv[10]);
-      		plot2dResolution( indir, infilelistname, outfilename, tvarname, calimapname, isd_type ); //, brun, erun, leta, heta );
+      		plot2dResolution( indir, infilelistname, outfilename, tvarname, calimapname, isd_type, useAmp, xbinstr );
 			std::string fitInFile = outfilename + ".root";
-			runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_Data_Hist" );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_Data_Hist" );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_Data_Hist" );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_CC_Data_Hist" );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_CC_Data_Hist" );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_CC_Data_Hist" );
+			runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_Data_Hist", xbinstr );
+            runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_Data_Hist", xbinstr );
+            runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_Data_Hist", xbinstr );
+            runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_CC_Data_Hist", xbinstr );
+            runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_CC_Data_Hist", xbinstr );
+            runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_CC_Data_Hist", xbinstr );
         //}
         return 1;
 }
