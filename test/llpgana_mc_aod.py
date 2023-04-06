@@ -57,7 +57,7 @@ options.register('processName','TREE',VarParsing.multiplicity.singleton,VarParsi
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v16.root' # eta/phi correction test for oot phos
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_test_v17.root' # turned of jets, ect., changed genpart stablity check, slimmed output
 #outfilename = 'llpgana_mc_AODSIM_ntuplizer_genpartlist_v17.root' #
-outfilename = 'llpgana_mc_AODSIM_ntuplizer_cl2mom_v17.root'
+outfilename = 'llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root' # slimed output and added photon cluster covarencies
 
 options.register('outputFileName',outfilename,VarParsing.multiplicity.singleton,VarParsing.varType.string,'output file name created by cmsRun');
 

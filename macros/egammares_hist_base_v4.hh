@@ -61,6 +61,12 @@ public :
    std::vector<float>   *phoTrkSumPtHollowConeDR04;
    std::vector<float>   *phoR9;
    std::vector<int>     *phoSelType;
+
+   std::vector<float>   *unrhJitter;
+   std::vector<float>   *unrhNonJitter;
+   std::vector<float>   *unrhEncNonJitter;
+   std::vector<float>   *unrhEnergy;
+
    Float_t         phoDiMass;
    Float_t         phoDiAngle;
    Float_t         phoDiDr;
@@ -106,6 +112,12 @@ public :
    TBranch        *b_phoTrkSumPtHollowConeDR04;   //!
    TBranch        *b_phoR9;   //!
    TBranch        *b_phoSelType;   //!
+
+   TBranch        *b_unrhJitter;   //!
+   TBranch        *b_unrhNonJitter;   //!
+   TBranch        *b_unrhEncNonJitter;   //!
+   TBranch        *b_unrhEnergy;   //!  
+
    TBranch        *b_phoDiMass;   //!
    TBranch        *b_phoDiAngle;   //!
    TBranch        *b_phoDiDr;   //!
@@ -215,6 +227,10 @@ void egammares_hist_base::Init(TTree *tree)
    phoTrkSumPtHollowConeDR04 = 0;
    phoR9 = 0;
    phoSelType = 0;
+   unrhJitter = 0;
+   unrhNonJitter = 0;
+   unrhEncNonJitter = 0;
+   unrhEnergy = 0;
    // Set branch addresses and branch pointers
    //if (!tree) return;
    fChain = tree;
@@ -224,16 +240,20 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
    fChain->SetBranchAddress("event", &event, &b_event);
+
    fChain->SetBranchAddress("rhCaliID", &rhCaliID, &b_rhCaliID);
    fChain->SetBranchAddress("rhCaliEnergy", &rhCaliEnergy, &b_rhCaliEnergy);
    fChain->SetBranchAddress("rhCaliRtTime", &rhCaliRtTime, &b_rhCaliRtTime);
    fChain->SetBranchAddress("rhCaliCCTime", &rhCaliCCTime, &b_rhCaliCCTime);
+
    fChain->SetBranchAddress("resRhID", &resRhID, &b_resRhID);
    fChain->SetBranchAddress("resAmp", &resAmp, &b_resAmp);
    fChain->SetBranchAddress("resE", &resE, &b_resE);
    fChain->SetBranchAddress("resRtTime", &resRtTime, &b_resRtTime);
    fChain->SetBranchAddress("resCCTime", &resCCTime, &b_resCCTime);
    fChain->SetBranchAddress("resTOF", &resTOF, &b_resTOF);
+
+/*
    fChain->SetBranchAddress("rhID", &rhID, &b_rhID);
    fChain->SetBranchAddress("rhRtTime", &rhRtTime, &b_rhRtTime);
    fChain->SetBranchAddress("rhCCTime", &rhCCTime, &b_rhCCTime);
@@ -243,6 +263,9 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("rhisWeird", &rhisWeird, &b_rhisWeird);
    fChain->SetBranchAddress("rhisDiWeird", &rhisDiWeird, &b_rhisDiWeird);
    fChain->SetBranchAddress("rhSwCross", &rhSwCross, &b_rhSwCross);
+*/
+
+/*
    fChain->SetBranchAddress("phoEnergy", &phoEnergy, &b_phoEnergy);
    fChain->SetBranchAddress("phoRhIds", &phoRhIds, &b_phoRhIds);
    fChain->SetBranchAddress("phoPt", &phoPt, &b_phoPt);
@@ -259,11 +282,19 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("phoTrkSumPtHollowConeDR04", &phoTrkSumPtHollowConeDR04, &b_phoTrkSumPtHollowConeDR04);
    fChain->SetBranchAddress("phoR9", &phoR9, &b_phoR9);
    fChain->SetBranchAddress("phoSelType", &phoSelType, &b_phoSelType);
+
    fChain->SetBranchAddress("phoDiMass", &phoDiMass, &b_phoDiMass);
    fChain->SetBranchAddress("phoDiAngle", &phoDiAngle, &b_phoDiAngle);
    fChain->SetBranchAddress("phoDiDr", &phoDiDr, &b_phoDiDr);
    fChain->SetBranchAddress("phoDiPhi", &phoDiPhi, &b_phoDiPhi);
    fChain->SetBranchAddress("phoDiEta", &phoDiEta, &b_phoDiEta);
+*/
+
+   fChain->SetBranchAddress("unrhJitter", &unrhJitter, &b_unrhJitter);
+   fChain->SetBranchAddress("unrhNonJitter", &unrhNonJitter, &b_unrhNonJitter);
+   fChain->SetBranchAddress("unrhEncNonJitter", &unrhEncNonJitter, &b_unrhEncNonJitter);
+   fChain->SetBranchAddress("unrhEnergy", &unrhEnergy, &b_unrhEnergy);
+
    //Notify();
 }
 

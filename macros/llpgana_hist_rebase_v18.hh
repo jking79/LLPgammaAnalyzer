@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed Dec  7 17:06:18 2022 by ROOT version 6.14/09
+// Wed Mar 22 13:42:18 2023 by ROOT version 6.14/09
 // from TTree llpgtree/llpgtree
-// found on file: llpgana_mc_AODSIM_ntuplizer_test_v16.root
+// found on file: llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root
 //////////////////////////////////////////////////////////
 
 //#ifndef llpgana_hist_rebase_h
@@ -20,7 +20,7 @@ using namespace std;
 class llpgana_hist_rebase {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-//   Int_t           fCurrent; //!current Tree number in a TChain
+   //Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
@@ -40,49 +40,11 @@ public :
    Float_t         metCSumEt;
    Float_t         metCPx;
    Float_t         metCPy;
-   Float_t         jetHt;
-   UInt_t          nJets;
-   UInt_t          nGoodDrJets;
-   UInt_t          nGoodScJets;
-   UInt_t          nGoodBcJets;
-   UInt_t          nUnJets;
-   vector<float>   *jetE;
-   vector<float>   *jetPt;
-   vector<float>   *jetEta;
-   vector<float>   *jetPhi;
-   vector<float>   *jetNHF;
-   vector<float>   *jetNEMF;
-   vector<float>   *jetCHF;
-   vector<float>   *jetCEMF;
-   vector<float>   *jetMUF;
-   vector<float>   *jetNHM;
-   vector<float>   *jetCHM;
-   vector<int>     *jetPHM;
-   vector<int>     *jetELM;
-   vector<float>   *jetPHE;
-   vector<float>   *jetPHEF;
-   vector<float>   *jetELE;
-   vector<float>   *jetELEF;
-   vector<float>   *jetMUE;
-   vector<int>     *jetID;
-   vector<unsigned int> *cljBcCnt;
-   UInt_t          nCaloJets;
-   vector<float>   *cljSeedTOFTime;
-   vector<float>   *cljCMeanTime;
-   vector<float>   *cljCDrMeanTime;
-   vector<float>   *cljPt;
-   vector<float>   *cljEnergy;
-   vector<float>   *cljPhi;
-   vector<float>   *cljEta;
-   vector<float>   *cljPx;
-   vector<float>   *cljPy;
-   vector<float>   *cljPz;
    UInt_t          nPhotons;
    vector<bool>    *phoIsOotPho;
    vector<bool>    *phoExcluded;
    vector<float>   *phoSeedTOFTime;
    vector<float>   *phoCMeanTime;
-   vector<float>   *phoSc2dEv;
    vector<float>   *phoPt;
    vector<float>   *phoEnergy;
    vector<float>   *phoPhi;
@@ -91,11 +53,8 @@ public :
    vector<float>   *phoPy;
    vector<float>   *phoPz;
    vector<vector<unsigned int> > *phoRhIds;
-   vector<bool>    *phoIsPFPhoton;
-   vector<bool>    *phoIsStdPhoton;
    vector<bool>    *phoHasConTracks;
    vector<bool>    *phoIsPixelSeed;
-   vector<bool>    *phoIsPhoton;
    vector<bool>    *phoIsEB;
    vector<bool>    *phoIsEE;
    vector<float>   *phoHadOverEM;
@@ -137,66 +96,12 @@ public :
    vector<int>     *phoNTrkHollowConeDR04;
    vector<int>     *genPhoIdx;
    vector<float>   *genPhoDr;
-   UInt_t          nElectrons;
-   vector<float>   *eleSeedTOFTime;
-   vector<float>   *eleCMeanTime;
-   vector<float>   *elePt;
-   vector<float>   *eleEnergy;
-   vector<float>   *elePhi;
-   vector<float>   *eleEta;
-   vector<float>   *elePx;
-   vector<float>   *elePy;
-   vector<float>   *elePz;
-   vector<float>   *jetSumEPFrac;
-   vector<float>   *jetEPEnergy;
-   vector<float>   *jetEMEnergy;
-   vector<float>   *jetEMEnrFrac;
-   vector<float>   *jetEPEnrFrac;
-   vector<float>   *jetDrLeadEta;
-   vector<float>   *jetDrLeadPhi;
-   vector<float>   *jetDrLeadEnr;
-   vector<float>   *sJetDrRHEnergy;
-   vector<float>   *jetDrEMF;
-   vector<unsigned int> *jetDrRhCnt;
-   vector<unsigned int> *jetBcTimesCnt;
-   vector<float>   *jetBcSumRHEnr;
-   vector<float>   *jetBcEMFr;
-   vector<unsigned int> *jetBcRhCnt;
-   vector<unsigned int> *jetBcGrpCnt;
-   vector<unsigned int> *nJetScMatch;
-   vector<unsigned int> *jetScRhCnt;
-   vector<vector<unsigned int> > *jetScRhIds;
-   vector<float>   *sJetScEnergy;
-   vector<float>   *sJetScPhEnergy;
-   vector<float>   *sJetScRhEnergy;
-   vector<float>   *jetScEMF;
-   vector<float>   *jetDRMuTime;
-   vector<float>   *jetDRTimeError;
-   vector<float>   *jetDRTimeRMS;
-   vector<float>   *jetDRMedTime;
-   vector<float>   *jetCDRMuTime;
-   vector<float>   *jetCDRMedTime;
-   vector<float>   *jetSCMuTime;
-   vector<float>   *jetSCMedTime;
-   vector<float>   *jetCSCMuTime;
-   vector<float>   *jetCSCMedTime;
-   vector<float>   *jetCBCMuTime;
-   vector<float>   *jetCBCMedTime;
-   vector<float>   *jetGenImpactAngle;
-   vector<float>   *jetGenTime;
-   vector<float>   *jetGenPt;
-   vector<float>   *jetGenEta;
-   vector<float>   *jetGenEnergy;
-   vector<float>   *jetGenEMFrac;
-   vector<float>   *jetGenDrMatch;
-   vector<float>   *jetGenTimeVar;
-   vector<float>   *jetGenTimeLLP;
-   vector<float>   *jetGenLLPPurity;
-   vector<float>   *jetGenNextBX;
-   vector<float>   *jetGenNKids;
-   vector<float>   *jetGenTOF;
-   vector<float>   *jetImpactAngle;
-   vector<float>   *jetSc2dEv;
+   vector<float>   *phoSMaj;
+   vector<float>   *phoSMin;
+   vector<float>   *phoSAlp;
+   vector<float>   *phoCovEtaEta;
+   vector<float>   *phoCovEtaPhi;
+   vector<float>   *phoCovPhiPhi;
    UInt_t          nGenParts;
    vector<float>   *genPt;
    vector<float>   *genEnergy;
@@ -217,9 +122,6 @@ public :
    vector<float>   *rhTime;
    vector<float>   *rhTOF;
    vector<unsigned int> *rhID;
-   vector<int>     *rhXtalI1;
-   vector<int>     *rhXtalI2;
-   vector<int>     *rhSubdet;
    vector<bool>    *rhisOOT;
 
    // List of branches
@@ -238,49 +140,11 @@ public :
    TBranch        *b_metCSumEt;   //!
    TBranch        *b_metCPx;   //!
    TBranch        *b_metCPy;   //!
-   TBranch        *b_jetHt;   //!
-   TBranch        *b_nJets;   //!
-   TBranch        *b_nGoodDrJets;   //!
-   TBranch        *b_nGoodScJets;   //!
-   TBranch        *b_nGoodBcJets;   //!
-   TBranch        *b_nUnJets;   //!
-   TBranch        *b_jetE;   //!
-   TBranch        *b_jetPt;   //!
-   TBranch        *b_jetEta;   //!
-   TBranch        *b_jetPhi;   //!
-   TBranch        *b_jetNHF;   //!
-   TBranch        *b_jetNEMF;   //!
-   TBranch        *b_jetCHF;   //!
-   TBranch        *b_jetCEMF;   //!
-   TBranch        *b_jetMUF;   //!
-   TBranch        *b_jetNHM;   //!
-   TBranch        *b_jetCHM;   //!
-   TBranch        *b_jetPHM;   //!
-   TBranch        *b_jetELM;   //!
-   TBranch        *b_jetPHE;   //!
-   TBranch        *b_jetPHEF;   //!
-   TBranch        *b_jetELE;   //!
-   TBranch        *b_jetELEF;   //!
-   TBranch        *b_jetMUE;   //!
-   TBranch        *b_jetID;   //!
-   TBranch        *b_cljBcCnt;   //!
-   TBranch        *b_nCaloJets;   //!
-   TBranch        *b_cljSeedTOFTime;   //!
-   TBranch        *b_cljCMeanTime;   //!
-   TBranch        *b_cljCDrMeanTime;   //!
-   TBranch        *b_cljPt;   //!
-   TBranch        *b_cljEnergy;   //!
-   TBranch        *b_cljPhi;   //!
-   TBranch        *b_cljEta;   //!
-   TBranch        *b_cljPx;   //!
-   TBranch        *b_cljPy;   //!
-   TBranch        *b_cljPz;   //!
    TBranch        *b_nPhotons;   //!
    TBranch        *b_phoIsOotPho;   //!
    TBranch        *b_phoExcluded;   //!
    TBranch        *b_phoSeedTOFTime;   //!
    TBranch        *b_phoCMeanTime;   //!
-   TBranch        *b_phoSc2dEv;   //!
    TBranch        *b_phoPt;   //!
    TBranch        *b_phoEnergy;   //!
    TBranch        *b_phoPhi;   //!
@@ -289,11 +153,8 @@ public :
    TBranch        *b_phoPy;   //!
    TBranch        *b_phoPz;   //!
    TBranch        *b_phoRhIds;   //!
-   TBranch        *b_phoIsPFPhoton;   //!
-   TBranch        *b_phoIsStdPhoton;   //!
    TBranch        *b_phoHasConTracks;   //!
    TBranch        *b_phoIsPixelSeed;   //!
-   TBranch        *b_phoIsPhoton;   //!
    TBranch        *b_phoIsEB;   //!
    TBranch        *b_phoIsEE;   //!
    TBranch        *b_phoHadOverEM;   //!
@@ -335,66 +196,12 @@ public :
    TBranch        *b_phoNTrkHollowConeDR04;   //!
    TBranch        *b_genPhoIdx;   //!
    TBranch        *b_genPhoDr;   //!
-   TBranch        *b_nElectrons;   //!
-   TBranch        *b_eleSeedTOFTime;   //!
-   TBranch        *b_eleCMeanTime;   //!
-   TBranch        *b_elePt;   //!
-   TBranch        *b_eleEnergy;   //!
-   TBranch        *b_elePhi;   //!
-   TBranch        *b_eleEta;   //!
-   TBranch        *b_elePx;   //!
-   TBranch        *b_elePy;   //!
-   TBranch        *b_elePz;   //!
-   TBranch        *b_jetSumEPFrac;   //!
-   TBranch        *b_jetEPEnergy;   //!
-   TBranch        *b_jetEMEnergy;   //!
-   TBranch        *b_jetEMEnrFrac;   //!
-   TBranch        *b_jetEPEnrFrac;   //!
-   TBranch        *b_jetDrLeadEta;   //!
-   TBranch        *b_jetDrLeadPhi;   //!
-   TBranch        *b_jetDrLeadEnr;   //!
-   TBranch        *b_sJetDrRHEnergy;   //!
-   TBranch        *b_jetDrEMF;   //!
-   TBranch        *b_jetDrRhCnt;   //!
-   TBranch        *b_jetBcTimesCnt;   //!
-   TBranch        *b_jetBcSumRHEnr;   //!
-   TBranch        *b_jetBcEMFr;   //!
-   TBranch        *b_jetBcRhCnt;   //!
-   TBranch        *b_jetBcGrpCnt;   //!
-   TBranch        *b_nJetScMatch;   //!
-   TBranch        *b_jetScRhCnt;   //!
-   TBranch        *b_jetScRhIds;   //!
-   TBranch        *b_sJetScEnergy;   //!
-   TBranch        *b_sJetScPhEnergy;   //!
-   TBranch        *b_sJetScRhEnergy;   //!
-   TBranch        *b_jetScEMF;   //!
-   TBranch        *b_jetDRMuTime;   //!
-   TBranch        *b_jetDRTimeError;   //!
-   TBranch        *b_jetDRTimeRMS;   //!
-   TBranch        *b_jetDRMedTime;   //!
-   TBranch        *b_jetCDRMuTime;   //!
-   TBranch        *b_jetCDRMedTime;   //!
-   TBranch        *b_jetSCMuTime;   //!
-   TBranch        *b_jetSCMedTime;   //!
-   TBranch        *b_jetCSCMuTime;   //!
-   TBranch        *b_jetCSCMedTime;   //!
-   TBranch        *b_jetCBCMuTime;   //!
-   TBranch        *b_jetCBCMedTime;   //!
-   TBranch        *b_jetGenImpactAngle;   //!
-   TBranch        *b_jetGenTime;   //!
-   TBranch        *b_jetGenPt;   //!
-   TBranch        *b_jetGenEta;   //!
-   TBranch        *b_jetGenEnergy;   //!
-   TBranch        *b_jetGenEMFrac;   //!
-   TBranch        *b_jetGenDrMatch;   //!
-   TBranch        *b_jetGenTimeVar;   //!
-   TBranch        *b_jetGenTimeLLP;   //!
-   TBranch        *b_jetGenLLPPurity;   //!
-   TBranch        *b_jetGenNextBX;   //!
-   TBranch        *b_jetGenNKids;   //!
-   TBranch        *b_jetGenTOF;   //!
-   TBranch        *b_jetImpactAngle;   //!
-   TBranch        *b_jetSc2dEv;   //!
+   TBranch        *b_phoSMaj;   //!
+   TBranch        *b_phoSMin;   //!
+   TBranch        *b_phoSAlp;   //!
+   TBranch        *b_phoCovEtaEta;   //!
+   TBranch        *b_phoCovEtaPhi;   //!
+   TBranch        *b_phoCovPhiPhi;   //!
    TBranch        *b_nGenParts;   //!
    TBranch        *b_genPt;   //!
    TBranch        *b_genEnergy;   //!
@@ -415,20 +222,17 @@ public :
    TBranch        *b_rhTime;   //!
    TBranch        *b_rhTOF;   //!
    TBranch        *b_rhID;   //!
-   TBranch        *b_rhXtalI1;   //!
-   TBranch        *b_rhXtalI2;   //!
-   TBranch        *b_rhSubdet;   //!
    TBranch        *b_rhisOOT;   //!
 
-//  llpgana_hist_rebase(TTree *tree=0);
-//  virtual ~llpgana_hist_rebase();
-//   virtual Int_t    Cut(Long64_t entry);
-//   virtual Int_t    GetEntry(Long64_t entry);
-//   virtual Long64_t LoadTree(Long64_t entry);
+   //llpgana_hist_rebase(TTree *tree=0);
+   //virtual ~llpgana_hist_rebase();
+   //virtual Int_t    Cut(Long64_t entry);
+   //virtual Int_t    GetEntry(Long64_t entry);
+   //virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-//   virtual void     Loop();
-//   virtual Bool_t   Notify();
-//   virtual void     Show(Long64_t entry = -1);
+   //virtual void     Loop();
+   //virtual Bool_t   Notify();
+   //virtual void     Show(Long64_t entry = -1);
 };
 
 //#endif
@@ -440,11 +244,11 @@ llpgana_hist_rebase::llpgana_hist_rebase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("llpgana_mc_AODSIM_ntuplizer_test_v16.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("llpgana_mc_AODSIM_ntuplizer_test_v16.root");
+         f = new TFile("llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("llpgana_mc_AODSIM_ntuplizer_test_v16.root:/tree");
+      TDirectory * dir = (TDirectory*)f->Get("llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root:/tree");
       dir->GetObject("llpgtree",tree);
 
    }
@@ -488,41 +292,10 @@ void llpgana_hist_rebase::Init(TTree *tree)
    // (once per file to be processed).
 
    // Set object pointer
-   jetE = 0;
-   jetPt = 0;
-   jetEta = 0;
-   jetPhi = 0;
-   jetNHF = 0;
-   jetNEMF = 0;
-   jetCHF = 0;
-   jetCEMF = 0;
-   jetMUF = 0;
-   jetNHM = 0;
-   jetCHM = 0;
-   jetPHM = 0;
-   jetELM = 0;
-   jetPHE = 0;
-   jetPHEF = 0;
-   jetELE = 0;
-   jetELEF = 0;
-   jetMUE = 0;
-   jetID = 0;
-   cljBcCnt = 0;
-   cljSeedTOFTime = 0;
-   cljCMeanTime = 0;
-   cljCDrMeanTime = 0;
-   cljPt = 0;
-   cljEnergy = 0;
-   cljPhi = 0;
-   cljEta = 0;
-   cljPx = 0;
-   cljPy = 0;
-   cljPz = 0;
    phoIsOotPho = 0;
    phoExcluded = 0;
    phoSeedTOFTime = 0;
    phoCMeanTime = 0;
-   phoSc2dEv = 0;
    phoPt = 0;
    phoEnergy = 0;
    phoPhi = 0;
@@ -531,11 +304,8 @@ void llpgana_hist_rebase::Init(TTree *tree)
    phoPy = 0;
    phoPz = 0;
    phoRhIds = 0;
-   phoIsPFPhoton = 0;
-   phoIsStdPhoton = 0;
    phoHasConTracks = 0;
    phoIsPixelSeed = 0;
-   phoIsPhoton = 0;
    phoIsEB = 0;
    phoIsEE = 0;
    phoHadOverEM = 0;
@@ -577,65 +347,12 @@ void llpgana_hist_rebase::Init(TTree *tree)
    phoNTrkHollowConeDR04 = 0;
    genPhoIdx = 0;
    genPhoDr = 0;
-   eleSeedTOFTime = 0;
-   eleCMeanTime = 0;
-   elePt = 0;
-   eleEnergy = 0;
-   elePhi = 0;
-   eleEta = 0;
-   elePx = 0;
-   elePy = 0;
-   elePz = 0;
-   jetSumEPFrac = 0;
-   jetEPEnergy = 0;
-   jetEMEnergy = 0;
-   jetEMEnrFrac = 0;
-   jetEPEnrFrac = 0;
-   jetDrLeadEta = 0;
-   jetDrLeadPhi = 0;
-   jetDrLeadEnr = 0;
-   sJetDrRHEnergy = 0;
-   jetDrEMF = 0;
-   jetDrRhCnt = 0;
-   jetBcTimesCnt = 0;
-   jetBcSumRHEnr = 0;
-   jetBcEMFr = 0;
-   jetBcRhCnt = 0;
-   jetBcGrpCnt = 0;
-   nJetScMatch = 0;
-   jetScRhCnt = 0;
-   jetScRhIds = 0;
-   sJetScEnergy = 0;
-   sJetScPhEnergy = 0;
-   sJetScRhEnergy = 0;
-   jetScEMF = 0;
-   jetDRMuTime = 0;
-   jetDRTimeError = 0;
-   jetDRTimeRMS = 0;
-   jetDRMedTime = 0;
-   jetCDRMuTime = 0;
-   jetCDRMedTime = 0;
-   jetSCMuTime = 0;
-   jetSCMedTime = 0;
-   jetCSCMuTime = 0;
-   jetCSCMedTime = 0;
-   jetCBCMuTime = 0;
-   jetCBCMedTime = 0;
-   jetGenImpactAngle = 0;
-   jetGenTime = 0;
-   jetGenPt = 0;
-   jetGenEta = 0;
-   jetGenEnergy = 0;
-   jetGenEMFrac = 0;
-   jetGenDrMatch = 0;
-   jetGenTimeVar = 0;
-   jetGenTimeLLP = 0;
-   jetGenLLPPurity = 0;
-   jetGenNextBX = 0;
-   jetGenNKids = 0;
-   jetGenTOF = 0;
-   jetImpactAngle = 0;
-   jetSc2dEv = 0;
+   phoSMaj = 0;
+   phoSMin = 0;
+   phoSAlp = 0;
+   phoCovEtaEta = 0;
+   phoCovEtaPhi = 0;
+   phoCovPhiPhi = 0;
    genPt = 0;
    genEnergy = 0;
    genPhi = 0;
@@ -654,15 +371,12 @@ void llpgana_hist_rebase::Init(TTree *tree)
    rhTime = 0;
    rhTOF = 0;
    rhID = 0;
-   rhXtalI1 = 0;
-   rhXtalI2 = 0;
-   rhSubdet = 0;
    rhisOOT = 0;
    // Set branch addresses and branch pointers
-//  if (!tree) return;
+   if (!tree) return;
    fChain = tree;
-//  fCurrent = -1;
-//  fChain->SetMakeClass(1);
+   //fCurrent = -1;
+   //fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
@@ -679,49 +393,11 @@ void llpgana_hist_rebase::Init(TTree *tree)
    fChain->SetBranchAddress("metCSumEt", &metCSumEt, &b_metCSumEt);
    fChain->SetBranchAddress("metCPx", &metCPx, &b_metCPx);
    fChain->SetBranchAddress("metCPy", &metCPy, &b_metCPy);
-   fChain->SetBranchAddress("jetHt", &jetHt, &b_jetHt);
-   fChain->SetBranchAddress("nJets", &nJets, &b_nJets);
-   fChain->SetBranchAddress("nGoodDrJets", &nGoodDrJets, &b_nGoodDrJets);
-   fChain->SetBranchAddress("nGoodScJets", &nGoodScJets, &b_nGoodScJets);
-   fChain->SetBranchAddress("nGoodBcJets", &nGoodBcJets, &b_nGoodBcJets);
-   fChain->SetBranchAddress("nUnJets", &nUnJets, &b_nUnJets);
-   fChain->SetBranchAddress("jetE", &jetE, &b_jetE);
-   fChain->SetBranchAddress("jetPt", &jetPt, &b_jetPt);
-   fChain->SetBranchAddress("jetEta", &jetEta, &b_jetEta);
-   fChain->SetBranchAddress("jetPhi", &jetPhi, &b_jetPhi);
-   fChain->SetBranchAddress("jetNHF", &jetNHF, &b_jetNHF);
-   fChain->SetBranchAddress("jetNEMF", &jetNEMF, &b_jetNEMF);
-   fChain->SetBranchAddress("jetCHF", &jetCHF, &b_jetCHF);
-   fChain->SetBranchAddress("jetCEMF", &jetCEMF, &b_jetCEMF);
-   fChain->SetBranchAddress("jetMUF", &jetMUF, &b_jetMUF);
-   fChain->SetBranchAddress("jetNHM", &jetNHM, &b_jetNHM);
-   fChain->SetBranchAddress("jetCHM", &jetCHM, &b_jetCHM);
-   fChain->SetBranchAddress("jetPHM", &jetPHM, &b_jetPHM);
-   fChain->SetBranchAddress("jetELM", &jetELM, &b_jetELM);
-   fChain->SetBranchAddress("jetPHE", &jetPHE, &b_jetPHE);
-   fChain->SetBranchAddress("jetPHEF", &jetPHEF, &b_jetPHEF);
-   fChain->SetBranchAddress("jetELE", &jetELE, &b_jetELE);
-   fChain->SetBranchAddress("jetELEF", &jetELEF, &b_jetELEF);
-   fChain->SetBranchAddress("jetMUE", &jetMUE, &b_jetMUE);
-   fChain->SetBranchAddress("jetID", &jetID, &b_jetID);
-   fChain->SetBranchAddress("cljBcCnt", &cljBcCnt, &b_cljBcCnt);
-   fChain->SetBranchAddress("nCaloJets", &nCaloJets, &b_nCaloJets);
-   fChain->SetBranchAddress("cljSeedTOFTime", &cljSeedTOFTime, &b_cljSeedTOFTime);
-   fChain->SetBranchAddress("cljCMeanTime", &cljCMeanTime, &b_cljCMeanTime);
-   fChain->SetBranchAddress("cljCDrMeanTime", &cljCDrMeanTime, &b_cljCDrMeanTime);
-   fChain->SetBranchAddress("cljPt", &cljPt, &b_cljPt);
-   fChain->SetBranchAddress("cljEnergy", &cljEnergy, &b_cljEnergy);
-   fChain->SetBranchAddress("cljPhi", &cljPhi, &b_cljPhi);
-   fChain->SetBranchAddress("cljEta", &cljEta, &b_cljEta);
-   fChain->SetBranchAddress("cljPx", &cljPx, &b_cljPx);
-   fChain->SetBranchAddress("cljPy", &cljPy, &b_cljPy);
-   fChain->SetBranchAddress("cljPz", &cljPz, &b_cljPz);
    fChain->SetBranchAddress("nPhotons", &nPhotons, &b_nPhotons);
    fChain->SetBranchAddress("phoIsOotPho", &phoIsOotPho, &b_phoIsOotPho);
    fChain->SetBranchAddress("phoExcluded", &phoExcluded, &b_phoExcluded);
    fChain->SetBranchAddress("phoSeedTOFTime", &phoSeedTOFTime, &b_phoSeedTOFTime);
    fChain->SetBranchAddress("phoCMeanTime", &phoCMeanTime, &b_phoCMeanTime);
-   fChain->SetBranchAddress("phoSc2dEv", &phoSc2dEv, &b_phoSc2dEv);
    fChain->SetBranchAddress("phoPt", &phoPt, &b_phoPt);
    fChain->SetBranchAddress("phoEnergy", &phoEnergy, &b_phoEnergy);
    fChain->SetBranchAddress("phoPhi", &phoPhi, &b_phoPhi);
@@ -730,11 +406,8 @@ void llpgana_hist_rebase::Init(TTree *tree)
    fChain->SetBranchAddress("phoPy", &phoPy, &b_phoPy);
    fChain->SetBranchAddress("phoPz", &phoPz, &b_phoPz);
    fChain->SetBranchAddress("phoRhIds", &phoRhIds, &b_phoRhIds);
-   fChain->SetBranchAddress("phoIsPFPhoton", &phoIsPFPhoton, &b_phoIsPFPhoton);
-   fChain->SetBranchAddress("phoIsStdPhoton", &phoIsStdPhoton, &b_phoIsStdPhoton);
    fChain->SetBranchAddress("phoHasConTracks", &phoHasConTracks, &b_phoHasConTracks);
    fChain->SetBranchAddress("phoIsPixelSeed", &phoIsPixelSeed, &b_phoIsPixelSeed);
-   fChain->SetBranchAddress("phoIsPhoton", &phoIsPhoton, &b_phoIsPhoton);
    fChain->SetBranchAddress("phoIsEB", &phoIsEB, &b_phoIsEB);
    fChain->SetBranchAddress("phoIsEE", &phoIsEE, &b_phoIsEE);
    fChain->SetBranchAddress("phoHadOverEM", &phoHadOverEM, &b_phoHadOverEM);
@@ -776,66 +449,12 @@ void llpgana_hist_rebase::Init(TTree *tree)
    fChain->SetBranchAddress("phoNTrkHollowConeDR04", &phoNTrkHollowConeDR04, &b_phoNTrkHollowConeDR04);
    fChain->SetBranchAddress("genPhoIdx", &genPhoIdx, &b_genPhoIdx);
    fChain->SetBranchAddress("genPhoDr", &genPhoDr, &b_genPhoDr);
-   fChain->SetBranchAddress("nElectrons", &nElectrons, &b_nElectrons);
-   fChain->SetBranchAddress("eleSeedTOFTime", &eleSeedTOFTime, &b_eleSeedTOFTime);
-   fChain->SetBranchAddress("eleCMeanTime", &eleCMeanTime, &b_eleCMeanTime);
-   fChain->SetBranchAddress("elePt", &elePt, &b_elePt);
-   fChain->SetBranchAddress("eleEnergy", &eleEnergy, &b_eleEnergy);
-   fChain->SetBranchAddress("elePhi", &elePhi, &b_elePhi);
-   fChain->SetBranchAddress("eleEta", &eleEta, &b_eleEta);
-   fChain->SetBranchAddress("elePx", &elePx, &b_elePx);
-   fChain->SetBranchAddress("elePy", &elePy, &b_elePy);
-   fChain->SetBranchAddress("elePz", &elePz, &b_elePz);
-   fChain->SetBranchAddress("jetSumEPFrac", &jetSumEPFrac, &b_jetSumEPFrac);
-   fChain->SetBranchAddress("jetEPEnergy", &jetEPEnergy, &b_jetEPEnergy);
-   fChain->SetBranchAddress("jetEMEnergy", &jetEMEnergy, &b_jetEMEnergy);
-   fChain->SetBranchAddress("jetEMEnrFrac", &jetEMEnrFrac, &b_jetEMEnrFrac);
-   fChain->SetBranchAddress("jetEPEnrFrac", &jetEPEnrFrac, &b_jetEPEnrFrac);
-   fChain->SetBranchAddress("jetDrLeadEta", &jetDrLeadEta, &b_jetDrLeadEta);
-   fChain->SetBranchAddress("jetDrLeadPhi", &jetDrLeadPhi, &b_jetDrLeadPhi);
-   fChain->SetBranchAddress("jetDrLeadEnr", &jetDrLeadEnr, &b_jetDrLeadEnr);
-   fChain->SetBranchAddress("sJetDrRHEnergy", &sJetDrRHEnergy, &b_sJetDrRHEnergy);
-   fChain->SetBranchAddress("jetDrEMF", &jetDrEMF, &b_jetDrEMF);
-   fChain->SetBranchAddress("jetDrRhCnt", &jetDrRhCnt, &b_jetDrRhCnt);
-   fChain->SetBranchAddress("jetBcTimesCnt", &jetBcTimesCnt, &b_jetBcTimesCnt);
-   fChain->SetBranchAddress("jetBcSumRHEnr", &jetBcSumRHEnr, &b_jetBcSumRHEnr);
-   fChain->SetBranchAddress("jetBcEMFr", &jetBcEMFr, &b_jetBcEMFr);
-   fChain->SetBranchAddress("jetBcRhCnt", &jetBcRhCnt, &b_jetBcRhCnt);
-   fChain->SetBranchAddress("jetBcGrpCnt", &jetBcGrpCnt, &b_jetBcGrpCnt);
-   fChain->SetBranchAddress("nJetScMatch", &nJetScMatch, &b_nJetScMatch);
-   fChain->SetBranchAddress("jetScRhCnt", &jetScRhCnt, &b_jetScRhCnt);
-   fChain->SetBranchAddress("jetScRhIds", &jetScRhIds, &b_jetScRhIds);
-   fChain->SetBranchAddress("sJetScEnergy", &sJetScEnergy, &b_sJetScEnergy);
-   fChain->SetBranchAddress("sJetScPhEnergy", &sJetScPhEnergy, &b_sJetScPhEnergy);
-   fChain->SetBranchAddress("sJetScRhEnergy", &sJetScRhEnergy, &b_sJetScRhEnergy);
-   fChain->SetBranchAddress("jetScEMF", &jetScEMF, &b_jetScEMF);
-   fChain->SetBranchAddress("jetDRMuTime", &jetDRMuTime, &b_jetDRMuTime);
-   fChain->SetBranchAddress("jetDRTimeError", &jetDRTimeError, &b_jetDRTimeError);
-   fChain->SetBranchAddress("jetDRTimeRMS", &jetDRTimeRMS, &b_jetDRTimeRMS);
-   fChain->SetBranchAddress("jetDRMedTime", &jetDRMedTime, &b_jetDRMedTime);
-   fChain->SetBranchAddress("jetCDRMuTime", &jetCDRMuTime, &b_jetCDRMuTime);
-   fChain->SetBranchAddress("jetCDRMedTime", &jetCDRMedTime, &b_jetCDRMedTime);
-   fChain->SetBranchAddress("jetSCMuTime", &jetSCMuTime, &b_jetSCMuTime);
-   fChain->SetBranchAddress("jetSCMedTime", &jetSCMedTime, &b_jetSCMedTime);
-   fChain->SetBranchAddress("jetCSCMuTime", &jetCSCMuTime, &b_jetCSCMuTime);
-   fChain->SetBranchAddress("jetCSCMedTime", &jetCSCMedTime, &b_jetCSCMedTime);
-   fChain->SetBranchAddress("jetCBCMuTime", &jetCBCMuTime, &b_jetCBCMuTime);
-   fChain->SetBranchAddress("jetCBCMedTime", &jetCBCMedTime, &b_jetCBCMedTime);
-   fChain->SetBranchAddress("jetGenImpactAngle", &jetGenImpactAngle, &b_jetGenImpactAngle);
-   fChain->SetBranchAddress("jetGenTime", &jetGenTime, &b_jetGenTime);
-   fChain->SetBranchAddress("jetGenPt", &jetGenPt, &b_jetGenPt);
-   fChain->SetBranchAddress("jetGenEta", &jetGenEta, &b_jetGenEta);
-   fChain->SetBranchAddress("jetGenEnergy", &jetGenEnergy, &b_jetGenEnergy);
-   fChain->SetBranchAddress("jetGenEMFrac", &jetGenEMFrac, &b_jetGenEMFrac);
-   fChain->SetBranchAddress("jetGenDrMatch", &jetGenDrMatch, &b_jetGenDrMatch);
-   fChain->SetBranchAddress("jetGenTimeVar", &jetGenTimeVar, &b_jetGenTimeVar);
-   fChain->SetBranchAddress("jetGenTimeLLP", &jetGenTimeLLP, &b_jetGenTimeLLP);
-   fChain->SetBranchAddress("jetGenLLPPurity", &jetGenLLPPurity, &b_jetGenLLPPurity);
-   fChain->SetBranchAddress("jetGenNextBX", &jetGenNextBX, &b_jetGenNextBX);
-   fChain->SetBranchAddress("jetGenNKids", &jetGenNKids, &b_jetGenNKids);
-   fChain->SetBranchAddress("jetGenTOF", &jetGenTOF, &b_jetGenTOF);
-   fChain->SetBranchAddress("jetImpactAngle", &jetImpactAngle, &b_jetImpactAngle);
-   fChain->SetBranchAddress("jetSc2dEv", &jetSc2dEv, &b_jetSc2dEv);
+   fChain->SetBranchAddress("phoSMaj", &phoSMaj, &b_phoSMaj);
+   fChain->SetBranchAddress("phoSMin", &phoSMin, &b_phoSMin);
+   fChain->SetBranchAddress("phoSAlp", &phoSAlp, &b_phoSAlp);
+   fChain->SetBranchAddress("phoCovEtaEta", &phoCovEtaEta, &b_phoCovEtaEta);
+   fChain->SetBranchAddress("phoCovEtaPhi", &phoCovEtaPhi, &b_phoCovEtaPhi);
+   fChain->SetBranchAddress("phoCovPhiPhi", &phoCovPhiPhi, &b_phoCovPhiPhi);
    fChain->SetBranchAddress("nGenParts", &nGenParts, &b_nGenParts);
    fChain->SetBranchAddress("genPt", &genPt, &b_genPt);
    fChain->SetBranchAddress("genEnergy", &genEnergy, &b_genEnergy);
@@ -856,11 +475,8 @@ void llpgana_hist_rebase::Init(TTree *tree)
    fChain->SetBranchAddress("rhTime", &rhTime, &b_rhTime);
    fChain->SetBranchAddress("rhTOF", &rhTOF, &b_rhTOF);
    fChain->SetBranchAddress("rhID", &rhID, &b_rhID);
-   fChain->SetBranchAddress("rhXtalI1", &rhXtalI1, &b_rhXtalI1);
-   fChain->SetBranchAddress("rhXtalI2", &rhXtalI2, &b_rhXtalI2);
-   fChain->SetBranchAddress("rhSubdet", &rhSubdet, &b_rhSubdet);
    fChain->SetBranchAddress("rhisOOT", &rhisOOT, &b_rhisOOT);
-//   Notify();
+   //Notify();
 }
 
 /*

@@ -5,8 +5,8 @@
 // found on file: llpgana_mc_AODSIM_ntuplizer_EB_cl2mom_v18.root
 //////////////////////////////////////////////////////////
 
-#ifndef llpgana_hist_rebase_h
-#define llpgana_hist_rebase_h
+//#ifndef llpgana_hist_rebase_h
+//#define llpgana_hist_rebase_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -14,15 +14,11 @@
 
 // Header file for the classes stored in the TTree if any.
 #include "vector"
-#include "vector"
-#include "vector"
-#include "vector"
-#include "vector"
 
 class llpgana_hist_rebase {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-   Int_t           fCurrent; //!current Tree number in a TChain
+   //Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
@@ -43,88 +39,88 @@ public :
    Float_t         metCPx;
    Float_t         metCPy;
    UInt_t          nPhotons;
-   vector<bool>    *phoIsOotPho;
-   vector<bool>    *phoExcluded;
-   vector<float>   *phoSeedTOFTime;
-   vector<float>   *phoCMeanTime;
-   vector<float>   *phoPt;
-   vector<float>   *phoEnergy;
-   vector<float>   *phoPhi;
-   vector<float>   *phoEta;
-   vector<float>   *phoPx;
-   vector<float>   *phoPy;
-   vector<float>   *phoPz;
-   vector<vector<unsigned int> > *phoRhIds;
-   vector<bool>    *phoHasConTracks;
-   vector<bool>    *phoIsPixelSeed;
-   vector<bool>    *phoIsEB;
-   vector<bool>    *phoIsEE;
-   vector<float>   *phoHadOverEM;
-   vector<float>   *phoHadD1OverEM;
-   vector<float>   *phoHadD2OverEM;
-   vector<float>   *phoHadOverEMVaid;
-   vector<float>   *phohadTowOverEM;
-   vector<float>   *phohadTowD10OverEM;
-   vector<float>   *phohadTowD20OverEM;
-   vector<float>   *phohadTowOverEMValid;
-   vector<float>   *phoE1x5;
-   vector<float>   *phoE2x5;
-   vector<float>   *phoE3x3;
-   vector<float>   *phoE5x5;
-   vector<float>   *phoMaxEnergyXtal;
-   vector<float>   *phoSigmaEtaEta;
-   vector<float>   *phoSigmaIEtaIEta;
-   vector<float>   *phoR1x5;
-   vector<float>   *phoR2x5;
-   vector<float>   *phoR9;
-   vector<float>   *phoFull5x5_e1x5;
-   vector<float>   *phoFull5x5_e2x5;
-   vector<float>   *phoFull5x5_e3x3;
-   vector<float>   *phoFull5x5_e5x5;
-   vector<float>   *phoFull5x5_maxEnergyXtal;
-   vector<float>   *phoFull5x5_sigmaEtaEta;
-   vector<float>   *phoFull5x5_sigmaIEtaIEta;
-   vector<float>   *phoFull5x5_r9;
-   vector<float>   *phoEcalRHSumEtConeDR04;
-   vector<float>   *phoHcalTwrSumEtConeDR04;
-   vector<float>   *phoHcalDepth1TowerSumEtConeDR04;
-   vector<float>   *phoCalDepth2TowerSumEtConeDR04;
-   vector<float>   *phoHcalTowerSumEtBcConeDR04;
-   vector<float>   *phoHcalDepth1TowerSumEtBcConeDR04;
-   vector<float>   *phoHcalDepth2TowerSumEtBcConeDR04;
-   vector<float>   *phoTrkSumPtSolidConeDR04;
-   vector<float>   *phoTrkSumPtHollowConeDR04;
-   vector<int>     *phoNTrkSolidConeDR04;
-   vector<int>     *phoNTrkHollowConeDR04;
-   vector<int>     *genPhoIdx;
-   vector<float>   *genPhoDr;
-   vector<float>   *phoSMaj;
-   vector<float>   *phoSMin;
-   vector<float>   *phoSAlp;
-   vector<float>   *phoCovEtaEta;
-   vector<float>   *phoCovEtaPhi;
-   vector<float>   *phoCovPhiPhi;
+   std::vector<bool>    *phoIsOotPho;
+   std::vector<bool>    *phoExcluded;
+   std::vector<float>   *phoSeedTOFTime;
+   std::vector<float>   *phoCMeanTime;
+   std::vector<float>   *phoPt;
+   std::vector<float>   *phoEnergy;
+   std::vector<float>   *phoPhi;
+   std::vector<float>   *phoEta;
+   std::vector<float>   *phoPx;
+   std::vector<float>   *phoPy;
+   std::vector<float>   *phoPz;
+   std::vector<vector<unsigned int> > *phoRhIds;
+   std::vector<bool>    *phoHasConTracks;
+   std::vector<bool>    *phoIsPixelSeed;
+   std::vector<bool>    *phoIsEB;
+   std::vector<bool>    *phoIsEE;
+   std::vector<float>   *phoHadOverEM;
+   std::vector<float>   *phoHadD1OverEM;
+   std::vector<float>   *phoHadD2OverEM;
+   std::vector<float>   *phoHadOverEMVaid;
+   std::vector<float>   *phohadTowOverEM;
+   std::vector<float>   *phohadTowD10OverEM;
+   std::vector<float>   *phohadTowD20OverEM;
+   std::vector<float>   *phohadTowOverEMValid;
+   std::vector<float>   *phoE1x5;
+   std::vector<float>   *phoE2x5;
+   std::vector<float>   *phoE3x3;
+   std::vector<float>   *phoE5x5;
+   std::vector<float>   *phoMaxEnergyXtal;
+   std::vector<float>   *phoSigmaEtaEta;
+   std::vector<float>   *phoSigmaIEtaIEta;
+   std::vector<float>   *phoR1x5;
+   std::vector<float>   *phoR2x5;
+   std::vector<float>   *phoR9;
+   std::vector<float>   *phoFull5x5_e1x5;
+   std::vector<float>   *phoFull5x5_e2x5;
+   std::vector<float>   *phoFull5x5_e3x3;
+   std::vector<float>   *phoFull5x5_e5x5;
+   std::vector<float>   *phoFull5x5_maxEnergyXtal;
+   std::vector<float>   *phoFull5x5_sigmaEtaEta;
+   std::vector<float>   *phoFull5x5_sigmaIEtaIEta;
+   std::vector<float>   *phoFull5x5_r9;
+   std::vector<float>   *phoEcalRHSumEtConeDR04;
+   std::vector<float>   *phoHcalTwrSumEtConeDR04;
+   std::vector<float>   *phoHcalDepth1TowerSumEtConeDR04;
+   std::vector<float>   *phoCalDepth2TowerSumEtConeDR04;
+   std::vector<float>   *phoHcalTowerSumEtBcConeDR04;
+   std::vector<float>   *phoHcalDepth1TowerSumEtBcConeDR04;
+   std::vector<float>   *phoHcalDepth2TowerSumEtBcConeDR04;
+   std::vector<float>   *phoTrkSumPtSolidConeDR04;
+   std::vector<float>   *phoTrkSumPtHollowConeDR04;
+   std::vector<int>     *phoNTrkSolidConeDR04;
+   std::vector<int>     *phoNTrkHollowConeDR04;
+   std::vector<int>     *genPhoIdx;
+   std::vector<float>   *genPhoDr;
+   std::vector<float>   *phoSMaj;
+   std::vector<float>   *phoSMin;
+   std::vector<float>   *phoSAlp;
+   std::vector<float>   *phoCovEtaEta;
+   std::vector<float>   *phoCovEtaPhi;
+   std::vector<float>   *phoCovPhiPhi;
    UInt_t          nGenParts;
-   vector<float>   *genPt;
-   vector<float>   *genEnergy;
-   vector<float>   *genPhi;
-   vector<float>   *genEta;
-   vector<float>   *genPx;
-   vector<float>   *genPy;
-   vector<float>   *genPz;
-   vector<int>     *genPdgId;
-   vector<int>     *genLLP;
+   std::vector<float>   *genPt;
+   std::vector<float>   *genEnergy;
+   std::vector<float>   *genPhi;
+   std::vector<float>   *genEta;
+   std::vector<float>   *genPx;
+   std::vector<float>   *genPy;
+   std::vector<float>   *genPz;
+   std::vector<int>     *genPdgId;
+   std::vector<int>     *genLLP;
    Int_t           nRecHits;
-   vector<float>   *rhPosX;
-   vector<float>   *rhPosY;
-   vector<float>   *rhPosZ;
-   vector<float>   *rhPosEta;
-   vector<float>   *rhPosPhi;
-   vector<float>   *rhEnergy;
-   vector<float>   *rhTime;
-   vector<float>   *rhTOF;
-   vector<unsigned int> *rhID;
-   vector<bool>    *rhisOOT;
+   std::vector<float>   *rhPosX;
+   std::vector<float>   *rhPosY;
+   std::vector<float>   *rhPosZ;
+   std::vector<float>   *rhPosEta;
+   std::vector<float>   *rhPosPhi;
+   std::vector<float>   *rhEnergy;
+   std::vector<float>   *rhTime;
+   std::vector<float>   *rhTOF;
+   std::vector<unsigned int> *rhID;
+   std::vector<bool>    *rhisOOT;
 
    // List of branches
    TBranch        *b_run;   //!
@@ -226,20 +222,21 @@ public :
    TBranch        *b_rhID;   //!
    TBranch        *b_rhisOOT;   //!
 
-   llpgana_hist_rebase(TTree *tree=0);
-   virtual ~llpgana_hist_rebase();
-   virtual Int_t    Cut(Long64_t entry);
-   virtual Int_t    GetEntry(Long64_t entry);
-   virtual Long64_t LoadTree(Long64_t entry);
+   //llpgana_hist_rebase(TTree *tree=0);
+   //virtual ~llpgana_hist_rebase();
+   //virtual Int_t    Cut(Long64_t entry);
+   //virtual Int_t    GetEntry(Long64_t entry);
+   //virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop();
-   virtual Bool_t   Notify();
-   virtual void     Show(Long64_t entry = -1);
+   //virtual void     Loop();
+   //virtual Bool_t   Notify();
+   //virtual void     Show(Long64_t entry = -1);
 };
 
-#endif
+//#endif
 
-#ifdef llpgana_hist_rebase_cxx
+//#ifdef llpgana_hist_rebase_cxx
+/*
 llpgana_hist_rebase::llpgana_hist_rebase(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
@@ -280,6 +277,7 @@ Long64_t llpgana_hist_rebase::LoadTree(Long64_t entry)
    }
    return centry;
 }
+*/
 
 void llpgana_hist_rebase::Init(TTree *tree)
 {
@@ -375,8 +373,8 @@ void llpgana_hist_rebase::Init(TTree *tree)
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
-   fCurrent = -1;
-   fChain->SetMakeClass(1);
+   //fCurrent = -1;
+   //fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
@@ -476,9 +474,10 @@ void llpgana_hist_rebase::Init(TTree *tree)
    fChain->SetBranchAddress("rhTOF", &rhTOF, &b_rhTOF);
    fChain->SetBranchAddress("rhID", &rhID, &b_rhID);
    fChain->SetBranchAddress("rhisOOT", &rhisOOT, &b_rhisOOT);
-   Notify();
+   //Notify();
 }
 
+/*
 Bool_t llpgana_hist_rebase::Notify()
 {
    // The Notify() function is called when a new file is opened. This
@@ -504,4 +503,5 @@ Int_t llpgana_hist_rebase::Cut(Long64_t entry)
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef llpgana_hist_rebase_cxx
+*/
+//#endif // #ifdef llpgana_hist_rebase_cxx

@@ -112,6 +112,10 @@
 #include "Geometry/CaloGeometry/interface/CaloCellGeometry.h"
 #include "DataFormats/GeometryVector/interface/GlobalPoint.h"
 
+// Topology 
+#include "Geometry/CaloTopology/interface/CaloTopology.h"
+#include "Geometry/Records/interface/CaloTopologyRecord.h"
+
 // ECAL Record info (Laser Constants)
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbService.h"
 #include "CalibCalorimetry/EcalLaserCorrection/interface/EcalLaserDbRecord.h"
@@ -542,8 +546,10 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         std::vector<bool>   phoIsEBGap, phoIsEBEtaGap, phoIsEBPhiGap, phoIsEEGap, phoIsEERingGap, phoIsEEDeeGap, phoIsEBEEGap;
 
         std::vector<float>	phoHadOverEM, phoHadD1OverEM, phoHadD2OverEM, phoHadOverEMVaid, phohadTowOverEM, phohadTowD10OverEM;
-        std::vector<float>  phohadTowD20OverEM, phohadTowOverEMValid, phoE1x5, phoE2x5, phoE3x3, phoE5x5, phoMaxEnergyXtal, phoSigmaEtaEta, phoSigmaIEtaIEta;
-        std::vector<float>  phoR1x5, phoR2x5, phoR9, phoFull5x5_e1x5, phoFull5x5_e2x5, phoFull5x5_e3x3, phoFull5x5_e5x5, phoFull5x5_maxEnergyXtal;
+        std::vector<float>  phohadTowD20OverEM, phohadTowOverEMValid, phoE1x5, phoE2x5, phoE3x3, phoE5x5, phoMaxEnergyXtal; 
+        std::vector<float>  phoSigmaEtaEta, phoSigmaIEtaIEta;
+        std::vector<float>  phoR1x5, phoR2x5, phoR9, phoFull5x5_e1x5, phoFull5x5_e2x5, phoFull5x5_e3x3, phoFull5x5_e5x5; 
+        std::vector<float>  phoFull5x5_maxEnergyXtal;
         std::vector<float>  phoFull5x5_sigmaEtaEta, phoFull5x5_sigmaIEtaIEta, phoFull5x5_r1x5, phoFull5x5_r2x5, phoFull5x5_r9;
         std::vector<int>    phoNSatXtals, phoMipNHitCone;
         std::vector<bool>   phoIsSeedSat, phoMipIsHalo;
@@ -554,7 +560,7 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
         std::vector<float>  phoTrkSumPtSolidConeDR04, phoTrkSumPtHollowConeDR04;
         std::vector<int>    phoNTrkSolidConeDR04, phoNTrkHollowConeDR04;
 
-		std::vector<float>  phoSMaj, phoSMin, phoSAlp;
+		std::vector<float>  phoSMaj, phoSMin, phoSAlp, phoCovEtaEta, phoCovEtaPhi, phoCovPhiPhi;
 
 		// genPhotons
 
@@ -602,6 +608,13 @@ class LLPgammaAnalyzer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResourc
       	edm::ESHandle<CaloGeometry> caloGeo_;
       	const CaloSubdetectorGeometry * barrelGeometry;
       	const CaloSubdetectorGeometry * endcapGeometry;  
+		const CaloGeometry *ecalGeometry;
+
+        // CaloTopology
+        edm::ESHandle<CaloTopology> caloTopo_;
+        const CaloSubdetectorTopology * barrelTopology;
+        const CaloSubdetectorTopology * endcapTopology;
+		const CaloTopology * ecalTopology; 
 
         // lasers
         edm::ESHandle<EcalLaserDbService> laserH;

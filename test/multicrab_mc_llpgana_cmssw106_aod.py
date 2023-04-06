@@ -82,8 +82,8 @@ def docrab( dataset ):
         #config.Data.splitting     = 'Automatic'
         #config.Data.unitsPerJob   = 2000
         config.Data.splitting    = 'EventAwareLumiBased' # MC
-        config.Data.unitsPerJob  =  1500 # MC GMSB
-        #config.Data.unitsPerJob  =  10000 # MC GJet
+        #config.Data.unitsPerJob  =  1500 # MC GMSB
+        config.Data.unitsPerJob  =  10000 # MC GJet
 
         config.JobType.allowUndistributedCMSSW = True
         #config.JobType.inputFiles  = [ inptCfgEB, inptCfgEE ]
@@ -108,29 +108,6 @@ def docrab( dataset ):
             dataset        = inDO[0].split('/')[3]
             print( dataset )
 
-            #trial          = "llpga_v1" # 4 Feb 22 : t37L_ phsc & elesc _005_jetht_emf00bc3rh2e_id2pt200nrh5eta15rhe2 
-            #trial          = "llpga_v2" # 16 May 22
-            #trial          = "llpga_v3" # 17 May 22
-            #trial          = "llpga_v6" # added dr & sc times - use sc
-            #trial          = "llpga_v7" # added dr & sc times - use dr
-            #trial          = "llpga_v8" # added dr & sc times - use gentime
-            #trial          = "llpga_v9" # added dr & sc times - use gentime w/ gen filter
-            #trial          = "llpga_v10" # added dr & sc times - use dr w/ gen filter
-            #trial          = "llpga_v11" # added dr & sc times - use gentime w/ gen filter jet pt -> 100  jet ID -> 2
-            #trial          = "llpga_v12" # added ootPhoton - cut gentime > 25.0   
-            #trial          = "llpga_v14" # as 12 + eta & genenergy cuts on genplots ( + difftime plots )
-            #trial          = "llpga_v15" # as 14 + does not contain LLP or B
-            #trial          = "llpga_v16" # as 14 + no LLP or B cut
-            #trial          = "llpga_v17" # as 14 w/ expanded plots + LLP or B cut
-            #trial          = "llpga_v18" # as 14 w/ expanded plots + LLP or B cut + ootphoton dr match
-            #trial          = "llpga_v21" # as 18 + jet genJet dr match + sqrt(sq2(dif)/sq2(gen))
-            #trial          = "llpga_v23" # as 21 + modified genjet getTOFChain added nextBX flag and gentime var, using maxe for wieghts
-            #trial          = "llpga_v24" # as 23 + exclude flight legs with sum t > 25.0 ( nextBX = true ) in genTime/angle/ect calc
-            #trial          = "llpga_v25" # as 24 + step is llp logic, purity, and varince cuts
-            #trial          = "llpga_v26" # as 25 w/ var < 1.5 & purity > 0.75 on 2Ds + var vs purity plot  named 25/220617-XXXXXX
-            #trial          = "llpga_v27" # as 25 w/ var < 15 & purity > 0.88 on 2Ds + nKids
-            #trial          = "llpga_v28" # as 25 w/ var < 1 & purity > 0.88 on 2Ds + nKids
-            #trial          = "llpga_v29" # as 28 + difftime < 1.5
             #trial          = "llpga_v30" # as 28 + difftime < 1.0
             #trial          = "llpga_v33" # as 28 + difftime < 0.8 + genPhaseSpaceCut (9-4*e/genE)
             #trial          = "llpga_v34" # as 28 + difftime < 0.8 + genPhaseSpaceCut (9-4*e/genE) && not genPhSpaceCut + scdiff v drmatch
@@ -158,7 +135,8 @@ def docrab( dataset ):
             #trial          = "llpga_GJets_AOD_v57"
             #trial          = "llpga_GMSB_AOD_v58" # reduced footprint ( no jet stuff ) , changed gen stablity criteria
             #trial          = "llpga_GJets_AOD_v58"
-            trial          = "llpga_GMSB_AOD_v59" # fixed gen particle gmsb model origin ID
+            #trial          = "llpga_GMSB_AOD_v59" # fixed gen particle gmsb model origin ID
+            trial          = "llpga_GMSB_AOD_v60" # slimmed output ( removed jets and clusters ) 
 
             #config.Data.outLFNDirBase  = "/store/user/jaking/LLPGamma/"+trial+"/"
             config.Data.outLFNDirBase  = "/store/group/lpcsusylep/jaking/LLPGamma/"+trial+"/"
@@ -178,10 +156,10 @@ def docrab( dataset ):
 
 #-----------------------------------------------------------------------------------------------------------------------------
 #>>>>>>>>>>>>>>>>>>>     #MC GMSB RunIIFall17DRPremix  #globalTag=94X_mc2017_realistic_v14  #  <<<<<<<   comment/uncomment lumi mask when using/!using MC >
-            config.JobType.pyCfgParams   = ['globalTag=94X_mc2017_realistic_v14','outputFileName=output.root']
+            #config.JobType.pyCfgParams   = ['globalTag=94X_mc2017_realistic_v14','outputFileName=output.root','hasGenInfo=True']
             ##config.JobType.pyCfgParams   = ['globalTag=106X_dataRun2_v28','outputFileName=output.root','hasGenInfo=True']
 #>>>>>>>>>>>>>>>>>>>     #MC GJets RunIISummer20UL18RECO  !!!!! CHANGE UNITS PER JOB !!!!!!!
-            #config.JobType.pyCfgParams   = ['globalTag=106X_upgrade2018_realistic_v11_L1v1','outputFileName=output.root','hasGenInfo=True']
+            config.JobType.pyCfgParams   = ['globalTag=106X_upgrade2018_realistic_v11_L1v1','outputFileName=output.root','hasGenInfo=True']
 
 #-----------------------------------------------------------------------------------------------------------------------------
             config.Data.inputDataset     = inDO[0]
@@ -417,14 +395,14 @@ def run_multi():
 
             #['/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
             #['/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-4cores5k_106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
-            #['/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
-            #['/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
-            #['/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM']
+            ['/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM'],
+            ['/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL18RECO-106X_upgrade2018_realistic_v11_L1v1-v2/AODSIM']
 
 		]
 
-        runDataset = dsGMSB # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
-        #runDataset = dsGJET # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
+        #runDataset = dsGMSB # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
+        runDataset = dsGJET # !!!!  CHANGE UNITS PER JOB AND GT USED !!!!!!!
         for dataset in runDataset :
 		    docrab( dataset )
 

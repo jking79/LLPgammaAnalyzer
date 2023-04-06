@@ -366,6 +366,7 @@ Ic_legtitle = ''
 loc2_legtitle = ' LS'
 #xtitle = ''
 xtitle = 'A_{eff}/#sigma_{n}'
+#xtitle = '#Delta_{Run}'
 #xtitle = 'E_{eff} [GeV]'
 #xtitle = 'RecHit E [GeV]'
 #xtitle = 'pCaloHit E_{eff} [GeV]'
@@ -376,6 +377,7 @@ xtitle = 'A_{eff}/#sigma_{n}'
 #xtitle = 'Max(R_{oot}^{after})'
 #xtitle = 'Max(R_{oot}^{before})'
 ytitle = '#sigma(t_{1}-t_{2}) [ns]'
+#ytitle = 'Ave Xtal Time [ns]'
 #ytitle = '#sigma(t_{gen}-t_{reco}) [ns]'
 #ytitle = '#sigma(Adjusted pCalo time) [ns]'
 #ytitle = '#mu(t_{1}-t_{2}) [ns]'
@@ -405,6 +407,24 @@ Ic_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : i
 glo_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle + gi_legtitle }
 #---------------------------------------------------------------
 
+# run3 2022 iov5 cali drift
+ptitle=[' 2022 IOV5 359421-360089','','#splitline{EBEB}{CC Ave RH Time by Channel}'] #{GT 106X_dataRun2_v28}'
+y = [ 4.5, 0.5 ]
+x = [ 200.0, 700.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_iov5cali_v7'
+#dostack(hl_r3_iov5cali_v7, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
+# run3 2022G2_v10
+ptitle=[' Run3 2022','','#splitline{EBEB}{CC SRU}'] #{GT 106X_dataRun2_v28}'
+y = [ 0.4, 0.06 ]
+x = [ 100.0, 1000.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
+t = [0.2,0.825,0.0,0.175,0.225]
+outname = 'downloads/tr_hl_r3_SRU_v10'
+#dostack(hl_r3_22CCSRU_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+
 # run3 2022G2_v10
 ptitle=[' 362350_362700 v10','','#splitline{EBEB}{Run2022G}'] #{GT 106X_dataRun2_v28}'
 y = [ 1.6, 0.05 ]
@@ -412,7 +432,7 @@ x = [ 100.0, 600.0 ]
 l = [ 0.7,0.65,0.925,0.9 ]
 t = [0.2,0.825,0.0,0.175,0.225]
 outname = 'downloads/tr_hl_r3_22G2_v10'
-dostack(hl_r3_22G2_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
+#dostack(hl_r3_22G2_v10, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 # run3 2022E_v10
 ptitle=[' 359022_362760 v10','','#splitline{EBEB}{Run2022E}'] #{GT 106X_dataRun2_v28}'
@@ -523,13 +543,13 @@ outname = 'downloads/tr_hl_r3_22IOV2_cali3'
 #dostack(hl_r3_22IOV2_cali3, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 # run3 2022IOV5v3
-ptitle=[' 359421_360089 v3','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
-y = [ 2.0, 0.05 ]
+ptitle=[' 359421_360089','','#splitline{EBEB}{Run2022IOV5}'] #{GT 106X_dataRun2_v28}'
+y = [ 1.2, 0.08 ]
 x = [ 75.0, 2250.0 ]
 l = [ 0.7,0.65,0.925,0.9 ]
 t = [0.2,0.825,0.0,0.175,0.225]
 outname = 'downloads/tr_hl_r3_22IOV5_v3'
-#dostack(hl_r3_22IOV5_v3, outname, date, Ic_layout, ptitle,  y, x, l, t)
+dostack(hl_r3_22IOV5_v3, outname, date, Ic_layout, ptitle,  y, x, l, t)
 
 # run3 2022IOV3v3
 ptitle=[' 357290_358883 v3','','#splitline{EBEB}{Run2022IOV3}'] #{GT 106X_dataRun2_v28}'

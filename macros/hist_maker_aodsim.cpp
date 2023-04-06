@@ -42,7 +42,7 @@
 //#include "llpgana_ntuple_base.hh"
 //#include "llpgana_hist_base_v10.hh"
 //#include "llpgana_hist_rebase_v11.hh"
-#include "llpgana_hist_rebase_v17.hh"
+#include "llpgana_hist_rebase_v18.hh"
 
 #define n1dHists 512
 #define n2dHists 512 
@@ -1357,8 +1357,10 @@ void makehists::eventLoop( Long64_t entry ){
         //auto usePho = isLoose && isEB && isTightEB && isClR9r68;
 
         auto usePho = isLoose && isEB && isTightEB && isCmb;
-        //auto usePho = tightCut && isEB && isTightEB && isCmb && isSigPho;
+        //auto usePho = isTight && isEB && isTightEB && isCmb && isSigPho;
+        //auto usePho = isLoose && isEB && isTightEB && isCmb && isSigPho;
         //auto usePho = isLoose && isEB && isTightEB && isCmb && not isSigPho;
+
 
 		if( DEBUG ) std::cout << " -- photons # " << it << " isSUSY " << isSUSY << " isOOT " << isOOT << " isCmb " << isCmb << std::endl;
 		if( usePho && goodRhCnt && minPhoPt ) { //----------------------------------- 
@@ -1385,14 +1387,15 @@ void makehists::eventLoop( Long64_t entry ){
 			auto tofTimes = getLeadTofRhTime( (*phoRhIds)[it], vtxX, vtxY, vtxZ );
 			auto phoEigens2D = getRhGrpEigen_sph( tofTimes,(*phoRhIds)[it] );
 			auto isEiganGood = phoEigens2D[0] != -9;	
+			//if( true ){
 			if( isEiganGood ){
 
-	            auto eigtaf = phoEigens2D[20];
+	            //auto eigtaf = phoEigens2D[20];
 	            //auto eigtaf = 1;
-				auto rotAngle = getAngle( phoEigens2D[0], phoEigens2D[1] );
-				auto rot3DAnlge = phoEigens2D[9];// : (((phoEigens2D[9] + PI) < 2*PI) ? phoEigens2D[9] + PI : phoEigens2D[9] - PI);
-				auto geoRotAngle = getAngle( phoEigens2D[16], phoEigens2D[17] );
-	
+				//auto rotAngle = getAngle( phoEigens2D[0], phoEigens2D[1] );
+				//auto rot3DAnlge = phoEigens2D[9];// : (((phoEigens2D[9] + PI) < 2*PI) ? phoEigens2D[9] + PI : phoEigens2D[9] - PI);
+				//auto geoRotAngle = getAngle( phoEigens2D[16], phoEigens2D[17] );	
+/*
 				//float dAngleMin = 0.1;
 	            float dAngleMin = 0.2;
 	            //float dAngleMin = 0.3;
@@ -1425,13 +1428,16 @@ void makehists::eventLoop( Long64_t entry ){
 				auto notAnglePeak = notAnglePeak1 && notAnglePeak2 && notAnglePeak3 && notAnglePeak4 && notAnglePeak5;
 		
 				//if( not notAnglePeak ) std::cout << "dAngle cuts 1: " << dRAngle3 << " 2: " << angle3 << " 3: " << dGeoAngle3 << " 4: " << dRotAngle3 << std::endl;
+*/
 		
-				auto evalue2d = phoEigens2D[2];
-	            auto evaluegeo = phoEigens2D[18];
-	            auto geoslope = phoEigens2D[22];
-				auto slope = phoEigens2D[27];// 24 -> pairs 2d slope, 3 -> old slope, 5 -> pairs 3d slope
+				//auto evalue2d = phoEigens2D[2];
+	        	auto evaluegeo = phoEigens2D[18];
+	            //auto geoslope = phoEigens2D[22];
+				//auto slope = phoEigens2D[27];// 24 -> pairs 2d slope, 3 -> old slope, 5 -> pairs 3d slope
 	            //auto slope = phoEigens2D[24]; //default;
 	            //auto slope = phoEigens2D[5];
+
+				auto smmcut = (*phoSMaj)[it] < 1.3 && (*phoSMin)[it] < 0.4;
 	
 	        	auto isClR9r46 = phoClstrR9 > 0.4 && phoClstrR9 < 0.6;
 	        	auto isClR9r68 = phoClstrR9 > 0.6 && phoClstrR9 < 0.8;
@@ -1439,13 +1445,13 @@ void makehists::eventLoop( Long64_t entry ){
 	        	auto isClR9lt0p7 = phoClstrR9 < 0.7;
 	
 				auto maxPhoGeoEV = evaluegeo < 0.85;
-				auto minRHCnt = nrh > 35;
-				auto maxEvRh = evalue2d < ( 0.005*nrh + 0.8 );
-				auto min3dTval = phoEigens2D[34] > 0.02;
-                auto max3d4val = phoEigens2D[33] < 0.8;	
-				auto minSlope = std::abs(slope) > 0.05;
+				auto minRHCnt = nrh > 25;
+				//auto maxEvRh = evalue2d < ( 0.005*nrh + 0.8 );
+				//auto min3dTval = phoEigens2D[34] > 0.02;
+                //auto max3d4val = phoEigens2D[33] < 0.8;	
+				//auto minSlope = std::abs(slope) > 0.05;
 
-				auto passCuts = maxPhoGeoEV;
+				//auto passCuts = maxPhoGeoEV;
 				//auto passCuts = maxPhoGeoEV && notAnglePeak;
 	            //auto passCuts = maxPhoGeoEV && minRHCnt;
 				//auto passCuts = maxPhoGeoEV && maxEvRh;
@@ -1453,146 +1459,217 @@ void makehists::eventLoop( Long64_t entry ){
 	            //auto passCuts = min3dTval;
 	            //auto passCuts = max3d4val;
 	            //auto passCuts = minSlope;
-				//auto passCuts = true;
-	
-				if( passCuts ){
-	
-	            	hist1d[102]->Fill( phoClstrR9 );   
-	            	//hist2d[223]->Fill( (*phoR9)[it], phoClstrR9 );
-						
-					hist1d[124]->Fill(phoEigens2D[35]);//smaj
-					hist1d[125]->Fill(phoEigens2D[36]);//smin
-					hist1d[126]->Fill( (*phoSigmaIEtaIEta)[it] );
 
+				auto passCuts = true;
+				//auto passCuts = maxPhoGeoEV;
+                //auto passCuts = smmcut;
+                //auto passCuts = smmcut && maxPhoGeoEV;	
+
+				if( passCuts ){
+
+                    makeEBEEMaps( it );
+	
+	            	hist1d[102]->Fill( phoClstrR9 );//<<   
+					hist1d[124]->Fill( phoEigens2D[35] );//smaj //<<
+					hist1d[125]->Fill( phoEigens2D[36] );//smin //<<
+					hist1d[126]->Fill( (*phoSigmaIEtaIEta)[it] );
 	            	hist1d[146]->Fill( (*phoPt)[it] );
 	            	hist1d[147]->Fill( (*phoEnergy)[it] );
 					hist2d[217]->Fill( (*phoEnergy)[it], (*phoPt)[it] );
 	            	hist1d[148]->Fill( (*phoCMeanTime)[it] );//c mean
-	
-	            	hist1d[102]->Fill( phoClstrR9 );
-	            	//hist2d[223]->Fill( (*phoR9)[it], phoClstrR9 );
+                    hist1d[103]->Fill( nrh );//<<
+                    hist1d[133]->Fill( evaluegeo );//<<
+                    hist1d[152]->Fill( (*phoSMaj)[it] );
+                    hist1d[153]->Fill( (*phoSMin)[it] );
+                    hist1d[154]->Fill( (*phoSAlp)[it] );
+                    hist1d[155]->Fill( (*phoCovEtaEta)[it] );
+                    hist1d[156]->Fill( (*phoCovEtaPhi)[it] );
+                    hist1d[157]->Fill( (*phoCovPhiPhi)[it] );
+
 	            	hist2d[218]->Fill( nrh, phoClstrR9 );
-	            	//hist2d[225]->Fill( nrh, (*phoR9)[it]);
+                    hist2d[222]->Fill( nrh, phoEigens2D[35] );
+                    hist2d[223]->Fill( nrh, phoEigens2D[36] );
+                    hist2d[224]->Fill( nrh, (*phoSigmaIEtaIEta)[it] );
 	                hist2d[219]->Fill( nrh, (*phoEnergy)[it] );
-	                hist2d[220]->Fill( nrh, (*phoPt)[it] );
+	                hist2d[220]->Fill( nrh, (*phoCMeanTime)[it] );
+                    hist2d[229]->Fill( nrh, evaluegeo );
+                    hist2d[228]->Fill( nrh, (*phoSMaj)[it] );	
+                    hist2d[230]->Fill( nrh, (*phoSMin)[it] );
+                    hist2d[231]->Fill( nrh, (*phoSAlp)[it] );
+                    hist2d[232]->Fill( nrh, (*phoCovEtaEta)[it] );
+                    hist2d[233]->Fill( nrh, (*phoCovEtaPhi)[it] );
+                    hist2d[234]->Fill( nrh, (*phoCovPhiPhi)[it] );
+
+                    hist2d[247]->Fill( phoClstrR9, evaluegeo );
+                    hist2d[252]->Fill( phoEigens2D[35], evaluegeo );
+                    hist2d[255]->Fill( phoEigens2D[36], evaluegeo );
+                    hist2d[258]->Fill( (*phoSigmaIEtaIEta)[it], evaluegeo );
+                    hist2d[235]->Fill( (*phoEnergy)[it], evaluegeo );
+                    hist2d[236]->Fill( (*phoCMeanTime)[it], evaluegeo );
+                    hist2d[237]->Fill( (*phoSMaj)[it], evaluegeo ); 
+                    hist2d[238]->Fill( (*phoSMin)[it], evaluegeo );
+                    hist2d[239]->Fill( (*phoSAlp)[it], evaluegeo );
+                    hist2d[240]->Fill( (*phoCovEtaEta)[it], evaluegeo );
+                    hist2d[241]->Fill( (*phoCovEtaPhi)[it], evaluegeo );
+                    hist2d[242]->Fill( (*phoCovPhiPhi)[it], evaluegeo );
+
+                    hist2d[225]->Fill( phoClstrR9, phoEigens2D[35] );
+                    hist2d[226]->Fill( phoClstrR9, phoEigens2D[36] );
+                    hist2d[227]->Fill( phoClstrR9, (*phoSigmaIEtaIEta)[it] );
+                    hist2d[245]->Fill( phoClstrR9, (*phoEnergy)[it] );
+                    hist2d[246]->Fill( phoClstrR9, (*phoCMeanTime)[it] );
+                    hist2d[248]->Fill( phoClstrR9, (*phoSMaj)[it] ); 
+                    hist2d[249]->Fill( phoClstrR9, (*phoSMin)[it] );
+                    hist2d[250]->Fill( phoClstrR9, (*phoSAlp)[it] );
+                    hist2d[251]->Fill( phoClstrR9, (*phoCovEtaEta)[it] );
+                    hist2d[252]->Fill( phoClstrR9, (*phoCovEtaPhi)[it] );
+                    hist2d[253]->Fill( phoClstrR9, (*phoCovPhiPhi)[it] );
+
+                    hist2d[254]->Fill( phoEigens2D[35], phoEigens2D[36] );
+                    hist2d[255]->Fill( phoEigens2D[35], (*phoSigmaIEtaIEta)[it] );
+                    hist2d[256]->Fill( phoEigens2D[35], (*phoEnergy)[it] );
+                    hist2d[257]->Fill( phoEigens2D[35], (*phoCMeanTime)[it] );
+                    hist2d[259]->Fill( phoEigens2D[35], (*phoSMaj)[it] );
+                    hist2d[260]->Fill( phoEigens2D[35], (*phoSMin)[it] );
+                    hist2d[261]->Fill( phoEigens2D[35], (*phoSAlp)[it] );
+                    hist2d[262]->Fill( phoEigens2D[35], (*phoCovEtaEta)[it] );
+                    hist2d[263]->Fill( phoEigens2D[35], (*phoCovEtaPhi)[it] );
+                    hist2d[264]->Fill( phoEigens2D[35], (*phoCovPhiPhi)[it] );
+
+                    hist2d[265]->Fill( phoEigens2D[36], (*phoSigmaIEtaIEta)[it] );
+                    hist2d[266]->Fill( phoEigens2D[36], (*phoEnergy)[it] );
+                    hist2d[267]->Fill( phoEigens2D[36], (*phoCMeanTime)[it] );
+                    hist2d[269]->Fill( phoEigens2D[36], (*phoSMaj)[it] );
+                    hist2d[270]->Fill( phoEigens2D[36], (*phoSMin)[it] );
+                    hist2d[271]->Fill( phoEigens2D[36], (*phoSAlp)[it] );
+                    hist2d[272]->Fill( phoEigens2D[36], (*phoCovEtaEta)[it] );
+                    hist2d[273]->Fill( phoEigens2D[36], (*phoCovEtaPhi)[it] );
+                    hist2d[274]->Fill( phoEigens2D[36], (*phoCovPhiPhi)[it] );
+
+                    hist2d[275]->Fill( (*phoSigmaIEtaIEta)[it], (*phoEnergy)[it] );
+                    hist2d[276]->Fill( (*phoSigmaIEtaIEta)[it], (*phoCMeanTime)[it] );
+                    hist2d[278]->Fill( (*phoSigmaIEtaIEta)[it], (*phoSMaj)[it] );
+                    hist2d[279]->Fill( (*phoSigmaIEtaIEta)[it], (*phoSMin)[it] );
+                    hist2d[280]->Fill( (*phoSigmaIEtaIEta)[it], (*phoSAlp)[it] );
+                    hist2d[281]->Fill( (*phoSigmaIEtaIEta)[it], (*phoCovEtaEta)[it] );
+                    hist2d[282]->Fill( (*phoSigmaIEtaIEta)[it], (*phoCovEtaPhi)[it] );
+                    hist2d[283]->Fill( (*phoSigmaIEtaIEta)[it], (*phoCovPhiPhi)[it] );
+
+                    hist2d[284]->Fill( (*phoEnergy)[it], (*phoCMeanTime)[it] );
+                    hist2d[286]->Fill( (*phoEnergy)[it], (*phoSMaj)[it] );
+                    hist2d[287]->Fill( (*phoEnergy)[it], (*phoSMin)[it] );
+                    hist2d[288]->Fill( (*phoEnergy)[it], (*phoSAlp)[it] );
+                    hist2d[289]->Fill( (*phoEnergy)[it], (*phoCovEtaEta)[it] );
+                    hist2d[290]->Fill( (*phoEnergy)[it], (*phoCovEtaPhi)[it] );
+                    hist2d[291]->Fill( (*phoEnergy)[it], (*phoCovPhiPhi)[it] );
+
+                    hist2d[293]->Fill( (*phoCMeanTime)[it], (*phoSMaj)[it] );
+                    hist2d[294]->Fill( (*phoCMeanTime)[it], (*phoSMin)[it] );
+                    hist2d[295]->Fill( (*phoCMeanTime)[it], (*phoSAlp)[it] );
+                    hist2d[296]->Fill( (*phoCMeanTime)[it], (*phoCovEtaEta)[it] );
+                    hist2d[297]->Fill( (*phoCMeanTime)[it], (*phoCovEtaPhi)[it] );
+                    hist2d[298]->Fill( (*phoCMeanTime)[it], (*phoCovPhiPhi)[it] );
 	
-	            	hist1d[103]->Fill(nrh);
-	            	makeEBEEMaps( it );
-	
-					hist1d[136]->Fill( phoEigens2D[0] );
-		            hist1d[137]->Fill( phoEigens2D[1] );
-		            hist1d[138]->Fill( phoEigens2D[16] );
-		            hist1d[139]->Fill( phoEigens2D[17] );
-		            hist1d[140]->Fill( phoEigens2D[15] );
+					//hist1d[136]->Fill( phoEigens2D[0] );
+		            //hist1d[137]->Fill( phoEigens2D[1] );
+		            //hist1d[138]->Fill( phoEigens2D[16] );
+		            //hist1d[139]->Fill( phoEigens2D[17] );
+		            //hist1d[140]->Fill( phoEigens2D[15] );
 		
-		            hist1d[141]->Fill( phoEigens2D[30] );//ev1 : x  "z"
-		            hist1d[142]->Fill( phoEigens2D[31] );//ev1 : y  "c"
-		            hist1d[143]->Fill( phoEigens2D[32] );//ev1 : z  "time"
-		            hist1d[144]->Fill( phoEigens2D[27] );//c vs c+t , ? 3d4Value//33
-		            hist1d[145]->Fill( phoEigens2D[34] );//t vs t+zc oval ? 3dTvalue
-                    hist2d[216]->Fill( eigtaf*slope, phoEigens2D[34] );
+		            //hist1d[141]->Fill( phoEigens2D[30] );//ev1 : x  "z"
+		            //hist1d[142]->Fill( phoEigens2D[31] );//ev1 : y  "c"
+		            //hist1d[143]->Fill( phoEigens2D[32] );//ev1 : z  "time"
+		            //hist1d[144]->Fill( phoEigens2D[27] );//c vs c+t , ? 3d4Value//33
+		            //hist1d[145]->Fill( phoEigens2D[34] );//t vs t+zc oval ? 3dTvalue
+                    //hist2d[216]->Fill( eigtaf*slope, phoEigens2D[34] );
 
 
-                    hist1d[149]->Fill( phoEigens2D[38] );//3dev1
-                    hist1d[150]->Fill( phoEigens2D[39] );//3dev2
-                    hist1d[151]->Fill( phoEigens2D[40] );//3dev3
+                    //hist1d[149]->Fill( phoEigens2D[38] );//3dev1
+                    //hist1d[150]->Fill( phoEigens2D[39] );//3dev2
+                    //hist1d[151]->Fill( phoEigens2D[40] );//3dev3
 
-					//hist2d[222]->Fill( phoClstrR9, phoEigens2D[15] );
+					////hist2d[222]->Fill( phoClstrR9, phoEigens2D[15] );
 		
-		            if( DEBUG ) std::cout << " -- start eigan hists fill p0:" << std::endl;
-		            hist1d[127]->Fill( rotAngle );//eliptical angle  Eigan Rotation Angle
-		            hist1d[106]->Fill( rot3DAnlge );//eliptical angle  Eta Phi Angle 2D : algined
-		            hist2d[203]->Fill( rotAngle, rot3DAnlge );
-		            hist2d[210]->Fill( phoEigens2D[0], phoEigens2D[1] );
-		            hist2d[211]->Fill( phoEigens2D[30], phoEigens2D[31] );
-		            hist2d[212]->Fill( phoEigens2D[30], phoEigens2D[32] );
-		            hist2d[213]->Fill( phoEigens2D[31], phoEigens2D[32] );
-		            hist1d[113]->Fill( evalue2d ); 
-		            if( DEBUG ) std::cout << " -- start eigan hists fill p0a:" << std::endl;
-		            //hist1d[129]->Fill( evaluegeo );
-					hist1d[114]->Fill(slope); // rot way slope aligned
-		            hist1d[117]->Fill(eigtaf*slope); // TA slope
-					hist2d[200]->Fill((*phoEta)[it],eigtaf*slope); 
-		            hist2d[202]->Fill((*phoEta)[it],phoEigens2D[27]);//3d vector slope
-					hist2d[201]->Fill((*phoEta)[it],evalue2d);
-		            if( DEBUG ) std::cout << " -- start eigan hists fill p0b:" << std::endl;
+		            //if( DEBUG ) std::cout << " -- start eigan hists fill p0:" << std::endl;
+		            //hist1d[127]->Fill( rotAngle );//eliptical angle  Eigan Rotation Angle
+		            //hist1d[106]->Fill( rot3DAnlge );//eliptical angle  Eta Phi Angle 2D : algined
+		            //hist2d[203]->Fill( rotAngle, rot3DAnlge );
+		            //hist2d[210]->Fill( phoEigens2D[0], phoEigens2D[1] );
+		            //hist2d[211]->Fill( phoEigens2D[30], phoEigens2D[31] );
+		            //hist2d[212]->Fill( phoEigens2D[30], phoEigens2D[32] );
+		            //hist2d[213]->Fill( phoEigens2D[31], phoEigens2D[32] );
+		            //hist1d[113]->Fill( evalue2d ); 
+		            //if( DEBUG ) std::cout << " -- start eigan hists fill p0a:" << std::endl;
+					//hist1d[114]->Fill(slope); // rot way slope aligned
+		            //hist1d[117]->Fill(eigtaf*slope); // TA slope
+					//hist2d[200]->Fill((*phoEta)[it],eigtaf*slope); 
+		            //hist2d[202]->Fill((*phoEta)[it],phoEigens2D[27]);//3d vector slope
+					//hist2d[201]->Fill((*phoEta)[it],evalue2d);
+		            //if( DEBUG ) std::cout << " -- start eigan hists fill p0b:" << std::endl;
 					//hist1d[]->Fill(phoEigens2D[10]);
 					//hist1d[]->Fill(phoEigens2D[25]);
 					//hist1d[125]->Fill(phoEigens2D[12]);
 					//hist1d[126]->Fill(phoEigens2D[25]);
-		            if( DEBUG ) std::cout << " -- start eigan hists fill p0c:" << std::endl;
-					//hist2d[219]->Fill( phoEigens2D[10], phoEigens2D[25] );
-		            //hist2d[220]->Fill( eigtaf*phoEigens2D[24], phoEigens2D[10] );
-		            if( DEBUG ) std::cout << " -- start eigan hists fill p0d:" << std::endl;
-		            //hist2d[222]->Fill( phoEigens2D[25], phoClstrR9 );
+		            //if( DEBUG ) std::cout << " -- start eigan hists fill p0c:" << std::endl;
+					//hist2d[]->Fill( phoEigens2D[10], phoEigens2D[25] );
+		            //hist2d[]->Fill( eigtaf*phoEigens2D[24], phoEigens2D[10] );
+		            //if( DEBUG ) std::cout << " -- start eigan hists fill p0d:" << std::endl;
+		            ////hist2d[222]->Fill( phoEigens2D[25], phoClstrR9 );
 					//hist2d[]->Fill( (*phoEta)[it], rotAngle ); 
 		            //hist2d[]->Fill( (*phoPhi)[it], rotAngle );
 		            //hist2d[]->Fill( rotAngle, phoEigens2D[2] );
 		            //hist2d[]->Fill( phoEigens2D[9], eigtaf*slope );
-		            if( DEBUG ) std::cout << " -- eigan hists fill p1:" << std::endl;
+		            //if( DEBUG ) std::cout << " -- eigan hists fill p1:" << std::endl;
 		
-		            hist2d[232]->Fill( phoClstrR9, rotAngle );
-		            hist2d[233]->Fill( evalue2d, eigtaf*slope );
-		            hist2d[235]->Fill( rotAngle, evalue2d );
-		            hist2d[234]->Fill( rotAngle, eigtaf*slope );
-		            hist2d[230]->Fill( phoClstrR9, evalue2d );
-		            hist2d[231]->Fill( phoClstrR9, eigtaf*slope );
+		            //hist2d[232]->Fill( phoClstrR9, rotAngle );
+		            //hist2d[233]->Fill( evalue2d, eigtaf*slope );
+		            //hist2d[235]->Fill( rotAngle, evalue2d );
+		            //hist2d[234]->Fill( rotAngle, eigtaf*slope );
+		            //hist2d[230]->Fill( phoClstrR9, evalue2d );
+		            //hist2d[231]->Fill( phoClstrR9, eigtaf*slope );
 		
-		            hist1d[133]->Fill( evaluegeo );
-		            hist1d[134]->Fill( geoslope );
-		            hist1d[135]->Fill( geoRotAngle );
-		            if( DEBUG ) std::cout << " -- eigan hists fill p2:" << std::endl;
+		            //hist1d[134]->Fill( geoslope );
+		            //hist1d[135]->Fill( geoRotAngle );
+		            //if( DEBUG ) std::cout << " -- eigan hists fill p2:" << std::endl;
 		
-		            hist2d[236]->Fill( evaluegeo, rotAngle );
-		            hist2d[237]->Fill( eigtaf*geoslope, rotAngle );
-		            hist2d[238]->Fill( eigtaf*geoslope, evalue2d );
-		            hist2d[239]->Fill( geoRotAngle, rotAngle );
-		            hist2d[240]->Fill( eigtaf*geoslope, eigtaf*slope );
-		            hist2d[241]->Fill( geoRotAngle, eigtaf*slope );
-		            hist2d[242]->Fill( geoRotAngle, evalue2d );
-		            hist2d[243]->Fill( evaluegeo, evalue2d );
-		            hist2d[244]->Fill( evaluegeo, eigtaf*slope );
+		            //hist2d[236]->Fill( evaluegeo, rotAngle );
+		            //hist2d[237]->Fill( eigtaf*geoslope, rotAngle );
+		            //hist2d[238]->Fill( eigtaf*geoslope, evalue2d );
+		            //hist2d[239]->Fill( geoRotAngle, rotAngle );
+		            //hist2d[240]->Fill( eigtaf*geoslope, eigtaf*slope );
+		            //hist2d[241]->Fill( geoRotAngle, eigtaf*slope );
+		            //hist2d[242]->Fill( geoRotAngle, evalue2d );
+		            //hist2d[243]->Fill( evaluegeo, evalue2d );
+		            //hist2d[244]->Fill( evaluegeo, eigtaf*slope );
 		
-		            if( DEBUG ) std::cout << " -- eigan hists fill p3:" << std::endl;
-		            hist2d[245]->Fill( geoRotAngle, evaluegeo );
-		            hist2d[246]->Fill( geoRotAngle, eigtaf*geoslope );
-		            hist2d[247]->Fill( phoClstrR9, evaluegeo );
-		            hist2d[248]->Fill( phoClstrR9, eigtaf*geoslope );
-		            hist2d[249]->Fill( phoClstrR9, geoRotAngle );
-		            hist2d[250]->Fill( evaluegeo, eigtaf*geoslope );
+		            //if( DEBUG ) std::cout << " -- eigan hists fill p3:" << std::endl;
+		            //hist2d[245]->Fill( geoRotAngle, evaluegeo );
+		            //hist2d[246]->Fill( geoRotAngle, eigtaf*geoslope );
+		            //hist2d[248]->Fill( phoClstrR9, eigtaf*geoslope );
+		            //hist2d[249]->Fill( phoClstrR9, geoRotAngle );
+		            //hist2d[250]->Fill( evaluegeo, eigtaf*geoslope );
 		
 					//hist2d[224]->Fill( nrh, rotAngle );
 					//hist2d[226]->Fill( nrh, evalue2d );
 		            //hist2d[227]->Fill( nrh, eigtaf*slope );
 		            //hist2d[228]->Fill( nrh, eigtaf*geoslope );
-		            //hist2d[229]->Fill( nrh, evaluegeo );
-		            hist2d[221]->Fill( nrh, geoRotAngle );
+		            //hist2d[221]->Fill( nrh, geoRotAngle );
 
-					hist2d[251]->Fill( phoEigens2D[35], evalue2d );
-                    hist2d[252]->Fill( phoEigens2D[35], evaluegeo );
-                    hist2d[253]->Fill( phoEigens2D[35], phoEigens2D[27] );//33->27
-                    hist2d[254]->Fill( phoEigens2D[36], evalue2d );
-                    hist2d[255]->Fill( phoEigens2D[36], evaluegeo );
-                    hist2d[256]->Fill( phoEigens2D[36], phoEigens2D[27] );//33->27
-                    hist2d[257]->Fill( (*phoSigmaIEtaIEta)[it], evalue2d );
-                    hist2d[258]->Fill( (*phoSigmaIEtaIEta)[it], evaluegeo );
-                    hist2d[259]->Fill( (*phoSigmaIEtaIEta)[it], phoEigens2D[27] );//33->27
+					//hist2d[251]->Fill( phoEigens2D[35], evalue2d );
+                    //hist2d[253]->Fill( phoEigens2D[35], phoEigens2D[27] );//33->27
+                    //hist2d[254]->Fill( phoEigens2D[36], evalue2d );
+                    //hist2d[256]->Fill( phoEigens2D[36], phoEigens2D[27] );//33->27
+                    //hist2d[257]->Fill( (*phoSigmaIEtaIEta)[it], evalue2d );
+                    //hist2d[259]->Fill( (*phoSigmaIEtaIEta)[it], phoEigens2D[27] );//33->27
 
-                    hist2d[222]->Fill( nrh, phoEigens2D[35] );
-                    hist2d[223]->Fill( nrh, phoEigens2D[36] );
-                    hist2d[224]->Fill( nrh, (*phoSigmaIEtaIEta)[it] );
+                    //hist2d[228]->Fill( rotAngle, phoEigens2D[35] );
+                    //hist2d[]->Fill( rotAngle, phoEigens2D[36] );
+                    //hist2d[260]->Fill( rotAngle, (*phoSigmaIEtaIEta)[it] );
 
-                    hist2d[225]->Fill( phoClstrR9, phoEigens2D[35] );
-                    hist2d[226]->Fill( phoClstrR9, phoEigens2D[36] );
-                    hist2d[227]->Fill( phoClstrR9, (*phoSigmaIEtaIEta)[it] );
+                    //hist2d[261]->Fill( geoRotAngle, phoEigens2D[35] );
+                    //hist2d[262]->Fill( geoRotAngle, phoEigens2D[36] );
+                    //hist2d[263]->Fill( geoRotAngle, (*phoSigmaIEtaIEta)[it] );
 
-                    hist2d[228]->Fill( rotAngle, phoEigens2D[35] );
-                    hist2d[229]->Fill( rotAngle, phoEigens2D[36] );
-                    hist2d[260]->Fill( rotAngle, (*phoSigmaIEtaIEta)[it] );
-
-                    hist2d[261]->Fill( geoRotAngle, phoEigens2D[35] );
-                    hist2d[262]->Fill( geoRotAngle, phoEigens2D[36] );
-                    hist2d[263]->Fill( geoRotAngle, (*phoSigmaIEtaIEta)[it] );
 
 				}//<<>>if( doCuts ) //--------------------------------------
 
@@ -2027,7 +2104,7 @@ void makehists::getBranches( Long64_t entry ){
    b_phoExcluded->GetEntry(entry);   //!
    b_phoSeedTOFTime->GetEntry(entry);   //!
    b_phoCMeanTime->GetEntry(entry);   //!
-   b_phoSc2dEv->GetEntry(entry);   //!
+   //b_phoSc2dEv->GetEntry(entry);   //!
    b_phoPt->GetEntry(entry);   //!
    b_phoEnergy->GetEntry(entry);   //!
    b_phoPhi->GetEntry(entry);   //!
@@ -2036,11 +2113,11 @@ void makehists::getBranches( Long64_t entry ){
    b_phoPy->GetEntry(entry);   //!
    b_phoPz->GetEntry(entry);   //!
    b_phoRhIds->GetEntry(entry);   //!
-   b_phoIsPFPhoton->GetEntry(entry);   //!
-   b_phoIsStdPhoton->GetEntry(entry);   //!
+   //b_phoIsPFPhoton->GetEntry(entry);   //!
+   //b_phoIsStdPhoton->GetEntry(entry);   //!
    b_phoHasConTracks->GetEntry(entry);   //!
    b_phoIsPixelSeed->GetEntry(entry);   //!
-   b_phoIsPhoton->GetEntry(entry);   //!
+   //b_phoIsPhoton->GetEntry(entry);   //!
    b_phoIsEB->GetEntry(entry);   //!
    b_phoIsEE->GetEntry(entry);   //!
    b_phoHadOverEM->GetEntry(entry);   //!
@@ -2082,6 +2159,13 @@ void makehists::getBranches( Long64_t entry ){
    b_phoNTrkHollowConeDR04->GetEntry(entry);   //!
    b_genPhoIdx->GetEntry(entry);   //!
    b_genPhoDr->GetEntry(entry);   //!
+
+   b_phoSMaj->GetEntry(entry);   //!
+   b_phoSMin->GetEntry(entry);   //!
+   b_phoSAlp->GetEntry(entry);   //!
+   b_phoCovEtaEta->GetEntry(entry);   //!
+   b_phoCovEtaPhi->GetEntry(entry);   //!
+   b_phoCovPhiPhi->GetEntry(entry);   //!
 
    b_nGenParts->GetEntry(entry);   //!
    b_genPt->GetEntry(entry);   //!
@@ -2143,9 +2227,9 @@ void makehists::endJobs(){
     normTH2D(hist2d[127]);
 */
 
-    normTH2D(hist2d[202]);
-    normTH2D(hist2d[201]);
-    normTH2D(hist2d[200]);
+    //1normTH2D(hist2d[202]);
+    //normTH2D(hist2d[201]);
+    //normTH2D(hist2d[200]);
     //normTH2D(hist2d[226]);
     //normTH2D(hist2d[227]);
 
@@ -2161,8 +2245,8 @@ void makehists::initHists(){
 	// jet time
     //int jtdiv(400);
     //float jtran(8);
-    int jtdiv(1000);
-    float jtran(25);
+    int jtdiv(300);
+    float jtran(15);
     int jdtdiv(160);
     float jdtran(4);
     int rhcnt(160);
@@ -2294,11 +2378,11 @@ void makehists::initHists(){
 
     hist1d[102] = new TH1D("phoClstrR9", "phoClstrR9", 100, 0, 1);
 
-    hist1d[103] = new TH1D("phoNumRecHits", "phoNumRecHits", 100, 0, 100);
+    hist1d[103] = new TH1D("phoNumRecHits", "phoNumRecHits", 80, 0, 80);
     hist1d[104] = new TH1D("phoPtPreCut", "phoPt PreCut", 1000, 0, 1000);
     hist1d[105] = new TH1D("phoEnergyPreCut", "phoEnergy PreCut", 2000, 0, 2000);
 
-    hist1d[106] = new TH1D("pho3DRotAngle", "pho3DRotAngle", 140, -0.5, 6.5);
+    //hist1d[106] = new TH1D("pho3DRotAngle", "pho3DRotAngle", 140, -0.5, 6.5);
 
     hist1d[107] = new TH1D("phoIsPixelSeed", "phoIsPixelSeed", 3, 0, 2);
     hist1d[108] = new TH1D("phoHadOverEM", "phoHadOverEM", 250, 0, 10);
@@ -2307,14 +2391,14 @@ void makehists::initHists(){
     hist1d[111] = new TH1D("phoEcalRHSumEtConeDR04", "phoEcalRHSumEtConeDR04", 750, 0, 750);
     hist1d[112] = new TH1D("phoHcalTwrSumEtConeDR04", "phoHcalTwrSumEtConeDR04", 750, 0, 750);
 
-    hist1d[113] = new TH1D("phoEginValueSph", "phoEginValueSph", 150, 0.4, 1.1);
-    hist1d[114] = new TH1D("phoEginSlopeAP", "phoEginSlopeSph 1Way", sldiv, slmin, slmax);
+    //hist1d[113] = new TH1D("phoEginValueSph", "phoEginValueSph", 150, 0.4, 1.1);
+    //hist1d[114] = new TH1D("phoEginSlopeAP", "phoEginSlopeSph 1Way", sldiv, slmin, slmax);
     hist1d[115] = new TH1D("clRhEnergy", "clRhEnergy", 3000, 0, 1000);
 
     hist1d[116] = new TH1D("pho_etprofile", "Photon rEta Time Profile Sph;MajAxis [cm]", clsphdiv, -1*clsphtrn, clsphtrn);
 
-    hist1d[117] = new TH1D("phoEginSlopeSphTA", "phoEginSlopeSph TA", sldiv, slmin, slmax);
-    hist1d[118] = new TH1D("pho_proFitEtavChi", "Profile Fit Eta v Chi2Prob Sph", cwdiv, -1*cwtrn, cwtrn );
+    //hist1d[117] = new TH1D("phoEginSlopeSphTA", "phoEginSlopeSph TA", sldiv, slmin, slmax);
+	hist1d[118] = new TH1D("pho_proFitEtavChi", "Profile Fit Eta v Chi2Prob Sph", cwdiv, -1*cwtrn, cwtrn );
 
     hist1d[119] = new TH1D("phoClTimePreCut", "phoTime PreCut", jtdiv, -1*jtran, jtran);
     hist1d[120] = new TH1D("phoSeedRhTime", "phoLeadRhTime", jtdiv, -1*jtran, jtran);
@@ -2323,11 +2407,11 @@ void makehists::initHists(){
     hist1d[122] = new TH1D("phoClass", "phoClass", 4, 0, 4);
 
     hist1d[123] = new TH1D("phoClRhTime","phoClRhTime",1000, -50, 50);
-    hist1d[124] = new TH1D("phoClSMaj","phoClSMaj",250,0,25);
-    hist1d[125] = new TH1D("phoClSMin","phoClSMin",250,0,2.5);
-    hist1d[126] = new TH1D("phoSigIEtaIEta","phoSigIEtaIEta",100,0,0.1);
+    hist1d[124] = new TH1D("phoClSMaj","phoClSMaj",50,0,5);
+    hist1d[125] = new TH1D("phoClSMin","phoClSMin",50,0,0.5);
+    hist1d[126] = new TH1D("phoSigIEtaIEta","phoSigIEtaIEta",300,0,0.03);
 
-    hist1d[127] = new TH1D("phoRotAngle","phoRotAngle",140,-0.5,6.5);
+    //hist1d[127] = new TH1D("phoRotAngle","phoRotAngle",140,-0.5,6.5);
 
     hist1d[128] = new TH1D("phoR9_zoom", "phoR9_zoom", 200, 0.8, 1);
     //hist1d[129] = new TH1D("phoGeoEginValueSph", "phoGeoEginValueSph", 150, 0.4, 1.1);
@@ -2336,29 +2420,36 @@ void makehists::initHists(){
     hist1d[132] = new TH1D("phoType", "phoType(1-pho 2-susy 3-oot 4-cmb)", 6,0,5);
 
     hist1d[133] = new TH1D("phoGeoValue", "phoGeoValue", 150, 0.4, 1.1);
-    hist1d[134] = new TH1D("phoGeoSlope", "phoGeoSlope", sldiv, slmin, slmax);
-    hist1d[135] = new TH1D("phoGeoAngle","phoGeoAngle",70,0,7);
+    //hist1d[134] = new TH1D("phoGeoSlope", "phoGeoSlope", sldiv, slmin, slmax);
+    //hist1d[135] = new TH1D("phoGeoAngle","phoGeoAngle",70,0,7);
 
-    hist1d[136] = new TH1D("pho2DEiganV0","pho2DEiganV0",200,-1,1);
-    hist1d[137] = new TH1D("pho2DEiganV1","pho2DEiganV1",200,-1,1);
-    hist1d[138] = new TH1D("phoG2DEiganV0","phoG2DEiganV0",200,-1,1);
-    hist1d[139] = new TH1D("phoG2DEiganV1","phoG2DEiganV1",200,-1,1);
+    //hist1d[136] = new TH1D("pho2DEiganV0","pho2DEiganV0",200,-1,1);
+    //hist1d[137] = new TH1D("pho2DEiganV1","pho2DEiganV1",200,-1,1);
+    //hist1d[138] = new TH1D("phoG2DEiganV0","phoG2DEiganV0",200,-1,1);
+    //hist1d[139] = new TH1D("phoG2DEiganV1","phoG2DEiganV1",200,-1,1);
 
     hist1d[140] = new TH1D("phoMinDr","phoMinDr",500,0,5);
 
-    hist1d[141] = new TH1D("pho3DEiganV0","pho3DEiganV0",200,-1,1);
-    hist1d[142] = new TH1D("pho3DEiganV1","pho3DEiganV1",200,-1,1);
-    hist1d[143] = new TH1D("pho3DEiganV2","pho3DEiganV2",200,-1,1);
-    hist1d[144] = new TH1D("pho3d4Value","pho3d4Value",100,0,1);
-    hist1d[145] = new TH1D("pho3dTValue","pho3dTValue",400,0,0.4);
+    //hist1d[141] = new TH1D("pho3DEiganV0","pho3DEiganV0",200,-1,1);
+    //hist1d[142] = new TH1D("pho3DEiganV1","pho3DEiganV1",200,-1,1);
+    //hist1d[143] = new TH1D("pho3DEiganV2","pho3DEiganV2",200,-1,1);
+    //hist1d[144] = new TH1D("pho3d4Value","pho3d4Value",100,0,1);
+    //hist1d[145] = new TH1D("pho3dTValue","pho3dTValue",400,0,0.4);
 
     hist1d[146] = new TH1D("phoPtPostCut", "phoPt PostCut", 1000, 0, 1000);
     hist1d[147] = new TH1D("phoEnergyPostCut", "phoEnergy PostCut", 2000, 0, 2000);
     hist1d[148] = new TH1D("phoClTimePostCut", "phoTime PostCut", jtdiv, -1*jtran, jtran);
 
-    hist1d[149] = new TH1D("pho3dEV1","pho3dEV1",20,0,20);
-    hist1d[150] = new TH1D("pho3dEV2","pho3dEV2",20,0,20);
-    hist1d[151] = new TH1D("pho3dEV3","pho3dEV3",20,0,20);
+    //hist1d[149] = new TH1D("pho3dEV1","pho3dEV1",20,0,20);
+    //hist1d[150] = new TH1D("pho3dEV2","pho3dEV2",20,0,20);
+    //hist1d[151] = new TH1D("pho3dEV3","pho3dEV3",20,0,20);
+
+    hist1d[152] = new TH1D("phoSMaj", "phoSMaj", 300,0,3);
+    hist1d[153] = new TH1D("phoSMin", "phoSMin", 60,0,.6);
+    hist1d[154] = new TH1D("phoSAlp", "phoSAlp", 350,-1.75,1.75);
+    hist1d[155] = new TH1D("phoCovEtaEta", "phoCovEtaEtaSqrt", 100,0,0.001);
+    hist1d[156] = new TH1D("phoCovEtaPhi", "phoCovEtaPhiSqrt", 800,-0.0004,0.0004);
+    hist1d[157] = new TH1D("phoCovPhiPhi", "phoCovPhiPhiSqrt", 100,0,0.001);
 
 	//------  genparticles 200 - 249
 
@@ -2516,10 +2607,10 @@ void makehists::initHists(){
 */
 
 	//--- Photons 200 - 349 -------------------------------------------
-    hist2d[200] = new TH2D( "phoEta_TASpSlope", "Photon Eta Vs TA Slope;Eta;Slope [ns/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
-    hist2d[201] = new TH2D( "phoEta_2dtValue", "Photon Eta Vs EiganValue2D;Eta;EiganValue",60, -1.5, 1.5, 25, 0.5, 1.0);
-    hist2d[202] = new TH2D( "phoEta_3DTAngle", "Photon Eta Vs 3D TAngle;Eta;TAngle", 60, -1.5, 1.5, 640, -3.2, 3.2);
-	hist2d[203] = new TH2D( "phoSAngle_pho3Dangle","phoRotAngle Vs pho3DAngle",140,-0.5,6.5,140,-0.5,6.5);
+    //hist2d[200] = new TH2D( "phoEta_TASpSlope", "Photon Eta Vs TA Slope;Eta;Slope [ns/cm]", 60, -1.5, 1.5, sldiv, slmin, slmax);
+    //hist2d[201] = new TH2D( "phoEta_2dtValue", "Photon Eta Vs EiganValue2D;Eta;EiganValue",60, -1.5, 1.5, 25, 0.5, 1.0);
+    //hist2d[202] = new TH2D( "phoEta_3DTAngle", "Photon Eta Vs 3D TAngle;Eta;TAngle", 60, -1.5, 1.5, 640, -3.2, 3.2);
+	//hist2d[203] = new TH2D( "phoSAngle_pho3Dangle","phoRotAngle Vs pho3DAngle",140,-0.5,6.5,140,-0.5,6.5);
 
     hist2d[204] = new TH2D("phoID_SUSY", "phoIDvSUSY (-1 not matched);isPho;isSUSY", 3, -1, 2, 2, 0, 2);
     hist2d[205] = new TH2D("phoPreE_PrePt", "phoPreEvPrePt;Energy [GeV];Pt [GeV]", 2000, 0, 2000, 1000, 0, 1000);
@@ -2529,86 +2620,162 @@ void makehists::initHists(){
     hist2d[208] = new TH2D("pho_tmap", "Photon Time Map;Z [cm];C [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
     hist2d[209] = new TH2D("pho_occmap", "Photon Occ Map;Z [cm];C [cm]", cldiv, -1*cltrn, cltrn, cldiv, -1*cltrn, cltrn);
 
-    hist2d[210] = new TH2D("phoSphEgnxy", "phoSphEgn z,c;z;c", 220, -1.1, 1.1, 220, -1.1, 1.1);
-    hist2d[211] = new TH2D("pho3DEgnxy", "pho3DEgn x,y;x;y", 220, -1.1, 1.1, 220, -1.1, 1.1);
-    hist2d[212] = new TH2D("pho3DEgnxz", "pho3DEgn x,z;x;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
-    hist2d[213] = new TH2D("pho3DEgnyz", "pho3DEgn y,z;y;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    //hist2d[210] = new TH2D("phoSphEgnxy", "phoSphEgn z,c;z;c", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    //hist2d[211] = new TH2D("pho3DEgnxy", "pho3DEgn x,y;x;y", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    //hist2d[212] = new TH2D("pho3DEgnxz", "pho3DEgn x,z;x;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
+    //hist2d[213] = new TH2D("pho3DEgnyz", "pho3DEgn y,z;y;z", 220, -1.1, 1.1, 220, -1.1, 1.1);
 
     hist2d[214] = new TH2D("pho_ptwtmap", "Photon Phi(x) Time(y) WtMap Sph;MinAxis [cm];Time [ns]", clsphdiv, -1*clsphtrn, clsphtrn, cwdiv, -1*cwtrn, cwtrn );
     hist2d[215] = new TH2D("pho_etwtmap", "Photon Eta(x) Time(y) WtMap Sph;MajAxis [cm];Time [ns]", clsphdiv, -1*clsphtrn, clsphtrn, cwdiv, -1*cwtrn, cwtrn );
 
-    hist2d[216] = new TH2D("pho2dSlope_3dTValue","2D Slope v 3dTValue;Slope;3dTValue",200,-2,2,400,0,0.4);
+    //hist2d[216] = new TH2D("pho2dSlope_3dTValue","2D Slope v 3dTValue;Slope;3dTValue",200,-2,2,400,0,0.4);
     hist2d[217] = new TH2D("phoPostE_PostPt", "phoPostEvPostPt;Energy [GeV];Pt [GeV]", 2000, 0, 2000, 1000, 0, 1000);
-    hist2d[218] = new TH2D("phoNRH_ClR9","Photon nClRecHits v clR9;nRecHits;ClusterR9",120,0,120,100,0,1);
 
-    hist2d[219] = new TH2D("phoNRH_phoE","Photon nClRecHits v phoE;nRecHits;ClusterR9",120,0,120,2000,0,2000);
-    hist2d[220] = new TH2D("phoNRH_phoPt","Photon nClRecHits v phoPt;nRecHits;ClusterR9",120,0,120,1000,0,1000);
+    hist2d[218] = new TH2D("phoNRH_ClR9","Photon nClRecHits v clR9;nRecHits;ClusterR9",80,0,80,100,0,1);
+    hist2d[222] = new TH2D("phoNRH_phoClSMaj","phoNRH_phoClSMaj;#rh;SMaj",80,0,80,200,0,2);
+    hist2d[223] = new TH2D("phoNRH_phoClSMin","phoNRH_phoClSMin;#rh;SMin",80,0,80,80,0,0.8);
+    hist2d[224] = new TH2D("phoNRH_phoClSigIEtaIEta","phoNRH_phoClSigIEtaIEta;#rh;sieie",80,0,80,250,0,0.025);
+    hist2d[219] = new TH2D("phoNRH_phoE","Photon nClRecHits v phoE;nRecHits;Energy",80,0,80,2000,0,2000);
+    hist2d[220] = new TH2D("phoNRH_phoClTime","Photon nClRecHits v ClTime;nRecHits;ClTime [ns]",80,0,80,jtdiv, -1*jtran, jtran);
+    hist2d[229] = new TH2D("phoNRH_geoValue","Photon nClRecHits v geoValue;nRecHits;geoValue",80,0,80,50,0.5,1);
+    hist2d[228] = new TH2D("phoNRH_phoSMaj","Photon nClRecHits v phoSMaj;nRecHits;phoSMaj",80,0,80,250,0,2.5);
+    hist2d[230] = new TH2D("phoNRH_phoSMin","Photon nClRecHits v phoSMin;nRecHits;phoSMin",80,0,80,750,0,0.75);
+    hist2d[231] = new TH2D("phoNRH_phoSAlp","Photon nClRecHits v phoSAlp;nRecHits;phoSAlp",80,0,80,350,-1.75,1.75);
+    hist2d[232] = new TH2D("phoNRH_phoCovEtaEta","Photon nClRecHits v phoCovEtaEta;nRecHits;phoCovEtaEta",80,0,80,100,0,0.001);
+    hist2d[233] = new TH2D("phoNRH_phoCovEtaPhi","Photon nClRecHits v phoCovEtaPhi;nRecHits;phoCovEtaPhi",80,0,80,100,-0.0005,0.0005);
+    hist2d[234] = new TH2D("phoNRH_phoCovPhiPhi","Photon nClRecHits v phoCovPhiPhi;nRecHits;phoCovPhiPhi",80,0,80,100,0,0.001);
 
+    hist2d[247] = new TH2D("phoClR9_geoValue","Photon ClR9 v geoValue;ClR9;geoValue",100,0,1,50,0.5,1);
+    hist2d[252] = new TH2D("phoClSMaj_geoValue","phoClSMaj v geoValue;ClSMaj;geoValue",200,0,2,50,0.5,1);
+    hist2d[255] = new TH2D("phoClSMin_geoValue","phoClSMin v geoValue;ClSMin;geoValue",80,0,0.8,50,0.5,1);
+    hist2d[258] = new TH2D("phoClSigIEtaIEta_geoValue","phoClSigIEtaIEta v geoValue;ClSigIEtaIEta;geoValue",250,0,0.025,50,0.5,1);
+    hist2d[235] = new TH2D("phoE_geoValue","Photon phoE v geoValue;Energy;geoValue",2000,0,2000,50,0.5,1);
+    hist2d[236] = new TH2D("phoClTime_geoValue","Photon ClTime v geoValue;ClTime [ns];geoValue",jtdiv,-1*jtran,jtran,50,0.5,1);
+    hist2d[237] = new TH2D("phoSMaj_geoValue","Photon SMaj v geoValue;phoSMaj;geoValue",250,0,2.5,50,0.5,1);
+    hist2d[238] = new TH2D("phoSMin_geoValue","Photon SMin v geoValue;phoSMin;geoValue",750,0,0.75,50,0.5,1);
+    hist2d[239] = new TH2D("phoSAlp_geoValue","Photon SAlp v geoValue;phoSAlp;geoValue",350,-1.75,1.75,50,0.5,1);
+    hist2d[240] = new TH2D("phoCovEtaEta_geoValue","Photon CovEtaEta v geoValue;phoCovEtaEta;geoValue",100,0,0.001,50,0.5,1);
+    hist2d[241] = new TH2D("phoCovEtaPhi_geoValue","Photon CovEtaPhi v geoValue;phoCovEtaPhi;geoValue",100,-0.0005,0.0005,50,0.5,1);
+    hist2d[242] = new TH2D("phoCovPhiPhi_geoValue","Photon CovPhiPhi v geoValue;phoCovPhiPhi;geoValue",100,0,0.001,50,0.5,1);
 
-    //hist2d[222] = new TH2D("phoClR9_minDr","Photon clR9 Vs minDr;ClusterR9;minDr",100,0,1,500,0,5);
-    //hist2d[223] = new TH2D("phoR9_ClR9","phoR9_ClR9;R9;clR9",100,0,1,100,0,1);
+    hist2d[225] = new TH2D("phoClR9_phoClSMaj","phoClR9_phoClSMaj;clr9;SMaj",100,0,1,200,0,2);
+    hist2d[226] = new TH2D("phoClR9_phoClSMin","phoClR9_phoClSMin;clr9;SMin",100,0,1,80,0,0.8);
+    hist2d[227] = new TH2D("phoClR9_phoClSigIEtaIEta","phoClR9_phoClSigIEtaIEta;clr9;sieie",100,0,1,250,0,0.025);
+    hist2d[245] = new TH2D("phoClR9_phoE","Photon phoClR9 v phoE;clr9;Energy",100,0,1,2000,0,2000);
+    hist2d[246] = new TH2D("phoClR9_phoClTime","Photon phoClR9 v ClTime;clr9;ClTime [ns]",100,0,1,jtdiv, -1*jtran, jtran);
+    hist2d[248] = new TH2D("phoClR9_phoSMaj","Photon phoClR9 v phoSMaj;clr9;phoSMaj",100,0,1,250,0,2.5);
+    hist2d[249] = new TH2D("phoClR9_phoSMin","Photon phoClR9 v phoSMin;clr9;phoSMin",100,0,1,750,0,0.75);
+    hist2d[250] = new TH2D("phoClR9_phoSAlp","Photon phoClR9 v phoSAlp;clr9;phoSAlp",100,0,1,350,-1.75,1.75);
+    hist2d[251] = new TH2D("phoClR9_phoCovEtaEta","Photon phoClR9 v phoCovEtaEta;clr9;phoCovEtaEta",100,0,1,100,0,0.001);
+    hist2d[252] = new TH2D("phoClR9_phoCovEtaPhi","Photon phoClR9 v phoCovEtaPhi;clr9;phoCovEtaPhi",100,0,1,100,-0.0005,0.0005);
+    hist2d[253] = new TH2D("phoClR9_phoCovPhiPhi","Photon phoClR9 v phoCovPhiPhi;clr9;phoCovPhiPhi",100,0,1,100,0,0.001);
+
+    hist2d[254] = new TH2D("phoClSMaj_phoClSMin","phoClSMaj v phoClSMin;SMaj;SMin",200,0,2,80,0,0.8);
+    hist2d[255] = new TH2D("phoClSMaj_phoClSigIEtaIEta","phoClSMaj v phoClSigIEtaIEta;SMaj;sieie",200,0,2,250,0,0.025);
+    hist2d[256] = new TH2D("phoClSMaj_phoE","Photon phoClSMaj v phoE;SMaj;Energy",200,0,2,2000,0,2000);
+    hist2d[257] = new TH2D("phoClSMaj_phoClTime","Photon phoClSMaj v ClTime;SMaj;ClTime [ns]",200,0,2,jtdiv, -1*jtran, jtran);
+    hist2d[259] = new TH2D("phoClSMaj_phoSMaj","Photon phoClSMaj v phoSMaj;SMaj;phoSMaj",200,0,2,250,0,2.5);
+    hist2d[260] = new TH2D("phoClSMaj_phoSMin","Photon phoClSMaj v phoSMin;SMaj;phoSMin",200,0,2,750,0,0.75);
+    hist2d[261] = new TH2D("phoClSMaj_phoSAlp","Photon phoClSMaj v phoSAlp;SMaj;phoSAlp",200,0,2,350,-1.75,1.75);
+    hist2d[262] = new TH2D("phoClSMaj_phoCovEtaEta","Photon phoClSMaj v phoCovEtaEta;SMaj;phoCovEtaEta",200,0,2,100,0,0.001);
+    hist2d[263] = new TH2D("phoClSMaj_phoCovEtaPhi","Photon phoClSMaj v phoCovEtaPhi;SMaj;phoCovEtaPhi",200,0,2,100,-0.0005,0.0005);
+    hist2d[264] = new TH2D("phoClSMaj_phoCovPhiPhi","Photon phoClSMaj v phoCovPhiPhi;SMaj;phoCovPhiPhi",200,0,2,100,0,0.001);
+
+    hist2d[265] = new TH2D("phoClSMin_phoClSigIEtaIEta","phoClSMin v phoClSigIEtaIEta;SMin;sieie",80,0,0.8,250,0,0.025);
+    hist2d[266] = new TH2D("phoClSMin_phoE","Photon phoClSMin v phoE;SMin;Energy",80,0,0.8,2000,0,2000);
+    hist2d[267] = new TH2D("phoClSMin_phoClTime","Photon phoClSMin v ClTime;SMin;ClTime [ns]",80,0,0.8,jtdiv, -1*jtran, jtran);
+    hist2d[269] = new TH2D("phoClSMin_phoSMaj","Photon phoClSMin v phoSMaj;SMin;phoSMaj",80,0,0.8,250,0,2.5);
+    hist2d[270] = new TH2D("phoClSMin_phoSMin","Photon phoClSMin v phoSMin;SMin;phoSMin",80,0,0.8,750,0,0.75);
+    hist2d[271] = new TH2D("phoClSMin_phoSAlp","Photon phoClSMin v phoSAlp;SMin;phoSAlp",80,0,0.8,350,-1.75,1.75);
+    hist2d[272] = new TH2D("phoClSMin_phoCovEtaEta","Photon phoClSMin v phoCovEtaEta;SMin;phoCovEtaEta",80,0,0.8,100,0,0.001);
+    hist2d[273] = new TH2D("phoClSMin_phoCovEtaPhi","Photon phoClSMin v phoCovEtaPhi;SMin;phoCovEtaPhi",80,0,0.8,100,-0.0005,0.0005);
+    hist2d[274] = new TH2D("phoClSMin_phoCovPhiPhi","Photon phoClSMin v phoCovPhiPhi;SMin;phoCovPhiPhi",80,0,0.8,100,0,0.001);
+
+    hist2d[275] = new TH2D("phoClSigIEtaIEta_phoE","Photon phoClSigIEtaIEta v phoE;sieie;Energy",250,0,0.025,2000,0,2000);
+    hist2d[276] = new TH2D("phoClSigIEtaIEta_phoClTime","Photon phoClSigIEtaIEta v ClTime;sieie;ClTime [ns]",250,0,0.025,jtdiv, -1*jtran, jtran);
+    hist2d[278] = new TH2D("phoClSigIEtaIEta_phoSMaj","Photon phoClSigIEtaIEta v phoSMaj;sieie;phoSMaj",250,0,0.025,250,0,2.5);
+    hist2d[279] = new TH2D("phoClSigIEtaIEta_phoSMin","Photon phoClSigIEtaIEta v phoSMin;sieie;phoSMin",250,0,0.025,750,0,0.75);
+    hist2d[280] = new TH2D("phoClSigIEtaIEta_phoSAlp","Photon phoClSigIEtaIEta v phoSAlp;sieie;phoSAlp",250,0,0.025,350,-1.75,1.75);
+    hist2d[281] = new TH2D("phoClSigIEtaIEta_phoCovEtaEta","Photon phoClSigIEtaIEta v phoCovEtaEta;sieie;phoCovEtaEta",250,0,0.025,100,0,0.001);
+    hist2d[282] = new TH2D("phoClSigIEtaIEta_phoCovEtaPhi","Photon phoClSigIEtaIEta v phoCovEtaPhi;sieie;phoCovEtaPhi",250,0,0.025,100,-0.0005,0.0005);
+    hist2d[283] = new TH2D("phoClSigIEtaIEta_phoCovPhiPhi","Photon phoClSigIEtaIEta v phoCovPhiPhi;sieie;phoCovPhiPhi",250,0,0.025,100,0,0.001);
+
+    hist2d[284] = new TH2D("phoE_phoClTime","Photon phoE v ClTime;Energy;ClTime [ns]",2000,0,2000,jtdiv, -1*jtran, jtran);
+    hist2d[286] = new TH2D("phoE_phoSMaj","Photon phoE v phoSMaj;Energy;phoSMaj",2000,0,2000,250,0,2.5);
+    hist2d[287] = new TH2D("phoE_phoSMin","Photon phoE v phoSMin;Energy;phoSMin",2000,0,2000,750,0,0.75);
+    hist2d[288] = new TH2D("phoE_phoSAlp","Photon phoE v phoSAlp;Energy;phoSAlp",2000,0,2000,350,-1.75,1.75);
+    hist2d[289] = new TH2D("phoE_phoCovEtaEta","Photon phoE v phoCovEtaEta;Energy;phoCovEtaEta",2000,0,2000,100,0,0.001);
+    hist2d[290] = new TH2D("phoE_phoCovEtaPhi","Photon phoE v phoCovEtaPhi;Energy;phoCovEtaPhi",2000,0,2000,100,-0.0005,0.0005);
+    hist2d[291] = new TH2D("phoE_phoCovPhiPhi","Photon phoE v phoCovPhiPhi;Energy;phoCovPhiPhi",2000,0,2000,100,0,0.001);
+
+    hist2d[293] = new TH2D("phoClTime_phoSMaj","Photon phoClTime v phoSMaj;ClTime [ns];phoSMaj",jtdiv, -1*jtran, jtran,250,0,2.5);
+    hist2d[294] = new TH2D("phoClTime_phoSMin","Photon phoClTime v phoSMin;ClTime [ns];phoSMin",jtdiv, -1*jtran, jtran,750,0,0.75);
+    hist2d[295] = new TH2D("phoClTime_phoSAlp","Photon phoClTime v phoSAlp;ClTime [ns];phoSAlp",jtdiv, -1*jtran, jtran,350,-1.75,1.75);
+    hist2d[296] = new TH2D("phoClTime_phoCovEtaEta","Photon phoClTime v phoCovEtaEta;ClTime [ns];phoCovEtaEta",jtdiv, -1*jtran, jtran,100,0,0.001);
+    hist2d[297] = new TH2D("phoClTime_phoCovEtaPhi","Photon phoClTime v phoCovEtaPhi;ClTime [ns];phoCovEtaPhi",jtdiv, -1*jtran, jtran,100,-0.0005,0.0005);
+    hist2d[298] = new TH2D("phoClTime_phoCovPhiPhi","Photon phoClTime v phoCovPhiPhi;ClTime [ns];phoCovPhiPhi",jtdiv, -1*jtran, jtran,100,0,0.001);
+
+/* avalible numbers -------
+	237
+	247
+	258
+	268
+	277
+	285
+	292
+------------------------*/
+
+    //hist2d[] = new TH2D("phoClR9_minDr","Photon clR9 Vs minDr;ClusterR9;minDr",100,0,1,500,0,5);
+    //hist2d[] = new TH2D("phoR9_ClR9","phoR9_ClR9;R9;clR9",100,0,1,100,0,1);
 
     //hist2d[] = new TH2D("phoNRH_R9_fake","Photon Fake nClRecHits v R9;nRecHits;R9",200,0,200,100,0,1);
-    //hist2d[224] = new TH2D("phoNRH_angle","Photon nClRecHits v Angle;nRecHits;Angle",120,0,120,70,0,7);
-    //hist2d[225] = new TH2D("phoNRH_R9","Photon nClRecHits v R9;nRecHits;R9",120,0,120,100,0,1);
-    //hist2d[226] = new TH2D("phoNRH_value","Photon nClRecHits v 2dtValue;nRecHits;2dtValue",120,0,120,50,0.5,1);
-    //hist2d[227] = new TH2D("phoNRH_slope","Photon nClRecHits v Slope;nRecHits;Slope",120,0,120,sldiv, slmin, slmax);
-    //hist2d[228] = new TH2D("phoNRH_geoSlope","Photon nClRecHits v geoSlope;nRecHits;geoSlope",120,0,120,sldiv, slmin, slmax);
-    //hist2d[229] = new TH2D("phoNRH_geoValue","Photon nClRecHits v geoValue;nRecHits;geoValue",120,0,120,50,0.5,1);
-    hist2d[221] = new TH2D("phoNRH_geoAngle","Photon nClRecHits v geoAngle;nRecHits;geoAngle",120,0,120,70,0,7);
+    //hist2d[] = new TH2D("phoNRH_angle","Photon nClRecHits v Angle;nRecHits;Angle",120,0,120,70,0,7);
+    //hist2d[] = new TH2D("phoNRH_","Photon nClRecHits v R9;nRecHits;R9",120,0,120,100,0,1);
+    //hist2d[] = new TH2D("phoNRH_value","Photon nClRecHits v 2dtValue;nRecHits;2dtValue",120,0,120,50,0.5,1);
+    //hist2d[] = new TH2D("phoNRH_slope","Photon nClRecHits v Slope;nRecHits;Slope",120,0,120,sldiv, slmin, slmax);
+    //hist2d[ = new TH2D("phoNRH_geoSlope","Photon nClRecHits v geoSlope;nRecHits;geoSlope",120,0,120,sldiv, slmin, slmax);
+    //hist2d[] = new TH2D("phoNRH_geoAngle","Photon nClRecHits v geoAngle;nRecHits;geoAngle",120,0,120,70,0,7);
 
-    hist2d[222] = new TH2D("phoNRH_phoClSMaj","phoNRH_phoClSMaj;#rh;SMaj",120,0,120,500,0,5);
-    hist2d[223] = new TH2D("phoNRH_phoClSMin","phoNRH_phoClSMin;#rh;SMin",120,0,120,200,0,2);
-    hist2d[224] = new TH2D("phoNRH_phoClSigIEtaIEta","phoNRH_phoClSigIEtaIEta;#rh;sieie",120,0,120,500,0,0.05);
+    //hist2d[228] = new TH2D("phoAngle_phoClSMaj","phoAngle_phoClSMaj;2dtAng;Smaj",70,0,7,500,0,5);
+    //hist2d[] = new TH2D("phoAngle_phoClSMin","phoAngle_phoClSMin;2dtAng;SMin",70,0,7,200,0,2);
+    //hist2d[260] = new TH2D("phoAngle_phoClSigIEtaIEta","phoAngle_phoClSigIEtaIEta;2dtAng;sieie",70,0,7,500,0,0.05);
 
-    hist2d[225] = new TH2D("phoClR9_phoClSMaj","phoClR9_phoClSMaj;clr9;SMaj",100,0,1,500,0,5);
-    hist2d[226] = new TH2D("phoClR9_phoClSMin","phoClR9_phoClSMin;clr9;SMin",100,0,1,200,0,2);
-    hist2d[227] = new TH2D("phoClR9_phoClSigIEtaIEta","phoClR9_phoClSigIEtaIEta;clr9;sieie",100,0,1,500,0,0.05);
-
-    hist2d[228] = new TH2D("phoAngle_phoClSMaj","phoAngle_phoClSMaj;2dtAng;Smaj",70,0,7,500,0,5);
-    hist2d[229] = new TH2D("phoAngle_phoClSMin","phoAngle_phoClSMin;2dtAng;SMin",70,0,7,200,0,2);
-    hist2d[260] = new TH2D("phoAngle_phoClSigIEtaIEta","phoAngle_phoClSigIEtaIEta;2dtAng;sieie",70,0,7,500,0,0.05);
-
-    hist2d[261] = new TH2D("phoGeoAngle_phoClSMaj","phoGeoAngle_phoClSMaj;geoAng;SMaj",70,0,7,500,0,5);
-    hist2d[262] = new TH2D("phoGeoAngle_phoClSMin","phoGeoAngle_phoClSMin;geoAng;SMin",70,0,7,200,0,2);
-    hist2d[263] = new TH2D("phoGeoAngle_phoClSigIEtaIEta","phoGeoAngle_phoClSigIEtaIEta;geoAng;sieie",70,0,7,500,0,0.05);
+    //hist2d[261] = new TH2D("phoGeoAngle_phoClSMaj","phoGeoAngle_phoClSMaj;geoAng;SMaj",70,0,7,500,0,5);
+    //hist2d[262] = new TH2D("phoGeoAngle_phoClSMin","phoGeoAngle_phoClSMin;geoAng;SMin",70,0,7,200,0,2);
+    //hist2d[263] = new TH2D("phoGeoAngle_phoClSigIEtaIEta","phoGeoAngle_phoClSigIEtaIEta;geoAng;sieie",70,0,7,500,0,0.05);
 
 	// eigan plots value/slope/angle/clr9
 
-    hist2d[230] = new TH2D("phoClR9_value","Photon ClR9 v tValue;ClR9;tValue",100,0,1,50,0.5,1);
-    hist2d[231] = new TH2D("phoClR9_slope","Photon ClR9 v Slope;ClR9;Slope",100,0,1,sldiv, slmin, slmax);
-    hist2d[232] = new TH2D("phoClR9_Angle","Photon ClR9 v Angle;ClR9;Angle",100,0,1,70,0,7);
-    hist2d[233] = new TH2D("phoValue_slope","Photon Value v Slope;Value;Slope",50,0.5,1,sldiv, slmin, slmax);
-    hist2d[235] = new TH2D("phoAngle_value","Photon Angle v tValue;Angle;Value",70,0,7,50,0.5,1);
-    hist2d[234] = new TH2D("phoAngle_slope","Photon Angle v Slope;Angle;Slope",70,0,7,sldiv, slmin, slmax);
+    //hist2d[230] = new TH2D("phoClR9_value","Photon ClR9 v tValue;ClR9;tValue",100,0,1,50,0.5,1);
+    //hist2d[231] = new TH2D("phoClR9_slope","Photon ClR9 v Slope;ClR9;Slope",100,0,1,sldiv, slmin, slmax);
+    //hist2d[232] = new TH2D("phoClR9_Angle","Photon ClR9 v Angle;ClR9;Angle",100,0,1,70,0,7);
+    //hist2d[233] = new TH2D("phoValue_slope","Photon Value v Slope;Value;Slope",50,0.5,1,sldiv, slmin, slmax);
+    //hist2d[235] = new TH2D("phoAngle_value","Photon Angle v tValue;Angle;Value",70,0,7,50,0.5,1);
+    //hist2d[234] = new TH2D("phoAngle_slope","Photon Angle v Slope;Angle;Slope",70,0,7,sldiv, slmin, slmax);
 
-    hist2d[236] = new TH2D("phoGeoValue_angle","Photon geoValue v angle;geoValue;angle",50,0.5,1,70,0,7);
-    hist2d[237] = new TH2D("phoGeoSlope_angle","Photon geoSlope v angle;geoSlope;angle",sldiv, slmin, slmax,70,0,7);
-    hist2d[238] = new TH2D("phoGeoSlope_value","Photon geoSlope v value;geoSlope;value",sldiv, slmin, slmax,50,0.5,1);
+    //hist2d[236] = new TH2D("phoGeoValue_angle","Photon geoValue v angle;geoValue;angle",50,0.5,1,70,0,7);
+    //hist2d[237] = new TH2D("phoGeoSlope_angle","Photon geoSlope v angle;geoSlope;angle",sldiv, slmin, slmax,70,0,7);
+    //hist2d[238] = new TH2D("phoGeoSlope_value","Photon geoSlope v value;geoSlope;value",sldiv, slmin, slmax,50,0.5,1);
 
-    hist2d[239] = new TH2D("phoGeoAngle_Angle","Photon geoAngle v Angle;geoAngle;rotAngle",70,0,7,70,0,7);
-    hist2d[242] = new TH2D("phoGeoAngle_Value","Photon geoAngle v tValue;geoAngle;tValue",70,0,7,50,0.5,1);
-    hist2d[241] = new TH2D("phoGeoAngle_slope","Photon geoAngle v Slope;geoAngle;slope",70,0,7,sldiv, slmin, slmax);
-    hist2d[243] = new TH2D("phoGeoValue_value","Photon geoValue v tValue;geoValue;tValue",50,0.5,1,50,0.5,1);
-    hist2d[244] = new TH2D("phoGeoValue_slope","Photon geoValue v slope;geoValue;slope",50,0.5,1,sldiv, slmin, slmax);
-    hist2d[240] = new TH2D("phoGeoSlope_slope","Photon geoSlope v slope;geoSlope;slope",sldiv, slmin, slmax,sldiv, slmin, slmax);
+    //hist2d[239] = new TH2D("phoGeoAngle_Angle","Photon geoAngle v Angle;geoAngle;rotAngle",70,0,7,70,0,7);
+    //hist2d[242] = new TH2D("phoGeoAngle_Value","Photon geoAngle v tValue;geoAngle;tValue",70,0,7,50,0.5,1);
+    //hist2d[241] = new TH2D("phoGeoAngle_slope","Photon geoAngle v Slope;geoAngle;slope",70,0,7,sldiv, slmin, slmax);
+    //hist2d[243] = new TH2D("phoGeoValue_value","Photon geoValue v tValue;geoValue;tValue",50,0.5,1,50,0.5,1);
+    //hist2d[244] = new TH2D("phoGeoValue_slope","Photon geoValue v slope;geoValue;slope",50,0.5,1,sldiv, slmin, slmax);
+    //hist2d[240] = new TH2D("phoGeoSlope_slope","Photon geoSlope v slope;geoSlope;slope",sldiv, slmin, slmax,sldiv, slmin, slmax);
 
-    hist2d[245] = new TH2D("phoGeoAngle_geoValue","Photon geoAngle v geoValue;geoAngle;geoValue",70,0,7,50,0.5,1);
-    hist2d[246] = new TH2D("phoGeoAngle_geoSlope","Photon geoAngle v geoSlope;geoAngle;geoSlope",70,0,7,sldiv, slmin, slmax);
-    hist2d[247] = new TH2D("phoClR9_geoValue","Photon ClR9 v geoValue;ClR9;geoValue",100,0,1,50,0.5,1);
-    hist2d[248] = new TH2D("phoClR9_geoSlope","Photon ClR9 v geoSlope;ClR9;geoSlope",100,0,1,sldiv, slmin, slmax);
-    hist2d[249] = new TH2D("phoClR9_geoAngle","Photon ClR9 v geoAngle;ClR9;geoAngle",100,0,1,70,0,7);
-    hist2d[250] = new TH2D("phoGeoValue_geoSlope","Photon geoValue v geoSlope;geoValue;geoSlope",50,0.5,1,sldiv, slmin, slmax);
+    //hist2d[245] = new TH2D("phoGeoAngle_geoValue","Photon geoAngle v geoValue;geoAngle;geoValue",70,0,7,50,0.5,1);
+    //hist2d[246] = new TH2D("phoGeoAngle_geoSlope","Photon geoAngle v geoSlope;geoAngle;geoSlope",70,0,7,sldiv, slmin, slmax);
+    //hist2d[248] = new TH2D("phoClR9_geoSlope","Photon ClR9 v geoSlope;ClR9;geoSlope",100,0,1,sldiv, slmin, slmax);
+    //hist2d[249] = new TH2D("phoClR9_geoAngle","Photon ClR9 v geoAngle;ClR9;geoAngle",100,0,1,70,0,7);
+    //hist2d[250] = new TH2D("phoGeoValue_geoSlope","Photon geoValue v geoSlope;geoValue;geoSlope",50,0.5,1,sldiv, slmin, slmax);
 
-    hist2d[251] = new TH2D("phoClSMaj_2dtValue","phoClSMaj_2dtValue;ClSMaj;2dtValue",500,0,5,50,0.5,1);
-    hist2d[252] = new TH2D("phoClSMaj_geoValue","phoClSMaj_geoValue;ClSMaj;geoValue",500,0,5,50,0.5,1);
-    hist2d[253] = new TH2D("phoClSMaj_3d4Value","phoClSMaj_3d4Value;ClSMaj;3d4Value",500,0,5,50,0.5,1);
-    hist2d[254] = new TH2D("phoClSMin_2dtValue","phoClSMin_2dtValue;ClSMin;2dtValue",200,0,2,50,0.5,1);
-    hist2d[255] = new TH2D("phoClSMin_geoValue","phoClSMin_geoValue;ClSMin;geoValue",200,0,2,50,0.5,1);
-    hist2d[256] = new TH2D("phoClSMin_3d4Value","phoClSMin_3d4Value;ClSMin;3d4Value",200,0,2,50,0.5,1);
-    hist2d[257] = new TH2D("phoClSigIEtaIEta_2dtValue","phoClSigIEtaIEta_2dtValue;ClSigIEtaIEta;2dtValue",500,0,0.05,50,0.5,1);
-    hist2d[258] = new TH2D("phoClSigIEtaIEta_geoValue","phoClSigIEtaIEta_geoValue;ClSigIEtaIEta;geoValue",500,0,0.05,50,0.5,1);
-    hist2d[259] = new TH2D("phoClSigIEtaIEta_3d4Value","phoClSigIEtaIEta_3d4Value;ClSigIEtaIEta;3d4Value",500,0,0.05,50,0.5,1);
+    //hist2d[251] = new TH2D("phoClSMaj_2dtValue","phoClSMaj_2dtValue;ClSMaj;2dtValue",500,0,5,50,0.5,1);
+    //hist2d[253] = new TH2D("phoClSMaj_3d4Value","phoClSMaj_3d4Value;ClSMaj;3d4Value",500,0,5,50,0.5,1);
+    //hist2d[254] = new TH2D("phoClSMin_2dtValue","phoClSMin_2dtValue;ClSMin;2dtValue",200,0,2,50,0.5,1);
+    //hist2d[256] = new TH2D("phoClSMin_3d4Value","phoClSMin_3d4Value;ClSMin;3d4Value",200,0,2,50,0.5,1);
+    //hist2d[257] = new TH2D("phoClSigIEtaIEta_2dtValue","phoClSigIEtaIEta_2dtValue;ClSigIEtaIEta;2dtValue",500,0,0.05,50,0.5,1);
+    //hist2d[259] = new TH2D("phoClSigIEtaIEta_3d4Value","phoClSigIEtaIEta_3d4Value;ClSigIEtaIEta;3d4Value",500,0,0.05,50,0.5,1);
 	//60 - 63
 
 	//--- rechit collections 350 - 399 -------------------------------------------------
@@ -2641,11 +2808,11 @@ int main ( int argc, char *argv[] ){
 
     //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
     //else {
-                auto indir = "LLPGamma/llpga_GMSB_AOD_v59/"; //argv[1];
-                //auto indir = "LLPGamma/llpga_GJets_AOD_v58/";
+                //auto indir = "LLPGamma/llpga_GMSB_AOD_v60/"; //argv[1];
+                auto indir = "LLPGamma/llpga_GJets_AOD_v60/";
 
-                auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v59_Full.txt"; //argv[2];
-                //auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v58_Full.txt";
+                //auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v60_Full.txt"; //argv[2];
+                auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v60_Full.txt";
 
 				//auto outfilename = "lpgana_mc_test12_tight_max3d4v_sig.root";
 
@@ -2742,12 +2909,22 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV59_mhV30_Pt30logE_10th_Tight_tEB_nRH15_isNotSig_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV59_mhV30_Pt30logE_20th_Tight_tEB_nRH15_isCmb_Hists.root";
 
-                auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV59_mhV30_GV85Pt30logE_10th_Tight_tEB_nRH15_isSig_v3_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV59_mhV30_GV85Pt30logE_10th_Tight_tEB_nRH15_isSig_v3_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV59_mhV30_GV85Pt30logE_10th_Tight_tEB_nRH15_isNotSig_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV59_mhV30_GV85Pt30logE_20th_Tight_tEB_nRH15_isCmb_v3_Hists.root";
 				//v3 has TAngle 33->27
 
-				int pct = 10;
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_10th_loose_tEB_nRH15_isSig_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_SMM_10th_loose_tEB_nRH15_isSig_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_GEO_10th_loose_tEB_nRH15_isSig_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_SMMGEO_10th_loose_tEB_nRH15_isSig_Hists.root";
+
+                auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_50th_loose_tEB_nRH15_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_SMM_50th_loose_tEB_nRH15_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_GEO_50th_loose_tEB_nRH15_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_SMMGEO_20th_loose_tEB_nRH15_Hists.root";
+
+				int pct = 50;
 				makehists base;
                 base.llpgana_hist_maker( indir, infilename, outfilename, pct );
     //}
