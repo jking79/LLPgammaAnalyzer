@@ -1,0 +1,1028 @@
+//////////////////////////////////////////////////////////////////////
+// -*- C++ -*-
+//
+//
+// Original Author:  Jack W King III
+//         Created:  Wed, 27 Jan 2021 19:19:35 GMT
+//
+//////////////////////////////////////////////////////////////////////
+
+
+#include "KUCMSSkimmer_class.hh"
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------
+//// KUCMSSkimmer class ----------------------------------------------------------------------------------------------------------------
+////-----------------------------------------------------------------------------------------------------------------------------
+
+//#define DEBUG true
+#define DEBUG false
+
+class  KUCMSAodSkimmer:KUCMSSkimmer :{
+
+    public:
+
+    // Output Branch variables
+
+    uInt nEvents;
+    uInt nSelectedEvents;
+    //uInt RunNumber;
+
+};
+
+//KUCMSSkimmer::KUCMSSkimmer(){}
+
+//KUCMSSkimmer::~KUCMSSkimmer(){}
+
+void KUCMSSkimmer::kucmsSkimmer( std::string indir, std::string infilelist, std::string outfilename, int pct ){
+
+    const std::string disphotreename("tree/llpgtree");
+    //const std::string eosdir("root://cmseos.fnal.gov//store/user/jaking/");
+    const std::string eosdir("root://cmseos.fnal.gov//store/user/lpcsusylep/jaking/");
+    const std::string listdir("llpgana_list_files/");
+
+	std::cout << "Producing Histograms for : " << outfilename << std::endl;
+    std::ifstream infile(listdir+infilelist);
+    auto fInTree = new TChain(disphotreename.c_str());
+    std::cout << "Adding files to TChain." << std::endl;
+    std::cout << " - With : " << infilelist << " >> " << fInTree << std::endl;
+    std::string str;
+	int cnt = 1;
+    while (std::getline(infile,str)){
+		//std::cout << "--  for Fine #" << cnt << " moduls " << cnt%pct << " ";
+		if( cnt%pct == 0 ){ 
+        	auto tfilename = eosdir + indir + str;
+        	std::cout << "--  adding file: " << tfilename << std::endl;
+        	fInTree->Add(tfilename.c_str());
+		}//<<>>if( cnt%4 == 0 ){
+		//else std::cout << " do not add file" << std::endl;
+		cnt++;
+    }//<<>>while (std::getline(infile,str))
+
+	auto fOutTree = new TTree("kuSkimTree","output root file for kUCMSSkimmer");
+
+	Init(fInTree);
+	initHists();
+    setOutputBranches(fOutTree);	
+
+	SetupDetIDsEB(DetIDMap);
+	SetupDetIDsEE(DetIDMap);
+
+    std::cout << "Setting up For Main Loop." << std::endl;
+	int loopCounter(10000);
+    auto nEntries = fInTree->GetEntries();
+	//nEntries = 10000;
+	//loopCounter = 10;
+    if(DEBUG){ nEntries = 4; loopCounter = 1; }
+    std::cout << "Proccessing " << nEntries << " entries." << std::endl;
+    for (Long64_t centry = 0; centry < nEntries; centry++){
+        if( centry%loopCounter == 0 ) std::cout << "Proccessed " << centry << " of " << nEntries << " entries." << std::endl;
+        if(DEBUG) std::cout << "*****************************************************************************" << std::endl;
+        auto entry = fInTree->LoadTree(centry);
+		if(DEBUG) std::cout << " - getBranches " << std::endl;
+		getBranches(entry);
+		if(DEBUG) std::cout << " - eventLoop " << std::endl;
+		eventLoop(entry);
+		fOutTree->Fill();
+    }//<<>>for (Long64_t centry = 0; centry < nEntries; centry++)  end entry loop
+
+    std::cout << "<<<<<<<< Write Output Maps and Hists <<<<<<<<<<<<<< " << std::endl;
+
+    TFile* fOutFile = new TFile( outfilename.c_str(), "RECREATE" );
+    fOutFile->cd();
+
+	endJobs(fOutTree);
+	fOutTree->Write();
+
+	for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]){ hist1d[it]->Write(); delete hist1d[it]; } }
+    for( int it = 0; it < n2dHists; it++ ){ if(hist2d[it]){ hist2d[it]->Write(); delete hist2d[it]; } }
+    for( int it = 0; it < n3dHists; it++ ){ if(hist3d[it]){ hist3d[it]->Write(); delete hist3d[it]; } }
+
+	nMaps = 0;
+	for( int it = 0; it < nEBEEMaps; it++ ){ 
+		ebeeMapP[it]->Write(); delete ebeeMapP[it]; 								 
+		ebeeMapT[it]->Write(); delete ebeeMapT[it]; 
+		ebeeMapR[it]->Write(); delete ebeeMapR[it];
+	}//<<>>for( int it = 0; it < nEBEEMaps; it++ )
+
+    std::cout << "KUCMSSkimmer : Thats all Folks!!" << std::endl;
+
+    fOutFile->Close();
+
+	delete fInTree;
+	delete fOutTree;
+	delete fOutTree;
+
+}//<<>>void kucmsSkimmer
+
+//------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------
+
+// ----------------------------------------------- event loop -------------------------------------------------------------------------
+void KUCMSSkimmer::eventLoop( Long64_t entry ){
+
+	processEvntVars();	
+	eventSelection();	
+
+}//<<>>void KUCMSSkimmer::eventLoop( Long64_t entry )
+
+void KUCMSSkimmer::processEvntVars(){
+
+	
+
+}//<<>>void KUCMSSkimmer::processEvntVars()
+
+void KUCMSSkimmer::processRechits(){
+
+    if( DEBUG ) std::cout << "Finding rechits" << std::endl;
+	//------------ rechits -------------------------
+
+    if( DEBUG ) std::cout << " -- Looping over " << nRecHits << " rechits" << std::endl;
+
+    for( int it = 0; it < nRecHits; it++ ){
+
+		auto id = (*rhID)[it];
+		auto idinfo = DetIDMap[id];
+		if( idinfo.ecal == ECAL::EB ){
+			auto radius = hypo( (*rhPosX)[it], (*rhPosY)[it] );
+
+
+
+		} else {
+
+
+
+		}//<<>>if( (*rhSubdet)[it] == 0 )
+
+	}//<<>>for( int it = 0; it < nRecHits; it++ )
+
+}//<<>>void KUCMSSkimmer::processRechits()
+
+void KUCMSSkimmer::processGenParticles(){
+
+    if( DEBUG ) std::cout << "Finding genParticles" << std::endl;
+    //------------  genparts ------------------------
+
+	int nLlpPho(0);
+    for( int it = 0; it < nGenParts; it++ ){
+
+		if( (*genPdgId)[it] == 22 && (*genLLP)[it] == 1 ) nLlpPho++;
+        auto genID = (*genPdgId)[it];
+
+    }//<<>>for( int it = 0; it < nGenParts; it++ )
+
+}//<<>>void KUCMSSkimmer::processGenParticles()
+
+void KUCMSSkimmer::processCalojets(){
+
+	//------------  calojets ------------------------
+
+	int nCaloJets = 0;
+	for( int it = 0; it < nCaloJets; it++ ){
+
+
+	}//<<>>for( int it = 0; it < nCaloJets; it++ )
+
+}//<<>>void KUCMSSkimmer::processCalojets()
+
+void KUCMSSkimmer::processPhotons(){
+
+    if( DEBUG ) std::cout << "Finding photons" << std::endl;
+    //----------------- photons ------------------
+	
+    if( DEBUG ) std::cout << " - Looping over for " << nPhotons << " photons" << std::endl;
+    for( int it = 0; it < nPhotons; it++ ){
+
+
+		// detrimine photon classification ( sig/susy/ect... )
+		//---------------------------------------------------
+		auto isCmb = not (*phoExcluded)[it];
+        //auto isCmb = phoExcluded[it];
+        auto phoGenIdx = (*genPhoIdx)[it];
+        auto isSUSY = (phoGenIdx >= 0)?((*genLLP)[phoGenIdx] < 700 ):false;
+		auto isOOT = (*phoIsOotPho)[it];
+		auto isSigPho = (phoGenIdx >= 0)?((*genLLP)[phoGenIdx] == 1):false;
+
+        if( DEBUG ) std::cout << " -- looping photons : filling gen" << std::endl;
+    
+		// determine pog id class
+		// -----------------------------------------------------
+		if( DEBUG ) std::cout << " -- pho id" << std::endl;
+		auto rhIso = (*phoEcalRHSumEtConeDR04)[it] < ( 0.006*(*phoPt)[it] + 4.2 );
+		auto hcalTowIso = (*phoHcalTowerSumEtBcConeDR04)[it] < ( 0.0025*(*phoPt)[it] + 2.2 );
+        if( DEBUG ) std::cout << " -- pho id 1" << std::endl;
+		auto hcTrkIsoL = (*phoTrkSumPtSolidConeDR04)[it] < ( 0.001*(*phoPt)[it] + 3.5 ); //hallow cone track iso
+        auto hcTrkIsoT = (*phoTrkSumPtSolidConeDR04)[it] < ( 0.001*(*phoPt)[it] + 2 ); //hallow cone track iso
+        if( DEBUG ) std::cout << " -- pho id 2" << std::endl;
+        auto hadOverE = (*phohadTowOverEM)[it] < 0.05;
+        auto sigmaIeieEE = (*phoSigmaIEtaIEta)[it] < 0.03; // tight only EE
+        auto sigmaIeieEB = (*phoSigmaIEtaIEta)[it] < 0.013; // tight only EB
+
+        if( DEBUG ) std::cout << " -- pho id set cuts" << std::endl;
+		auto baseCut = rhIso && hcalTowIso && hadOverE;
+		auto looseCut = baseCut && hcTrkIsoL;
+		auto tightCut = baseCut && hcTrkIsoT;
+		auto tightEB = tightCut && sigmaIeieEB;
+		auto tightEE = tightCut && sigmaIeieEE;
+
+		auto phoClass = tightCut?3:looseCut?2:1;
+
+		//find intial cut values 
+		//----------------------------------------------------------------
+		if( DEBUG ) std::cout << " -- pho rechits" << std::endl;
+		auto nrh = ((*phoRhIds)[it]).size();
+        auto phoClstrR9 = clstrR9( (*phoRhIds)[it] );
+
+        auto isEB = (*phoIsEB)[it];
+		auto isTightEB = std::abs((*phoEta)[it]) < 1.45;
+
+		auto isTight = phoClass == 3;
+        auto isLoose = phoClass > 1;
+        auto isFake = phoClass == 1;
+
+        auto goodRhCnt = nrh > 14;
+        auto minPhoPt = (*phoPt)[it] > 30;
+
+		auto usePho = true;
+
+		if( DEBUG ) std::cout << " -- photons # " << it << " isSUSY " << isSUSY << " isOOT " << isOOT << " isCmb " << isCmb << std::endl;
+		if( usePho && goodRhCnt && minPhoPt ) { //----------------------------------- 
+	
+            auto isPho = (phoGenIdx >= 0)?(((*genPdgId)[phoGenIdx] == 22)?1:0):-1;
+
+			if( DEBUG ) std::cout << " Finding Eigans for Photon W/ " << nrh << " rechits." << std::endl;
+			auto tofTimes = getLeadTofRhTime( (*phoRhIds)[it], vtxX, vtxY, vtxZ );
+			auto phoEigens2D = getRhGrpEigen_sph( tofTimes,(*phoRhIds)[it] );
+			auto isEiganGood = phoEigens2D[0] != -9;	
+			//if( true ){
+			if( isEiganGood ){
+
+				//auto evalue2d = phoEigens2D[2];
+	        	auto evaluegeo = phoEigens2D[18];
+	            //auto geoslope = phoEigens2D[22];
+				//auto slope = phoEigens2D[27];// 24 -> pairs 2d slope, 3 -> old slope, 5 -> pairs 3d slope
+	            //auto slope = phoEigens2D[24]; //default;
+	            //auto slope = phoEigens2D[5];
+
+				auto smmcut = (*phoSMaj)[it] < 1.3 && (*phoSMin)[it] < 0.4;
+	
+	        	auto isClR9r46 = phoClstrR9 > 0.4 && phoClstrR9 < 0.6;
+	        	auto isClR9r68 = phoClstrR9 > 0.6 && phoClstrR9 < 0.8;
+	        	auto isClR9r26 = phoClstrR9 > 0.2 && phoClstrR9 < 0.6;
+	        	auto isClR9lt0p7 = phoClstrR9 < 0.7;
+	
+				auto maxPhoGeoEV = evaluegeo < 0.85;
+				auto minRHCnt = nrh > 25;
+				//auto maxEvRh = evalue2d < ( 0.005*nrh + 0.8 );
+				//auto min3dTval = phoEigens2D[34] > 0.02;
+                //auto max3d4val = phoEigens2D[33] < 0.8;	
+				//auto minSlope = std::abs(slope) > 0.05;
+
+				//auto passCuts = maxPhoGeoEV;
+				//auto passCuts = maxPhoGeoEV && notAnglePeak;
+	            //auto passCuts = maxPhoGeoEV && minRHCnt;
+				//auto passCuts = maxPhoGeoEV && maxEvRh;
+	            //auto passCuts = maxPhoGeoEV && notAnglePeak && minRHCnt;
+	            //auto passCuts = min3dTval;
+	            //auto passCuts = max3d4val;
+	            //auto passCuts = minSlope;
+
+				auto passCuts = true;
+				//auto passCuts = maxPhoGeoEV;
+                //auto passCuts = smmcut;
+                //auto passCuts = smmcut && maxPhoGeoEV;	
+
+			}//<<>if( isEiganGood ){
+
+        }//<<>>if( usePho ) { //----------------------------------- 
+
+    }//<<>>for( int it = 0; it < nPhotons; it++ )
+
+}//<<>>void KUCMSSkimmer::processPhoton(){
+
+void KUCMSSkimmer::processElectrons(){
+
+    if( DEBUG ) std::cout << "Finding electrons" << std::endl;
+	//-------- electrons --------------------------------------
+
+	int nElectrons = 0;
+    if( DEBUG ) std::cout << " - Looping over for " << nElectrons << " electrons" << std::endl;
+    for( int it = 0; it < nElectrons; it++ ){
+
+    }//<<>>for( int it = 0; it < nElectrons; it++ )
+
+}//<<>>void KUCMSSkimmer::processElectrons
+
+void KUCMSSkimmer::processJets(){
+
+    if( DEBUG ) std::cout << "Finding jets" << std::endl;
+	//--------- jets --------------------------
+
+	int nJets = 0;
+    if( DEBUG ) std::cout << " - Looping over for " << nJets << " jets" << std::endl;
+    for( int it = 0; it < nJets; it++ ){
+
+        //const auto jetepafrac   = (*jetPHEF)[it] + (*jetELEF)[it];;
+        //const auto jetepe       = (*jetPHE)[it] + (*jetELE)[it];
+        //const auto jeteme       = (*jetCEMF)[it] + (*jetNEMF)[it];
+        //const auto jetemfrac    = jeteme/(*jetE)[it];
+        //const auto jetepfrac    = jetepe/(*jetE)[it];
+		
+    	if( DEBUG ) std::cout << "Finding genjet" << std::endl;
+		//// --- genjet info -----------------------------------
+
+    	if( DEBUG ) std::cout << "Finding jet dr times" << std::endl;
+		//// ---  jet time dr method --------------------------- (*)[it]
+
+	}//<<>>for( int it = 0; it < nJets; it++ )
+
+}//<<>>void KUCMSSkimmer::processJets()
+
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
+
+void KUCMSSkimmer::getBranches( Long64_t entry ){
+
+	//fChain->GetEntry(entry);
+
+   b_run->GetEntry(entry);   //!
+   b_lumi->GetEntry(entry);   //!
+   b_event->GetEntry(entry);   //!
+
+   b_nVtx->GetEntry(entry);   //!
+   b_vtxX->GetEntry(entry);   //!
+   b_vtxY->GetEntry(entry);   //!
+   b_vtxZ->GetEntry(entry);   //!
+
+   //b_metSumEt->GetEntry(entry);   //!
+   //b_metPt->GetEntry(entry);   //!
+   //b_metPx->GetEntry(entry);   //!
+   //b_metPy->GetEntry(entry);   //!
+   //b_metPhi->GetEntry(entry);   //!
+   //b_metCSumEt->GetEntry(entry);   //!
+   //b_metCPx->GetEntry(entry);   //!
+   //b_metCPy->GetEntry(entry);   //!
+
+   //b_jetHt->GetEntry(entry);   //!
+   //b_nJets->GetEntry(entry);   //!
+   //b_nGoodDrJets->GetEntry(entry);   //!
+   //b_nGoodScJets->GetEntry(entry);   //!
+   //b_nGoodBcJets->GetEntry(entry);   //!
+   //b_nUnJets->GetEntry(entry);   //!
+   //b_jetE->GetEntry(entry);   //!
+
+   b_nPhotons->GetEntry(entry);   //!
+   b_phoIsOotPho->GetEntry(entry);   //!
+   b_phoExcluded->GetEntry(entry);   //!
+   b_phoSeedTOFTime->GetEntry(entry);   //!
+   b_phoCMeanTime->GetEntry(entry);   //!
+   //b_phoSc2dEv->GetEntry(entry);   //!
+   b_phoPt->GetEntry(entry);   //!
+   b_phoEnergy->GetEntry(entry);   //!
+   b_phoPhi->GetEntry(entry);   //!
+   b_phoEta->GetEntry(entry);   //!
+   b_phoPx->GetEntry(entry);   //!
+   b_phoPy->GetEntry(entry);   //!
+   b_phoPz->GetEntry(entry);   //!
+   b_phoRhIds->GetEntry(entry);   //!
+   //b_phoIsPFPhoton->GetEntry(entry);   //!
+   //b_phoIsStdPhoton->GetEntry(entry);   //!
+   b_phoHasConTracks->GetEntry(entry);   //!
+   b_phoIsPixelSeed->GetEntry(entry);   //!
+   //b_phoIsPhoton->GetEntry(entry);   //!
+   b_phoIsEB->GetEntry(entry);   //!
+   b_phoIsEE->GetEntry(entry);   //!
+   b_phoHadOverEM->GetEntry(entry);   //!
+   b_phoHadD1OverEM->GetEntry(entry);   //!
+   b_phoHadD2OverEM->GetEntry(entry);   //!
+   b_phoHadOverEMVaid->GetEntry(entry);   //!
+   b_phohadTowOverEM->GetEntry(entry);   //!
+   b_phohadTowD10OverEM->GetEntry(entry);   //!
+   b_phohadTowD20OverEM->GetEntry(entry);   //!
+   b_phohadTowOverEMValid->GetEntry(entry);   //!
+   b_phoE1x5->GetEntry(entry);   //!
+   b_phoE2x5->GetEntry(entry);   //!
+   b_phoE3x3->GetEntry(entry);   //!
+   b_phoE5x5->GetEntry(entry);   //!
+   b_phoMaxEnergyXtal->GetEntry(entry);   //!
+   b_phoSigmaEtaEta->GetEntry(entry);   //!
+   b_phoSigmaIEtaIEta->GetEntry(entry);   //!
+   b_phoR1x5->GetEntry(entry);   //!
+   b_phoR2x5->GetEntry(entry);   //!
+   b_phoR9->GetEntry(entry);   //!
+   b_phoFull5x5_e1x5->GetEntry(entry);   //!
+   b_phoFull5x5_e2x5->GetEntry(entry);   //!
+   b_phoFull5x5_e3x3->GetEntry(entry);   //!
+   b_phoFull5x5_e5x5->GetEntry(entry);   //!
+   b_phoFull5x5_maxEnergyXtal->GetEntry(entry);   //!
+   b_phoFull5x5_sigmaEtaEta->GetEntry(entry);   //!
+   b_phoFull5x5_sigmaIEtaIEta->GetEntry(entry);   //!
+   b_phoFull5x5_r9->GetEntry(entry);   //!
+   b_phoEcalRHSumEtConeDR04->GetEntry(entry);   //!
+   b_phoHcalTwrSumEtConeDR04->GetEntry(entry);   //!
+   b_phoHcalDepth1TowerSumEtConeDR04->GetEntry(entry);   //!
+   b_phoCalDepth2TowerSumEtConeDR04->GetEntry(entry);   //!
+   b_phoHcalTowerSumEtBcConeDR04->GetEntry(entry);   //!
+   b_phoHcalDepth1TowerSumEtBcConeDR04->GetEntry(entry);   //!
+   b_phoHcalDepth2TowerSumEtBcConeDR04->GetEntry(entry);   //!
+   b_phoTrkSumPtSolidConeDR04->GetEntry(entry);   //!
+   b_phoTrkSumPtHollowConeDR04->GetEntry(entry);   //!
+   b_phoNTrkSolidConeDR04->GetEntry(entry);   //!
+   b_phoNTrkHollowConeDR04->GetEntry(entry);   //!
+   b_genPhoIdx->GetEntry(entry);   //!
+   b_genPhoDr->GetEntry(entry);   //!
+
+   b_phoSMaj->GetEntry(entry);   //!
+   b_phoSMin->GetEntry(entry);   //!
+   b_phoSAlp->GetEntry(entry);   //!
+   b_phoCovEtaEta->GetEntry(entry);   //!
+   b_phoCovEtaPhi->GetEntry(entry);   //!
+   b_phoCovPhiPhi->GetEntry(entry);   //!
+
+   b_nGenParts->GetEntry(entry);   //!
+   b_genPt->GetEntry(entry);   //!
+   //b_genEnergy->GetEntry(entry);   //!
+   //b_genPhi->GetEntry(entry);   //!
+   //b_genEta->GetEntry(entry);   //!
+   //b_genPx->GetEntry(entry);   //!
+   //b_genPy->GetEntry(entry);   //!
+   //b_genPz->GetEntry(entry);   //!
+   b_genPdgId->GetEntry(entry);   //!
+   b_genLLP->GetEntry(entry);   //!
+
+   b_nRecHits->GetEntry(entry);   //!
+   b_rhPosX->GetEntry(entry);   //!
+   b_rhPosY->GetEntry(entry);   //!
+   b_rhPosZ->GetEntry(entry);   //!
+   b_rhPosEta->GetEntry(entry);   //!
+   b_rhPosPhi->GetEntry(entry);   //!
+   b_rhEnergy->GetEntry(entry);   //!
+   b_rhTime->GetEntry(entry);   //!
+   b_rhTOF->GetEntry(entry);   //!
+   b_rhID->GetEntry(entry);   //!
+   b_rhisOOT->GetEntry(entry);   //!
+
+}//<<>>void KUCMSSkimmer::getBranches( Long64_t entry )
+
+void KUCMSSkimmer::setOutputBranches( TTree* fOutTree ){
+
+
+	fOutTree->Branch( "RunNumber", &RunNumber );
+
+
+}//<<>>void KUCMSSkimmer::setBranches( TTree& fOutTree )
+
+void KUCMSSkimmer::endJobs( TTree* fOutTree ){
+
+	TBranch *nEventBranch = fOutTree->Branch( "nEvents", &nEvents );
+	nEventBranch->Fill();
+	TBranch *nSelectedEventsBranch = fOutTree->Branch( "nSelectedEvents", &nSelectedEvents );
+	nSelectedEventsBranch->Fill();
+
+
+}//<<>>void KUCMSSkimmer::endJobs()
+
+void KUCMSSkimmer::initHists(){
+
+	for( int it = 0; it < n1dHists; it++ ){ hist1d[it] = NULL; }
+    for( int it = 0; it < n2dHists; it++ ){ hist2d[it] = NULL; }
+    for( int it = 0; it < n3dHists; it++ ){ hist3d[it] = NULL; }
+
+	//------------------------------------------------------------------------------------------
+    //------ 1D Hists --------------------------------------------------------------------------
+
+    ////hist1d[100] = new TH1D("genPhoPt", "genPhoPt;Pt [GeV]",500,0,1000);
+
+    for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]) hist1d[it]->Sumw2();}
+
+	//------------------------------------------------------------------------------------------
+    //------ 2D Hists --------------------------------------------------------------------------
+
+    ////hist2d[1] = new TH2D("jetDrMuTime_pt", "jetDrMuTime_pt", jtdiv, -1*jtran, jtran, 500, 0, 500);
+    
+	//------------------------------------------------------------------------------------------
+    //------ 3D Hists --------------------------------------------------------------------------
+
+    //hist3d[0] = new TH3D("phoNRH_ClR9_phoID","Photon nClRecHits v clR9 v phoId;nRecHits;ClusterR9;PhotonID(fake1,loose2,tight3)",200,0,200,100,0,1,8,0,4);
+
+	//------------------------------------------------------------------------------------
+    // Cluster maps -----------------------------------------------------------------------
+
+	nMaps = 0;
+	for(int it=0; it<nEBEEMaps; it++){
+		fMap[it] = false;
+		string label(";iEta;iPhi");
+        string stt1("ebeeMapPhoCluster_"+std::to_string(it));
+        ebeeMapP[it] = new TH2D( stt1.c_str(), (stt1+label).c_str(), 361, -90, 90, 721, 0, 360);
+        string stt2("ebeeMapPhoClusterTime_"+std::to_string(it));
+        ebeeMapT[it] = new TH2D( stt2.c_str(), (stt2+label).c_str(), 361, -90, 90, 721, 0, 360);
+		string stt3("ebeeMapPhoClusterRes_"+std::to_string(it));
+        ebeeMapR[it] = new TH2D( stt3.c_str(), (stt3+label).c_str(), 361, -90, 90, 721, 0, 360);
+	}//<<>>for(int it=0; it<nEBEEMaps; it++)
+
+}//<<>>void KUCMSSkimmer::initHists()
+
+int KUCMSSkimmer::getRhIdx( uInt rhDetID ){
+
+    //b_rhID->GetEntry(entry);
+    for( int idx = 0; idx < rhID->size(); idx++ ){ if( rhDetID == (*rhID)[idx] ) return idx; }
+    //std::cout << " -- !! no rhDetID to (*rhID)[idx] match !! ---------------------- " << std::endl;
+    return -1;
+
+}//<<>>int KUCMSSkimmer::getRhIdx( int rhDetID )
+
+uInt KUCMSSkimmer::getLeadRhID( vector<uInt> recHitIds ){
+
+    uInt result;
+    float enr(0.0);
+    //b_rhEnergy->GetEntry(entry);
+    for( auto id : recHitIds ){
+        auto rhenr = (*rhEnergy)[getRhIdx(id)];
+        if( rhenr > enr ){ enr = rhenr; result = id; }
+    }//<<>>for (const auto recHit : recHits )
+
+    return result;
+
+}//>>>>EcalRecHit KUCMSSkimmer::getLeadRh( rhGroup recHitsi
+
+float KUCMSSkimmer::clstrR9( vector<uInt> recHitIds ){
+
+    auto leadRhID = getLeadRhID( recHitIds );
+    auto leadRhEn = (*rhEnergy)[getRhIdx(leadRhID)];
+    float sumRhEn(0);
+    for ( auto id : recHitIds ){ sumRhEn +=  (*rhEnergy)[getRhIdx(id)]; }
+    return sumRhEn > 0 ? leadRhEn/sumRhEn  : 1.2;
+
+}//<<>>float KUCMSSkimmer::clstrR9( vector<uInt> recHitIds )
+
+vector<float> KUCMSSkimmer::getLeadTofRhTime( vector<uInt> recHitIds, double vtxX, double vtxY, double vtxZ ){
+
+    //b_rhPosX->GetEntry(entry);
+    //b_rhPosY->GetEntry(entry);
+    //b_rhPosZ->GetEntry(entry);
+    //b_rhTime->GetEntry(entry);
+
+    vector<float> result;
+    if( recHitIds.size() < 1 ){ result.push_back(-99); return result; }
+    auto lrhid = getLeadRhID(recHitIds);
+    auto lrhidx = getRhIdx(lrhid);
+    auto X = (*rhPosX)[lrhidx];
+    auto Y = (*rhPosY)[lrhidx];
+    auto Z = (*rhPosZ)[lrhidx];
+    const auto d_rh = hypo( X, Y, Z);
+    const auto d_pv = hypo( X-vtxX, Y-vtxY, Z-vtxZ);
+    const auto tof = (d_rh-d_pv)/SOL;
+    for( int idx = 0; idx < rhTime->size(); idx++ ){result.push_back((*rhTime)[idx]-tof);}
+    return result;
+
+}//>>>>vector<float> KUCMSSkimmer::getLeadTofRhTime( rhGroup recHits, double vtxX, double vtxY, double vtxZ )
+
+vector<float> KUCMSSkimmer::getRhGrpEigen_sph( vector<float> times, vector<uInt> rechitids ){
+
+    // N 3.64, C 0.3000  s^2 = (N/(rhe))^2 + 2C^2
+
+    float N(3.64);
+    float C(0.3000);
+
+    vector<float> eg2wts;
+    vector<float> rhetas, rhphis;;
+    vector<float> xs, ys, zs;
+    vector<float> rhxs, rhys, rhzs;
+    vector<float> rhtimes;
+    vector<float> grhtimes;
+    vector<float> angles;
+    vector<float> zcAngles;
+    vector<float> invtresvec, rhinvtresvec;
+    vector<float> rhlogwtvec, rhtresvec;
+    vector<float> logwtvec, tresvec;
+    vector<float> emptyReturn(8,-9);
+
+    // --------- prepare inputs for eigan calcs --------------------------
+    //std::cout << " getRhGrpEigen_sph 1, ";
+
+    auto nRecHits = rechitids.size();
+    if( nRecHits < 16 ) return emptyReturn;
+    float sumRhEn(0);
+    for ( auto id : rechitids ){ sumRhEn +=  (*rhEnergy)[getRhIdx(id)]; }
+    if( sumRhEn <= 0 ) return emptyReturn;
+    for( uInt it(0); it < nRecHits; it++ ){
+
+        const auto rhIDX = getRhIdx(rechitids[it]);
+        auto idinfo = DetIDMap[rechitids[it]];
+        auto isEB = idinfo.ecal == ECAL::EB;
+        if( isEB ) hist1d[123]->Fill(times[it]);
+        //std::cout << "In getRhGrpEigen_sph w/ idx : " << rhIDX << std::endl;
+        if( rhIDX == -1 ){ return emptyReturn; std::cout << " -- Bad idx !!!!! -- In getRhGrpEigen_sph ---- " << std::endl; }
+        if( isEB ){
+            const auto rhEtaPos = idinfo.i2;//recHitPos.ieta();
+            rhetas.push_back((rhEtaPos>0)?rhEtaPos+84.5:rhEtaPos+85.5);
+            const auto rhPhiPos = idinfo.i1;//recHitPos.iphi();
+            rhphis.push_back(rhPhiPos-0.5);
+            const auto rhXPos = (*rhPosX)[rhIDX];
+            rhxs.push_back(rhXPos);
+            const auto rhYPos = (*rhPosY)[rhIDX];
+            rhys.push_back(rhYPos);
+            const auto rhZPos = (*rhPosZ)[rhIDX];
+            rhzs.push_back(rhZPos);
+            rhtimes.push_back(times[it]);
+            auto rhenergy = (*rhEnergy)[rhIDX];
+            auto resolution = sq2(N/rhenergy)+2*C*C;
+            auto logwt = std::max(0.0, 4.2 + log(rhenergy/sumRhEn));// cut at rh energy < 1.5% of cluster
+            rhlogwtvec.push_back(logwt);
+            rhinvtresvec.push_back(1/resolution);
+            rhtresvec.push_back(resolution);
+            //std::cout << "In getRhGrpEigen_sph w/ rheta " << rhEtaPos << " : rhphi " << rhPhiPos << " : rht " << times[it] << std::endl;
+
+        } else {
+            return emptyReturn; //std::cout << "In getRhGrpEigen_sph : NOT EB !!!!!!" << std::endl; }
+        }//<<>> else - if( idinfo.ecal == ECAL::EB )
+    }//<<>>for( uInt it(0); it < rechits.size(); it++ )
+    if( rhtimes.size() < 9 ) return emptyReturn;
+
+    bool uselog(true);
+
+    auto rhewgt = (uselog)?rhlogwtvec:rhinvtresvec;
+    auto tmtime = mean(rhtimes,rhewgt);
+    for( uInt it(0); it < rhtimes.size(); it++ ){
+        auto rht = rhtimes[it];
+        auto goodDifTime = (rhtimes[it]-tmtime) < 10.0;
+        auto isInTime = ( rhtimes[it] > -50.0 ) && ( rhtimes[it] < 50.0 );
+        if( isInTime && goodDifTime ){
+            grhtimes.push_back(rhtimes[it]);
+            xs.push_back(rhxs[it]);
+            ys.push_back(rhys[it]);
+            zs.push_back(rhzs[it]);
+            logwtvec.push_back(rhlogwtvec[it]);
+            tresvec.push_back(rhtresvec[it]);
+            invtresvec.push_back(rhinvtresvec[it]);
+        }//<<>>if( isInTime && goodDifTime )
+    }//<<>>for( auto rht : rhtimes )
+    if( grhtimes.size() < 9 ) return emptyReturn;
+
+    //std::cout << "2, ";
+    vector<float> letas;
+    vector<float> lphis;
+    auto meta = mean(rhetas,rhewgt);
+    auto mphi = meanIPhi(rhphis,rhewgt);
+    //auto meta = mean(rhetas);
+    //auto mphi = meanIPhi(rhphis);
+    for( uInt it(0); it < rhetas.size(); it++ ){
+        float leta = rhetas[it]-meta;
+        letas.push_back(leta);
+        float lphi = dltIPhi(rhphis[it],mphi);
+        lphis.push_back(lphi);
+        float angle = getAngle( leta, lphi );
+        angles.push_back(angle);
+    }//<<>>for( uInt it(0); it < etas.size(); it++ )
+
+    auto ewgt = (uselog)?logwtvec:invtresvec;
+    auto mtime = mean(grhtimes,ewgt);
+    auto mx = mean(xs,ewgt);
+    auto my = mean(ys,ewgt);
+    auto mz = mean(zs,ewgt);
+    auto mr = hypo(mx,my);
+    auto ma = std::atan2(my,mx);
+
+    //std::cout << "In getRhGrpEigen_sph w/ meta " << meta << " : mphi " << mphi << " : mt " << mtime << std::endl;
+    vector<float> lzs;
+    vector<float> lcs;
+    vector<float> lts;
+    vector<float> ltds;
+    vector<float> nolts;
+    vector<float> invltres;
+    float minDr(100.0);
+    float vslz(0.0);
+    float vslc(0.0);
+    float vs3lz(0.0);
+    float vs3lc(0.0);
+    float vs3lt(0.0);
+    for( uInt it(0); it < grhtimes.size(); it++ ){
+
+        float ltim = grhtimes[it]-mtime;
+        lts.push_back(ltim);
+        auto ltd = ltim*SOL;
+        ltds.push_back(ltd);
+        invltres.push_back(ewgt[it]);
+        auto lt2reswt = ltim*ltim*ewgt[it];
+        eg2wts.push_back(lt2reswt);
+        nolts.push_back(0.0);
+
+        float lz = zs[it]-mz;
+        lzs.push_back(lz);
+        float lc = mr*(std::atan2(ys[it],xs[it])-ma);
+        lcs.push_back(lc);
+        //float zcAngle = getAngle( lz, lc );
+        float zcAngle = std::atan2(lc,lz);
+        zcAngles.push_back(zcAngle);
+
+        auto dr = hypo(lz,lc);
+        auto drt = hypo(ltd,dr);
+        if( dr < minDr ) minDr = dr;
+        // do dr calc in ieta,iphi cross check
+
+        auto sqrtreswt = (uselog)?ewgt[it]:std::sqrt(ewgt[it]);
+        auto ltdsqrtreswt = std::abs(ltd)*sqrtreswt;
+        vs3lz += lz*ltdsqrtreswt/drt;
+        vs3lc += lc*ltdsqrtreswt/drt;
+        vs3lt += ltd*sqrtreswt/drt;
+        vslz += lz*ltdsqrtreswt/dr;
+        vslc += lc*ltdsqrtreswt/dr;
+        //if( (std::abs(lz) < minDl) && (std::abs(lc) < minDl) ) ewgt[it] = 0;
+
+    }//<<>>for( uInt it(0); it < grhtimes.size(); it++ )
+
+    // --------------  get eigan values and vectors ---------------------------------------
+    //std::cout << "3, ";
+
+    auto eigens =  getRhGrpEigen( zcAngles, eg2wts );//0 x, 1 y, 2 values
+    auto d2dot = eigens[0]*vslz + eigens[1]*vslc;
+    if( d2dot < 0 ){ eigens[0] *= -1; eigens[1] *= -1; }
+    auto eigens3 =  getRhGrpEigen( lzs, lcs, ltds, invltres );//0 x, 1 y, 2 values
+    auto d3dot = eigens3[0]*vs3lz + eigens3[1]*vs3lc + eigens3[2]*vs3lt;
+    if( d3dot < 0 ){ eigens3[0] *= -1; eigens3[1] *= -1; eigens3[2] *= -1; }
+    auto geoeigens =  getRhGrpEigen( zcAngles, invltres );//0 x, 1 y, 2 values
+    auto geoddot = geoeigens[0]*vslz + geoeigens[1]*vslc;
+    if( geoddot < 0 ){ geoeigens[0] *= -1; geoeigens[1] *= -1; }
+    ////auto geoeigens3 =  getRhGrpEigen( lzs, lcs, nolts, invltres );//0 x, 1 y, 2 values
+
+    // --------------  get eigan vector angles ------------------------------------------ 
+    //std::cout << "4, ";
+
+    float rotangle = getAngle(eigens[0], eigens[1]);
+    float e2sin = std::sin(rotangle); //eigens[1];
+    float e2cos = std::cos(rotangle); //eigens[0];
+    //float rot3angle = getAngle(eigens3[0], eigens3[1]);
+    float rot3angle = getAngle(eigens3[0], eigens3[1]);
+    float e3sin = std::sin(rot3angle);
+    float e3cos = std::cos(rot3angle);
+    float rotgangle = getAngle(geoeigens[0], geoeigens[1]);
+    float egsin = std::sin(rotgangle);
+    float egcos = std::cos(rotgangle);
+
+    // -----------------------------------------
+    // finding nemo ( slope )
+    // -----------------------------------------
+    //std::cout << "6, ";
+
+    auto nWts = invltres.size();
+
+    vector<float> xs1;
+    vector<float> xs3;
+    vector<float> xsgeo;
+    vector<float> slvars1;
+    vector<float> slvars3;
+    vector<float> slvarsgeo;
+    float xsum1(0.0);
+    float xsum3(0.0);
+    float xsumgeo(0.0);
+
+    auto dsxcor = e2cos*(2.2) - e2sin*(2.2);
+    auto d3xcor = e3cos*(2.2) - e3sin*(2.2);
+    auto dgxcor = (geoeigens[0])*(2.2) - (geoeigens[1])*(2.2);
+    auto xscorvar = sq2(dsxcor)/12;
+    auto x3corvar = sq2(d3xcor)/12;
+    auto xgcorvar = sq2(dgxcor)/12;
+
+    // for pairs method
+    vector<float> plzs;
+    vector<float> plcs;
+    //vector<float> plws;
+    vector<float> pl3zs;
+    vector<float> pl3cs;
+    vector<float> plgzs;
+    vector<float> plgcs;
+
+    //std::cout << "7, ";
+    for( uInt it(0); it < lzs.size(); it++ ){
+
+        auto xscor = e2cos*lzs[it] - e2sin*lcs[it];
+        auto yscor = e2sin*lzs[it] + e2cos*lcs[it];
+        auto x3cor = e3cos*lzs[it] - e3sin*lcs[it];
+        auto y3cor = e3sin*lzs[it] + e3cos*lcs[it];
+        auto xgcor = egcos*lzs[it] - egsin*lcs[it];
+        auto ygcor = egsin*lzs[it] + egcos*lcs[it];
+
+        // for pairs method && histogram maps
+        plzs.push_back(xscor);
+        plcs.push_back(yscor);
+        pl3zs.push_back(x3cor);
+        pl3cs.push_back(y3cor);
+        plgzs.push_back(xgcor);
+        plgcs.push_back(ygcor);
+
+        //if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
+        //                        << " : xsor " << xscor << " : ycor " << yscor << " : dt " << eg2wts[it] << std::endl;
+        //if( false ) std::cout << "In getRhGrpEigen_sph w/2 leta " << letas[it] << " : lphi " << lphis[it]
+        //                        << " : sxcor " << x3cor << " : sycor " << y3cor << " : dt " << eg2wts[it] << std::endl;
+
+        // calc slope info
+        auto sl1 = (lts[it])/(xscor);//*slopeCorr;
+        auto sl3 = (lts[it])/(x3cor);//*slopeCorr;
+        auto slg = (lts[it])/(xgcor);//*slopeCorr;
+        xs1.push_back(sl1);
+        xs3.push_back(sl3);
+        xsgeo.push_back(slg);
+        //slvars1.push_back(1/((notresvec[it]+tottresvec+sq2(sl1)*xscorvar*(1.0+(1.0/nWts)))/sq2(xscor)));
+        slvars1.push_back(invltres[it]);
+        //slvars3.push_back(1/((notresvec[it]+tottresvec+sq2(sl3)*x3corvar*(1.0+(1.0/nWts)))/sq2(x3cor)));
+        slvars3.push_back(invltres[it]);
+        //slvarsgeo.push_back(1/((notresvec[it]+tottresvec+sq2(slg)*xgcorvar*(1.0+(1.0/nWts)))/sq2(xgcor)));
+        slvarsgeo.push_back(invltres[it]);
+        xsum1 += sl1*slvars1[it];
+        xsum3 += sl3*slvars3[it];
+        xsumgeo += slg*slvarsgeo[it];
+
+    }//<<>>for( uInt it(0); it < wts.size(); it++ )
+
+//===================================================================
+    //std::cout << "8, ";
+
+    vector<float> pszs1;
+    vector<float> plsrs;
+    float plssum(0.0);
+    vector<float> p3zs1;
+    vector<float> pl3rs;
+    float pl3sum(0.0);
+    vector<float> pgzs1;
+    vector<float> plgrs;
+    float plgsum(0.0);
+
+    //=============================================================
+    // pairs method set up
+    //============================================================
+
+    for( uInt it1(0); it1 < plzs.size(); it1++ ){
+        for( uInt it2(it1); it2 < plzs.size(); it2++ ){
+
+            auto minDz = 3.3;
+            auto plz = plzs[it1]-plzs[it2];
+            if( std::abs(plz) < minDz ) plz = 999;
+            auto pl3z = pl3zs[it1]-pl3zs[it2];
+            if( std::abs(pl3z) < minDz ) pl3z = 999;
+            auto plgz = plgzs[it1]-plgzs[it2];
+            if( std::abs(plgz) < minDz ) plgz = 999;
+            //auto plc = plcs[it1]-plcs[it2]; 
+            auto pltime = grhtimes[it1]-grhtimes[it2];
+
+            //auto gaplr = std::sqrt(invltres[it1]*invltres[it2]); 
+            auto gaplr = std::sqrt(std::sqrt(invltres[it1])*std::sqrt(invltres[it2]));
+
+            if( plz != 999 ){
+                auto psl = pltime/plz;
+                pszs1.push_back(psl);
+                //auto gaplr = (slvars1[it1] + slvars1[it2]);
+                plsrs.push_back( gaplr );
+                plssum += psl*gaplr;
+            }//<<>>if( plz != 999 )
+
+            if( pl3z != 999 ){
+                auto p3sl = pltime/pl3z;
+                p3zs1.push_back(p3sl);
+                //auto gaplr = (slvars3[it1] + slvars3[it2]);
+                pl3rs.push_back( gaplr );
+                pl3sum += p3sl*gaplr;
+            }//<<>>if( plz != 999 )
+
+            if( plgz != 999 ){
+                auto pgsl = pltime/plgz;
+                pgzs1.push_back(pgsl);
+                //auto gaplr = (slvarsgeo[it1] + slvarsgeo[it2]);
+                plgrs.push_back( gaplr );
+                plgsum += pgsl*gaplr;
+            }//<<>>if( plz != 999 )
+
+        }//<<>>for( uInt it2(it1); it2 < grhtimes.size(); it2++ )
+    }//<<>>for( uInt it1(0); it1 < grhtimes.size(); it1++ )
+
+//--------------------------------------------------------------------
+    //std::cout << "9, ";
+
+
+    //find eigan vecgtor aligment
+    //float eigensOld2d0(eigens[0]), eigensOld2d1(eigens[1]);
+    //if( xsum1 < 0 ){ eigensOld2d0 *= -1; eigensOld2d1 *= -1; xsum1 = std::abs(xsum1);}
+    //if( plssum < 0 ){ eigens[0] *= -1; eigens[1] *= -1; plssum = std::abs(plssum);}
+    //if( pl3sum < 0 ){ eigens3[0] *= -1; eigens3[1] *= -1; eigens3[2] *= -1; pl3sum = std::abs(pl3sum);}
+    //if( plgsum < 0 ){ geoeigens[0] *= -1; geoeigens[1] *= -1; plgsum = std::abs(plgsum);}
+
+
+    // -----------   compute final outputs --------------------------------
+
+    auto phiCorrFactor = 0.8;
+    auto sxx = var( letas, 0., rhlogwtvec );
+    auto syy = var( lphis, 0., rhlogwtvec, accum(rhlogwtvec)/phiCorrFactor );
+    auto sxy = cvar( letas, 0., lphis, 0., rhlogwtvec, accum(rhlogwtvec)/std::sqrt(phiCorrFactor) );
+    auto smaj = (sxx + syy + std::sqrt(sq2(sxx - syy) + 4.*sq2(sxy)))/2.;
+    auto smin = (sxx + syy - std::sqrt(sq2(sxx - syy) + 4.*sq2(sxy)))/2.;
+    auto sang = std::atan((sxx-syy+std::sqrt(sq2(syy-sxx)+4.*sq2(sxy)))/(2.*sxy));
+
+    auto ebside = ( mz > 0 ) ? 1 : -1;
+    auto taflip = ( ((std::abs(mz) < std::abs(vtxZ)) && (mz*vtxZ > 0) ) ? -1 : 1 )*ebside;
+
+    //2d egians slope
+    auto nXSum = xs1.size();
+    auto totSloRes1 = accum(slvars1);
+    auto slope1 = xsum1/totSloRes1;
+    auto slope1err = std::sqrt(1/totSloRes1);
+    auto varsl = var(xs1,slope1,slvars1,totSloRes1);
+    auto chi1 = chisq(xs1,slope1,varsl);
+    auto slchi2v1 = 0.f; //= chisqv(xs1,slope1,slvars1,varsl);//?????????????????
+    auto chi2pf1 = 1 - TMath::Prob(chi1, nWts);
+
+    // 3d eigan slope
+    auto totSloRes3 = accum(pl3rs);
+    auto slope3 = pl3sum/totSloRes3;
+    auto slope3err = std::sqrt(1/totSloRes3);
+
+    //geo eigan slope
+    auto totSloResGeo = accum(plgrs);
+    auto slopeg = plgsum/totSloResGeo;
+    auto slopegerr = std::sqrt(1/totSloResGeo);
+
+    //pairs slope
+    auto totSloResPrs = accum(plsrs);
+    auto slopeprs = plssum/totSloResPrs;
+    auto slopeprserr = std::sqrt(1/totSloResPrs);
+
+    // eigan3d angle slope
+    auto angle3d = getAngle(eigens3[1],eigens3[2]);
+    auto hypo3d02 = hypo(eigens3[0],eigens3[2]);
+    auto hypo3d01 = hypo(eigens3[0],eigens3[1]);
+    auto hypo3d12 = hypo(eigens3[1],eigens3[2]);
+    auto slope3d = std::atan(eigens3[2]/hypo3d01);
+    //auto slope3d = 100*(eigens3[0]/hypo3d12)/SOL;
+
+    // Fill Histograms
+    for( uInt it(0); it < lzs.size(); it++ ){
+
+        //plzs.push_back(xscor);
+        //plcs.push_back(yscor);
+        //pl3zs.push_back(x3cor);
+        //pl3cs.push_back(y3cor);
+        //plgzs.push_back(xgcor);
+        //plgcs.push_back(ygcor);
+        if( invltres[it] == 0 ) continue;
+        auto sqrtwt = std::sqrt(invltres[it]);
+        auto wichsum = slopeprs;
+        //auto wichsum = pl3sum;
+        //auto wichsum = xsum1;
+        //auto wichsum = 1;
+        auto xcor = ( wichsum < 0 ) ? -1*plzs[it] : plzs[it];
+        auto ycor = ( wichsum < 0 ) ? -1*plcs[it] : plcs[it];
+        auto fill = lts[it]*sqrtwt;
+        hist2d[206]->Fill(xcor,ycor,fill);
+        hist2d[207]->Fill(xcor,ycor,sqrtwt);
+        hist2d[208]->Fill(lzs[it],lcs[it],fill);
+        hist2d[209]->Fill(lzs[it],lcs[it],sqrtwt);
+        hist2d[214]->Fill(ycor,lts[it],sqrtwt);
+        hist2d[215]->Fill(xcor,lts[it],sqrtwt);
+
+    }//<<>>for( uInt it(0); it < lzs.size(); it++ )
+
+    // Fill results vector
+    // std::cout << "10, ";
+    // eigens 0 = vector x, 1 = vector y, 2 = vector mag
+    eigens.push_back(slope1);//3  aligned slope
+    eigens.push_back(chi2pf1);//4 aligned slope chi sqr prob
+    eigens.push_back(slope3);//5 3d pairs slope
+    eigens.push_back(0);//6 
+    eigens.push_back(rotangle);//7 aligned rotation angle
+    eigens.push_back(nXSum);//8 # of entries ( rechits )
+    eigens.push_back(rot3angle);//9 3d rotation angle
+    eigens.push_back(std::sqrt(varsl));//10 stdev aligned slope
+    eigens.push_back(slope1err);//11 err aligned slope
+    eigens.push_back(0);//12 
+    eigens.push_back(slope3err);//13 errr unaligned slope
+    eigens.push_back(slchi2v1);//14 chisqr like gof aligned slope
+    eigens.push_back(minDr);//15 
+    eigens.push_back(geoeigens[0]);//16 geoeigan x vec
+    eigens.push_back(geoeigens[1]);//17 geoeigan y vec
+    eigens.push_back(geoeigens[2]);//18 geoeigan mag vec
+    eigens.push_back(ebside);//19 EB side
+    eigens.push_back(taflip);//20 towards(+)/away(-) slope sign flip
+    eigens.push_back(0);//21
+    eigens.push_back(slopeg);//22 geoeigan slope
+    eigens.push_back(slopegerr);//23 geoeigan slope error
+    eigens.push_back(slopeprs);//24 pairs slope method
+    eigens.push_back(slopeprserr);//25 pairs slope method error
+    eigens.push_back(0);//26
+    eigens.push_back(slope3d);//27 slope from 3d major eiganvector in "time" deminsion
+    eigens.push_back(eigens3[3]);//28 "scaled magnitude" of 3d eiganvalue3
+    eigens.push_back(angle3d);//29 rotation angle for eigan 3d
+    eigens.push_back(eigens3[0]);//30 ev x  "z"
+    eigens.push_back(eigens3[1]);//31 ev y  "c"
+    eigens.push_back(eigens3[2]);//32 ev z  "time"
+    eigens.push_back(eigens3[6]);//33 3dEV 6 = c vs c+t , ? 3d4Value
+    eigens.push_back(eigens3[5]);//34 3d Time EV 5 = t vs t+zc oval ? 3dTvalue
+//std::cout << "Slope egin : " << slope1 << " " << chi2pf1 << " " << rotangle << " " << std::sqrt(varsl) << " " << slope1err << std::endl;
+    eigens.push_back(smaj);//35
+    eigens.push_back(smin);//36
+    eigens.push_back(sang);//37
+    eigens.push_back(eigens3[8]);//38
+    eigens.push_back(eigens3[9]);//39
+    eigens.push_back(eigens3[10]);//40
+
+    //std::cout << " Done" << std::endl;;
+    return eigens;
+}//>>>>vector<float> KUCMSSkimmer::getRhGrpEigen_sph( vector<float> times, rhGroup rechits ){
+
