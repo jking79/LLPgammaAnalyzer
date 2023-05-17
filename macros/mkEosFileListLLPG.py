@@ -27,7 +27,7 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v58/'
 #command = eosll+mdis+'/ecalTiming/tt_KUCCRes_126_Test/EGamma/'
 #command = eosll+mdis+'LLPGamma/llpga_GJets_AOD_v57/'
-command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v59/'
+command = eosll+mdis+'LLPGamma/llpga_GMSB_AOD_v60/'
 #command = eosll+mspc+'ecalTiming/'
 #command = eosll+mdis+'ecalTiming/EGamma/'
 #command = eosll+mspc+'EGamma/'
@@ -45,7 +45,7 @@ rootfile = '.root'
 #dirselect = '22eraC_CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357328-357331'
 #dirselect = 'noOOTCC_kustc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 #dirselect = 'CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
-dirselect = ''
+dirselect = 'GMSB_L-100TeV_'
 
 #debug = True
 debug = False

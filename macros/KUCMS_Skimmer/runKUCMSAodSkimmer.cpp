@@ -18,6 +18,7 @@ int main ( int argc, char *argv[] ){
                 auto indir = "LLPGamma/llpga_GJets_AOD_v60/";
 
                 //auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v60_Full.txt"; //argv[2];
+                //auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v60_L100.txt";
                 auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v60_Full.txt";
 
                 //auto outfilename = "lpgana_mc_test12_tight_max3d4v_sig.root";
@@ -33,12 +34,15 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_GEO_10th_loose_tEB_nRH15_isSig_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GMSB_AOD_aV60_mhV31_Pt30logE_SMMGEO_10th_loose_tEB_nRH15_isSig_Hists.root";
 
-                auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_50th_loose_tEB_nRH15_Hists.root";
+                //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_50th_loose_tEB_nRH15_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_SMM_50th_loose_tEB_nRH15_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_GEO_50th_loose_tEB_nRH15_Hists.root";
                 //auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_mhV31_Pt30logE_SMMGEO_20th_loose_tEB_nRH15_Hists.root";
 
-                int pct = 50;
+				auto outfilename = "llpgana_mc_AODSIM_GJets_AOD_aV60_skim_v1.root";  // photon only diphton selection
+                //auto outfilename = "llpgana_mc_AODSIM_GMSB_L100_AOD_aV60_skim_v1.root"; 
+
+                int pct = 10;
                 KUCMSAodSkimmer llpgana;
                 llpgana.kucmsAodSkimmer( indir, infilename, outfilename, pct );
     //}
