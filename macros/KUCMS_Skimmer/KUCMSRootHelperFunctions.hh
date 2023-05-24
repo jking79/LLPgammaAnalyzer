@@ -235,6 +235,7 @@ std::vector<float> getDistStats( std::vector<float> values ){
     results.push_back(1.2533*err);//11 error of median
 
     return results;
+
 }//>>>> std::vector<float> getDistStats( std::vector<float> values )
 
 std::vector<float> getDistStats( std::vector<float> values, std::vector<float> wts ){
@@ -299,9 +300,10 @@ std::vector<float> getDistStats( std::vector<float> values, std::vector<float> w
     else results.push_back(values[size/2]);//10 median
     results.push_back(1.2533*err);//11 error of median  
     results.push_back(wtot);//12 tot e of all rechits
-    results[2] = results[6] - results[10];
+    //results[2] = results[6] - results[10];
 
     return results;
+
 }//>>>>std::vector<float> getDistStats( std::vector<float> values, std::vector<float> weights )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> wts ){
@@ -336,6 +338,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> wts 
     results.push_back(ev);
 
     return results;
+
 }//<<>>std::vector<float> getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, std::vector<float> wts ){
@@ -378,6 +381,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
     results.push_back(ev);
 
     return results;
+
 }//<<>>std::vector<float> = getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts ){
@@ -437,6 +441,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
     results.push_back(ev);//3
 
     return results;
+
 }//<<>>std::vector<float> getRhGrpEigen3D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 #endif

@@ -12,6 +12,7 @@
 
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
+#include "KUCMSBranchManager.hh"
 #include "RestFrames/RestFrames.hh"
 
 #define n1dHists 512
@@ -40,12 +41,13 @@ class KUCMSAodSkimmer : public root_rebase {
 	~KUCMSAodSkimmer();
 
 	// tchian processing functions
-    void kucmsAodSkimmer( std::string indir, std::string infilelist, std::string outfilename, int pct );
+    void kucmsAodSkimmer( std::string indir, std::string infilelist, std::string outfilename );
     void initHists();
     void getBranches( Long64_t entry );
     bool eventLoop( Long64_t entry );
 	void startJobs();
-    void endJobs( TTree* fOutTree );
+    void endJobs();
+	void fillConfigTree( TTree* fOutTree, std::string key, float crossSection );
     void setOutputBranches( TTree* fOutTree );
 
 	// object processing & selection
@@ -84,39 +86,53 @@ class KUCMSAodSkimmer : public root_rebase {
     int getRhIdx( uInt rhDetID );
     uInt getLeadRhID( std::vector<uInt> recHitIds );
     float clstrR9( std::vector<uInt> recHitIds );
+	std::vector<float> getRhGrpTimes( std::vector<uInt> rechitids );
+    std::vector<float> getRhGrpEnergies( std::vector<uInt> rechitids );
+	std::vector<float> getRhGrpEigenFromAngles( std::vector<uInt> rechitids );
     std::vector<float> getLeadTofRhTime( std::vector<uInt> recHitIds, double vtxX, double vtxY, double vtxZ );
     std::vector<float> getRhGrpEigen_sph( std::vector<float> times, std::vector<uInt> rechitids );
 
   	// RestFrames frames and friends
 
-  	LabRecoFrame*     LAB;
-  	DecayRecoFrame*   S;
-  	DecayRecoFrame*   X2a;
-  	DecayRecoFrame*   X2b;
-  	VisibleRecoFrame*   Ja;
-  	VisibleRecoFrame*   Jb;
-  	InvisibleRecoFrame* X1a;
-  	InvisibleRecoFrame* X1b;
+  	LabRecoFrame* LAB;
+  	DecayRecoFrame* S;
+	DecayRecoFrame*	X2a; 
+	DecayRecoFrame* X2b;
+  	VisibleRecoFrame* Ja; 
+    VisibleRecoFrame* Jb;
+  	InvisibleRecoFrame* X1a; 
+    InvisibleRecoFrame* X1b;
 
-  	InvisibleGroup*       INV;
-  	SetMassInvJigsaw*     InvM;
+  	InvisibleGroup* INV;
+  	SetMassInvJigsaw* InvM;
   	SetRapidityInvJigsaw* InvEta;
   	MinMassesSqInvJigsaw* InvSplit;
 
-  	CombinatoricGroup*   COMB_J;
+  	CombinatoricGroup* COMB_J;
   	MinMassesSqCombJigsaw* CombSplit_J;
 
     // Output Branch variables
 
+	KUCMSBranchManager selEVs;
     uInt RunNumber;
     uInt nEvents, nSelectedEvents;
-	float Met;
-	uInt nSelPhotons, leadSelPho, subLeadSelPho; 
-	std::vector<uInt> selPhoQuality;
-	std::vector<float> selPhoTime, selPhoGEgnVal, selPhoEta, selPhoPhi, selPhoPt, selPhoSMaj, selPhoSMin, selPhoClstrRn;
+
+	KUCMSBranchManager selMet;
+	float Met, MetPx, MetPy;
+
+	KUCMSBranchManager selPhotons;
+	int nSelPhotons, leadSelPho, subLeadSelPho; 
+	std::vector<uInt> selPhoQuality, selPhoNrh;
+	std::vector<float> selPhoTime, selPhoGeoEgnVal, selPhoEta, selPhoPhi, selPhoPt, selPhoSMaj, selPhoSMin, selPhoClstrRn;
+    std::vector<float> selPhoR9, selPhoSieie, selPhoEnergy, selPhoGeoSMaj, selPhoGeoSMin;
+
+	KUCMSBranchManager selJets;
 	uint nSelJets;
 	std::vector<uInt> selJetQuality;
 	float JetHt;
 	std::vector<float> selJetMass, selJetPt, selJetEnergy, selJetEta, selJetPhi, selJetTime;
+
+	KUCMSBranchManager selRjrEVs;
+	float X1aMass, X1aCosA, X1bMass, X1bCosA, X2aMass, X2aCosA, X2bMass, X2bCosA, SMass, SCosA;
 
 };

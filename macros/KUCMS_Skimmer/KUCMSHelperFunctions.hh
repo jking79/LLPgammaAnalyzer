@@ -59,7 +59,7 @@ struct DetIDStruct {
 
 void SetupDetIDsEB( std::map<UInt_t,DetIDStruct> &DetIDMap ){
 
-    const std::string detIDConfigEB("../test/fullinfo_detids_EB.txt");
+    const std::string detIDConfigEB("ecal_config/fullinfo_detids_EB.txt");
     std::ifstream infile( detIDConfigEB, std::ios::in);
 
     UInt_t cmsswId, dbID;
@@ -77,7 +77,7 @@ void SetupDetIDsEB( std::map<UInt_t,DetIDStruct> &DetIDMap ){
 
 void SetupDetIDsEE( std::map<UInt_t,DetIDStruct> &DetIDMap ){
 
-    const std::string detIDConfigEE("../test/fullinfo_detids_EE.txt");
+    const std::string detIDConfigEE("ecal_config/fullinfo_detids_EE.txt");
     std::ifstream infile( detIDConfigEE, std::ios::in);
 
     UInt_t cmsswId, dbID;
@@ -214,8 +214,9 @@ const auto dltIPhi  (CFlt x, CFlt y){auto dp(x-y); if( dp > 180 ){dp-=360.0;} el
 const auto dltPhi   (CFlt x, CFlt y){auto dp(x-y);if(dp>PI) dp-=2*PI; else if(dp<=-PI) dp+=2*PI; return dp;}
 const auto dltAngle (CFlt x, CFlt y){auto dp(x-y);if(dp>=2*PI) dp-=2*PI; else if(dp<=-2*PI) dp+=2*PI; return dp;}
 const auto max      (CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
-const auto leadIdx  (CVFlt x){float m(x[0]); int idx(0), it(0); for(auto ix : x ){ if( ix > m ){ m = ix; idx = it; } it++; } return idx;}
-const auto subldIdx (CVFlt x, int ldx){float m(x[0]); int idx(0), it(0); 
+const auto leadIdx  (CVFlt x){float m(x[0]); int idx(0), it(0); if( x.size() == 0 ) return -9; if( x.size() == 1 ) return 0; 
+						for(auto ix : x ){ if( ix > m ){ m = ix; idx = it; } it++; } return idx;}
+const auto subldIdx (CVFlt x, int ldx){float m(x[0]); int idx(0), it(0); if( x.size() <= 1 ) return -9; if( ldx == 0 ){ m = x[1]; idx = 1;} 
 						for(auto ix : x ){ if( ix > m && ix < x[ldx] ){ m = ix; idx = it; } it++; } return idx;}
 
 const auto deltaR2  (CDbl e0, CDbl e1, CDbl p0, CDbl p1 ){ 
@@ -298,6 +299,28 @@ const auto wsincos  (CVFlt x, CVFlt wv){
                         for(auto ix : x ){ sum += wv[it]*sin(ix)*cos(ix); wt += wv[it]; it++;}
                         return sum/wt;
                     }//const auto wsincos
+
+//-----------  misc helper functions -------------------------------------------
+
+const auto  splitString( std::string str, const char* separator ) {
+
+	std::vector < std::string > strings;
+    int startIndex(0), endIndex(0);
+    for ( int i = 0; i <= str.size(); i++ ){
+        if ( str[i] == *separator || i == str.size() ){
+
+            endIndex = i;
+            std::string temp;
+            temp.append(str, startIndex, endIndex - startIndex);
+            strings.push_back(temp);
+            startIndex = endIndex + 1;
+
+        }//<<>>if (str[i] == separator || i == str.size())
+    }//<<>>for (int i = 0; i <= str.size(); i++)
+	return strings;
+
+}//<<>>const auto  splitString(string str, char separator)
+
 
 #endif
 //-------------------------------------------------------------------------------------------------------------------
