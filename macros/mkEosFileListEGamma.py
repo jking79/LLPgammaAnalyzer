@@ -43,7 +43,8 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/'
 #command = eosll+mgrp+'LLPGamma/llpga_GMSB_AOD_v60/'
 #command = eosll+mgrp+'LLPGamma/llpga_GJets_AOD_v60/'
-command = eosll+mspc+'/ecalTiming/gammares_tt_kucc_126_v11_ccEncDiag/EGamma/'
+#command = eosll+mspc+'/ecalTiming/gammares_tt_kucc_126_v11_ccEncDiag/EGamma/'
+command = eosll+mspc+'/ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/'
 
 version = ''
 #version = '_v11_'
@@ -89,7 +90,8 @@ rootfile = '.root'
 #dirselect = 'gammares_tt_kucc_126_v10_reso_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
 #dirselect = 'gammares_tt_kucc_126_v10_diag2_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
 #dirselect = 'gammares_tt_kucc_126_v11_diag_EGamma_MINIAOD_Run2022G-PromptReco-v1_359022-362760'
-dirselect = 'gammares_tt_kucc_126_v11_ccEncDiag_EGamma_MINIAOD_Run2022C-PromptReco-v1_355890-355895'
+#dirselect = 'gammares_tt_kucc_126_v11_ccEncDiag_EGamma_MINIAOD_Run2022C-PromptReco-v1_355890-355895'
+dirselect = 'gammares_ttcc_1307_v11_diag_EGamma1_MINIAOD_Run2023B-PromptReco-v1_366323-367065'
 
 #debug = True
 debug = False

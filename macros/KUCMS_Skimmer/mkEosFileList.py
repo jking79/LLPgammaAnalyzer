@@ -33,7 +33,9 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'EGamma/'
 #command = eosll+mdis+'KUCMSNtuple/GMSB_AOD_v1/'
 #command = eosll+mdis+'/KUCMSNtuple/GJETS_AOD_v1/'
-command = eosll+mdis+'/KUCMSNtuple/WJETS_AOD_v1/'
+#command = eosll+mdis+'/KUCMSNtuple/WJETS_AOD_v1/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v2/'
+command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v3/'
 
 version = ''
 #version = '_v11_'
@@ -52,7 +54,9 @@ rootfile = '.root'
 
 #dirselect = 'GMSB_L-400'
 #dirselect = 'GJets_HT-600T'
-dirselect = 'WJetsToLNu_HT-800'
+#dirselect = 'WJetsToLNu_HT-800'
+#dirselect = 'QCD_HT100to200'
+dirselect = 'GMSB_L-400TeV'
 
 #dirselect = ''
 

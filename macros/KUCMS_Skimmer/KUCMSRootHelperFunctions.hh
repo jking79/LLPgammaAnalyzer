@@ -9,29 +9,15 @@
 //--------------------   hh file -------------------------------------------------------------
 //---------------------------------------------------------------------------------------------
 
-#include "KUCMSHelperFunctions.hh"
+#include "./KUCMSHelperFunctions.hh"
 
-// ROOT includes
-#include "TFile.h"
-#include "TTree.h"
-#include "TH1F.h"
-#include "TH1D.h"
-#include "TH2F.h"
-#include "TGraphAsymmErrors.h"
-#include "TMath.h"
-#include "TCanvas.h"
-#include "TROOT.h"
-#include "TStyle.h"
-#include "TString.h"
-#include "TColor.h"
-#include "TPaveText.h"
-#include "TText.h"
-#include "TChain.h"
+// ROOT
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
-#include "TF1.h"
 #include "TFormula.h"
+#include "TF1.h"
+#include "TTree.h"
 #include "Math/PositionVector3D.h"
 #include "TMatrixD.h"
 #include "TVectorD.h"
@@ -235,7 +221,6 @@ std::vector<float> getDistStats( std::vector<float> values ){
     results.push_back(1.2533*err);//11 error of median
 
     return results;
-
 }//>>>> std::vector<float> getDistStats( std::vector<float> values )
 
 std::vector<float> getDistStats( std::vector<float> values, std::vector<float> wts ){
@@ -300,11 +285,10 @@ std::vector<float> getDistStats( std::vector<float> values, std::vector<float> w
     else results.push_back(values[size/2]);//10 median
     results.push_back(1.2533*err);//11 error of median  
     results.push_back(wtot);//12 tot e of all rechits
-    //results[2] = results[6] - results[10];
+    results[2] = results[6] - results[10];
 
     return results;
-
-}//>>>>std::vector<float> getDistStats( std::vector<float> values, std::vector<float> weights )
+}//>>>>vector<float> getDistStats( std::vector<float> values, std::vector<float> weights )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> wts ){
 //spherical
@@ -338,8 +322,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> wts 
     results.push_back(ev);
 
     return results;
-
-}//<<>>std::vector<float> getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
+}//<<>>vector<float> getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, std::vector<float> wts ){
 
@@ -347,7 +330,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
 
     auto mean_x = mean( xs, wts );
     auto mean_y = mean( ys, wts );
-    auto swts = accum( wts );
+    auto swts = vfsum( wts );
     auto var_x = var( xs, mean_x, wts, swts );
     auto var_y = var( ys, mean_y, wts, swts );
     auto var_xy = cvar( xs, mean_x, ys, mean_y, wts, swts );
@@ -381,8 +364,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
     results.push_back(ev);
 
     return results;
-
-}//<<>>std::vector<float> = getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
+}//<<>>vector<float> = getRhGrpEigen2D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts ){
 // ieipt
@@ -392,7 +374,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
     auto mean_x = mean( xs, wts );
     auto mean_y = mean( ys, wts );
     auto mean_z = mean( zs, wts );
-    auto swts = accum( wts );
+    auto swts = vfsum( wts );
     auto var_x = var( xs, mean_x, wts, swts );
     auto var_y = var( ys, mean_y, wts, swts );
     auto var_z = var( zs, mean_z, wts, swts );
@@ -441,8 +423,7 @@ std::vector<float> getRhGrpEigen( std::vector<float> xs, std::vector<float> ys, 
     results.push_back(ev);//3
 
     return results;
-
-}//<<>>std::vector<float> getRhGrpEigen3D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
+}//<<>>vector<float> getRhGrpEigen3D( std::vector<float> xs, std::vector<float> ys, std::vector<float> zs, std::vector<float> wts )
 
 #endif
 //----------------------------------------------------------------------------------------------------------------------

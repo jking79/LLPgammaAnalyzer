@@ -14,7 +14,6 @@ CC=g++
 
 p1=runKUCMSAodSkimmer
 
-
 all: $(p1) 
 
 $(p1): $(p1).cpp

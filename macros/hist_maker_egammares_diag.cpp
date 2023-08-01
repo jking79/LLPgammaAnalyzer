@@ -1640,7 +1640,8 @@ int main ( int argc, char *argv[] ){
                 //auto indir = "ecalTiming/gammares_tt_kucc_126_v11_diag/EGamma/";
                 //auto indir = "ecalTiming/gammares_tt_kucc_126_v7_diag_unclean/EGamma/";
                 //auto indir = "/uscms/home/jaking/nobackup/ecaltiming/CMSSW_12_6_0_pre4/src/GammaResTool/gammaResTool/test/";
-                auto indir = "ecalTiming/gammares_tt_kucc_126_v11_ccEncDiag/EGamma/";
+                //auto indir = "ecalTiming/gammares_tt_kucc_126_v11_ccEncDiag/EGamma/";
+                auto indir = "/ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
 
                 //auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v59_Full.txt"; //argv[2];
                 //auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v58_Full.txt";

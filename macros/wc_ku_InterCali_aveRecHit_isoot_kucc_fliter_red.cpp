@@ -487,8 +487,9 @@ int main ( int argc, char *argv[] ){
                 //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v3/EGamma/";
 				//auto indir = "ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/";
 				//auto indir = "ecalTiming/gammares_tt_kucc_126_v10_diag/EGamma/";
-                auto indir = "ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
-
+                //auto indir = "ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
+                auto indir = "ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
+ 
                 ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
                 ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
                 //auto infilelist = "egamma_run352400-run358400_califilelist.txt";
@@ -537,8 +538,10 @@ int main ( int argc, char *argv[] ){
                 //auto infilelist = "tt_run3_2022D1_Prompt_355794_359021_126_gammares_v10_reso_califilelist.txt";
                 //auto infilelist = "tt_run3_2022D2_Prompt_355794_359021_126_gammares_v10_reso_califilelist.txt";
                 //auto infilelist = "tt_run3_2022E_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
-                auto infilelist = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
                 //auto infilelist = "tt_run3_2022G_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
+
+                auto infilelist = "tt_run3_2023B_Prompt_366323_367065_1301_gammares_v11_reso_califilelist.txt";
 
                 //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
                 //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
@@ -584,9 +587,10 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022D1_Prompt_355794_359021_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022D2_Prompt_355794_359021_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022E_Prompt_359022_362760_Cali.root";
-                auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022F_Prompt_359022_362760_Cali.root";
+                //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022F_Prompt_359022_362760_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022G_Prompt_359022_362760_Cali.root";
 
+                auto outfilename = "tt_KUCCRes_1307_v11_run3_2023B_Prompt_366323_367065_Cali.txt";
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}

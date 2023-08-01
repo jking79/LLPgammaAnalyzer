@@ -12,7 +12,7 @@
 
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
-#include "KUCMSBranchManager.hh"
+#include "KUCMSBranchManager2.hh"
 #include "RestFrames/RestFrames.hh"
 
 #define n1dHists 512
@@ -111,28 +111,16 @@ class KUCMSAodSkimmer : public root_rebase {
   	CombinatoricGroup* COMB_J;
   	MinMassesSqCombJigsaw* CombSplit_J;
 
+	// event counting varibles
+	
+	uInt nEvents, nSelectedEvents;
+
     // Output Branch variables
 
-	KUCMSBranchManager selEVs;
-    uInt RunNumber;
-    uInt nEvents, nSelectedEvents;
-
+	KUCMSBranchManager selEvtVars;
 	KUCMSBranchManager selMet;
-	float Met, MetPx, MetPy;
-
 	KUCMSBranchManager selPhotons;
-	int nSelPhotons, leadSelPho, subLeadSelPho; 
-	std::vector<uInt> selPhoQuality, selPhoNrh;
-	std::vector<float> selPhoTime, selPhoGeoEgnVal, selPhoEta, selPhoPhi, selPhoPt, selPhoSMaj, selPhoSMin, selPhoClstrRn;
-    std::vector<float> selPhoR9, selPhoSieie, selPhoEnergy, selPhoGeoSMaj, selPhoGeoSMin;
-
 	KUCMSBranchManager selJets;
-	uint nSelJets;
-	std::vector<uInt> selJetQuality;
-	float JetHt;
-	std::vector<float> selJetMass, selJetPt, selJetEnergy, selJetEta, selJetPhi, selJetTime;
-
-	KUCMSBranchManager selRjrEVs;
-	float X1aMass, X1aCosA, X1bMass, X1bCosA, X2aMass, X2aCosA, X2bMass, X2bCosA, SMass, SCosA;
+	KUCMSBranchManager selRjrVars;
 
 };

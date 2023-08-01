@@ -7,27 +7,30 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "KUCMSAodSkimmer_code.hh"
+#include "KUCMSAodSkimmer_cc.hh"
 
 // ------------------------------------------- main function ------------------------------------------------------------
 int main ( int argc, char *argv[] ){
 
     //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
     //else {
-				auto indir = "KUCMSNtuple/GMSB_AOD_v1/";
-                //auto indir = "KUCMSNtuple/GJETS_AOD_v1/";
-                //auto indir = "KUCMSNtuple/WJETS_AOD_v1/";
+                //std::string listdir = "../llpgana_list_files/";
+                const std::string listdir = "";
+                //const string KUCMSAodSkimmer::eosdir = "root://cmseos.fnal.gov//store/user/jaking/";
+                const std::string eosdir = "root://cmseos.fnal.gov//store/user/lpcsusylep/jaking/";
 
-				auto infilename = "test_GMSB_Files_List.txt";
-                //auto infilename = "GMSB_Files_List.txt";
+			    //auto infilename = "KUCMS_Ntuple_QCD_Files_List.txt";
+                auto infilename = "KUCMS_Ntuple_Master_QCD_Files_List.txt";
+                //auto infilename = "GMSB_Files_List.txt";:
                 //auto infilename = "GJets_Files_List.txt";
                 //auto infilename = "WJets_Files_List.txt";
 
-				auto outfilename = "_AODSIM_Ntuple_v1_Skim_v4Test.root";
+				auto outfilename = "_AODSIM_Ntuple_v2_LLPgama_Skim_v6.root";
 
                 KUCMSAodSkimmer llpgana;
-                llpgana.kucmsAodSkimmer( indir, infilename, outfilename );
+                llpgana.kucmsAodSkimmer( listdir, eosdir, infilename, outfilename );
     //}
     return 1;
+
 
 }//<<>>int main ( int argc, char *argv[] )

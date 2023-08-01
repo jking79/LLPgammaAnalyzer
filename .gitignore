@@ -10,8 +10,8 @@ test/GJetWorkSpace/
 test/GMSBWorkSpace/
 test/oldworkingArea/
 test/myWorkSpace/
-*list.txt
-*List.txt
+macros/*.obj
+*.txt
 *.root
 *.pyc
 *.obj
