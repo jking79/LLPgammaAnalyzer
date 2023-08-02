@@ -13,7 +13,7 @@
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
 
-#include "llpgana_hist_rebase_v18.hh"
+#include "kuSkimTree_v1.h"
 
 #define n1dHists 512
 #define n2dHists 512 
@@ -27,7 +27,7 @@
 // KUCMSSkimmer class -----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-class HistMaker : root_rebase {
+class HistMaker : kuSkimTree_v1 {
 
 	public:
 

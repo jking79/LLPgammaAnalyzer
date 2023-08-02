@@ -113,8 +113,8 @@ class KUCMSAodSkimmer : public root_base {
     // config vars
     std::string dataSetKey;
     float xsctn;
-    float lam;
-	float ctau;
+    float gmass;
+	float xmass;
 	float mcwgt;
 	int mctype;
 

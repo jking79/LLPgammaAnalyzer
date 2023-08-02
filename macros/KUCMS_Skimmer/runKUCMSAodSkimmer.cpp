@@ -19,13 +19,15 @@ int main ( int argc, char *argv[] ){
                 //const string KUCMSAodSkimmer::eosdir = "root://cmseos.fnal.gov//store/user/jaking/";
                 const std::string eosdir = "root://cmseos.fnal.gov//store/user/lpcsusylep/jaking/";
 
-			    //auto infilename = "KUCMS_Ntuple_QCD_Files_List.txt";
-                auto infilename = "KUCMS_Ntuple_Master_QCD_Files_List.txt";
+                //auto infilename = "KUCMS_Ntuple_Master_QCD_Files_List.txt";
+                auto infilename = "KUCMS_Ntuple_Master_GMSB_Files_List.txt";
+
+                //auto infilename = "KUCMS_Ntuple_QCD_Files_List.txt";
                 //auto infilename = "GMSB_Files_List.txt";:
                 //auto infilename = "GJets_Files_List.txt";
                 //auto infilename = "WJets_Files_List.txt";
 
-				auto outfilename = "_AODSIM_Ntuple_v2_LLPgama_Skim_v6.root";
+				auto outfilename = "_AODSIM_Ntuple_v2_LLPgama_Skim_v6.root";\
 
                 KUCMSAodSkimmer llpgana;
                 llpgana.kucmsAodSkimmer( listdir, eosdir, infilename, outfilename );

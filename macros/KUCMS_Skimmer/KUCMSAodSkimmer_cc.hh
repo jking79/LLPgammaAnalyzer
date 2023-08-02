@@ -142,8 +142,8 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir, 
 		auto infiles = instrs[1];
 		auto key = instrs[2];
 		auto crossSection = std::stof( instrs[3] );
-		auto gmsblam = std::stof( instrs[4] );
-        auto gmsbct = std::stof( instrs[5] );
+		auto gmsbgm = std::stof( instrs[4] );
+        auto gmsbxm = std::stof( instrs[5] );
         auto mcw = std::stof( instrs[6] );
         auto mct = std::stoi( instrs[7] );		
 
@@ -166,8 +166,8 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir, 
 
         dataSetKey = key;
         xsctn = crossSection;
-        lam = gmsblam; // = 0 if not gmsb
-        ctau = gmsbct; // = 0 if not gmsb
+        gmass = gmsbgm; // = 0 if not gmsb
+        xmass = gmsbxm; // = 0 if not gmsb
         mcwgt = mcw; // default 1
         mctype = mct; // 0 = fullsim
 	
@@ -725,7 +725,6 @@ bool KUCMSAodSkimmer::eventSelection(){
     auto subLeadPhoPt = ( nSelPhotons > 1 ) ? geVars("subLeadPhoPt") : 0;
 	if( DEBUG ) std::cout << " - Lead/Sublead Photons: " << leadSelPho << " - " << subLeadSelPho << std::endl;
 
-    auto gt1jets = nSelJets >= 1;
     auto gt1phos = nSelPhotons >= 1;
     auto gt2jets = nSelJets >= 2;
     auto gt2phos = nSelPhotons >= 2;
@@ -733,7 +732,7 @@ bool KUCMSAodSkimmer::eventSelection(){
     auto leadPhoPt20 = leadPhoPt >= 20;
 	auto subLeadPhoPt40 = subLeadPhoPt >= 40; 
 	
-    auto evtSelected = gt1jets && gt1phos && leadPhoPt20;
+    auto evtSelected = gt2jets && gt1phos && leadPhoPt20;
 	//auto evtSelected = leadPhoPt70 && subLeadPhoPt40 && gt2jets && gt2phos;
 
 	if( DEBUG ){ if( evtSelected ) std::cout << " - Event Passed." << std::endl; else std::cout << " - Event Failed." << std::endl;}
@@ -917,9 +916,9 @@ void KUCMSAodSkimmer::fillConfigTree( TTree* fConfigTree ){
 	sKeyBranch->Fill();
     TBranch *sCrossSectionBranch = fConfigTree->Branch( "sCrossSection", &xsctn );
 	sCrossSectionBranch->Fill();
-    TBranch *sLambdaBranch = fConfigTree->Branch( "sGMSBLambda", &lam );
+    TBranch *sLambdaBranch = fConfigTree->Branch( "sGMSBGravMass", &gmass );
     sLambdaBranch->Fill();
-    TBranch *sCTauBranch = fConfigTree->Branch( "sGMSBCTau", &ctau );
+    TBranch *sCTauBranch = fConfigTree->Branch( "sGMSBChi1Mass", &xmass );
     sCTauBranch->Fill();
     TBranch *sMCWgtBranch = fConfigTree->Branch( "sMCWgt", &mcwgt );
     sMCWgtBranch->Fill();
