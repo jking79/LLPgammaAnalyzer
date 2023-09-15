@@ -8,7 +8,11 @@
 //////////////////////////////////////////////////////////////////////
 
 
-#include "skimHistMaker_class.hh"
+#include "skimHistMaker.hh"
+
+//#define DEBUG true
+#define DEBUG false
+#define doEBEEmaps false
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -19,15 +23,15 @@
 
 //HistMaker::~HistMaker(){}
 
-void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, int pct ){
+void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename ){
 
-    bool debug = true;
-    //bool debug = false;
+    //bool debug = true;
+    bool debug = false;
 
     const std::string disphotreename("kuSkimTree");
     //const std::string eosdir("root://cmseos.fnal.gov//store/user/jaking/");
-    const std::string eosdir("skim_files");
-    const std::string listdir("skim_list_files/");
+    const std::string eosdir("");
+    const std::string listdir("");
 
 	std::cout << "Producing Histograms for : " << outfilename << std::endl;
     std::ifstream infile(listdir+infilelist);
@@ -38,11 +42,11 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
 	int cnt = 1;
     while (std::getline(infile,str)){
 		//std::cout << "--  for Fine #" << cnt << " moduls " << cnt%pct << " ";
-		if( cnt%pct == 0 ){ 
-        	auto tfilename = eosdir + indir + str;
-        	std::cout << "--  adding file: " << tfilename << std::endl;
-        	fInTree->Add(tfilename.c_str());
-		}//<<>>if( cnt%4 == 0 ){
+		//if( cnt%pct == 0 ){ 
+        auto tfilename = eosdir + indir + str;
+        std::cout << "--  adding file: " << tfilename << std::endl;
+        fInTree->Add(tfilename.c_str());
+		//}//<<>>if( cnt%4 == 0 ){
 		//else std::cout << " do not add file" << std::endl;
 		cnt++;
     }//<<>>while (std::getline(infile,str))
@@ -64,7 +68,8 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
 		if(debug) std::cout << " - eventLoop " << std::endl;
 		eventLoop(entry);
     }//<<>>for (Long64_t centry = 0; centry < nEntries; centry++)  end entry loop
-
+   
+    if(debug) std::cout << " - Creating output file " << std::endl;
     TFile* fOutFile = new TFile( outfilename.c_str(), "RECREATE" );
     fOutFile->cd();
 
@@ -76,11 +81,11 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
     for( int it = 0; it < n3dHists; it++ ){ if(hist3d[it]){ hist3d[it]->Write(); delete hist3d[it]; } }
 
 	nMaps = 0;
-	for( int it = 0; it < nEBEEMaps; it++ ){ 
+	if( doEBEEmaps ){ for( int it = 0; it < nEBEEMaps; it++ ){ 
 		ebeeMapP[it]->Write(); delete ebeeMapP[it]; 								 
 		ebeeMapT[it]->Write(); delete ebeeMapT[it]; 
 		ebeeMapR[it]->Write(); delete ebeeMapR[it];
-	}//<<>>for( int it = 0; it < nEBEEMaps; it++ )
+	}}//<<>>for( int it = 0; it < nEBEEMaps; it++ )
 
     fOutFile->Close();
     std::cout << "histMaker : Thats all Folks!!" << std::endl;
@@ -232,7 +237,8 @@ void HistMaker::eventLoop( Long64_t entry ){
         //auto usePho = isLoose && isEB && isTightEB && isCmb && not isSigPho;
 
 
-		if( DEBUG ) std::cout << " -- photons # " << it << " isSUSY " << isSUSY << " isOOT " << isOOT << " isCmb " << isCmb << std::endl;
+		//if( DEBUG ) std::cout << " -- photons # " << it << " isSUSY " << isSUSY << " isOOT " << isOOT << " isCmb " << isCmb << std::endl;
+        if( DEBUG ) std::cout << " -- sel photons # " << it << std::endl;
 		if( usePho && goodRhCnt && minPhoPt ) { //----------------------------------- 
 	
 	        hist1d[132]->Fill(1);
@@ -253,7 +259,7 @@ void HistMaker::eventLoop( Long64_t entry ){
             //auto isPho = (phoGenIdx >= 0)?(((*genPdgId)[phoGenIdx] == 22)?1:0):-1;
             //hist2d[204]->Fill(isPho,isSUSY);
 
-			if( DEBUG ) std::cout << " Finding Eigans for Photon W/ " << nrh << " rechits." << std::endl;
+			if( DEBUG ) std::cout << " Not Finding Eigans for Photon W/ " << nrh << " rechits." << std::endl;
 
         }//<<>>if( usePho ) { //----------------------------------- 
 
@@ -272,7 +278,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 */
 
 	//--------- jets --------------------------
-
+    if( DEBUG ) std::cout << "Finding Jets with " << nSelJets << " selected. "<< std::endl;
 
 	//// ---  base info  ----
 
@@ -417,6 +423,7 @@ void HistMaker::initHists(){
     hist1d[0] = new TH1D("jetPt", "jetPt", 500, 0, 5000);
     hist1d[1] = new TH1D("jetPhi", "jetPhi", 700, -3.5, 3.5);
     hist1d[2] = new TH1D("jetEta", "jetEta", 700, -3.5, 3.5);
+    hist1d[9] = new TH1D("nJet", "nJets", 21, -0.5, 20.5);
 
 	//----- photons 100 - 249
 
@@ -674,16 +681,37 @@ void HistMaker::initHists(){
 	//------------------------------------------------------------------------------------
     // Cluster maps -----------------------------------------------------------------------
 	nMaps = 0;
-	for(int it=0; it<nEBEEMaps; it++){
+    std::string label("baseHists");
+	if( doEBEEmaps ){ for(int it=0; it<nEBEEMaps; it++){
 		fMap[it] = false;
-		string label(";iEta;iPhi");
-        string stt1("ebeeMapPhoCluster_"+std::to_string(it));
+		std::string label(";iEta;iPhi");
+        std::string stt1("ebeeMapPhoCluster_"+std::to_string(it));
         ebeeMapP[it] = new TH2D( stt1.c_str(), (stt1+label).c_str(), 361, -90, 90, 721, 0, 360);
-        string stt2("ebeeMapPhoClusterTime_"+std::to_string(it));
+        std::string stt2("ebeeMapPhoClusterTime_"+std::to_string(it));
         ebeeMapT[it] = new TH2D( stt2.c_str(), (stt2+label).c_str(), 361, -90, 90, 721, 0, 360);
-		string stt3("ebeeMapPhoClusterRes_"+std::to_string(it));
+		std::string stt3("ebeeMapPhoClusterRes_"+std::to_string(it));
         ebeeMapR[it] = new TH2D( stt3.c_str(), (stt3+label).c_str(), 361, -90, 90, 721, 0, 360);
-	}//<<>>for(int it=0; it<nEBEEMaps; it++)
+	}}//<<>>for(int it=0; it<nEBEEMaps; it++)
 
 }//<<>>void HistMaker::initHists()
+
+//void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename )
+
+int main ( int argc, char *argv[] ){
+
+    //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
+    //else {
+                const std::string listdir = "skim_v6_files/";
+
+                auto infilename = "KUCMS_GMSB_Skim_List.txt";
+
+                auto outfilename = "KUCMS_GMSB_Skim_BaseHists.root";
+
+                HistMaker base;
+                base.histMaker( listdir, infilename, outfilename );
+    //}
+    return 1;
+
+
+}//<<>>int main ( int argc, char *argv[] )
 

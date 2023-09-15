@@ -293,6 +293,15 @@ const auto wsincos  (CVFlt x, CVFlt wv){
 
 //-----------  misc helper functions -------------------------------------------
 
+std::string mkht( std::string cat, std::string title){ 
+
+    //std::cout << "Input: " << cat << " & " << title << std::endl;
+	auto ret = cat+title;
+    //std::cout << "Output: " << ret << std::endl;
+	return ret;
+
+}//>><<const auto mkht( std::string cat, std::string title)
+
 const auto splitString( std::string str, const char* separator ) {
 
 	std::vector < std::string > strings;

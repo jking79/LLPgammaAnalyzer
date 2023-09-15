@@ -133,12 +133,13 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir, 
     while( std::getline( masterInfile, masterstr ) ){
 
 		if( DEBUG ) std:: cout << masterstr << std::endl;
+        if( masterstr[0] == '#' ) continue;
 		if( masterstr == " " ) continue;
 		auto instrs = splitString( masterstr, " " );
 		if( DEBUG ) std:: cout << instrs.size() << std::endl;
-        auto inpath = instrs[0];
-        if( inpath == "#" || instrs.size() < 8 ) continue;
+        if( instrs.size() < 8 ) continue;
 
+        auto inpath = instrs[0];
 		auto infiles = instrs[1];
 		auto key = instrs[2];
 		auto crossSection = std::stof( instrs[3] );
@@ -181,10 +182,12 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir, 
 		startJobs();
 	
 	    std::cout << "Setting up For Main Loop." << std::endl;
-		int loopCounter(5000);
+		int loopCounter(100000);
 	    auto nEntries = fInTree->GetEntries();
 	    if(DEBUG){ nEntries = 1000; loopCounter = 100; }
 	    std::cout << "Proccessing " << nEntries << " entries." << std::endl;
+        nEvents = nEntries;
+        int nSelEvts(0);
 	    for (Long64_t centry = 0; centry < nEntries; centry++){
 
 	        if( centry%loopCounter == 0 ) std::cout << "Proccessed " << centry << " of " << nEntries << " entries." << std::endl;
@@ -193,9 +196,10 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir, 
 			geCnts.clear();
             geVars.clear();
 			auto saveToTree = eventLoop(entry);
-			if( saveToTree ) fOutTree->Fill();
+			if( saveToTree ){ nSelEvts++; fOutTree->Fill(); }
 
 	    }//<<>>for (Long64_t centry = 0; centry < nEntries; centry++)  end entry loop
+        nSelectedEvents = nSelEvts;
 		fillConfigTree( fConfigTree ); 
 
 		endJobs();
@@ -411,11 +415,11 @@ void KUCMSAodSkimmer::processPhotons(){
 		auto isExcluded = (*Photon_excluded)[it];
         //auto isCmb = phoExcluded[it];
 		if( isExcluded ) continue; 
-        auto isEB = (*Photon_seedIsEB)[it];
-		if( not isEB ) continue;
+        //auto isEB = (*Photon_seedIsEB)[it];
+		//if( not isEB ) continue;
         auto rhids = (*Photon_rhIds)[it];
         uInt nrh = rhids.size();
-		if( nrh < 5 ) continue;
+		//if( nrh < 2 ) continue;
 
 		//--------------------------------------------------------------
         if( DEBUG ) std::cout << " -- pho pull info" << std::endl;
@@ -430,6 +434,20 @@ void KUCMSAodSkimmer::processPhotons(){
         auto r9 = (*Photon_r9)[it];
         auto sieie = (*Photon_sieie)[it];
         auto energy = (*Photon_energy)[it];
+        auto susId = (*Photon_genLlpId)[it];
+
+        auto htsebcdr4 = (*Photon_hcalTowerSumEtBcConeDR04)[it];
+        auto tsphcdr3 = (*Photon_trkSumPtHollowConeDR03)[it];
+        auto tsphcdr4 = (*Photon_trkSumPtHollowConeDR04)[it];
+        auto tspscdr4 = (*Photon_trkSumPtSolidConeDR04)[it];
+        auto pixseed = (*Photon_pixelSeed)[it];
+        auto erhsecdr4 = (*Photon_ecalRHSumEtConeDR04)[it];
+        auto htoem = (*Photon_hadTowOverEM)[it];
+        auto sieip = (*Photon_sieip)[it];
+        auto sipip = (*Photon_sipip)[it];
+
+        auto gendp = (*Photon_genDp)[it];
+        auto gendr = (*Photon_genDr)[it];
 
         //--------------------------------------------------------------
         if( DEBUG ) std::cout << " -- pho get calclated values" << std::endl;
@@ -437,10 +455,10 @@ void KUCMSAodSkimmer::processPhotons(){
         //auto isSigPho = (genIdx >= 0)?((*genLLP)[genIdx] == 1):false;
         auto phoQuality = getPhoQuality(it);
         auto phoClstrR9 = clstrR9( rhids );
-        auto phoEigens2D = getRhGrpEigenFromAngles( rhids );
-        auto evaluegeo = phoEigens2D[2];
-		auto geosmaj = phoEigens2D[3];
-        auto geosmin = phoEigens2D[4];
+        //auto phoEigens2D = getRhGrpEigenFromAngles( rhids );
+        //auto evaluegeo = phoEigens2D[2];
+		//auto geosmaj = phoEigens2D[3];
+        //auto geosmin = phoEigens2D[4];
 
         // pho object selection ------------------------------------------
         if( DEBUG ) std::cout << " -- pho obj selection" << std::endl;
@@ -451,7 +469,8 @@ void KUCMSAodSkimmer::processPhotons(){
 		auto underMaxSieie = sieie <= 0.014;
         auto overMinRhCnt = nrh >= 20;
 
-		auto phoSelected = isMinMedQuality;
+		//auto phoSelected = isMinMedQuality;
+        auto phoSelected = true;
 		if( not phoSelected ) continue;
 		nSelPhotons++;
 
@@ -462,7 +481,7 @@ void KUCMSAodSkimmer::processPhotons(){
 		if( DEBUG ) std::cout << " -- pho fill out branches" << std::endl;
 		selPhotons.fillBranch( "selPhoQuality", phoQuality );
         selPhotons.fillBranch( "selPhoTime", time );
-		selPhotons.fillBranch( "selPhoGeoEgnVal", evaluegeo );
+		//selPhotons.fillBranch( "selPhoGeoEgnVal", evaluegeo );
         selPhotons.fillBranch( "selPhoEta", eta );
         selPhotons.fillBranch( "selPhoPhi", phi );
         selPhotons.fillBranch( "selPhoPt", pt );
@@ -473,9 +492,20 @@ void KUCMSAodSkimmer::processPhotons(){
         selPhotons.fillBranch( "selPhoSieie", sieie );
         selPhotons.fillBranch( "selPhoNrh", nrh );
         selPhotons.fillBranch( "selPhoEnergy" , energy );
-        selPhotons.fillBranch( "selPhoGeoSMaj", geosmaj );
-        selPhotons.fillBranch( "selPhoGeoSMin", geosmin );
-		if( verbose ) std::cout << " -- selPho Pt: " << pt << " phi: " << phi << " geo: " << evaluegeo << " clrn: " << phoClstrR9;
+        selPhotons.fillBranch( "selPhoSusyId" , susId );
+        //selPhotons.fillBranch( "selPhoGeoSMaj", geosmaj );
+        //selPhotons.fillBranch( "selPhoGeoSMin", geosmin );
+        selPhotons.fillBranch( "selPhoHcalTowerSumEtBcConeDR04", htsebcdr4 );
+        selPhotons.fillBranch( "selPhoTrkSumPtHollowConeDR03", tsphcdr3 );
+        selPhotons.fillBranch( "selPhoTrkSumPtHollowConeDR04", tsphcdr4 );
+        selPhotons.fillBranch( "selPhoTrkSumPtSolidConeDR04", tspscdr4 );
+        selPhotons.fillBranch( "selPhoPixelSeed", pixseed );
+        selPhotons.fillBranch( "selPhoEcalRHSumEtConeDR04", erhsecdr4 );
+        selPhotons.fillBranch( "selPhoHadTowOverEM", htoem );
+        selPhotons.fillBranch( "selPhoSieip", sieip );
+        selPhotons.fillBranch( "selPhoGenDp", gendp );
+        selPhotons.fillBranch( "selPhoGenDr", gendr );
+		//if( verbose ) std::cout << " -- selPho Pt: " << pt << " phi: " << phi << " geo: " << evaluegeo << " clrn: " << phoClstrR9;
 		if( verbose ) std::cout << " nrh: " << nrh << " quality: " << phoQuality << std::endl;
 
     }//<<>>for( int it = 0; it < nPhotons; it++ )
@@ -485,7 +515,8 @@ void KUCMSAodSkimmer::processPhotons(){
     if( DEBUG || verbose ) std::cout << " - Selected " << nSelPhotons << " photons" << std::endl;
     geCnts.set( "nSelPhotons", nSelPhotons );	
 	selPhotons.fillBranch( "nSelPhotons",  nSelPhotons );
-	
+    selPhotons.fillBranch( "nPhotons", nPhotons );	
+
 	uInt leadPhoIdx = ( nSelPhotons > 0 ) ? leadPho : 9999;
 	uInt subLeadPhoIdx = ( nSelPhotons > 1 ) ? subLeadPho : 9999;
     geCnts.set("leadPho",leadPhoIdx);
@@ -545,6 +576,28 @@ void KUCMSAodSkimmer::processJets(){
 		auto eta = (*Jet_eta)[it];
         auto phi = (*Jet_phi)[it];
 		auto rhids = (*Jet_drRhIds)[it];
+        auto susId = (*Jet_genLlpId)[it];
+
+        auto area = (*Jet_area)[it];
+        auto chEmEF = (*Jet_chEmEF)[it];
+        auto chHEF = (*Jet_chHEF)[it];
+        auto chHM = (*Jet_chHM)[it];
+        auto muEF = (*Jet_muEF)[it];
+        auto neEmEF = (*Jet_neEmEF)[it];
+        auto neHEF = (*Jet_neHEF)[it];
+        auto neHM = (*Jet_neHM)[it];
+
+        auto jgdpt = (*Jet_genDptMatch)[it];
+        auto jgdr = (*Jet_genDrMatch)[it];
+        auto jge = (*Jet_genEnergy)[it];
+        auto jgeta = (*Jet_genEta)[it];
+        auto jgimpang = (*Jet_genImpactAngle)[it];
+        auto llpdp = (*Jet_genLlpDp)[it];
+        auto llpdr = (*Jet_genLlpDr)[it];
+        auto jgpt = (*Jet_genPt)[it];
+        auto jgtof = (*Jet_genTOF)[it];
+        auto jgt= (*Jet_genTime)[it];
+        auto jgllpt = (*Jet_genTimeLLP)[it];
 
 		// get cacluated values-------------------------------------------
 		if( DEBUG ) std::cout << " - Finding Jet Time." << std::endl;
@@ -555,10 +608,10 @@ void KUCMSAodSkimmer::processJets(){
 
 		if( DEBUG ) std::cout << " - Jet Obj selection." << std::endl;
 		// jet object selection ------------------------------------------
-		auto overMinPt = pt >= 40; 
+		auto overMinPt = pt > 75; 
 		auto underMaxEta = std::abs(eta) <= 3.0;
-		auto isMinQuality = quality > 1;
-	
+		auto isMinQuality = quality > 0;
+
 		auto jetSelected = underMaxEta && isMinQuality && overMinPt;
 		if( not jetSelected ) continue;
 		nSelJets++;
@@ -569,8 +622,7 @@ void KUCMSAodSkimmer::processJets(){
         seljetmass.push_back(mass);
 
 		// fill vectors
-        selJets.fillBranch( "nJets", nJets);
-        selJets.fillBranch( "nSelJets", nSelJets);
+		selJets.fillBranch( "selJetSusyId", susId );
 		selJets.fillBranch( "selJetQuality", quality );
         selJets.fillBranch( "selJetPt", pt);
         selJets.fillBranch( "selJetMass", mass);
@@ -578,6 +630,27 @@ void KUCMSAodSkimmer::processJets(){
         selJets.fillBranch( "selJetEta", eta);
         selJets.fillBranch( "selJetPhi", phi);
         selJets.fillBranch( "selJetTime", time);
+
+        selJets.fillBranch( "selJetArea", area ); //*Jet_area)[it]; 
+        selJets.fillBranch( "selJetChEmEF", chEmEF ); //*Jet_chEmEF)[it]; 
+        selJets.fillBranch( "selJetchHEF", chHEF ); //*Jet_chHEF)[it]; 
+        selJets.fillBranch( "selJetChHM", chHM ); //*Jet_chHM)[it]; 
+        selJets.fillBranch( "selJetMuEF", muEF ); //*Jet_muEF)[it]; 
+        selJets.fillBranch( "selJetNeEmEF", neEmEF ); //*Jet_neEmEF)[it]; 
+        selJets.fillBranch( "selJetNeHEF", neHEF ); //*Jet_neHEF)[it]; 
+        selJets.fillBranch( "selJetNeHM", neHM ); //*Jet_neHM)[it]; 
+
+        selJets.fillBranch( "selGenJetDpt", jgdpt ); //*Jet_genDptMatch)[it]; 
+        selJets.fillBranch( "selGenJetdr", jgdr ); //*Jet_genDrMatch)[it]; 
+        selJets.fillBranch( "selGenJetEnergy", jge ); //*Jet_genEnergy)[it]; 
+        selJets.fillBranch( "selGenJeteta", jgeta ); //*Jet_genEta)[it]; 
+        selJets.fillBranch( "selGenJetImpAng", jgimpang ); //*Jet_genImpactAngle)[it]; 
+        selJets.fillBranch( "selJetLlpDp", llpdp ); //*Jet_genLlpDp)[it]; 
+        selJets.fillBranch( "selJetLlpDr", llpdr ); //*Jet_genLlpDr)[it]; 
+        selJets.fillBranch( "selGenJetPt", jgpt ); //*Jet_genPt)[it]; 
+        selJets.fillBranch( "selGenJetTof", jgtof ); //*Jet_genTOF)[it]; 
+        selJets.fillBranch( "selGenJetTime", jgt ); // (*Jet_genTime)[it]; 
+        selJets.fillBranch( "selGenJetLlpTime", jgllpt ); //*Jet_genTimeLLP)[it]; 
 
 	}//<<>>for( int it = 0; it < nJets; it++ )
     if( DEBUG ) std::cout << " - Finished Jet loop." << std::endl;
@@ -588,6 +661,7 @@ void KUCMSAodSkimmer::processJets(){
     geVects.set( "selJetPhi", seljetphi );
     geVects.set( "selJetMass", seljetmass );
 	geCnts.set( "nSelJets", nSelJets );
+    selJets.fillBranch( "nJets", nJets);
 	selJets.fillBranch( "nSelJets", nSelJets );
 
 }//<<>>void KUCMSAodSkimmer::processJets()
@@ -854,28 +928,43 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
 
     selPhotons.makeBranch( "nPhotons", UINT );
     selPhotons.makeBranch( "nSelPhotons", UINT ); 
-    selPhotons.makeBranch( "leadSelPho", UINT );
-    selPhotons.makeBranch( "subLeadSelPho", UINT );
+    selPhotons.makeBranch( "leadSelPho", INT );
+    selPhotons.makeBranch( "subLeadSelPho", INT );
+    selPhotons.makeBranch( "selPhoSusyId", VFLOAT );
     selPhotons.makeBranch( "selPhoQuality", VINT ); 
     selPhotons.makeBranch( "selPhoTime", VFLOAT ); 
-    selPhotons.makeBranch( "selPhoGeoEgnVal", VFLOAT ); 
+    //selPhotons.makeBranch( "selPhoGeoEgnVal", VFLOAT ); 
     selPhotons.makeBranch( "selPhoEta", VFLOAT ); 
     selPhotons.makeBranch( "selPhoPhi", VFLOAT );     
 	selPhotons.makeBranch( "selPhoPt", VFLOAT ); 
     selPhotons.makeBranch( "selPhoSMaj", VFLOAT ); 
     selPhotons.makeBranch( "selPhoSMin", VFLOAT ); 
-    selPhotons.makeBranch( "selPhoGeoSMaj", VFLOAT );
-    selPhotons.makeBranch( "selPhoGeoSMin", VFLOAT );
+    //selPhotons.makeBranch( "selPhoGeoSMaj", VFLOAT );
+    //selPhotons.makeBranch( "selPhoGeoSMin", VFLOAT );
     selPhotons.makeBranch( "selPhoClstrRn", VFLOAT );
     selPhotons.makeBranch( "selPhoR9", VFLOAT );
     selPhotons.makeBranch( "selPhoSieie", VFLOAT );
     selPhotons.makeBranch( "selPhoNrh", VUINT );
     selPhotons.makeBranch( "selPhoEnergy", VFLOAT );
+    selPhotons.makeBranch( "selPhoHcalTowerSumEtBcConeDR04", VFLOAT );
+    selPhotons.makeBranch( "selPhoTrkSumPtHollowConeDR03", VFLOAT );
+    selPhotons.makeBranch( "selPhoTrkSumPtHollowConeDR04", VFLOAT );
+    selPhotons.makeBranch( "selPhoTrkSumPtSolidConeDR04", VFLOAT );
+    selPhotons.makeBranch( "selPhoPixelSeed", VFLOAT );
+    selPhotons.makeBranch( "selPhoEcalRHSumEtConeDR04", VFLOAT );
+    selPhotons.makeBranch( "selPhoHadTowOverEM", VFLOAT );
+    selPhotons.makeBranch( "selPhoSieip", VFLOAT );
+    selPhotons.makeBranch( "selPhoSipip", VFLOAT );
+    selPhotons.makeBranch( "selPhoGenDp", VFLOAT );
+    selPhotons.makeBranch( "selPhoGenDr", VFLOAT );
+
+
     selPhotons.attachBranches( fOutTree );
 
     //selJets.makeBranch( "JetHt", &JetHt );
     selJets.makeBranch( "nJets", UINT );
-    selJets.makeBranch( "nSelJets", UINT ); 
+    selJets.makeBranch( "nSelJets", UINT );
+    selJets.makeBranch( "selJetSusyId", VFLOAT ); 
     selJets.makeBranch( "selJetQuality", VINT ); 
     selJets.makeBranch( "selJetPt", VFLOAT ); 
     selJets.makeBranch( "selJetEnergy", VFLOAT );
@@ -883,6 +972,28 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selJets.makeBranch( "selJetPhi", VFLOAT );
     selJets.makeBranch( "selJetTime", VFLOAT ); 
     selJets.makeBranch( "selJetMass", VFLOAT );
+
+    selJets.makeBranch( "selJetArea", VFLOAT ); //*Jet_area)[it]; 
+    selJets.makeBranch( "selJetChEmEF", VFLOAT ); //*Jet_chEmEF)[it]; 
+    selJets.makeBranch( "selJetchHEF", VFLOAT ); //*Jet_chHEF)[it]; 
+    selJets.makeBranch( "selJetChHM", VFLOAT ); //*Jet_chHM)[it]; 
+    selJets.makeBranch( "selJetMuEF", VFLOAT ); //*Jet_muEF)[it]; 
+    selJets.makeBranch( "selJetNeEmEF", VFLOAT ); //*Jet_neEmEF)[it]; 
+    selJets.makeBranch( "selJetNeHEF", VFLOAT ); //*Jet_neHEF)[it]; 
+    selJets.makeBranch( "selJetNeHM", VFLOAT ); //*Jet_neHM)[it]; 
+
+    selJets.makeBranch( "selGenJetDpt", VFLOAT ); //*Jet_genDptMatch)[it]; 
+    selJets.makeBranch( "selGenJetdr", VFLOAT ); //*Jet_genDrMatch)[it]; 
+    selJets.makeBranch( "selGenJetEnergy", VFLOAT ); //*Jet_genEnergy)[it]; 
+    selJets.makeBranch( "selGenJeteta", VFLOAT ); //*Jet_genEta)[it]; 
+    selJets.makeBranch( "selGenJetImpAng", VFLOAT ); //*Jet_genImpactAngle)[it]; 
+    selJets.makeBranch( "selJetLlpDp", VFLOAT ); //*Jet_genLlpDp)[it]; 
+    selJets.makeBranch( "selJetLlpDr", VFLOAT ); //*Jet_genLlpDr)[it]; 
+    selJets.makeBranch( "selGenJetPt", VFLOAT ); //*Jet_genPt)[it]; 
+    selJets.makeBranch( "selGenJetTof", VFLOAT ); //*Jet_genTOF)[it]; 
+    selJets.makeBranch( "selGenJetTime", VFLOAT ); // (*Jet_genTime)[it]; 
+    selJets.makeBranch( "selGenJetLlpTime", VFLOAT ); //*Jet_genTimeLLP)[it]; 
+
     selJets.attachBranches( fOutTree );
 
     selRjrVars.makeBranch( "X1aMass", VFLOAT );
@@ -895,6 +1006,7 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selRjrVars.makeBranch( "X2bCosA", VFLOAT );
     selRjrVars.makeBranch( "SMass", VFLOAT );
     selRjrVars.makeBranch( "SCosA", VFLOAT );
+
     selRjrVars.attachBranches( fOutTree );
 
 }//<<>>void KUCMSAodSkimmer::setBranches( TTree& fOutTree )
@@ -1004,7 +1116,7 @@ float KUCMSAodSkimmer::clstrR9( std::vector<uInt> recHitIds ){
     auto leadRhEn = (*ECALRecHit_energy)[getRhIdx(leadRhID)];
     float sumRhEn(0);
     for ( auto id : recHitIds ){ sumRhEn +=  (*ECALRecHit_energy)[getRhIdx(id)]; }
-    return sumRhEn > 0 ? leadRhEn/sumRhEn  : 1.2;
+    return sumRhEn > 0 ? leadRhEn/sumRhEn  : - 1.0;
 
 }//<<>>float KUCMSAodSkimmer::clstrR9( vector<uInt> recHitIds )
 
@@ -1046,6 +1158,7 @@ std::vector<float> KUCMSAodSkimmer::getRhGrpEigenFromAngles( std::vector<uInt> r
 	if( verbose ) std::cout << " --- EigenAngles sumRhEn : " << sumRhEn << std::endl;
     if( sumRhEn <= 0 ){ if( verbose ) std::cout << " ----  rechit collection has no energy" << std::endl; return emptyReturn; }
     if( DEBUG ) std::cout << "1a, ";
+    std::cout << " getRhGrpEigenFromAngles : nRechits: " << nRecHits << " -------------------------- " << std::endl;
     for( uInt it(0); it < nRecHits; it++ ){
 
         const auto rhIDX = getRhIdx(rechitids[it]);
@@ -1054,9 +1167,12 @@ std::vector<float> KUCMSAodSkimmer::getRhGrpEigenFromAngles( std::vector<uInt> r
         if( rhIDX == -1 ){ if( verbose ) std::cout << " ---- Bad idx !!!!! -- In getRhGrpEigen ---- " << std::endl; return emptyReturn; }
         if( not isEB ){ if( verbose ) std::cout << " ---- rechit group has EE members " << idinfo.ecal << std::endl; return emptyReturn; }
 
+        std::cout << " rhIDX: " << rhIDX << std::endl;
     	const auto rhEtaPos = idinfo.i2;//recHitPos.ieta();
+        std::cout << " rhEtaPos: " << rhEtaPos << std::endl;
         rhetas.push_back((rhEtaPos>0)?rhEtaPos+84.5:rhEtaPos+85.5);
         const auto rhPhiPos = idinfo.i1;//recHitPos.iphi();
+        std::cout << " rhPhiPos: " << rhPhiPos << std::endl;
         rhphis.push_back(rhPhiPos-0.5);
         auto rhenergy = (*ECALRecHit_energy)[rhIDX];
         auto logwt = std::max(0.0, 4.2 + log(rhenergy/sumRhEn));// cut at rh energy < 1.5% of cluster
@@ -1084,9 +1200,11 @@ std::vector<float> KUCMSAodSkimmer::getRhGrpEigenFromAngles( std::vector<uInt> r
 	if( verbose ) std::cout << " --- EigenAngles VAlue : " << eigens[2] << std::endl;
 
     auto phiCorrFactor = 0.8;
-    auto sxx = var( detas, 0., redlogwtvec );
-    auto syy = var( dphis, 0., redlogwtvec, accum(redlogwtvec)/phiCorrFactor );
-    auto sxy = cvar( detas, 0., dphis, 0., redlogwtvec, accum(redlogwtvec)/std::sqrt(phiCorrFactor) );
+    std::cout << " mean eta: " << meta << " mean phi: " << mphi << std::endl; 
+    auto sxx = var( detas, meta, redlogwtvec );
+    auto syy = var( dphis, mphi, redlogwtvec, accum(redlogwtvec)/phiCorrFactor );
+    auto sxy = cvar( detas, meta, dphis, mphi, redlogwtvec, accum(redlogwtvec)/std::sqrt(phiCorrFactor) );
+    std::cout << " sxx: " << sxx << " syy: " << syy << " sxy: " << sxy << std::endl;
     auto smaj = (sxx + syy + std::sqrt(sq2(sxx - syy) + 4.*sq2(sxy)))/2.;
     auto smin = (sxx + syy - std::sqrt(sq2(sxx - syy) + 4.*sq2(sxy)))/2.;
     auto sang = std::atan((sxx-syy+std::sqrt(sq2(syy-sxx)+4.*sq2(sxy)))/(2.*sxy));

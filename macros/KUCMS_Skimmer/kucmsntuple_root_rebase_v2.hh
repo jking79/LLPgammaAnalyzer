@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Jul 11 17:25:35 2023 by ROOT version 6.26/07
+// Tue Aug  8 11:42:53 2023 by ROOT version 6.26/07
 // from TTree llpgtree/KUCMSNtuple
-// found on file: gmsb_AODSIM_KUCMSNtuplizer_Objectified_v6.root
+// found on file: gmsb_AODSIM_KUCMSNtuplizer_Objectified_v8.root
 //////////////////////////////////////////////////////////
 
 #ifndef root_base_h
@@ -16,13 +16,11 @@
 #include "vector"
 
 class root_base {
-
-   public :
-
+public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
-   // Fixed size dimensions of array or collections stored in the TTree if any.
+// Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
    std::vector<float>   *ECALRecHit_energy;
@@ -65,7 +63,8 @@ class root_base {
    std::vector<float>   *Gen_px;
    std::vector<float>   *Gen_py;
    std::vector<float>   *Gen_pz;
-   Float_t         Gen_weight;
+   std::vector<int>     *Gen_susId;
+   Float_t         Evt_genWgt;
    std::vector<float>   *Jet_area;
    std::vector<float>   *Jet_chEmEF;
    std::vector<float>   *Jet_chHEF;
@@ -78,6 +77,9 @@ class root_base {
    std::vector<float>   *Jet_genEnergy;
    std::vector<float>   *Jet_genEta;
    std::vector<float>   *Jet_genImpactAngle;
+   std::vector<float>   *Jet_genLlpDp;
+   std::vector<float>   *Jet_genLlpDr;
+   std::vector<float>   *Jet_genLlpId;
    std::vector<float>   *Jet_genPhi;
    std::vector<float>   *Jet_genPt;
    std::vector<float>   *Jet_genTOF;
@@ -102,10 +104,6 @@ class root_base {
    Float_t         Met_px;
    Float_t         Met_py;
    Float_t         Met_sumEt;
-   Float_t         Met_covXX;
-   Float_t         Met_covXY;
-   Float_t         Met_covYY;
-   Float_t         Met_significance;
    std::vector<float>   *Photon_covEtaEta;
    std::vector<float>   *Photon_covEtaPhi;
    std::vector<float>   *Photon_covPhiPhi;
@@ -118,9 +116,11 @@ class root_base {
    std::vector<float>   *Photon_genDp;
    std::vector<float>   *Photon_genDr;
    std::vector<int>     *Photon_genIdx;
+   std::vector<float>   *Photon_genLlpId;
    std::vector<float>   *Photon_genSDp;
    std::vector<float>   *Photon_genSDr;
    std::vector<int>     *Photon_genSIdx;
+   std::vector<float>   *Photon_genSLlpId;
    std::vector<float>   *Photon_hadOverEM;
    std::vector<float>   *Photon_hadTowOverEM;
    std::vector<float>   *Photon_hcalTowerSumEtBcConeDR04;
@@ -141,17 +141,11 @@ class root_base {
    std::vector<float>   *Photon_trkSumPtHollowConeDR04;
    std::vector<float>   *Photon_trkSumPtSolidConeDR04;
    std::vector<bool>    *Photon_electronVeto;
-   std::vector<float>   *Photon_esEffSigmaRR;
-   std::vector<float>   *Photon_esEnergyOverRawE;
    std::vector<float>   *Photon_etaWidth;
-   std::vector<float>   *Photon_haloTaggerMVAVal;
    std::vector<bool>    *Photon_pixelSeed;
    std::vector<bool>    *Photon_seedIsEB;
    std::vector<bool>    *Photon_isScEtaEB;
    std::vector<bool>    *Photon_isScEtaEE;
-   std::vector<float>   *Photon_pfChargedIsoPFPV;
-   std::vector<float>   *Photon_pfChargedIsoWorstVtx;
-   std::vector<float>   *Photon_pfPhoIso03;
    std::vector<float>   *Photon_phiWidth;
    std::vector<int>     *Photon_seediEtaOriX;
    std::vector<int>     *Photon_seediPhiOriY;
@@ -203,7 +197,8 @@ class root_base {
    TBranch        *b_Gen_px;   //!
    TBranch        *b_Gen_py;   //!
    TBranch        *b_Gen_pz;   //!
-   TBranch        *b_Gen_weight;   //!
+   TBranch        *b_Gen_susId;   //!
+   TBranch        *b_Evt_genWgt;   //!
    TBranch        *b_Jet_area;   //!
    TBranch        *b_Jet_chEmEF;   //!
    TBranch        *b_Jet_chHEF;   //!
@@ -216,6 +211,9 @@ class root_base {
    TBranch        *b_Jet_genEnergy;   //!
    TBranch        *b_Jet_genEta;   //!
    TBranch        *b_Jet_genImpactAngle;   //!
+   TBranch        *b_Jet_genLlpDp;   //!
+   TBranch        *b_Jet_genLlpDr;   //!
+   TBranch        *b_Jet_genLlpId;   //!
    TBranch        *b_Jet_genPhi;   //!
    TBranch        *b_Jet_genPt;   //!
    TBranch        *b_Jet_genTOF;   //!
@@ -240,10 +238,6 @@ class root_base {
    TBranch        *b_Met_px;   //!
    TBranch        *b_Met_py;   //!
    TBranch        *b_Met_sumEt;   //!
-   TBranch        *b_Met_covXX;   //!
-   TBranch        *b_Met_covXY;   //!
-   TBranch        *b_Met_covYY;   //!
-   TBranch        *b_Met_significance;   //!
    TBranch        *b_Photon_covEtaEta;   //!
    TBranch        *b_Photon_covEtaPhi;   //!
    TBranch        *b_Photon_covPhiPhi;   //!
@@ -256,9 +250,11 @@ class root_base {
    TBranch        *b_Photon_genDp;   //!
    TBranch        *b_Photon_genDr;   //!
    TBranch        *b_Photon_genIdx;   //!
+   TBranch        *b_Photon_genLlpId;   //!
    TBranch        *b_Photon_genSDp;   //!
    TBranch        *b_Photon_genSDr;   //!
    TBranch        *b_Photon_genSIdx;   //!
+   TBranch        *b_Photon_genSLlpId;   //!
    TBranch        *b_Photon_hadOverEM;   //!
    TBranch        *b_Photon_hadTowOverEM;   //!
    TBranch        *b_Photon_hcalTowerSumEtBcConeDR04;   //!
@@ -279,17 +275,11 @@ class root_base {
    TBranch        *b_Photon_trkSumPtHollowConeDR04;   //!
    TBranch        *b_Photon_trkSumPtSolidConeDR04;   //!
    TBranch        *b_Photon_electronVeto;   //!
-   TBranch        *b_Photon_esEffSigmaRR;   //!
-   TBranch        *b_Photon_esEnergyOverRawE;   //!
    TBranch        *b_Photon_etaWidth;   //!
-   TBranch        *b_Photon_haloTaggerMVAVal;   //!
    TBranch        *b_Photon_pixelSeed;   //!
    TBranch        *b_Photon_seedIsEB;   //!
    TBranch        *b_Photon_isScEtaEB;   //!
    TBranch        *b_Photon_isScEtaEE;   //!
-   TBranch        *b_Photon_pfChargedIsoPFPV;   //!
-   TBranch        *b_Photon_pfChargedIsoWorstVtx;   //!
-   TBranch        *b_Photon_pfPhoIso03;   //!
    TBranch        *b_Photon_phiWidth;   //!
    TBranch        *b_Photon_seediEtaOriX;   //!
    TBranch        *b_Photon_seediPhiOriY;   //!
@@ -300,16 +290,18 @@ class root_base {
    TBranch        *b_Photon_y_calo;   //!
    TBranch        *b_Photon_z_calo;   //!
 
-   //root_base(TTree *tree=0);
-   //virtual ~root_base();
-   //virtual Int_t    Cut(Long64_t entry);
-   //virtual Int_t    GetEntry(Long64_t entry);
-   //virtual Long64_t LoadTree(Long64_t entry);
-   void Init(TTree *tree);
-   void getBranches( Long64_t entry );
-   //virtual void     Loop();
-   //virtual Bool_t   Notify();
-   //virtual void     Show(Long64_t entry = -1);
+//   root_base(TTree *tree=0);
+//   virtual ~root_base();
+//   virtual Int_t    Cut(Long64_t entry);
+//   virtual Int_t    GetEntry(Long64_t entry);
+//   virtual Long64_t LoadTree(Long64_t entry);
+   virtual void     Init(TTree *tree);
+   virtual void     getBranches(Long64_t entry);
+//   virtual void     Loop();
+//   virtual Bool_t   Notify();
+//   virtual void     Show(Long64_t entry = -1);
+
+
 };
 
 //#endif
@@ -321,11 +313,11 @@ root_base::root_base(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v6.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v8.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v6.root");
+         f = new TFile("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v8.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v6.root:/tree");
+      TDirectory * dir = (TDirectory*)f->Get("gmsb_AODSIM_KUCMSNtuplizer_Objectified_v8.root:/tree");
       dir->GetObject("llpgtree",tree);
 
    }
@@ -402,6 +394,7 @@ void root_base::Init(TTree *tree)
    Gen_px = 0;
    Gen_py = 0;
    Gen_pz = 0;
+   Gen_susId = 0;
    Jet_area = 0;
    Jet_chEmEF = 0;
    Jet_chHEF = 0;
@@ -414,6 +407,9 @@ void root_base::Init(TTree *tree)
    Jet_genEnergy = 0;
    Jet_genEta = 0;
    Jet_genImpactAngle = 0;
+   Jet_genLlpDp = 0;
+   Jet_genLlpDr = 0;
+   Jet_genLlpId = 0;
    Jet_genPhi = 0;
    Jet_genPt = 0;
    Jet_genTOF = 0;
@@ -440,9 +436,11 @@ void root_base::Init(TTree *tree)
    Photon_genDp = 0;
    Photon_genDr = 0;
    Photon_genIdx = 0;
+   Photon_genLlpId = 0;
    Photon_genSDp = 0;
    Photon_genSDr = 0;
    Photon_genSIdx = 0;
+   Photon_genSLlpId = 0;
    Photon_hadOverEM = 0;
    Photon_hadTowOverEM = 0;
    Photon_hcalTowerSumEtBcConeDR04 = 0;
@@ -463,17 +461,11 @@ void root_base::Init(TTree *tree)
    Photon_trkSumPtHollowConeDR04 = 0;
    Photon_trkSumPtSolidConeDR04 = 0;
    Photon_electronVeto = 0;
-   Photon_esEffSigmaRR = 0;
-   Photon_esEnergyOverRawE = 0;
    Photon_etaWidth = 0;
-   Photon_haloTaggerMVAVal = 0;
    Photon_pixelSeed = 0;
    Photon_seedIsEB = 0;
    Photon_isScEtaEB = 0;
    Photon_isScEtaEE = 0;
-   Photon_pfChargedIsoPFPV = 0;
-   Photon_pfChargedIsoWorstVtx = 0;
-   Photon_pfPhoIso03 = 0;
    Photon_phiWidth = 0;
    Photon_seediEtaOriX = 0;
    Photon_seediPhiOriY = 0;
@@ -486,7 +478,7 @@ void root_base::Init(TTree *tree)
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
-   //fCurrent = -1;
+   fCurrent = -1;
    //fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("ECALRecHit_energy", &ECALRecHit_energy, &b_ECALRecHit_energy);
@@ -529,7 +521,8 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Gen_px", &Gen_px, &b_Gen_px);
    fChain->SetBranchAddress("Gen_py", &Gen_py, &b_Gen_py);
    fChain->SetBranchAddress("Gen_pz", &Gen_pz, &b_Gen_pz);
-   fChain->SetBranchAddress("Gen_weight", &Gen_weight, &b_Gen_weight);
+   fChain->SetBranchAddress("Gen_susId", &Gen_susId, &b_Gen_susId);
+   fChain->SetBranchAddress("Evt_genWgt", &Evt_genWgt, &b_Evt_genWgt);
    fChain->SetBranchAddress("Jet_area", &Jet_area, &b_Jet_area);
    fChain->SetBranchAddress("Jet_chEmEF", &Jet_chEmEF, &b_Jet_chEmEF);
    fChain->SetBranchAddress("Jet_chHEF", &Jet_chHEF, &b_Jet_chHEF);
@@ -542,6 +535,9 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Jet_genEnergy", &Jet_genEnergy, &b_Jet_genEnergy);
    fChain->SetBranchAddress("Jet_genEta", &Jet_genEta, &b_Jet_genEta);
    fChain->SetBranchAddress("Jet_genImpactAngle", &Jet_genImpactAngle, &b_Jet_genImpactAngle);
+   fChain->SetBranchAddress("Jet_genLlpDp", &Jet_genLlpDp, &b_Jet_genLlpDp);
+   fChain->SetBranchAddress("Jet_genLlpDr", &Jet_genLlpDr, &b_Jet_genLlpDr);
+   fChain->SetBranchAddress("Jet_genLlpId", &Jet_genLlpId, &b_Jet_genLlpId);
    fChain->SetBranchAddress("Jet_genPhi", &Jet_genPhi, &b_Jet_genPhi);
    fChain->SetBranchAddress("Jet_genPt", &Jet_genPt, &b_Jet_genPt);
    fChain->SetBranchAddress("Jet_genTOF", &Jet_genTOF, &b_Jet_genTOF);
@@ -566,10 +562,6 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Met_px", &Met_px, &b_Met_px);
    fChain->SetBranchAddress("Met_py", &Met_py, &b_Met_py);
    fChain->SetBranchAddress("Met_sumEt", &Met_sumEt, &b_Met_sumEt);
-   fChain->SetBranchAddress("Met_covXX", &Met_covXX, &b_Met_covXX);
-   fChain->SetBranchAddress("Met_covXY", &Met_covXY, &b_Met_covXY);
-   fChain->SetBranchAddress("Met_covYY", &Met_covYY, &b_Met_covYY);
-   fChain->SetBranchAddress("Met_significance", &Met_significance, &b_Met_significance);
    fChain->SetBranchAddress("Photon_covEtaEta", &Photon_covEtaEta, &b_Photon_covEtaEta);
    fChain->SetBranchAddress("Photon_covEtaPhi", &Photon_covEtaPhi, &b_Photon_covEtaPhi);
    fChain->SetBranchAddress("Photon_covPhiPhi", &Photon_covPhiPhi, &b_Photon_covPhiPhi);
@@ -582,9 +574,11 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Photon_genDp", &Photon_genDp, &b_Photon_genDp);
    fChain->SetBranchAddress("Photon_genDr", &Photon_genDr, &b_Photon_genDr);
    fChain->SetBranchAddress("Photon_genIdx", &Photon_genIdx, &b_Photon_genIdx);
+   fChain->SetBranchAddress("Photon_genLlpId", &Photon_genLlpId, &b_Photon_genLlpId);
    fChain->SetBranchAddress("Photon_genSDp", &Photon_genSDp, &b_Photon_genSDp);
    fChain->SetBranchAddress("Photon_genSDr", &Photon_genSDr, &b_Photon_genSDr);
    fChain->SetBranchAddress("Photon_genSIdx", &Photon_genSIdx, &b_Photon_genSIdx);
+   fChain->SetBranchAddress("Photon_genSLlpId", &Photon_genSLlpId, &b_Photon_genSLlpId);
    fChain->SetBranchAddress("Photon_hadOverEM", &Photon_hadOverEM, &b_Photon_hadOverEM);
    fChain->SetBranchAddress("Photon_hadTowOverEM", &Photon_hadTowOverEM, &b_Photon_hadTowOverEM);
    fChain->SetBranchAddress("Photon_hcalTowerSumEtBcConeDR04", &Photon_hcalTowerSumEtBcConeDR04, &b_Photon_hcalTowerSumEtBcConeDR04);
@@ -605,17 +599,11 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Photon_trkSumPtHollowConeDR04", &Photon_trkSumPtHollowConeDR04, &b_Photon_trkSumPtHollowConeDR04);
    fChain->SetBranchAddress("Photon_trkSumPtSolidConeDR04", &Photon_trkSumPtSolidConeDR04, &b_Photon_trkSumPtSolidConeDR04);
    fChain->SetBranchAddress("Photon_electronVeto", &Photon_electronVeto, &b_Photon_electronVeto);
-   fChain->SetBranchAddress("Photon_esEffSigmaRR", &Photon_esEffSigmaRR, &b_Photon_esEffSigmaRR);
-   fChain->SetBranchAddress("Photon_esEnergyOverRawE", &Photon_esEnergyOverRawE, &b_Photon_esEnergyOverRawE);
    fChain->SetBranchAddress("Photon_etaWidth", &Photon_etaWidth, &b_Photon_etaWidth);
-   fChain->SetBranchAddress("Photon_haloTaggerMVAVal", &Photon_haloTaggerMVAVal, &b_Photon_haloTaggerMVAVal);
    fChain->SetBranchAddress("Photon_pixelSeed", &Photon_pixelSeed, &b_Photon_pixelSeed);
    fChain->SetBranchAddress("Photon_seedIsEB", &Photon_seedIsEB, &b_Photon_seedIsEB);
    fChain->SetBranchAddress("Photon_isScEtaEB", &Photon_isScEtaEB, &b_Photon_isScEtaEB);
    fChain->SetBranchAddress("Photon_isScEtaEE", &Photon_isScEtaEE, &b_Photon_isScEtaEE);
-   fChain->SetBranchAddress("Photon_pfChargedIsoPFPV", &Photon_pfChargedIsoPFPV, &b_Photon_pfChargedIsoPFPV);
-   fChain->SetBranchAddress("Photon_pfChargedIsoWorstVtx", &Photon_pfChargedIsoWorstVtx, &b_Photon_pfChargedIsoWorstVtx);
-   fChain->SetBranchAddress("Photon_pfPhoIso03", &Photon_pfPhoIso03, &b_Photon_pfPhoIso03);
    fChain->SetBranchAddress("Photon_phiWidth", &Photon_phiWidth, &b_Photon_phiWidth);
    fChain->SetBranchAddress("Photon_seediEtaOriX", &Photon_seediEtaOriX, &b_Photon_seediEtaOriX);
    fChain->SetBranchAddress("Photon_seediPhiOriY", &Photon_seediPhiOriY, &b_Photon_seediPhiOriY);
@@ -628,13 +616,10 @@ void root_base::Init(TTree *tree)
    //Notify();
 }
 
-void root_base::getBranches( Long64_t entry ){
+//   b_selPhoClstrRn->GetEntry(entry);    //!
+void root_base::getBranches(Long64_t entry){
 
-   //std::cout << " Getting Branches " << std::endl;
-
-   //std::cout << "  - ECAL  Branches " << std::endl;
    b_ECALRecHit_energy->GetEntry(entry);   //!
-   //std::cout << "  - ECAL  Branch energy" << std::endl;
    b_ECALRecHit_ID->GetEntry(entry);   //!
    b_ECALRecHit_swCross->GetEntry(entry);   //!
    b_ECALRecHit_TOF->GetEntry(entry);   //!
@@ -645,7 +630,6 @@ void root_base::getBranches( Long64_t entry ){
    b_ECALRecHit_rhx->GetEntry(entry);   //!
    b_ECALRecHit_rhy->GetEntry(entry);   //!
    b_ECALRecHit_rhz->GetEntry(entry);   //!
-   //std::cout << "  - Electron  Branches " << std::endl;
    b_Electron_energy->GetEntry(entry);   //!
    b_Electron_eta->GetEntry(entry);   //!
    b_Electron_genDp->GetEntry(entry);   //!
@@ -660,7 +644,6 @@ void root_base::getBranches( Long64_t entry ){
    b_Electron_pz->GetEntry(entry);   //!
    b_Electron_rhIds->GetEntry(entry);   //!
    b_Electron_seedTOFTime->GetEntry(entry);   //!
-   //std::cout << "  - Evt  Branches " << std::endl;
    b_Evt_luminosityBlock->GetEntry(entry);   //!
    b_Evt_run->GetEntry(entry);   //!
    b_Evt_event->GetEntry(entry);   //!
@@ -668,7 +651,6 @@ void root_base::getBranches( Long64_t entry ){
    b_PV_x->GetEntry(entry);   //!
    b_PV_y->GetEntry(entry);   //!
    b_PV_z->GetEntry(entry);   //!
-   //std::cout << "  - Gen  Branches " << std::endl;
    b_Gen_energy->GetEntry(entry);   //!
    b_Gen_eta->GetEntry(entry);   //!
    b_Gen_pdgId->GetEntry(entry);   //!
@@ -677,8 +659,8 @@ void root_base::getBranches( Long64_t entry ){
    b_Gen_px->GetEntry(entry);   //!
    b_Gen_py->GetEntry(entry);   //!
    b_Gen_pz->GetEntry(entry);   //!
-   b_Gen_weight->GetEntry(entry);   //!
-   //std::cout << "  - Jet  Branches " << std::endl;
+   b_Gen_susId->GetEntry(entry);   //!
+   b_Evt_genWgt->GetEntry(entry);   //!
    b_Jet_area->GetEntry(entry);   //!
    b_Jet_chEmEF->GetEntry(entry);   //!
    b_Jet_chHEF->GetEntry(entry);   //!
@@ -691,6 +673,9 @@ void root_base::getBranches( Long64_t entry ){
    b_Jet_genEnergy->GetEntry(entry);   //!
    b_Jet_genEta->GetEntry(entry);   //!
    b_Jet_genImpactAngle->GetEntry(entry);   //!
+   b_Jet_genLlpDp->GetEntry(entry);   //!
+   b_Jet_genLlpDr->GetEntry(entry);   //!
+   b_Jet_genLlpId->GetEntry(entry);   //!
    b_Jet_genPhi->GetEntry(entry);   //!
    b_Jet_genPt->GetEntry(entry);   //!
    b_Jet_genTOF->GetEntry(entry);   //!
@@ -705,7 +690,6 @@ void root_base::getBranches( Long64_t entry ){
    b_Jet_phi->GetEntry(entry);   //!
    b_Jet_pt->GetEntry(entry);   //!
    b_Jet_nConstituents->GetEntry(entry);   //!
-   //std::cout << "  - Met  Branches " << std::endl;
    b_Met_CPt->GetEntry(entry);   //!
    b_Met_Cpx->GetEntry(entry);   //!
    b_Met_Cpy->GetEntry(entry);   //!
@@ -716,11 +700,6 @@ void root_base::getBranches( Long64_t entry ){
    b_Met_px->GetEntry(entry);   //!
    b_Met_py->GetEntry(entry);   //!
    b_Met_sumEt->GetEntry(entry);   //!
-   b_Met_covXX->GetEntry(entry);   //!
-   b_Met_covXY->GetEntry(entry);   //!
-   b_Met_covYY->GetEntry(entry);   //!
-   b_Met_significance->GetEntry(entry);   //!
-   //std::cout << "  - Photon  Branches " << std::endl;
    b_Photon_covEtaEta->GetEntry(entry);   //!
    b_Photon_covEtaPhi->GetEntry(entry);   //!
    b_Photon_covPhiPhi->GetEntry(entry);   //!
@@ -733,9 +712,11 @@ void root_base::getBranches( Long64_t entry ){
    b_Photon_genDp->GetEntry(entry);   //!
    b_Photon_genDr->GetEntry(entry);   //!
    b_Photon_genIdx->GetEntry(entry);   //!
+   b_Photon_genLlpId->GetEntry(entry);   //!
    b_Photon_genSDp->GetEntry(entry);   //!
    b_Photon_genSDr->GetEntry(entry);   //!
    b_Photon_genSIdx->GetEntry(entry);   //!
+   b_Photon_genSLlpId->GetEntry(entry);   //!
    b_Photon_hadOverEM->GetEntry(entry);   //!
    b_Photon_hadTowOverEM->GetEntry(entry);   //!
    b_Photon_hcalTowerSumEtBcConeDR04->GetEntry(entry);   //!
@@ -756,17 +737,11 @@ void root_base::getBranches( Long64_t entry ){
    b_Photon_trkSumPtHollowConeDR04->GetEntry(entry);   //!
    b_Photon_trkSumPtSolidConeDR04->GetEntry(entry);   //!
    b_Photon_electronVeto->GetEntry(entry);   //!
-   b_Photon_esEffSigmaRR->GetEntry(entry);   //!
-   b_Photon_esEnergyOverRawE->GetEntry(entry);   //!
    b_Photon_etaWidth->GetEntry(entry);   //!
-   b_Photon_haloTaggerMVAVal->GetEntry(entry);   //!
    b_Photon_pixelSeed->GetEntry(entry);   //!
    b_Photon_seedIsEB->GetEntry(entry);   //!
    b_Photon_isScEtaEB->GetEntry(entry);   //!
    b_Photon_isScEtaEE->GetEntry(entry);   //!
-   b_Photon_pfChargedIsoPFPV->GetEntry(entry);   //!
-   b_Photon_pfChargedIsoWorstVtx->GetEntry(entry);   //!
-   b_Photon_pfPhoIso03->GetEntry(entry);   //!
    b_Photon_phiWidth->GetEntry(entry);   //!
    b_Photon_seediEtaOriX->GetEntry(entry);   //!
    b_Photon_seediPhiOriY->GetEntry(entry);   //!
@@ -776,7 +751,8 @@ void root_base::getBranches( Long64_t entry ){
    b_Photon_x_calo->GetEntry(entry);   //!
    b_Photon_y_calo->GetEntry(entry);   //!
    b_Photon_z_calo->GetEntry(entry);   //!
-}
+
+}//<<>>void root_base::getBranches(Long64_t entry)
 
 /*
 Bool_t root_base::Notify()
@@ -805,4 +781,5 @@ Int_t root_base::Cut(Long64_t entry)
    return 1;
 }
 */
+
 #endif // #ifdef root_base_cxx

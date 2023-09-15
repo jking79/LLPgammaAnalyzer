@@ -357,7 +357,7 @@ legtitle = ''
 #legtitle = 'KuStc'
 #legtitle = 'KuNotStc'
 
-rtitle = 'Run2 (13TeV)'
+rtitle = 'Run3' # (13TeV)'
 
 gi_legtitle = 'Global Inclusive'
 li_legtitle = 'Local Inclusive'

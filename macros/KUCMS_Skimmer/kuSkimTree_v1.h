@@ -24,7 +24,7 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
-   string          *DataSetKey;
+   std::string     *DataSetKey;
    Float_t         selCMet;
    Float_t         selCMetPx;
    Float_t         selCMetPy;
@@ -115,7 +115,7 @@ public :
    //virtual ~kuSkimTree_v1();
    //virtual Int_t    Cut(Long64_t entry);
    //virtual Int_t    GetEntry(Long64_t entry);
-   virtual Long64_t LoadTree(Long64_t entry);
+   //virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
    virtual void     getBranches(Long64_t entry);
    //virtual void     Loop();

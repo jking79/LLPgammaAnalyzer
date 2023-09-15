@@ -13,29 +13,26 @@
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
 
-#include "kuSkimTree_v1.h"
+#include "kuSkimTree_v3.h"
 
 #define n1dHists 512
 #define n2dHists 512 
 #define n3dHists 16
 #define nEBEEMaps 36
 
-#define DEBUG false
-//#define DEBUG true
-
 //--------------------------------------------------------------------------------------------------------------------------------------
 // KUCMSSkimmer class -----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-class HistMaker : kuSkimTree_v1 {
+class HistMaker : public kuSkimTree {
 
 	public:
 
-	//HistMaker();
+	HistMaker(){};
 	//~HistMaker();
 
-	void histMaker( std::string indir, std::string infilelist, std::string outfilename, int pct );	
-	void initHists();
+	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut );	
+	void initHists( std::string htitle );
 	//void getBranches( Long64_t entry );
 	void eventLoop( Long64_t entry );
  	void endJobs();	
@@ -43,12 +40,15 @@ class HistMaker : kuSkimTree_v1 {
     TH1D *hist1d[n1dHists];
     TH2D *hist2d[n2dHists];
     TH3D *hist3d[n3dHists];
+    int cutselection;
+
+    std::map< std::string, std::map< std::string, float > > configInfo;
 
 	int nMaps;
 	bool fMap[nEBEEMaps];
     TH2D *ebeeMapP[nEBEEMaps], *ebeeMapT[nEBEEMaps], *ebeeMapR[nEBEEMaps];
     void makeEBEEMaps( int phoit );
-    void makeEBEEMaps( vector<unsigned int> rhcol );
+    void makeEBEEMaps( std::vector<unsigned int> rhcol );
 
 };
 

@@ -1641,7 +1641,8 @@ int main ( int argc, char *argv[] ){
                 //auto indir = "ecalTiming/gammares_tt_kucc_126_v7_diag_unclean/EGamma/";
                 //auto indir = "/uscms/home/jaking/nobackup/ecaltiming/CMSSW_12_6_0_pre4/src/GammaResTool/gammaResTool/test/";
                 //auto indir = "ecalTiming/gammares_tt_kucc_126_v11_ccEncDiag/EGamma/";
-                auto indir = "/ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
+                //auto indir = "ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
+                auto indir = "ecalTiming/gammares_ttcc_131_v11_diag/";
 
                 //auto infilename = "llpgana_mc_AODSIM_GMSB_AOD_v59_Full.txt"; //argv[2];
                 //auto infilename = "llpgana_mc_AODSIM_GJets_AOD_v58_Full.txt";
@@ -1656,7 +1657,8 @@ int main ( int argc, char *argv[] ){
         		//auto infilename = "tt_run3_2018A_17Sep2018_v2_315257-316993_126_gammares_v10_diag_filelist.txt";
                 //auto infilename = "tt_run3_2022G_Prompt_359022-362760_126_gammares_v11_diag_filelist.txt";
                 //auto infilename = "ku_KUCC_tt_R2022C_126_gammares_v11_filelist.txt";
-                auto infilename = "tt_run3_2022C_Prompt_355890-355895_126_gammares_v12_ccenc_filelist.txt";
+                //auto infilename = "tt_run3_2022C_Prompt_355890-355895_126_gammares_v12_ccenc_filelist.txt";
+                auto infilename = "kuntuple_EGamma0v6.txt";
 
 				int brun = 100000;
             	int erun = 999999;
@@ -1694,7 +1696,7 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "egammares_diag_2018A_315257_316993_v10c_IDCT_EB_E10.root";
 				//auto outfilename = "egammares_diag2_2022G_Prompt_359022-362760_v10_IDCT_EB_E10.root";
                 //auto outfilename = "egammares_diag_2022G_Prompt_359022-362760_v11_IDCT_EB_E10.root";
-                auto outfilename = "egammares_diag_22CPrompt_355890-355895_v11_CCEnc10_EB.root";
+                auto outfilename = "egammares_diag_23BPrompt_Partial_v11_EB.root";
 
                 //auto fhtitle = "IOV5 SIEIE < 0.013 LG ";
 				//auto fhtitle = "IOV5 SIEIE > 0.013 LG ";
@@ -1704,7 +1706,7 @@ int main ( int argc, char *argv[] ){
                 //auto fhtitle = "Run2018A wp80 EB E10 ";
                 //auto fhtitle = "IOV5 IDCT EB E10 ";
                 //auto fhtitle = "Run2022G IDCT EB ";
-                auto fhtitle = "CCEnc EB Slope 1.0 ";
+                auto fhtitle = "Run2023B 13.1 EB";
 
 				makehists base;				
                 base.llpgana_hist_maker( indir, infilename, outfilename, califilename, brun, erun, fhtitle );

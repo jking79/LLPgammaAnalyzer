@@ -32,10 +32,11 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mdis+'ecalTiming/EGamma/'
 #command = eosll+mspc+'EGamma/'
 #command = eosll+mdis+'KUCMSNtuple/GMSB_AOD_v1/'
-#command = eosll+mdis+'/KUCMSNtuple/GJETS_AOD_v1/'
+command = eosll+mdis+'/KUCMSNtuple/kucmsntuple_GJETS_AOD_v5/'
 #command = eosll+mdis+'/KUCMSNtuple/WJETS_AOD_v1/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v2/'
-command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v3/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v5/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DYTT_AOD_v2/'
 
 version = ''
 #version = '_v11_'
@@ -53,15 +54,17 @@ rootfile = '.root'
 #dirselect = 'CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 
 #dirselect = 'GMSB_L-400'
-#dirselect = 'GJets_HT-600T'
+dirselect = 'GJets_HT'
 #dirselect = 'WJetsToLNu_HT-800'
 #dirselect = 'QCD_HT100to200'
-dirselect = 'GMSB_L-400TeV'
+#dirselect = 'GMSB_L-400TeV'
+#dirselect = 'DYJetsToLL_M-50'
+#dirselect = 'TTJets'
 
 #dirselect = ''
 
-#debug = True
-debug = False
+debug = True
+#debug = False
 
 #deep = True
 deep = False
@@ -78,7 +81,10 @@ if debug : print( '-------------------------------------------------')
 for line in dirls:
 	#print( line )
 	if dirselect in line : targdirs.append( line )
+    #targdirs.append( line )
+
 if debug : print( targdirs )
+
 if deep :
 	for mydir in targdirs:
 		command1 = command+mydir+'/'
@@ -103,11 +109,22 @@ for thesubdir in subdirlist1 :
 		command3 = command+thesubdir+subdir+'/'
 		subdir3 = bashout( command3 ).rstrip().splitlines()
 		for subsubdir in subdir3 : 
-			subdirlist2.append(thesubdir+subdir+'/'+subsubdir+'/0000/')
+			subdirlist2.append(thesubdir+subdir+'/'+subsubdir)
+
+for thesubdir2 in subdirlist2 :
+    command4 = command+thesubdir2+'/'
+    subdir4 = bashout( command4 ).rstrip().splitlines()
+    #print( thesubdir+subdir2+'/0000/' )
+    for subdir in subdir4 :
+        subdirlist3.append(thesubdir2+'/'+subdir+'/')
+        #command5 = command+thesubdir+subdir+'/'
+        #subdir5 = bashout( command5 ).rstrip().splitlines()
+        #for subsubdir in subdir5 :
+            #subdirlist3.append(thesubdir+subdir+'/'+subsubdir+'/')
 
 
-if debug : print( subdirlist2 )
-for subdir2 in subdirlist2:
+if debug : print( subdirlist3 )
+for subdir2 in subdirlist3:
 	lists = bashout( command+subdir2 ).rstrip().splitlines()
 	for line in lists :
 		if rootfile in line : filelist.append(subdir2+line)
