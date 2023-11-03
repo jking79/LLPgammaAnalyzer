@@ -41,7 +41,7 @@ class KUCMSAodSkimmer : public root_base {
 	~KUCMSAodSkimmer();
 
 	// tchian processing functions
-    void kucmsAodSkimmer( std::string listdir, std::string eosdir, std::string infilelist, std::string outfilename );
+    void kucmsAodSkimmer( std::string listdir, std::string eosdir, std::string infilelist, std::string outfilename, bool hasGenInfo );
     void initHists();
     bool eventLoop( Long64_t entry );
 	void startJobs();
@@ -120,10 +120,12 @@ class KUCMSAodSkimmer : public root_base {
 
 	// event varibles
 
+    bool doGenInfo;
     ItemManager<std::vector<float>> geVects;	
     ItemManager<uInt> geCnts;
 	ItemManager<float> geVars;	
 	uInt nEvents, nSelectedEvents;
+    float sumEvtGenWgt;
 
     // Output Branch variables
 

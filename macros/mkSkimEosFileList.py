@@ -39,6 +39,7 @@ command = eosll+mspc+'ecalTiming/gammares_ttcc_131_v11_diag/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_ZJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DYTT_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHTi_Met50_AOD_v2/'
+command = eosll+mdis+'EcalTiming/ZeroBias/'
 
 version = ''
 #version = '_v11_'
@@ -62,12 +63,13 @@ rootfile = '.root'
 #dirselect = 'GMSB_L-400TeV'
 #dirselect = 'DYJetsToLL_M-50'
 #dirselect = 'TTJets'
-dirselect = 'EGamma'
+#dirselect = 'EGamma'
+dirselect = 'ecaltiming_dqm_132r3prompt3'
 
 #dirselect = ''
 
-debug = True
-#debug = False
+#debug = True
+debug = False
 
 #deep = True
 deep = False
@@ -119,18 +121,18 @@ for line2 in targdirs :
             #subdir5 = bashout( command5 ).rstrip().splitlines()
             #for subsubdir in subdir5 :
                 #subdirlist3.append(thesubdir+subdir+'/'+subsubdir+'/')
-    
-    
+
     if debug : print( subdirlist3 )
     for subdir2 in subdirlist3:
     	lists = bashout( command+subdir2 ).rstrip().splitlines()
     	for lline in lists :
     		if rootfile in lline : filelist.append(subdir2+lline)
-   
+
     select =  line2.split("Tune")
-    outfile = 'kuntuple_' + select[0] + 'v6.txt'
+    outfile = 'kuntuple_' + select[0] + '_v6.txt'
     print( outfile )
     outf = open( outfile, 'w' )
+    filelist = subdirlist3
     for thefile in filelist:
     	outf.write( thefile + '\n' )
     outf.close()

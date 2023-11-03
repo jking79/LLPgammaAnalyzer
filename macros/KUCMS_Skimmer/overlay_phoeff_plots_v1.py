@@ -24,7 +24,8 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
     parserror = []
     thebinmid = []
     thebinerror = []
-    f1 = []
+    f1s = []
+    f1b = []
     h1 = []
     n = 0
 
@@ -78,35 +79,30 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
 
     mg = TMultiGraph();
 
-    for histname, tree, infile, lego  in hist_list :
+    for histname, tree, infiles, infileb, pbin, lego  in hist_list :
     
-        f1.append(TFile.Open(infile))
+        f1s.append(TFile.Open(infiles))
+        f1b.append(TFile.Open(infileb))
         if tree == '' : hist = histname
         else : hist = tree+'/'+histname
- 
-        orighist = f1[n].Get(hist)
-        htitle = 'hist' + str(n)
-        lenmybins = int(orighist.GetNbinsX())
-        h1.append(TGraphErrors(lenmybins))
-        norm = orighist.Integral()
-        if norm == 0 : norm = 1
 
-        for bn in range( 1,lenmybins-1):
-            obinval = float(orighist.GetBinContent(bn))
-            binval = obinval/norm
-            binerr = float(orighist.GetBinError(bn))/norm
-            binmid = float(orighist.GetBinCenter(bn))
-            binwidth = float(orighist.GetBinWidth(bn))
-            #binstart = float(orighist.GetBinLowEdge(bn))
-            h1[n].SetPoint(bn,binmid,binval)
-            if obinval == 0 : obinval = 1;
-            widtherr = binwidth/(2*sqrt(obinval))
-            h1[n].SetPointError(bn,widtherr,binerr)
-            #print('Fill bin',bn,'at',binmid,'with',binval,'err',widtherr,'by',binerr,'for:',binstart,'to',binstart+binwidth,'width',binwidth) 
+        orighists = f1s[n].Get(hist)
+        orighistb = f1b[n].Get(hist)
+        htitle = 'hist' + str(n)
+        lenmybins = n+1
+        h1.append(TGraphErrors(lenmybins))
+
+        #for bn in range( 1,lenmybins-1):
+        obinvals = float(orighists.GetBinContent(pbin+1))
+        obinvalb = float(orighistb.GetBinContent(pbin+1))
+        #if obinvals > 0 or obinvalb > 0 :
+        print( lego, obinvals, obinvalb )
+        h1[n].SetPoint(n+1,obinvals,obinvalb)
+
         h1[n].UseCurrentStyle()
         h1[n].SetMarkerStyle(n+25)
-        #k = [kMagenta+2,kGreen+2,kYellow+1,kBlue+2,kRed+2,kAzure+4,kBlack,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2]
-        k = [kMagenta+2,kGreen+2,kBlue+2,kRed+2,kAzure+4,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kBlack]
+        k = [kMagenta+2,kGreen+2,kYellow+1,kBlue+2,kRed+2,kAzure+4,kBlack,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kSpring-7,kSpring+3,kAzure+3,kAzure-7,kGray+1,kGray+2,kGray+3]
+        #k = [kMagenta+2,kGreen+2,kBlue+2,kRed+2,kAzure+4,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kBlack]
         #k = [kBlue+4,kBlue+1,kGreen+4,kYellow+3,kAzure+4,kViolet+7,kOrange+7,kGreen+3]
         #k = [kSpring-7,kSpring+3,kAzure+3,kAzure-7]
         #k = [kBlack]
@@ -114,7 +110,7 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
         h1[n].SetLineColor(k[n])
         if dofit : hfit.SetLineColor(k[n])
         h1[n].SetMarkerColor(k[n])
-        msz = 0.8
+        msz = 1.2
         if( n == 1 ) : h1[n].SetMarkerSize(msz+0.3)
         elif( n == 2 ) : h1[n].SetMarkerSize(msz+0.5)
         else : h1[n].SetMarkerSize(msz)
@@ -202,7 +198,7 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
 
     #c1.Print( outname + '_' + date + '.pdf' )
     c1.Print( outname + '_' + date + '.png' )
-    #c1.SaveAs( outname + '_' + date + '.root' )
+    #c1.SaveAs( outname + '_' + date + '.root"' )
     #c1.SaveAs( outname + '_' + date + '.C' )
     #c1.Show()
     c1.Close()
@@ -217,7 +213,7 @@ legtitle = ''
 
 rtitle = 'Run2 AODSIM'
 #Ic_legtitle = ''
-xtitle = ''
+xtitle = 'Signal Photons'
 #xtitle = '#Delta_{Run}'
 #xtitle = 'GeV'
 #xtitle = '[ns]'
@@ -226,12 +222,12 @@ xtitle = ''
 #ytitle = '#mu(t_{1}-t_{2}) [ns]'
 #ytitle = '#occupancy(t_{1}-t_{2}) '
 #xtitle = 'HcalTowerSumEtBcConeDR04 [GeV]'
-ytitle = 'a.u.'
+ytitle = 'Background Photons'
 htitle = ''
 #islogx = True
 islogx = False
-islogy = True
-#islogy = False
+#islogy = True
+islogy = False
 
 #---------------------------------------------------------------
 #hl_mc_fms_loc = [
@@ -241,190 +237,71 @@ islogy = True
 #     #["Data_sigma","",mc_single_loc+pcal+lstfr,"Single"],
 #]
 
-#rfname1 = "KUCMS_GMSB_L100t400_Skim_BaseHists.root"
-#rfname2 = "KUCMS_GMSB_L100t400_gNino_Skim_BaseHists.root"
-#rfname3 = "KUCMS_GMSB_L100t400_wzXino_Skim_BaseHists.root"
-#rfname4 = "KUCMS_GMSB_L100t400_NotSUS_Skim_BaseHists.root"
+bhJetht0 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso0_Skim_BaseHists.root"
+bhJetht1 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"
+bhJetht2 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"
+bhJetht3 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"
+bhJetht4 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 
-#rfname1 = "KUCMS_GMSB_L100t400_Met150_Skim_BaseHists.root"
-#rfname2 = "KUCMS_GMSB_L100t400_Met150_gNino_Skim_BaseHists.root"
-#rfname3 = "KUCMS_GMSB_L100t400_Met150_wzXino_Skim_BaseHists.root"
-#rfname4 = "KUCMS_GMSB_L100t400_Met150_NotSUS_Skim_BaseHists.root"
+bhGMSBs0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso0_Skim_BaseHists.root"
+bhGMSBs1 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"
+bhGMSBs2 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"
+bhGMSBs3 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"
+bhGMSBs4 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"
 
-#rfname1 = "KUCMS_GMSB_L100t400_Met150_pho3_Skim_BaseHists.root"
-#rfname2 = "KUCMS_GMSB_L100t400_Met150_pho3_gNino2_Skim_BaseHists.root"
-#rfname3 = "KUCMS_GMSB_L100t400_Met150_pho3_wzXino_Skim_BaseHists.root"
-#rfname4 = "KUCMS_GMSB_L100t400_Met150_pho3_NotSUS_Skim_BaseHists.root"
+bhGMSBb0 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso0_Skim_BaseHists.root"
+bhGMSBb1 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"
+bhGMSBb2 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"
+bhGMSBb3 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"
+bhGMSBb4 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 
-#rfname1 = "KUCMS_GMSB_L100t400_Met150_pho1m_gn_v6_Skim_BaseHists.root"
-#rfname2 = "KUCMS_GMSB_L100t400_Met150_pho1m_not_v6_Skim_BaseHists.root"
-#rfname3 = "KUCMS_GMSB_L100t400_Met150_pho1m_prt_v6_Skim_BaseHists.root"
-#rfname4 = "KUCMS_GMSB_L100t400_Met150_pho1m_qgsr_v6_Skim_BaseHists.root"
-#rfname5 = "KUCMS_GMSB_L100t400_Met150_pho1m_v6_Skim_BaseHists.root"
-#rfname6 = "KUCMS_GMSB_L100t400_Met150_pho1m_wz_v6_Skim_BaseHists.root"
-#rfname7 = "KUCMS_GMSB_L100t400_Met150_pho1m_xsr_v6_Skim_BaseHists.root"
-
-#rfname1 = "KUCMS_GMSB_L100t400_Met150_jet1m_gn_v6_Skim_BaseHists.root"
-#rfname2 = "KUCMS_GMSB_L100t400_Met150_jet1m_not_v6_Skim_BaseHists.root"
-#rfname3 = "KUCMS_GMSB_L100t400_Met150_jet1m_prt_v6_Skim_BaseHists.root"
-#rfname4 = "KUCMS_GMSB_L100t400_Met150_jet1m_qgsr_v6_Skim_BaseHists.root"
-#rfname5 = "KUCMS_GMSB_L100t400_Met150_jet1m_v6_Skim_BaseHists.root"
-#rfname6 = "KUCMS_GMSB_L100t400_Met150_jet1m_wz_v6_Skim_BaseHists.root"
-#rfname7 = "KUCMS_GMSB_L100t400_Met150_jet1m_xsr_v6_Skim_BaseHists.root"
-
-rfgmsb100 = "KUCMS_GMSB_L100_Met150_Other_v14_Skim_BaseHists.root"
-
-rfgmsb1 = "hist_files/KUCMS_GMSB_L100t400_Met150_Signal_v10_Skim_BaseHists.root"
-rfgmsb2 = "hist_files/KUCMS_GMSB_L100t400_Met150_XFSR_v10_Skim_BaseHists.root"
-rfgmsb3 = "hist_files/KUCMS_GMSB_L100t400_Met150_Other_v10_Skim_BaseHists.root"
-rfgmsb4 = "hist_files/KUCMS_GMSB_L100t400_Met150_UnMatched_v10_Skim_BaseHists.root"
-#rfgmsb3 = "KUCMS_GMSB_L200_Met0_UnMatched_v9A_Skim_BaseHists.root"
-
-rfgjets1 = "hist_files/KUCMS_GJets_HT40tInf_Met150_Other_v10_Skim_BaseHists.root"
-rfgjets2 = "hist_files/KUCMS_GJets_HT40tInf_Met150_UnMatched_v10_Skim_BaseHists.root"
-
-rfgmsbroc1 = "hist_files/KUCMS_GMSB_L100t400_Met150_Signal_v11_Skim_BaseHists.root"
-rfgmsbroc2 = "hist_files/KUCMS_GMSB_L100t400_Met150_notSig_v11a_Skim_BaseHists.root"
-
-#y = [ 0.01, 1000000 ]
-y = [ 0.00001, 1.0 ]
-#y = [ 0.001, 0.1 ]
-#y = [ 0.0, 0.035 ]
-#y = [ 0.00001, 0.25 ]
-#y = [ 0.0001, 0.4 ]
-#y = [ 0.0, 0.01 ]
-#y = [ 0.0, 0.005 ]
-#x = [ 0.0, 0.001 ]
-#x = [ 0.0, 0.05 ]
-#x = [ 0.0, 0.1 ]
-x = [ 0.0, 1.0 ]
-#x = [ 0.0, 5.0 ]
-#x = [ 0.0, 10.0 ]
-#x = [ 0.0, 50.0 ]
-#x = [ 0.0, 100.0 ]
-#x = [ 0.0, 1500.0 ]
-#x = [ -3.0, 3.0 ]
-#x = [ -10.0, 25.0 ]
-l = [ 0.7,0.7,0.925,0.9 ] # legend position top right
-#l = [ 0.2,0.65,0.425,0.9 ] # legend position top left
+y = [ 0.001, 1.0 ]
+#y = [ 0.01, 0.8 ]
+#x = [ 0.001, 1.0 ]
+#x = [ 0.25, 1.0 ]
+#x = [ 0.5, 1.0 ]
+x = [ 0.75, 1.0 ]
+#x = [ 0.9, 1.0 ]
+#l = [ 0.7,0.7,0.925,0.9 ] # legend position top right
+l = [ 0.2,0.25,0.3,0.75 ] # legend position top left
 t = [0.2,0.825,0.0,0.175,0.225] # titles position
+ptlist= [ ['20',1], ['30',2], ['100',3] ]
 
-#rhname = "evtMetPt"
-#x = [ 0.0, 2500.0 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
+outnames = 'llpa_phocuteff_pt'
+rhname = 'phoCEffPhoton'
+cut1 = "< 0.05"
+cut2 = "< 0.03"
+cut3 = "< 0.02"
+cut4 = "< 0.01"
 
-#rhname = "phoClstrRn"
-#x = [ 0, 1.0 ]
-#y = [ 0.0001, 0.15 ]
-#l = [ 0.75,0.7,0.925,0.9 ]
-#rhname = "phoEta"
-#x = [ -3.0, 3.0 ]
-#y = [ 0.00001, 0.0325 ]
-rhname = "phoPt"
-#rhname = "phoEnergy" # same
-#x = [ 0.0, 1500.0 ]
-x = [ 0.0, 250.0 ] 
-#x = [ 0.0, 100.0 ] 
-y = [ 0.001, 0.1 ]
-#rhname = "phoNrh"
-#x = [ 0.0, 100.0 ]
-#y = [ 0.00001, 0.25 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "phoSMin"
-#x = [ 0, 1.0 ]
-#y = [ 0.00001, 0.25 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "phoSieie"
-#x = [ 0.0, 0.1 ]
-#y = [ 0.00001, 0.25 ]
-#l = [ 0.75,0.7,0.925,0.9 ]
-#rhname = "phoTime"
-#x = [ -10.0, 25.0 ]
-#y = [ 0.00001, 0.25 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "selPhoHcalTowerSumEtBcConeDR04"
-#rhname = "selPhoTrkSumPtHollowConeDR04" # same
-#rhname = "selPhoTrkSumPtSolidConeDR04" # same
-#x = [ 0.0, 5.0 ]
-#x = [ 0.0, 25.0 ]
-#y = [ 0.00001, 0.035 ]
-#y = [ 0.0001, 0.5 ]
-#y = [ 0.0001, 1 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#l = [ 0.7,0.25,0.925,0.5 ]
-#rhname = "selPhoEcalRHSumEtConeDR04"
-#x = [ 0.0, 25.0 ]
-#y = [ 0.0001, 0.1 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "selPhoHadTowOverEM"
-#x = [ 0.0, 0.05 ]
-#x = [ 0.0, 0.25 ]
-#y = [ 0.0001, 0.1 ]
-#y = [ 0.0001, 0.5 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "selPhoSieip"
-#x = [ 0.0, 0.001 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-##rhname = "selPhoSipip"
-##x = [ 0.0, 0.1 ]
+for pt, ptn in ptlist :
 
-#y = [ 1, 1e8 ]
-#rhname = "jetPt"
-#rhname = "jetEnergy"
-#rhname = "jetMass"
-#x = [ 0.0, 500.0 ] 
-#x = [ 0.0, 750.0 ]
-#x = [ 0.0, 1500.0 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "jetEta"
-#rhname = "jetPhi"
-#x = [ -3.0, 3.0 ]
-#rhname = "jetTime"
-#x = [ -25.0, 25.0 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "jetArea"
-#rhname = "jetChEmEF"
-#rhname = "jetChHM"
-#rhname = "jetMuEF"
-#rhname = "jetNeEmEF"
-#rhname = "jetNeHEF"
-#rhname = "jetNeHM"
-#rhname = "jetChHEF"
-#x = [ 0.0, 1500.0 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
+  #cl3 = ', hadTowOverEM < 0.13'
+  cl3 = ''
+  cl1 = 'pt > '+pt+' GeV'+cl3
+  #cl2 = 'trkSumPtSolidConeDR04 Cuts'
+  cl2 = 'hadTowOverEM Cuts'
+  cutline = '#splitline{'+cl1+'}{'+cl2+'}'
+  ptitle=[' Photon Cut Efficencies ','',cutline]
+  layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
+  
+  inhistlist = [
+  
+      [ rhname, "", bhGMSBs0, bhGMSBb0, ptn, "GMSB"],
+      [ rhname, "", bhGMSBs1, bhGMSBb1, ptn, cut1],
+      [ rhname, "", bhGMSBs2, bhGMSBb2, ptn, cut2],
+      [ rhname, "", bhGMSBs3, bhGMSBb3, ptn, cut3],
+      [ rhname, "", bhGMSBs4, bhGMSBb4, ptn, cut4],
+      [ rhname, "", bhGMSBs0, bhJetht0, ptn, "JetHt"],
+      [ rhname, "", bhGMSBs1, bhJetht1, ptn, cut1],
+      [ rhname, "", bhGMSBs2, bhJetht2, ptn, cut2],
+      [ rhname, "", bhGMSBs3, bhJetht3, ptn, cut3],
+      [ rhname, "", bhGMSBs4, bhJetht4, ptn, cut4],
+  
+  ]
 
-fhname = rhname
-xtitle = fhname
-outname = 'llpa_met150_v1_' + fhname
-layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
-ptitle=[' 2018 GMSB L100 ','','']
-
-inhistlist = [
-#    [ rhname, "", rfname5, "All Matched"],   
-#    [ rhname, "", rfname1, "X0 -> Photon"],
-#    [ rhname, "", rfname1, "SQ/Glino -> q->jet"],
-#    [ rhname, "", rfname6, "X -> W/Z"],  
-#    [ rhname, "", rfname4, "Gluino/Squark -->"],
-#    [ rhname, "", rfname7, "X -->"], 
-#    [ rhname, "", rfname3, "Not Susy"], 
-#    [ rhname, "", rfname2, "Not Matched"],
-
-#    [ rhname, "", rfgmsb1, "Signal"],
-#    [ rhname, "", rfgmsb2, "XFSR"],
-#    [ rhname, "", rfgmsb3, "Other"],
-#    [ rhname, "", rfgmsb4, "UnMatched"],
-
-#    [ rhname, "", rfgjets1, "Gjets"],
-#    [ rhname, "", rfgjets2, "Gjets_UnMatched"],
-
-#    [ rhname, "", rfgmsbroc1, "Signal"],
-#    [ rhname, "", rfgmsbroc2, "NotSignal"],
-
-    [ rhname, "", rfgmsb100, "Other"],
-
-]
-
-dostack(inhistlist, outname, date, layout, ptitle,  y, x, l, t)
+  outname = outnames+pt
+  dostack(inhistlist, outname, date, layout, ptitle,  y, x, l, t)
 
 #ptitle=[' 2022 IOV5 359421-360089','','#splitline{EBEB}{CC Ave RH Time by Channel}'] #{GT 106X_dataRun2_v28}'
 #y = [ 4.5, 0.5 ]

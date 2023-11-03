@@ -213,6 +213,7 @@ const auto theta    (CFlt r, CFlt z){return std::atan2(r,z);}
 const auto eta      (CFlt x, CFlt y, CFlt z){return -1.0f*std::log(std::tan(theta(hypo(x,y),z)/2.f));}
 const auto effMean  (CFlt x, CFlt y){return (x*y)/sqrt(x*x+y*y);}
 const auto dIPhi    (CFlt x, CFlt y){auto dp(x-y); if( dp > 180 ){dp-=360.0;} else if( dp < -180 ){ dp+=360.0;} return dp;}
+const auto dPhi     (CFlt x, CFlt y){auto dp(x-y); if( dp > PI ){dp-=2*PI;} else if( dp < -PI ){ dp+=2*PI;} return dp;}
 const auto vfsum    (CVFlt x){return std::accumulate(x.begin(),x.end(),0.0f);}
 const auto max      (CVFlt x){float m(x[0]); for(auto ix : x ){ if( ix > m ) m = ix; } return m;}
 

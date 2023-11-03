@@ -41,7 +41,7 @@ def setTDRStyle():
 #// set the paper & margin sizes
         tdrStyle.SetPaperSize(20,26);
         tdrStyle.SetPadTopMargin(0.09);
-        tdrStyle.SetPadRightMargin(0.05);
+        tdrStyle.SetPadRightMargin(0.15);
         tdrStyle.SetPadBottomMargin(0.12);
         tdrStyle.SetPadLeftMargin(0.15);
 

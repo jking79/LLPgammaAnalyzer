@@ -1,8 +1,3 @@
-#import pandas as pd
-#import numpy as np
-#import matplotlib
-#import matplotlib.pyplot as plt
-
 from ROOT import *
 from math import *
 import time
@@ -42,11 +37,11 @@ x_bin = 520
 #h1 = TH1F('hpx', 'adjTime', 200, -10, 10)
 
 est = 0
-#edv = 30
+#edv = 15
 #eed = 600
-#edv = 30
-#eed = 300
-edv = 20
+#edv = 10
+#eed = 200
+edv = 10
 eed = 100
 ##############
 #est = 400
@@ -67,15 +62,22 @@ hr2 = TH1F('hr2', 'kOOT % Rt;Energy [GeV];kOOT %', edv, est, eed )
 #h2 = TH2F('h2px', 'time v energy', 520, -26, 26, 375, 0, 750 );
 #h2 = TH2F('h2px', 'time v energy', 200, -10, 10, 50, 0, 25 );
 #h2 = TH2F('h2px', 'time v amp', 300, -15, 15, 300, 0, 600 );
-h2 = TH2F('h2px', 'time v energy', 300, -15, 15, 50, 0, 25 );
+#h2 = TH2F('h2px', 'time v energy', 300, -15, 15, 50, 0, 25 );
 #h2 = TH2F('h2px', 'energy v adcToGeV0', 50, 0, 500, 120, 0, 12.0 );
+h2 = TH2F('h2px', 'CC v RT', 53, -26.5, 26.5, 53, -26.5, 26.5 );
 
-#h1.append(TH1F('hpx', 'adjTime', 520, -26, 26))
+#h1 = TH1F('hpx1', 'adjTimeCC', 520, -26, 26)
+h1 = TH1F('hpx1', 'amplitude', 100, 0, 200)
 #h1.GetXaxis().SetTitle("jitter + itc [ns]") 
+#h1.GetXaxis().SetTitle("itime constant [ns]")
 #h1.GetXaxis().SetTitle(" kOOT False corTime [ns]")
 #h1.GetXaxis().SetTitle("corTime (threshold) [ns]")
+h1.GetXaxis().SetTitle("Amplitude")
+#h2 = TH1F('hpx2', 'adjTimeRT', 520, -26, 26)
 #h2.GetXaxis().SetTitle("corTime (threshold) [ns]")
 #h2.GetYaxis().SetTitle("Energy [GeV]")
+h2.GetXaxis().SetTitle("CC time [ns]")
+h2.GetYaxis().SetTitle("Rt time [ns]")
 #outname = 'jitterTime'
 #h1.SetTitle(outname)
 
@@ -110,7 +112,8 @@ h2 = TH2F('h2px', 'time v energy', 300, -15, 15, 50, 0, 25 );
 #inputfile1 = 'koot_47k_eb_uncc_t30c8n225_energy_366850_log.txt'
 #inputfile1 = 'koot_47k_eb_uncc_t30c75n255_energy_366850_log.txt'
 #inputfile1 = 'koot_47k_eb_uncc_t30c9n255_energy_366850_log.txt'
-inputfile1 = 'koot_47k_eb_uncc_t30c85n255_energy_366850_log.txt'
+#inputfile1 = 'koot_47k_eb_uncc_t30c85n255_energy_366850_log.txt'
+inputfile1 = 'koot_47k_eb_uncc_t25c6n285_energy_366850_log.txt'
 
 #inputfile2 = 'koot_10k_eb_rt_energy_366850_log.txt'
 inputfile2 = 'koot_47k_eb_rt_t50_energy_366850_log.txt'
@@ -131,11 +134,16 @@ with open( inputfile1, 'r' ) as file1, open( inputfile2, 'r' ) as file2 :
     thres1 = float(info1[6])
     nterm1 = float(info1[7])
     cterm1 = float(info1[8])
-    energy1 = float(info1[9])
+    energy1 = float(info1[9]) #/float(info1[13])
     lasercalib1 = float(info1[10])
     interCalib1 = float(info1[11])
     adcToGeV01 = float(info1[12])
     pedrms121 = float(info1[13])
+    itimeconst1 = float(info1[14])
+    offsetTime1 = float(info1[15])
+    amplitude1 = float(info1[16])
+    rhid1 = float(info1[17])
+
 
     info2 = line2.split()
     jitter2 = float(info2[0])
@@ -147,7 +155,7 @@ with open( inputfile1, 'r' ) as file1, open( inputfile2, 'r' ) as file2 :
     thres2 = float(info2[6])
     nterm2 = float(info2[7])
     cterm2 = float(info2[8])
-    energy2 = float(info2[9])
+    energy2 = float(info2[9]) # /float(info2[13])
     lasercalib2 = float(info2[10])
     interCalib2 = float(info2[11])
     adcToGeV02 = float(info2[12])
@@ -160,27 +168,33 @@ with open( inputfile1, 'r' ) as file1, open( inputfile2, 'r' ) as file2 :
 
     #if energy2 < 20 and cortime2 < -2 and cortime2 > -4 : he.Fill(energy2);
     #if energy2 < 5 and cortime2 < -2 and cortime2 > -4 : print( info2 )
-    #if jitter2 != 0 : print( info1 )
+    #if jitter1 != 0 : print( info1 )
 
-    if jitter2 != 0.0  and energy1 == energy2 : 
-        he.Fill(energy1)
-        if( koot1 == 1 ) : hr1.Fill(energy1)
-        if( koot2 == 1 ) : hr2.Fill(energy1)
-        if( koot1 == koot2 ) : hs.Fill(energy1)
+    if jitter2 != 0.0 and energy1 == energy2 : 
+        energy = energy1/pedrms121
+        he.Fill(energy)
+        if( koot1 == 1 ) : hr1.Fill(energy)
+        if( koot2 == 1 ) : hr2.Fill(energy)
+        if( koot1 == koot2 ) : hs.Fill(energy)
 
     #h2.Fill( energy1, pedrms122 )
 
     #testtime = nocorjitter
-    #testtime = jitter + itc
-    testtime = cortime1
+    #testtime = jitter1 + itimeconst1
+    #testtime = itimeconst1
+    #testtime = cortime1
     #if testtime < -2 and energy > 12 and energy < 18  and koot == 1 : print( info )
     #print( jitter, ncorjitter, co2ime, koot, itc, osc )
-    if koot1 == 0 : #and testtime > -20 :
+    #if koot1 == 0 : #and testtime > -20 :
+    if jitter2 == 0 and amplitude1 > 100 : # and energy1 > 2.0 : # and koot1 == 0 :
     ##if amp > thres :
     #if abs(testtime) < 50 :
     #    #print( testtime, thres, amp )
-    #    #h1.Fill( testtime )
-        h2.Fill( testtime, energy1 )
+    #     h1.Fill( testtime )
+    #     h1.Fill( pedrms121 )
+    #     h1.Fill( amplitude1 )
+          h2.Fill( cortime1, cortime2 )
+    #     hg.Fill( testtime, energy1 )
 
 
 print( "precnt rh koot true E > 120 : ", float(tcnt)/rhcnt )
@@ -193,7 +207,7 @@ print( "precnt rh koot true E > 120 : ", float(tcnt)/rhcnt )
 #legend.AddEntry(h1[n],lego,'epl')
 #legend.Draw('same') 
 
-#h1.Draw()
+#h1.Draw('ep')
 h2.Draw('colz')
 
 #hr1.SetMinimum(0)

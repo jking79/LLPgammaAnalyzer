@@ -295,8 +295,8 @@ public :
 //   virtual Int_t    Cut(Long64_t entry);
 //   virtual Int_t    GetEntry(Long64_t entry);
 //   virtual Long64_t LoadTree(Long64_t entry);
-   virtual void     Init(TTree *tree);
-   virtual void     getBranches(Long64_t entry);
+   virtual void     Init( TTree *tree, bool doGenInfo );
+   virtual void     getBranches( Long64_t entry, bool doGenInfo );
 //   virtual void     Loop();
 //   virtual Bool_t   Notify();
 //   virtual void     Show(Long64_t entry = -1);
@@ -350,7 +350,7 @@ Long64_t root_base::LoadTree(Long64_t entry)
 }
 */
 
-void root_base::Init(TTree *tree)
+void root_base::Init(TTree *tree, bool doGenInfo )
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -359,6 +359,8 @@ void root_base::Init(TTree *tree)
    // code, but the routine can be extended by the user if needed.
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
+
+   Evt_genWgt = 1;
 
    // Set object pointer
    ECALRecHit_energy = 0;
@@ -513,6 +515,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("PV_x", &PV_x, &b_PV_x);
    fChain->SetBranchAddress("PV_y", &PV_y, &b_PV_y);
    fChain->SetBranchAddress("PV_z", &PV_z, &b_PV_z);
+   if( doGenInfo ){
    fChain->SetBranchAddress("Gen_energy", &Gen_energy, &b_Gen_energy);
    fChain->SetBranchAddress("Gen_eta", &Gen_eta, &b_Gen_eta);
    fChain->SetBranchAddress("Gen_pdgId", &Gen_pdgId, &b_Gen_pdgId);
@@ -523,6 +526,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Gen_pz", &Gen_pz, &b_Gen_pz);
    fChain->SetBranchAddress("Gen_susId", &Gen_susId, &b_Gen_susId);
    fChain->SetBranchAddress("Evt_genWgt", &Evt_genWgt, &b_Evt_genWgt);
+   }//if( doGenInfo )
    fChain->SetBranchAddress("Jet_area", &Jet_area, &b_Jet_area);
    fChain->SetBranchAddress("Jet_chEmEF", &Jet_chEmEF, &b_Jet_chEmEF);
    fChain->SetBranchAddress("Jet_chHEF", &Jet_chHEF, &b_Jet_chHEF);
@@ -530,6 +534,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Jet_drRhIds", &Jet_drRhIds, &b_Jet_drRhIds);
    fChain->SetBranchAddress("Jet_energy", &Jet_energy, &b_Jet_energy);
    fChain->SetBranchAddress("Jet_eta", &Jet_eta, &b_Jet_eta);
+   if( doGenInfo ){
    fChain->SetBranchAddress("Jet_genDptMatch", &Jet_genDptMatch, &b_Jet_genDptMatch);
    fChain->SetBranchAddress("Jet_genDrMatch", &Jet_genDrMatch, &b_Jet_genDrMatch);
    fChain->SetBranchAddress("Jet_genEnergy", &Jet_genEnergy, &b_Jet_genEnergy);
@@ -543,6 +548,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Jet_genTOF", &Jet_genTOF, &b_Jet_genTOF);
    fChain->SetBranchAddress("Jet_genTime", &Jet_genTime, &b_Jet_genTime);
    fChain->SetBranchAddress("Jet_genTimeLLP", &Jet_genTimeLLP, &b_Jet_genTimeLLP);
+   }//if( doGenInfo )
    fChain->SetBranchAddress("Jet_mass", &Jet_mass, &b_Jet_mass);
    fChain->SetBranchAddress("Jet_muEF", &Jet_muEF, &b_Jet_muEF);
    fChain->SetBranchAddress("Jet_neEmEF", &Jet_neEmEF, &b_Jet_neEmEF);
@@ -571,6 +577,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Photon_energyRaw", &Photon_energyRaw, &b_Photon_energyRaw);
    fChain->SetBranchAddress("Photon_eta", &Photon_eta, &b_Photon_eta);
    fChain->SetBranchAddress("Photon_excluded", &Photon_excluded, &b_Photon_excluded);
+   if( doGenInfo ){
    fChain->SetBranchAddress("Photon_genDp", &Photon_genDp, &b_Photon_genDp);
    fChain->SetBranchAddress("Photon_genDr", &Photon_genDr, &b_Photon_genDr);
    fChain->SetBranchAddress("Photon_genIdx", &Photon_genIdx, &b_Photon_genIdx);
@@ -579,6 +586,7 @@ void root_base::Init(TTree *tree)
    fChain->SetBranchAddress("Photon_genSDr", &Photon_genSDr, &b_Photon_genSDr);
    fChain->SetBranchAddress("Photon_genSIdx", &Photon_genSIdx, &b_Photon_genSIdx);
    fChain->SetBranchAddress("Photon_genSLlpId", &Photon_genSLlpId, &b_Photon_genSLlpId);
+   }//if( doGenInfo )
    fChain->SetBranchAddress("Photon_hadOverEM", &Photon_hadOverEM, &b_Photon_hadOverEM);
    fChain->SetBranchAddress("Photon_hadTowOverEM", &Photon_hadTowOverEM, &b_Photon_hadTowOverEM);
    fChain->SetBranchAddress("Photon_hcalTowerSumEtBcConeDR04", &Photon_hcalTowerSumEtBcConeDR04, &b_Photon_hcalTowerSumEtBcConeDR04);
@@ -617,7 +625,7 @@ void root_base::Init(TTree *tree)
 }
 
 //   b_selPhoClstrRn->GetEntry(entry);    //!
-void root_base::getBranches(Long64_t entry){
+void root_base::getBranches( Long64_t entry, bool doGenInfo ){
 
    b_ECALRecHit_energy->GetEntry(entry);   //!
    b_ECALRecHit_ID->GetEntry(entry);   //!
@@ -632,11 +640,13 @@ void root_base::getBranches(Long64_t entry){
    b_ECALRecHit_rhz->GetEntry(entry);   //!
    b_Electron_energy->GetEntry(entry);   //!
    b_Electron_eta->GetEntry(entry);   //!
+   if( doGenInfo ){
    b_Electron_genDp->GetEntry(entry);   //!
    b_Electron_genDr->GetEntry(entry);   //!
    b_Electron_genIdx->GetEntry(entry);   //!
    b_Electron_genSDp->GetEntry(entry);   //!
    b_Electron_genSIdx->GetEntry(entry);   //!
+   }//if( doGenInfo )
    b_Electron_phi->GetEntry(entry);   //!
    b_Electron_pt->GetEntry(entry);   //!
    b_Electron_px->GetEntry(entry);   //!
@@ -651,6 +661,7 @@ void root_base::getBranches(Long64_t entry){
    b_PV_x->GetEntry(entry);   //!
    b_PV_y->GetEntry(entry);   //!
    b_PV_z->GetEntry(entry);   //!
+   if( doGenInfo ){
    b_Gen_energy->GetEntry(entry);   //!
    b_Gen_eta->GetEntry(entry);   //!
    b_Gen_pdgId->GetEntry(entry);   //!
@@ -661,6 +672,7 @@ void root_base::getBranches(Long64_t entry){
    b_Gen_pz->GetEntry(entry);   //!
    b_Gen_susId->GetEntry(entry);   //!
    b_Evt_genWgt->GetEntry(entry);   //!
+   }//if( doGenInfo )
    b_Jet_area->GetEntry(entry);   //!
    b_Jet_chEmEF->GetEntry(entry);   //!
    b_Jet_chHEF->GetEntry(entry);   //!
@@ -668,6 +680,7 @@ void root_base::getBranches(Long64_t entry){
    b_Jet_drRhIds->GetEntry(entry);   //!
    b_Jet_energy->GetEntry(entry);   //!
    b_Jet_eta->GetEntry(entry);   //!
+   if( doGenInfo ){
    b_Jet_genDptMatch->GetEntry(entry);   //!
    b_Jet_genDrMatch->GetEntry(entry);   //!
    b_Jet_genEnergy->GetEntry(entry);   //!
@@ -681,6 +694,7 @@ void root_base::getBranches(Long64_t entry){
    b_Jet_genTOF->GetEntry(entry);   //!
    b_Jet_genTime->GetEntry(entry);   //!
    b_Jet_genTimeLLP->GetEntry(entry);   //!
+   }//if( doGenInfo )
    b_Jet_mass->GetEntry(entry);   //!
    b_Jet_muEF->GetEntry(entry);   //!
    b_Jet_neEmEF->GetEntry(entry);   //!
@@ -709,6 +723,7 @@ void root_base::getBranches(Long64_t entry){
    b_Photon_energyRaw->GetEntry(entry);   //!
    b_Photon_eta->GetEntry(entry);   //!
    b_Photon_excluded->GetEntry(entry);   //!
+   if( doGenInfo ){
    b_Photon_genDp->GetEntry(entry);   //!
    b_Photon_genDr->GetEntry(entry);   //!
    b_Photon_genIdx->GetEntry(entry);   //!
@@ -717,6 +732,7 @@ void root_base::getBranches(Long64_t entry){
    b_Photon_genSDr->GetEntry(entry);   //!
    b_Photon_genSIdx->GetEntry(entry);   //!
    b_Photon_genSLlpId->GetEntry(entry);   //!
+   }//if( doGenInfo )
    b_Photon_hadOverEM->GetEntry(entry);   //!
    b_Photon_hadTowOverEM->GetEntry(entry);   //!
    b_Photon_hcalTowerSumEtBcConeDR04->GetEntry(entry);   //!

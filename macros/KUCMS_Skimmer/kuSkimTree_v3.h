@@ -28,18 +28,21 @@ public :
 
    // Declaration of leaf types
    string          *DataSetKey;
+   Float_t         evtGenWgt;
    Float_t         selCMet;
    Float_t         selCMetPx;
    Float_t         selCMetPy;
    Int_t           leadSelPho;
    UInt_t          nPhotons;
    UInt_t          nSelPhotons;
+   vector<bool>	   *selPhoOOT;
    vector<float>   *selPhoClstrRn;
    vector<float>   *selPhoEcalRHSumEtConeDR04;
    vector<float>   *selPhoEnergy;
    vector<float>   *selPhoEta;
    vector<float>   *selPhoGenDp;
    vector<float>   *selPhoGenDr;
+   vector<float>   *selPhoGenPt;
    vector<float>   *selPhoHadTowOverEM;
    vector<float>   *selPhoHcalTowerSumEtBcConeDR04;
    vector<unsigned int> *selPhoNrh;
@@ -48,6 +51,7 @@ public :
    vector<float>   *selPhoPt;
    vector<int>     *selPhoQuality;
    vector<float>   *selPhoR9;
+   vector<float>   *selPhoPhoIsoDr;
    vector<float>   *selPhoSMaj;
    vector<float>   *selPhoSMin;
    vector<float>   *selPhoSieie;
@@ -101,11 +105,13 @@ public :
 
    // List of branches
    TBranch        *b_DataSetKey;   //!
+   TBranch        *b_evtGenWgt;
    TBranch        *b_selCMet;   //!
    TBranch        *b_selCMetPx;   //!
    TBranch        *b_selCMetPy;   //!
    TBranch        *b_leadSelPho;   //!
    TBranch        *b_nPhotons;   //!
+   TBranch        *b_selPhoOOT;
    TBranch        *b_nSelPhotons;   //!
    TBranch        *b_selPhoClstrRn;   //!
    TBranch        *b_selPhoEcalRHSumEtConeDR04;   //!
@@ -113,6 +119,8 @@ public :
    TBranch        *b_selPhoEta;   //!
    TBranch        *b_selPhoGenDp;   //!
    TBranch        *b_selPhoGenDr;   //!
+   TBranch        *b_selPhoGenPt;
+   TBranch        *b_selPhoPhoIsoDr;
    TBranch        *b_selPhoHadTowOverEM;   //!
    TBranch        *b_selPhoHcalTowerSumEtBcConeDR04;   //!
    TBranch        *b_selPhoNrh;   //!
@@ -241,12 +249,14 @@ void kuSkimTree::Init(TTree *tree)
 
    // Set object pointer
    DataSetKey = 0;
+   selPhoOOT = 0;
    selPhoClstrRn = 0;
    selPhoEcalRHSumEtConeDR04 = 0;
    selPhoEnergy = 0;
    selPhoEta = 0;
    selPhoGenDp = 0;
    selPhoGenDr = 0;
+   selPhoGenPt = 0;
    selPhoHadTowOverEM = 0;
    selPhoHcalTowerSumEtBcConeDR04 = 0;
    selPhoNrh = 0;
@@ -254,6 +264,7 @@ void kuSkimTree::Init(TTree *tree)
    selPhoPixelSeed = 0;
    selPhoPt = 0;
    selPhoQuality = 0;
+   selPhoPhoIsoDr = 0;
    selPhoR9 = 0;
    selPhoSMaj = 0;
    selPhoSMin = 0;
@@ -309,24 +320,28 @@ void kuSkimTree::Init(TTree *tree)
    //fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("DataSetKey", &DataSetKey, &b_DataSetKey);
+   //fChain->SetBranchAddress("evtGenWgt", &evtGenWgt, &b_evtGenWgt);
    fChain->SetBranchAddress("selCMet", &selCMet, &b_selCMet);
    fChain->SetBranchAddress("selCMetPx", &selCMetPx, &b_selCMetPx);
    fChain->SetBranchAddress("selCMetPy", &selCMetPy, &b_selCMetPy);
    fChain->SetBranchAddress("leadSelPho", &leadSelPho, &b_leadSelPho);
    fChain->SetBranchAddress("nPhotons", &nPhotons, &b_nPhotons);
    fChain->SetBranchAddress("nSelPhotons", &nSelPhotons, &b_nSelPhotons);
+   fChain->SetBranchAddress("selPhoOOT", &selPhoOOT, &b_selPhoOOT);
    fChain->SetBranchAddress("selPhoClstrRn", &selPhoClstrRn, &b_selPhoClstrRn);
    fChain->SetBranchAddress("selPhoEcalRHSumEtConeDR04", &selPhoEcalRHSumEtConeDR04, &b_selPhoEcalRHSumEtConeDR04);
    fChain->SetBranchAddress("selPhoEnergy", &selPhoEnergy, &b_selPhoEnergy);
    fChain->SetBranchAddress("selPhoEta", &selPhoEta, &b_selPhoEta);
    fChain->SetBranchAddress("selPhoGenDp", &selPhoGenDp, &b_selPhoGenDp);
    fChain->SetBranchAddress("selPhoGenDr", &selPhoGenDr, &b_selPhoGenDr);
+   fChain->SetBranchAddress("selPhoGenPt", &selPhoGenPt, &b_selPhoGenPt);
    fChain->SetBranchAddress("selPhoHadTowOverEM", &selPhoHadTowOverEM, &b_selPhoHadTowOverEM);
    fChain->SetBranchAddress("selPhoHcalTowerSumEtBcConeDR04", &selPhoHcalTowerSumEtBcConeDR04, &b_selPhoHcalTowerSumEtBcConeDR04);
    fChain->SetBranchAddress("selPhoNrh", &selPhoNrh, &b_selPhoNrh);
    fChain->SetBranchAddress("selPhoPhi", &selPhoPhi, &b_selPhoPhi);
    fChain->SetBranchAddress("selPhoPixelSeed", &selPhoPixelSeed, &b_selPhoPixelSeed);
    fChain->SetBranchAddress("selPhoPt", &selPhoPt, &b_selPhoPt);
+   //fChain->SetBranchAddress("selPhoPhoIsoDr", &selPhoPhoIsoDr, &b_selPhoPhoIsoDr);
    fChain->SetBranchAddress("selPhoQuality", &selPhoQuality, &b_selPhoQuality);
    fChain->SetBranchAddress("selPhoR9", &selPhoR9, &b_selPhoR9);
    fChain->SetBranchAddress("selPhoSMaj", &selPhoSMaj, &b_selPhoSMaj);
@@ -385,24 +400,28 @@ void kuSkimTree::Init(TTree *tree)
 void kuSkimTree::getBranches(Long64_t entry){
 
    b_DataSetKey->GetEntry(entry);   //!
+   //b_evtGenWgt->GetEntry(entry);   //!
    b_selCMet->GetEntry(entry);   //!
    b_selCMetPx->GetEntry(entry);   //!
    b_selCMetPy->GetEntry(entry);   //!
    b_leadSelPho->GetEntry(entry);   //!
    b_nPhotons->GetEntry(entry);   //!
    b_nSelPhotons->GetEntry(entry);   //!
+   b_selPhoOOT->GetEntry(entry);   //!
    b_selPhoClstrRn->GetEntry(entry);   //!
    b_selPhoEcalRHSumEtConeDR04->GetEntry(entry);   //!
    b_selPhoEnergy->GetEntry(entry);   //!
    b_selPhoEta->GetEntry(entry);   //!
    b_selPhoGenDp->GetEntry(entry);   //!
    b_selPhoGenDr->GetEntry(entry);   //!
+   b_selPhoGenPt->GetEntry(entry);
    b_selPhoHadTowOverEM->GetEntry(entry);   //!
    b_selPhoHcalTowerSumEtBcConeDR04->GetEntry(entry);   //!
    b_selPhoNrh->GetEntry(entry);   //!
    b_selPhoPhi->GetEntry(entry);   //!
    b_selPhoPixelSeed->GetEntry(entry);   //!
    b_selPhoPt->GetEntry(entry);   //!
+   //b_selPhoPhoIsoDr->GetEntry(entry);   //!
    b_selPhoQuality->GetEntry(entry);   //!
    b_selPhoR9->GetEntry(entry);   //!
    b_selPhoSMaj->GetEntry(entry);   //!
