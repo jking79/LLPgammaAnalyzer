@@ -253,14 +253,14 @@ rfgmsbrocg1c = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 x = [ 0.0, 1.1 ]
 y = [ 0.0, 1.1 ]
 
-rfgmsbroc1  = rfgmsbrocs0
-rfgmsbroc2g = rfgmsbrocg0
-rfgmsbroc2j  = rfgmsbrocj0
+rfgmsbroc1  = rfgmsbrocs1b
+rfgmsbroc2g = rfgmsbrocg1b
+rfgmsbroc2j  = rfgmsbrocj1b
 
 title = ' 2018 GMSB L100 '
-ptcut = 'Pt < '
-#isocut = 'hadTowOverEM < 0.13'
-isocut = ''
+ptcut = 'Pt > '
+isocut = '#splitline{#splitline{hadTowOverEM < 0.02}{ecalRHSumEtConeDR04 < 9.0}}{trkSumPtSolidConeDR04 < 6.0}'
+#isocut = ''
 ptlist = [ '20','30','100']
 outfileend = '_pt'
 

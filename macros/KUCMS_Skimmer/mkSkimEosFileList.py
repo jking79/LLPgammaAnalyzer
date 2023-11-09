@@ -41,7 +41,7 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v10/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHTi_Met50_AOD_v2/'
 
-version = ''
+version = 'Run2018A'
 #version = '_v11_'
 #version = '_noOOTAmp_'
 #version = '_wthOOTAmp_'

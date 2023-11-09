@@ -14,6 +14,7 @@ CC=g++
 
 p1=runKUCMSAodSkimmer
 p2=baseSkimHistMaker
+p3=skimMultiHistMaker
 
 all: $(p1) 
 
@@ -22,3 +23,6 @@ $(p1): $(p1).cpp
 
 $(p2): $(p2).cpp
 	$(CC) -o $(p2).obj $(p2).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p3): $(p3).cpp
+	$(CC) -o $(p3).obj $(p3).cpp $(RTCFLAGS) $(RTGLIBS)

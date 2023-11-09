@@ -241,7 +241,7 @@ x3 = [ -0.1, 25 ]
 #rhname4 = "pho100ptHadTowOverEM"
 rhname4 = [ "selPhoHadTowOverEM", "pho30ptHadTowOverEM", "pho100ptHadTowOverEM" ]
 #x = [ 0.0, 0.05 ]
-x4 = [ -0.001, 0.25 ]
+x4 = [ -0.001, 0.05 ]
 #cut = '<'
 y4 = [ 0.0001, 1 ]
 #y = [ 0.0001, 0.5 ]
@@ -277,7 +277,7 @@ rfgmsbroc3 = rfgmsbroc10
 boutname = 'llpa_met150_sbdist_pt'
 title = ' 2018 GMSB L100 '
 ptcut = 'Pt < '
-#isocut = 'hadTowOverEM < 0.13'
+#isocut = 'hadTowOverEM < 0.02'
 isocut = ''
 ptlist = [ '20','30','100']
 

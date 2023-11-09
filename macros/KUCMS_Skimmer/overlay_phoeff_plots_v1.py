@@ -101,7 +101,7 @@ def dostack( hist_list, outname, date, layout, ptitle, y, x, l, t ):
 
         h1[n].UseCurrentStyle()
         h1[n].SetMarkerStyle(n+25)
-        k = [kMagenta+2,kGreen+2,kYellow+1,kBlue+2,kRed+2,kAzure+4,kBlack,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kSpring-7,kSpring+3,kAzure+3,kAzure-7,kGray+1,kGray+2,kGray+3]
+        k = [kMagenta+2,kGreen+2,kYellow+1,kBlue+2,kRed+2,kAzure+4,kBlack,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kSpring-7,kSpring+3,kAzure+3,kAzure-7,kMagenta+2,kGreen+2,kYellow+1,kBlue+2,kRed+2,kAzure+4,kBlack,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kSpring-7,kSpring+3,kAzure+3,kAzure-7]
         #k = [kMagenta+2,kGreen+2,kBlue+2,kRed+2,kAzure+4,kViolet+7,kOrange+7,kGreen+3,kRed+4,kBlue+4,kGreen+2,kAzure+4,kMagenta+2,kGreen+2,kBlack]
         #k = [kBlue+4,kBlue+1,kGreen+4,kYellow+3,kAzure+4,kViolet+7,kOrange+7,kGreen+3]
         #k = [kSpring-7,kSpring+3,kAzure+3,kAzure-7]
@@ -237,67 +237,180 @@ islogy = False
 #     #["Data_sigma","",mc_single_loc+pcal+lstfr,"Single"],
 #]
 
-bhJetht0 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso0_Skim_BaseHists.root"
-bhJetht1 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"
-bhJetht2 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"
-bhJetht3 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"
-bhJetht4 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"
+#bhJetht0 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso0_Skim_BaseHists.root"
+#bhJetht1 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"
+#bhJetht2 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"
+#bhJetht3 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"
+#bhJetht4 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 
-bhGMSBs0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso0_Skim_BaseHists.root"
-bhGMSBs1 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"
-bhGMSBs2 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"
-bhGMSBs3 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"
-bhGMSBs4 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"
+#bhGMSBs0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso0_Skim_BaseHists.root"
+#bhGMSBs1 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"
+#bhGMSBs2 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"
+#bhGMSBs3 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"
+#bhGMSBs4 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"
 
-bhGMSBb0 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso0_Skim_BaseHists.root"
-bhGMSBb1 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"
-bhGMSBb2 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"
-bhGMSBb3 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"
-bhGMSBb4 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso0_Skim_BaseHists.root"
+#bhGMSBb1 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"
+#bhGMSBb2 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"
+#bhGMSBb3 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"
+#bhGMSBb4 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 
-y = [ 0.001, 1.0 ]
-#y = [ 0.01, 0.8 ]
-#x = [ 0.001, 1.0 ]
+bhJetht0 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_005_360_480_245_Skim_BaseHists.root"
+bhJetht1 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_50_100_Skim_BaseHists.root"
+bhJetht2 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_50_80_Skim_BaseHists.root"
+bhJetht3 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_50_90_Skim_BaseHists.root"
+bhJetht4 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_60_100_Skim_BaseHists.root"
+bhJetht5 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_60_80_Skim_BaseHists.root"
+bhJetht6 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_60_90_Skim_BaseHists.root"
+bhJetht7 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_70_100_Skim_BaseHists.root"
+bhJetht8 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_70_80_Skim_BaseHists.root"
+bhJetht9 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_1_70_90_Skim_BaseHists.root"
+bhJetht10 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_50_100_Skim_BaseHists.root"
+bhJetht11 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_50_80_Skim_BaseHists.root"
+bhJetht12 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_50_90_Skim_BaseHists.root"
+bhJetht13 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_60_100_Skim_BaseHists.root"
+bhJetht14 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_60_80_Skim_BaseHists.root"
+bhJetht15 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_60_90_Skim_BaseHists.root"
+bhJetht16 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_70_100_Skim_BaseHists.root"
+bhJetht17 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_70_80_Skim_BaseHists.root"
+bhJetht18 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_2_70_90_Skim_BaseHists.root"
+bhJetht19 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_50_100_Skim_BaseHists.root"
+bhJetht20 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_50_80_Skim_BaseHists.root"
+bhJetht21 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_50_90_Skim_BaseHists.root"
+bhJetht22 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_60_100_Skim_BaseHists.root"
+bhJetht23 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_60_80_Skim_BaseHists.root"
+bhJetht24 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_60_90_Skim_BaseHists.root"
+bhJetht25 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_70_100_Skim_BaseHists.root"
+bhJetht26 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_70_80_Skim_BaseHists.root"
+bhJetht27 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso_3_70_90_Skim_BaseHists.root"
+
+bhGMSBs0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_005_360_480_245_Skim_BaseHists.root"
+bhGMSBs1 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_100_Skim_BaseHists.root"
+bhGMSBs2 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_80_Skim_BaseHists.root"
+bhGMSBs3 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_90_Skim_BaseHists.root"
+bhGMSBs4 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_100_Skim_BaseHists.root"
+bhGMSBs5 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_80_Skim_BaseHists.root"
+bhGMSBs6 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_90_Skim_BaseHists.root"
+bhGMSBs7 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_100_Skim_BaseHists.root"
+bhGMSBs8 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_80_Skim_BaseHists.root"
+bhGMSBs9 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_90_Skim_BaseHists.root"
+bhGMSBs10 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_100_Skim_BaseHists.root"
+bhGMSBs11 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_80_Skim_BaseHists.root"
+bhGMSBs12 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_90_Skim_BaseHists.root"
+bhGMSBs13 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_100_Skim_BaseHists.root"
+bhGMSBs14 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_80_Skim_BaseHists.root"
+bhGMSBs15 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_90_Skim_BaseHists.root"
+bhGMSBs16 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_100_Skim_BaseHists.root"
+bhGMSBs17 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_80_Skim_BaseHists.root"
+bhGMSBs18 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_90_Skim_BaseHists.root"
+bhGMSBs19 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_100_Skim_BaseHists.root"
+bhGMSBs20 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_80_Skim_BaseHists.root"
+bhGMSBs21 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_90_Skim_BaseHists.root"
+bhGMSBs22 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_100_Skim_BaseHists.root"
+bhGMSBs23 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_80_Skim_BaseHists.root"
+bhGMSBs24 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_90_Skim_BaseHists.root"
+bhGMSBs25 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_100_Skim_BaseHists.root"
+bhGMSBs26 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_80_Skim_BaseHists.root"
+bhGMSBs27 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_90_Skim_BaseHists.root"
+
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_005_360_480_245_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_50_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_60_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_1_70_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_50_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_60_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_2_70_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_50_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_60_90_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_100_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_80_Skim_BaseHists.root"
+#bhGMSBb0 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso_3_70_90_Skim_BaseHists.root"
+
+#y = [ 0.001, 1.0 ]
+y = [ 0.015, 0.025 ]
+x = [ 0.45, 0.65 ]
 #x = [ 0.25, 1.0 ]
 #x = [ 0.5, 1.0 ]
-x = [ 0.75, 1.0 ]
+#x = [ 0.75, 1.0 ]
 #x = [ 0.9, 1.0 ]
 #l = [ 0.7,0.7,0.925,0.9 ] # legend position top right
-l = [ 0.2,0.25,0.3,0.75 ] # legend position top left
-t = [0.2,0.825,0.0,0.175,0.225] # titles position
+l = [ 0.2,0.15,0.3,0.875 ] # legend position top left
+t = [0.4,0.825,0.0,0.175,0.225] # titles position
 ptlist= [ ['20',1], ['30',2], ['100',3] ]
 
 outnames = 'llpa_phocuteff_pt'
 rhname = 'phoCEffPhoton'
-cut1 = "< 0.05"
-cut2 = "< 0.03"
-cut3 = "< 0.02"
-cut4 = "< 0.01"
+cut1 = "< 3.6"
+cut2 = "< 7.0"
+cut3 = "< 6.0"
+cut4 = "< 5.0"
 
 for pt, ptn in ptlist :
 
-  #cl3 = ', hadTowOverEM < 0.13'
+  #cl3 = ', hadTowOverEM < 0.02, ecalRHSumEtConeDR04 < 9.0'
   cl3 = ''
-  cl1 = 'pt > '+pt+' GeV'+cl3
+  cl1 = 'GMSB-JetHT pt > '+pt+' GeV'+cl3
   #cl2 = 'trkSumPtSolidConeDR04 Cuts'
-  cl2 = 'hadTowOverEM Cuts'
+  #cl2 = 'ecalRHSumEtConeDR04 Cuts'
+  #cl2 = 'hadTowOverEM Cuts'
+  cl2 = 'Default 0.13x0.011-0.10x0.004'
   cutline = '#splitline{'+cl1+'}{'+cl2+'}'
+  #cutline = cl2+" : "+cl1
   ptitle=[' Photon Cut Efficencies ','',cutline]
   layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
   
   inhistlist = [
   
-      [ rhname, "", bhGMSBs0, bhGMSBb0, ptn, "GMSB"],
-      [ rhname, "", bhGMSBs1, bhGMSBb1, ptn, cut1],
-      [ rhname, "", bhGMSBs2, bhGMSBb2, ptn, cut2],
-      [ rhname, "", bhGMSBs3, bhGMSBb3, ptn, cut3],
-      [ rhname, "", bhGMSBs4, bhGMSBb4, ptn, cut4],
-      [ rhname, "", bhGMSBs0, bhJetht0, ptn, "JetHt"],
-      [ rhname, "", bhGMSBs1, bhJetht1, ptn, cut1],
-      [ rhname, "", bhGMSBs2, bhJetht2, ptn, cut2],
-      [ rhname, "", bhGMSBs3, bhJetht3, ptn, cut3],
-      [ rhname, "", bhGMSBs4, bhJetht4, ptn, cut4],
-  
+      #[ rhname, "", bhGMSBs0, bhGMSBb0, ptn, "GMSB"],
+      #[ rhname, "", bhGMSBs1, bhGMSBb1, ptn, cut1],
+      #[ rhname, "", bhGMSBs2, bhGMSBb2, ptn, cut2],
+      #[ rhname, "", bhGMSBs3, bhGMSBb3, ptn, cut3],
+      #[ rhname, "", bhGMSBs4, bhGMSBb4, ptn, cut4],
+      #[ rhname, "", bhGMSBs0, bhJetht0, ptn, "Default"],
+      [ rhname, "", bhGMSBs1, bhJetht1, ptn, "0.01-5.0-10.0"],
+      [ rhname, "", bhGMSBs2, bhJetht2, ptn, "0.01-5.0-8.0"],
+      [ rhname, "", bhGMSBs3, bhJetht3, ptn, "0.01-5.0-9.0"],
+      [ rhname, "", bhGMSBs4, bhJetht4, ptn, "0.01-6.0-10.0"],
+      [ rhname, "", bhGMSBs5, bhJetht5, ptn, "0.01-6.0-8.0"],
+      [ rhname, "", bhGMSBs6, bhJetht6, ptn, "0.01-6.0-9.0"],
+      [ rhname, "", bhGMSBs7, bhJetht7, ptn, "0.01-7.0-10.0"],
+      [ rhname, "", bhGMSBs8, bhJetht8, ptn, "0.01-7.0-8.0"],
+      [ rhname, "", bhGMSBs9, bhJetht9, ptn, "0.01-7.0-9.0"],
+      [ rhname, "", bhGMSBs10, bhJetht10, ptn, "0.02-5.0-10.0"],
+      [ rhname, "", bhGMSBs11, bhJetht11, ptn, "0.02-5.0-8.0"],
+      [ rhname, "", bhGMSBs12, bhJetht12, ptn, "0.02-5.0-9.0"],
+      [ rhname, "", bhGMSBs13, bhJetht13, ptn, "0.02-6.0-10.0"],
+      [ rhname, "", bhGMSBs14, bhJetht14, ptn, "0.02-6.0-8.0"],
+      [ rhname, "", bhGMSBs15, bhJetht15, ptn, "0.02-6.0-9.0"],
+      [ rhname, "", bhGMSBs16, bhJetht16, ptn, "0.02-7.0-10.0"],
+      [ rhname, "", bhGMSBs17, bhJetht17, ptn, "0.02-7.0-8.0"],
+      [ rhname, "", bhGMSBs18, bhJetht18, ptn, "0.02-7.0-9.0"],
+      [ rhname, "", bhGMSBs19, bhJetht19, ptn, "0.03-5.0-10.0"],
+      [ rhname, "", bhGMSBs20, bhJetht20, ptn, "0.03-5.0-8.0"],
+      [ rhname, "", bhGMSBs21, bhJetht21, ptn, "0.03-5.0-9.0"],
+      [ rhname, "", bhGMSBs22, bhJetht22, ptn, "0.03-6.0-10.0"],
+      [ rhname, "", bhGMSBs23, bhJetht23, ptn, "0.03-6.0-8.0"],
+      [ rhname, "", bhGMSBs24, bhJetht24, ptn, "0.03-6.0-9.0"],
+      [ rhname, "", bhGMSBs25, bhJetht25, ptn, "0.03-7.0-10.0"],
+      [ rhname, "", bhGMSBs26, bhJetht26, ptn, "0.03-7.0-8.0"],
+      [ rhname, "", bhGMSBs27, bhJetht27, ptn, "0.03-7.0-9.0"],
+
   ]
 
   outname = outnames+pt

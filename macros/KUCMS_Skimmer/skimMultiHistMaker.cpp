@@ -19,7 +19,7 @@
 //// HistMaker class ----------------------------------------------------------------------------------------------------------------
 ////-----------------------------------------------------------------------------------------------------------------------------
 
-void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float value ){
+void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float va, float vb, float vc ){
 
     //bool debug = true;
     bool debug = false;
@@ -30,8 +30,12 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
     const std::string listdir("");
 
     cutselection = cut;
-	cutvalue = value;
+	cutva = va;
+    cutvb = vb;
+    cutvc = vc;
     preCutNPhotons = 0;
+    preCut30NPhotons = 0;
+    preCut100NPhotons = 0;
     postCutNPhotons = 0;
     postCut30NPhotons = 0;
     postCut100NPhotons = 0;
@@ -214,6 +218,8 @@ void HistMaker::eventLoop( Long64_t entry ){
     //----------------- photons ------------------
 
 	int totNSelPhotons = 0;
+    int totNSel30Photons = 0;
+    int totNSel100Photons = 0;
 	int totNCutPhotons = 0;
     int totNCut30Photons = 0;
     int totNCut100Photons = 0;
@@ -253,6 +259,17 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( (*selPhoPt)[it] < 20 ) continue;
         if( std::abs((*selPhoEta)[it]) > 1.479 ) continue;
 
+		bool jetphoton = false;
+		for( int jit = 0; jit < nSelJets; jit++ ){
+
+			float dpjeta = (*selJetEta)[jit] - (*selPhoPhi)[it];
+			float dpjphi = dPhi( (*selJetPhi)[jit], (*selPhoPhi)[it] );	
+			float dr = hypo( dpjeta, dpjphi );
+			if( dr < 0.4 ) jetphoton = true;
+
+		} // for( int jit = 0; jit < nSelJets; jit++ )
+		if( jetphoton ) continue; //{ std::cout << "Jet-Photon Overlap!!!" << std::endl; continue; }
+
         if( DEBUG ) std::cout << " -- looping photons : Start getting dr dp info" << std::endl;
 		auto phoClass = (*selPhoQuality)[it];
         //if( phoClass < 1 ) continue;
@@ -278,6 +295,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 		bool isSigType = isNino;
 		bool isXfsrType = isXinoWZ || isXfsr;
 		bool isOtherType = isPrompt || isSfsr; // || phoSusId < 1;
+        bool isNotSusyType = isPrompt || phoSusId < 9;
 
 //        if( isgnsusy && not isNino ){ usepho = false; continue; }
 //        if( iswzsusy && not isXinoWZ ){ usepho = false; continue; }
@@ -289,7 +307,7 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( isXfsr && not isXfsrType ){ usepho = false; continue; }
         if( isOther && not isOtherType ){ usepho = false; continue; }
         if( isUnMatched && phoSusId > 10 ){ usepho = false; continue; }
-		if( isNotSig && ( isSigType || isXfsrType ) ){ usepho = false; continue; }
+		if( isNotSig && not isNotSusyType ){ usepho = false; continue; }
 
         hist2d[200]->Fill( phoGenMatDr, phoTime );
         hist2d[201]->Fill( phoGenMatDp, phoTime );
@@ -309,11 +327,15 @@ void HistMaker::eventLoop( Long64_t entry ){
         hist1d[135]->Fill( phoSusId,fillwt );
 
 		totNSelPhotons++;
+		if( (*selPhoPt)[it] > 30 ) totNSel30Photons++;
+        if( (*selPhoPt)[it] > 100 ) totNSel100Photons++;
 
-        //bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
-        bool htoem = (*selPhoHadTowOverEM)[it] < cutvalue;
-        //bool isoskip = not ( tsptscdr4 && htoem );
-        bool isoskip = not ( htoem );
+        bool hcalsum = true;
+        //bool hcalsum = (*selPhoHcalTowerSumEtBcConeDR04)[it] < 2.45;
+        bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < cutvb; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+		bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < cutvc;
+        bool htoem = (*selPhoHadTowOverEM)[it] < cutva;
+        bool isoskip = not ( htoem && tsptscdr4 && ecalrhsum && hcalsum );
         if( isoskip ) continue;
         totNCutPhotons++;
 
@@ -420,12 +442,15 @@ void HistMaker::eventLoop( Long64_t entry ){
     }//<<>>for( int it = 0; it < nPhotons; it++ )
 
     preCutNPhotons += totNSelPhotons;
+    preCut30NPhotons += totNSel30Photons;
+    preCut100NPhotons += totNSel100Photons;
     postCutNPhotons += totNCutPhotons;
     postCut30NPhotons += totNCut30Photons;
     postCut100NPhotons += totNCut100Photons;
 
 	//-------- electrons --------------------------------------
 
+/*
 	//--------- jets --------------------------
     if( DEBUG ) std::cout << "Finding Jets with " << nSelJets << " selected. "<< std::endl;
 
@@ -452,12 +477,12 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( (*selJetSusyId)[it] == 30 ) nSusJetSqrkd++;
         if( (*selJetSusyId)[it] == 21 || (*selJetSusyId)[it] == 20 ) nSusJetSusy++;
 
-/*
-        bool isgoodmatch = jetGenMatDr < 0.3 && jetGenMatDp < 1.0 && jetGenMatDr >= 0 && jetGenMatDp >= 0;
-        bool isnogen = jetSusId < 19;
-        if( isOthermatch && ( ( not isnogen ) && isgoodmatch )){ continue; } // no match
-        if( ( not isOthermatch ) && ( isnogen || ( not isgoodmatch ) )){ continue; } // good match
-*/
+
+//        bool isgoodmatch = jetGenMatDr < 0.3 && jetGenMatDp < 1.0 && jetGenMatDr >= 0 && jetGenMatDp >= 0;
+//        bool isnogen = jetSusId < 19;
+//        if( isOthermatch && ( ( not isnogen ) && isgoodmatch )){ continue; } // no match
+//        if( ( not isOthermatch ) && ( isnogen || ( not isgoodmatch ) )){ continue; } // good match
+
 
         auto jetSusId = (*selJetSusyId)[it];
         auto jetGenMatDr = (*selJetLlpDr)[it];
@@ -531,6 +556,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 
     if( DEBUG ) std::cout << "Finding genjet" << std::endl;
 	//// --- genjet info -----------------------------------
+*/
 
     if( DEBUG ) std::cout << "Finding rjr" << std::endl;
 
@@ -568,11 +594,11 @@ void HistMaker::eventLoop( Long64_t entry ){
 void HistMaker::endJobs(){
 
 	float eff =  static_cast<float>(postCutNPhotons)/static_cast<float>(preCutNPhotons); 
-    float eff30 =  static_cast<float>(postCut30NPhotons)/static_cast<float>(preCutNPhotons);
-    float eff100 =  static_cast<float>(postCut100NPhotons)/static_cast<float>(preCutNPhotons);
+    float eff30 =  static_cast<float>(postCut30NPhotons)/static_cast<float>(preCut30NPhotons);
+    float eff100 =  static_cast<float>(postCut100NPhotons)/static_cast<float>(preCut100NPhotons);
     std::cout << " Pho Eff : " << eff << " = " << postCutNPhotons << " / " << preCutNPhotons << std::endl;
-    std::cout << " Pho Eff 30 : " << eff30 << " = " << postCut30NPhotons << " / " << preCutNPhotons << std::endl;
-    std::cout << " Pho Eff 100 : " << eff100 << " = " << postCut100NPhotons << " / " << preCutNPhotons << std::endl;
+    std::cout << " Pho Eff 30 : " << eff30 << " = " << postCut30NPhotons << " / " << preCut30NPhotons << std::endl;
+    std::cout << " Pho Eff 100 : " << eff100 << " = " << postCut100NPhotons << " / " << preCut100NPhotons << std::endl;
     hist1d[197]->Fill(1,eff);
     hist1d[197]->Fill(2,eff30);
     hist1d[197]->Fill(3,eff100);
@@ -607,6 +633,7 @@ void HistMaker::initHists( std::string ht ){
 
     std::cout << " title test : " << mkht(ht,"jetPt") << std::endl;
 
+/*
     hist1d[0] = new TH1D("jetPt", mkht(ht,"jetPt").c_str(), 500, 0, 5000);
     hist1d[1] = new TH1D("jetPhi", mkht(ht,"jetPhi").c_str(), 700, -3.5, 3.5);
     hist1d[2] = new TH1D("jetEta", mkht(ht,"jetEta").c_str(), 700, -3.5, 3.5);
@@ -645,7 +672,7 @@ void HistMaker::initHists( std::string ht ){
     hist1d[47] = new TH1D("jetNeHEF", mkht(ht,"jetNeHEF").c_str(), 100, 0, 1);
     hist1d[48] = new TH1D("jetNeHM", mkht(ht,"jetNeHM").c_str(), 75, 0, 75);
     hist1d[49] = new TH1D("jetChHEF", mkht(ht,"jetChHEF").c_str(), 100, 0, 1);
-
+*/
 
 	//----- photons 100 - 249
     //UInt_t          leadSelPho;
@@ -694,7 +721,7 @@ void HistMaker::initHists( std::string ht ){
     //hist1d[123] = new TH1D("nWNPhotons", mkht(ht,"nWNPhotons").c_str(), 20, 0, 20);
     //hist1d[124] = new TH1D("nZCPhotons", mkht(ht,"nZCPhotons").c_str(), 20, 0, 20);
 
-    hist1d[125] = new TH1D("selPhoHcalTowerSumEtBcConeDR04", mkht(ht,"selPhoHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 200);
+    hist1d[125] = new TH1D("selPhoHcalTowerSumEtBcConeDR04", mkht(ht,"selPhoHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 20);
     hist1d[126] = new TH1D("selPhoTrkSumPtHollowConeDR03", mkht(ht,"selPhoTrkSumPtHollowConeDR03").c_str(), 200, 0, 20);
     hist1d[127] = new TH1D("selPhoTrkSumPtHollowConeDR04", mkht(ht,"selPhoTrkSumPtHollowConeDR04").c_str(), 200, 0, 20);
     hist1d[128] = new TH1D("selPhoTrkSumPtSolidConeDR04", mkht(ht,"selPhoTrkSumPtSolidConeDR04").c_str(), 200, 0, 20);
@@ -715,7 +742,7 @@ void HistMaker::initHists( std::string ht ){
     hist1d[153] = new TH1D("pho30ptPhi", mkht(ht,"pho30ptPhi").c_str(), 700, -3.5, 3.5);
     hist1d[154] = new TH1D("pho30ptPt", mkht(ht,"pho30ptPt").c_str(), 200, 0, 2000);
     hist1d[155] = new TH1D("pho30ptEnergy", mkht(ht,"pho30ptEnergy").c_str(), 500, 0, 5000);
-    hist1d[157] = new TH1D("pho30ptHcalTowerSumEtBcConeDR04", mkht(ht,"pho30ptHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 200);
+    hist1d[157] = new TH1D("pho30ptHcalTowerSumEtBcConeDR04", mkht(ht,"pho30ptHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 20);
     hist1d[158] = new TH1D("pho30ptTrkSumPtSolidConeDR04", mkht(ht,"pho30ptTrkSumPtSolidConeDR04").c_str(), 200, 0, 20);
     hist1d[159] = new TH1D("pho30ptR9", mkht(ht,"pho30ptR9").c_str(), 100, 0, 1);
     hist1d[160] = new TH1D("pho30ptNrh", mkht(ht,"pho30ptNrh").c_str(), 100, 0, 100);
@@ -734,7 +761,7 @@ void HistMaker::initHists( std::string ht ){
     hist1d[203] = new TH1D("pho100ptPhi", mkht(ht,"pho100ptPhi").c_str(), 700, -3.5, 3.5);
     hist1d[204] = new TH1D("pho100ptPt", mkht(ht,"pho100ptPt").c_str(), 200, 0, 2000);
     hist1d[205] = new TH1D("pho100ptEnergy", mkht(ht,"pho100ptEnergy").c_str(), 500, 0, 5000);
-    hist1d[207] = new TH1D("pho100ptHTSumEtBcConeDR04", mkht(ht,"pho100ptHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 200);
+    hist1d[207] = new TH1D("pho100ptHTSumEtBcConeDR04", mkht(ht,"pho100ptHcalTowerSumEtBcConeDR04").c_str(), 200, 0, 20);
     hist1d[208] = new TH1D("pho100ptTrkSumPtSolidConeDR04", mkht(ht,"pho100ptTrkSumPtSolidConeDR04").c_str(), 200, 0, 20);
     hist1d[209] = new TH1D("pho100ptR9", mkht(ht,"pho100ptR9").c_str(), 100, 0, 1);
     hist1d[210] = new TH1D("pho100ptNrh", mkht(ht,"pho100ptNrh").c_str(), 100, 0, 100);
@@ -869,34 +896,38 @@ int main ( int argc, char *argv[] ){
                 int cuts = 7;
 				int cutb = 11;
                 float value0 = 10000.0;
+                // -- ecalRHSumEtConeDR04 (1)
+                float vcP = 3.6;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
+				std::list<float> cutsvc = { 8.0, 9.0, 10.0 };
+                //float value1 = 7.0;
+                //float value2 = 6.0;
+                //float value3 = 5.0;
 				// -- selPhoTrkSumPtSolidConeDR04 (2) 
-                //float valueP = 3.6;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
+                float vbP = 4.8;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
+				std::list<float> cutsvb = { 5.0, 6.0, 7.0 };
                 //float value1 = 13.0;
                 //float value2 = 15.0;
                 //float value3 = 17.0;
 				// -- selPhoHadTowOverEM (1)
-                float valueP = 0.15;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
-                float value1 = 0.16;
-                float value2 = 0.17;
-                float value3 = 0.18;
+                float vaP = 0.05;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
+                std::list<float> cutsva = { 0.01, 0.02, 0.03 };
+                //float value1 = 0.03;
+                //float value2 = 0.02;
+                //float value3 = 0.01;
 
-                auto outfilename0s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso11_Skim_BaseHists.root"; //7
-                auto outfilename0b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso11_Skim_BaseHists.root"; //11
-                auto outfilename0d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso11_Skim_BaseHists.root"; //11                
+                //auto outfilenamePs = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"; //7
+                //auto outfilename1s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"; //7
+                //auto outfilename2s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"; //7
+                //auto outfilename3s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"; //7
 
-                auto outfilenamePs = "KUCMS_GMSB_L100_Met150_Signal_v15_iso11P_Skim_BaseHists.root"; //7
-                auto outfilename1s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso11a_Skim_BaseHists.root"; //7
-                auto outfilename2s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso11b_Skim_BaseHists.root"; //7
-                auto outfilename3s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso11c_Skim_BaseHists.root"; //7
-
-                auto outfilenamePb = "KUCMS_GMSB_L100_Met150_notSig_v15_iso11P_Skim_BaseHists.root"; //11
-                auto outfilename1b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso11a_Skim_BaseHists.root"; //11
-                auto outfilename2b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso11b_Skim_BaseHists.root"; //11
-                auto outfilename3b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso11c_Skim_BaseHists.root"; //11
-                auto outfilenamePd = "KUCMS_JetHt_18D_Met150_notSig_v15_iso11P_Skim_BaseHists.root"; //11
-                auto outfilename1d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso11a_Skim_BaseHists.root"; //11
-                auto outfilename2d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso11b_Skim_BaseHists.root"; //11
-                auto outfilename3d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso11c_Skim_BaseHists.root"; //11
+                //auto outfilenamePb = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"; //11
+                //auto outfilename1b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"; //11
+                //auto outfilename2b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"; //11
+                //auto outfilename3b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"; //11
+                //auto outfilenamePd = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"; //11
+                //auto outfilename1d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"; //11
+                //auto outfilename2d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"; //11
+                //auto outfilename3d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"; //11
 
 
                 //auto outfilename = "KUCMS_GMSB_L100_Met150_XFSR_v13_Skim_BaseHists.root"; //8
@@ -911,48 +942,93 @@ int main ( int argc, char *argv[] ){
 
 				//auto htitle = "GMSB_met150_1t4_v9_Not2_";
 
-                auto htitle0s = "GMSB_met150_L100_v15_iso11_Signal_";
-                auto htitlePs = "GMSB_met150_L100_v15_iso11P_Signal_";
-                auto htitle1s = "GMSB_met150_L100_v15_iso11a_Signal_";
-                auto htitle2s = "GMSB_met150_L100_v15_iso11b_Signal_";
-                auto htitle3s = "GMSB_met150_L100_v15_iso11c_Signal_";
+                //auto htitle0s = "GMSB_met150_L100_v15_iso0_Signal_";
+                //auto htitlePs = "GMSB_met150_L100_v15_iso1_Signal_";
+                //auto htitle1s = "GMSB_met150_L100_v15_iso2_Signal_";
+                //auto htitle2s = "GMSB_met150_L100_v15_iso3_Signal_";
+                //auto htitle3s = "GMSB_met150_L100_v15_iso4_Signal_";
 
-                auto htitle0b = "GMSB_met150_L100_v15_iso11_notSig_";
-                auto htitlePb = "GMSB_met150_L100_v15_iso11P_notSig_";
-                auto htitle1b = "GMSB_met150_L100_v15_iso11a_notSig_";
-                auto htitle2b = "GMSB_met150_L100_v15_iso11b_notSig_";
-                auto htitle3b = "GMSB_met150_L100_v15_iso11c_notSig_";
+                //auto htitle0b = "GMSB_met150_L100_v15_iso0_notSig_";
+                //auto htitlePb = "GMSB_met150_L100_v15_iso1_notSig_";
+                //auto htitle1b = "GMSB_met150_L100_v15_iso2_notSig_";
+                //auto htitle2b = "GMSB_met150_L100_v15_iso3_notSig_";
+                //auto htitle3b = "GMSB_met150_L100_v15_iso4_notSig_";
 
-                auto htitle0d = "JetHT_met150_18D_v15_iso11_notSig_";
-                auto htitlePd = "JetHT_met150_18D_v15_iso11P_notSig_";
-                auto htitle1d = "JetHT_met150_18D_v15_iso11a_notSig_";
-                auto htitle2d = "JetHT_met150_18D_v15_iso11b_notSig_";
-                auto htitle3d = "JetHT_met150_18D_v15_iso11c_notSig_";
+                //auto htitle0d = "JetHT_met150_18D_v15_iso0_notSig_";
+                //auto htitlePd = "JetHT_met150_18D_v15_iso1_notSig_";
+                //auto htitle1d = "JetHT_met150_18D_v15_iso2_notSig_";
+                //auto htitle2d = "JetHT_met150_18D_v15_iso3_notSig_";
+                //auto htitle3d = "JetHT_met150_18D_v15_iso4_notSig_";
 
                 //auto htitle = "GJets_met150_40tInf_Other_v10_";
                 //auto htitle = "GJets_met150_40tInf_UnMatched_v10_";
 
                 //auto htitle = "JetHT_met150_L100_v15_Other_";
 
+                std::string outfilename0s = "KUCMS_GMSB_L100_Met150_Signal_v15_"; //iso0_Skim_BaseHists.root"; //7
+                std::string outfilename0b = "KUCMS_GMSB_L100_Met150_notSig_v15_"; //iso0_Skim_BaseHists.root"; //11
+                std::string outfilename0d = "KUCMS_JetHt_18D_Met150_notSig_v15_"; //iso0_Skim_BaseHists.root"; //11                
+                std::string ofnending = "Skim_BaseHists.root";
+
+                std::string htitle0s = "GMSB_met150_L100_v15_Signal_";
+                std::string htitle0b = "GMSB_met150_L100_v15_notSig_";
+                std::string htitle0d = "JetHT_met150_18D_v15_notSig_";
+
                 HistMaker base;
-                base.histMaker( listdir, infilenameGMSB, outfilename0s, htitle0s, cuts, value0 );
-                base.histMaker( listdir, infilenameGMSB, outfilename0b, htitle0b, cutb, value0 );
-                base.histMaker( listdir, infilenameJetHT, outfilename0d, htitle0d, cutb, value0 );
 
-                base.histMaker( listdir, infilenameGMSB, outfilenamePs, htitlePs, cuts, valueP );
-                base.histMaker( listdir, infilenameGMSB, outfilename1s, htitle1s, cuts, value1 );
-                base.histMaker( listdir, infilenameGMSB, outfilename2s, htitle2s, cuts, value2 );
-                base.histMaker( listdir, infilenameGMSB, outfilename3s, htitle3s, cuts, value3 );
+				//std::string outfilenames = outfilename0s + "iso_005_360_480_245_" + ofnending;
+                //std::string outfilenameb = outfilename0b + "iso_005_360_480_245_" + ofnending;
+                //std::string outfilenamed = outfilename0d + "iso_005_360_480_245_" + ofnending; 				
 
-                base.histMaker( listdir, infilenameGMSB, outfilenamePb, htitlePb, cutb, valueP );
-                base.histMaker( listdir, infilenameGMSB, outfilename1b, htitle1b, cutb, value1 );
-                base.histMaker( listdir, infilenameGMSB, outfilename2b, htitle2b, cutb, value2 );
-                base.histMaker( listdir, infilenameGMSB, outfilename3b, htitle3b, cutb, value3 );
+                //std::string htitles =  htitle0s + "iso_005_360_480_245_";
+                //std::string htitleb =  htitle0b + "iso_005_360_480_245_";
+                //std::string htitled =  htitle0d + "iso_005_360_480_245_";
 
-                base.histMaker( listdir, infilenameJetHT, outfilenamePd, htitlePd, cutb, valueP );
-                base.histMaker( listdir, infilenameJetHT, outfilename1d, htitle1d, cutb, value1 );
-                base.histMaker( listdir, infilenameJetHT, outfilename2d, htitle2d, cutb, value2 );
-                base.histMaker( listdir, infilenameJetHT, outfilename3d, htitle3d, cutb, value3 );
+                //base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, vaP, vbP, vcP );
+                //base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, vaP, vbP, vcP );
+                //base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, vaP, vbP, vcP );
+
+				for( auto va : cutsva ){
+					for( auto vb : cutsvb ){
+						for( auto vc : cutsvc ){
+
+							std::string astr = std::to_string( int(va * 100) );
+                            std::string bstr = std::to_string( int(vb * 10) );
+                            std::string cstr = std::to_string( int(vc * 10) );
+							//std::cout << " - " << astr << " " << bstr << " " << cstr << std::endl;
+							std::string isostr = "iso_" + astr + "_" + bstr + "_" + cstr + "_";
+							//std::cout << " - " << isostr << std::endl;
+							std::string htitles =  htitle0s + isostr;
+							std::string htitleb =  htitle0b + isostr;
+							std::string htitled =  htitle0d + isostr;
+							//std::cout << " - " << htitles << std::endl;
+                			std::string outfilenames = outfilename0s + isostr + ofnending;
+            			    std::string outfilenameb = outfilename0b + isostr + ofnending;
+			                std::string outfilenamed = outfilename0d + isostr + ofnending;
+                            //std::cout << " - " << outfilenames << std::endl;
+                			base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, va, vb, vc );
+                			base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, va, vb, vc );
+                			base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, va, vb, vc );
+
+						}//for( vc : cutsvc )
+					}//for( vb : cutsvb )
+				}//for( va : cutsva )
+			
+
+                //base.histMaker( listdir, infilenameGMSB, outfilenamePs, htitlePs, cuts, valueP );
+                //base.histMaker( listdir, infilenameGMSB, outfilename1s, htitle1s, cuts, value1 );
+                //base.histMaker( listdir, infilenameGMSB, outfilename2s, htitle2s, cuts, value2 );
+                //base.histMaker( listdir, infilenameGMSB, outfilename3s, htitle3s, cuts, value3 );
+
+                //base.histMaker( listdir, infilenameGMSB, outfilenamePb, htitlePb, cutb, valueP );
+                //base.histMaker( listdir, infilenameGMSB, outfilename1b, htitle1b, cutb, value1 );
+                //base.histMaker( listdir, infilenameGMSB, outfilename2b, htitle2b, cutb, value2 );
+                //base.histMaker( listdir, infilenameGMSB, outfilename3b, htitle3b, cutb, value3 );
+
+                //base.histMaker( listdir, infilenameJetHT, outfilenamePd, htitlePd, cutb, valueP );
+                //base.histMaker( listdir, infilenameJetHT, outfilename1d, htitle1d, cutb, value1 );
+                //base.histMaker( listdir, infilenameJetHT, outfilename2d, htitle2d, cutb, value2 );
+                //base.histMaker( listdir, infilenameJetHT, outfilename3d, htitle3d, cutb, value3 );
 
     //}
     return 1;

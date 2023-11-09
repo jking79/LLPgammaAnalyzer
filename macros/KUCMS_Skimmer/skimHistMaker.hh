@@ -31,7 +31,7 @@ class HistMaker : public kuSkimTree {
 	HistMaker(){};
 	//~HistMaker();
 
-	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float value );	
+	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float va, float vb, float vc );	
 	void initHists( std::string htitle );
 	//void getBranches( Long64_t entry );
 	void eventLoop( Long64_t entry );
@@ -43,7 +43,7 @@ class HistMaker : public kuSkimTree {
     int cutselection;
 	int preCutNPhotons, preCut30NPhotons, preCut100NPhotons; 
     int postCutNPhotons, postCut30NPhotons, postCut100NPhotons;
-    float cutvalue;
+    float cutva, cutvb, cutvc;
     float sumEvtGenWgt;
 
     std::map< std::string, std::map< std::string, float > > configInfo;

@@ -290,15 +290,15 @@ rfgmsbroc3a = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"
 rfgmsbroc3b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"
 rfgmsbroc3c = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
 
-rfgmsbroc1 = rfgmsbroc20
-rfgmsbroc2 = rfgmsbroc30
-rfgmsbroc3 = rfgmsbroc10
+rfgmsbroc1 = rfgmsbroc2b
+rfgmsbroc2 = rfgmsbroc3b
+rfgmsbroc3 = rfgmsbroc1b
 
 boutname = 'llpa_met150_sbcuts_pt'
 title = ' 2018 GMSB L100 '
-ptcut = 'Pt < '
-#isocut = 'hadTowOverEM < 0.13'
-isocut = ''
+ptcut = 'Pt > '
+#isocut = 'hadTowOverEM < 0.02, ecalRHSumEtConeDR04 < 9.0'
+isocut = '#splitline{#splitline{hadTowOverEM < 0.02}{ecalRHSumEtConeDR04 < 9.0}}{trkSumPtSolidConeDR04 < 6.0}'
 ptlist = [ '20','30','100']
 
 for rhname, pt in zip(rhname1,ptlist) :
