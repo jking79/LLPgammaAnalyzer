@@ -31,10 +31,15 @@ class HistMaker : public kuSkimTree {
 	HistMaker(){};
 	//~HistMaker();
 
-	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float va, float vb, float vc );	
+    void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle );
+	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle,int cut,float va,float vb,float vc,float vd );
+	void histMaker( std::string indir, std::vector<std::string> infilelists, std::string outfilename, std::string htitle );
+
 	void initHists( std::string htitle );
+    void initHists( std::string htitle, int nhists );
 	//void getBranches( Long64_t entry );
 	void eventLoop( Long64_t entry );
+	void eventLoop( Long64_t entry, int chist );
  	void endJobs();	
 
     TH1D *hist1d[n1dHists];
@@ -43,12 +48,12 @@ class HistMaker : public kuSkimTree {
     int cutselection;
 	int preCutNPhotons, preCut30NPhotons, preCut100NPhotons; 
     int postCutNPhotons, postCut30NPhotons, postCut100NPhotons;
-    float cutva, cutvb, cutvc;
+    float cutva, cutvb, cutvc, cutvd;
     float sumEvtGenWgt;
 
     std::map< std::string, std::map< std::string, float > > configInfo;
 
-	int nMaps;
+	int nMaps, Nsample;
 	bool fMap[nEBEEMaps];
     TH2D *ebeeMapP[nEBEEMaps], *ebeeMapT[nEBEEMaps], *ebeeMapR[nEBEEMaps];
     void makeEBEEMaps( int phoit );

@@ -13,8 +13,9 @@ RFGLIBS     = $(shell restframes-config --libs)
 CC=g++
 
 p1=runKUCMSAodSkimmer
-p2=baseSkimHistMaker
+p2=phoSelSkimHistMaker
 p3=skimMultiHistMaker
+p4=crStyleSkimHistMaker
 
 all: $(p1) 
 
@@ -26,3 +27,6 @@ $(p2): $(p2).cpp
 
 $(p3): $(p3).cpp
 	$(CC) -o $(p3).obj $(p3).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p4): $(p4).cpp
+	$(CC) -o $(p4).obj $(p4).cpp $(RTCFLAGS) $(RTGLIBS)

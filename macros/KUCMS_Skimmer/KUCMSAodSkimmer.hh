@@ -134,6 +134,7 @@ class KUCMSAodSkimmer : public root_base {
 	KUCMSBranchManager selPhotons;
 	KUCMSBranchManager selJets;
 	KUCMSBranchManager selRjrVars;
+    KUCMSBranchManager selGenPart;
 
 };
 

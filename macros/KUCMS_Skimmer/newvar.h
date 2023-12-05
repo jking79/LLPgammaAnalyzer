@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Fri Aug 18 13:40:14 2023 by ROOT version 6.14/09
+// Mon Nov 20 13:28:27 2023 by ROOT version 6.14/09
 // from TTree kuSkimTree/output root file for kUCMSSkimmer
-// found on file: skim_v7_files/kuntuple_gmsb_L100_v5_AODSIM_Ntuple_v2_LLPgama_Skim_v8.root
+// found on file: skims_files/kuntuple_GMSB_L-100TeV_Ctau-10cm_v10_Ntuple_v10_LLPgama_Skim_v12.root
 //////////////////////////////////////////////////////////
 
-#ifndef kuSkimTree_h
-#define kuSkimTree_h
+#ifndef newvar_h
+#define newvar_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -15,11 +15,12 @@
 // Header file for the classes stored in the TTree if any.
 #include "string"
 #include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
+#include "vector"
 
-using std::string;
-using std::vector;
-
-class kuSkimTree {
+class newvar {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -29,18 +30,15 @@ public :
    // Declaration of leaf types
    string          *DataSetKey;
    Float_t         evtGenWgt;
-
    Float_t         selCMet;
    Float_t         selCMetPx;
    Float_t         selCMetPy;
-
    vector<float>   *genPartEnergy;
    vector<float>   *genPartEta;
    vector<unsigned int> *genPartPdgId;
    vector<float>   *genPartPhi;
    vector<float>   *genPartPt;
    vector<int>     *genPartSusId;
-
    Int_t           leadSelPho;
    UInt_t          nPhotons;
    UInt_t          nSelPhotons;
@@ -82,7 +80,6 @@ public :
    vector<float>   *selPhoTrkSumPtHollowConeDR04;
    vector<float>   *selPhoTrkSumPtSolidConeDR04;
    Int_t           subLeadSelPho;
-
    UInt_t          nJets;
    UInt_t          nSelJets;
    vector<float>   *selGenJetDpt;
@@ -112,7 +109,6 @@ public :
    vector<float>   *selJetSusyId;
    vector<float>   *selJetTime;
    vector<float>   *selJetchHEF;
-
    vector<float>   *SCosA;
    vector<float>   *SMass;
    vector<float>   *X1aCosA;
@@ -126,19 +122,16 @@ public :
 
    // List of branches
    TBranch        *b_DataSetKey;   //!
-   TBranch        *b_evtGenWgt;
-
+   TBranch        *b_evtGenWgt;   //!
    TBranch        *b_selCMet;   //!
    TBranch        *b_selCMetPx;   //!
    TBranch        *b_selCMetPy;   //!
-
    TBranch        *b_genPartEnergy;   //!
    TBranch        *b_genPartEta;   //!
    TBranch        *b_genPartPdgId;   //!
    TBranch        *b_genPartPhi;   //!
    TBranch        *b_genPartPt;   //!
    TBranch        *b_genPartSusId;   //!
-
    TBranch        *b_leadSelPho;   //!
    TBranch        *b_nPhotons;   //!
    TBranch        *b_nSelPhotons;   //!
@@ -180,7 +173,6 @@ public :
    TBranch        *b_selPhoTrkSumPtHollowConeDR04;   //!
    TBranch        *b_selPhoTrkSumPtSolidConeDR04;   //!
    TBranch        *b_subLeadSelPho;   //!
-
    TBranch        *b_nJets;   //!
    TBranch        *b_nSelJets;   //!
    TBranch        *b_selGenJetDpt;   //!
@@ -210,7 +202,6 @@ public :
    TBranch        *b_selJetSusyId;   //!
    TBranch        *b_selJetTime;   //!
    TBranch        *b_selJetchHEF;   //!
-
    TBranch        *b_SCosA;   //!
    TBranch        *b_SMass;   //!
    TBranch        *b_X1aCosA;   //!
@@ -222,30 +213,28 @@ public :
    TBranch        *b_X2bCosA;   //!
    TBranch        *b_X2bMass;   //!
 
-   //kuSkimTree(TTree *tree=0);
-   //virtual ~kuSkimTree();
-   //virtual Int_t    Cut(Long64_t entry);
-   //virtual Int_t    GetEntry(Long64_t entry);
-   //virtual Long64_t LoadTree(Long64_t entry);
+   newvar(TTree *tree=0);
+   virtual ~newvar();
+   virtual Int_t    Cut(Long64_t entry);
+   virtual Int_t    GetEntry(Long64_t entry);
+   virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     getBranches(Long64_t entry);
-   //virtual void     Loop();
-   //virtual Bool_t   Notify();
-   //virtual void     Show(Long64_t entry = -1);
+   virtual void     Loop();
+   virtual Bool_t   Notify();
+   virtual void     Show(Long64_t entry = -1);
 };
 
-/*
 #endif
 
-#ifdef kuSkimTree_cxx
-kuSkimTree::kuSkimTree(TTree *tree) : fChain(0) 
+#ifdef newvar_cxx
+newvar::newvar(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("skim_v7_files/kuntuple_gmsb_L100_v5_AODSIM_Ntuple_v2_LLPgama_Skim_v8.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("skims_files/kuntuple_GMSB_L-100TeV_Ctau-10cm_v10_Ntuple_v10_LLPgama_Skim_v12.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("skim_v7_files/kuntuple_gmsb_L100_v5_AODSIM_Ntuple_v2_LLPgama_Skim_v8.root");
+         f = new TFile("skims_files/kuntuple_GMSB_L-100TeV_Ctau-10cm_v10_Ntuple_v10_LLPgama_Skim_v12.root");
       }
       f->GetObject("kuSkimTree",tree);
 
@@ -253,19 +242,19 @@ kuSkimTree::kuSkimTree(TTree *tree) : fChain(0)
    Init(tree);
 }
 
-kuSkimTree::~kuSkimTree()
+newvar::~newvar()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t kuSkimTree::GetEntry(Long64_t entry)
+Int_t newvar::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t kuSkimTree::LoadTree(Long64_t entry)
+Long64_t newvar::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -277,9 +266,8 @@ Long64_t kuSkimTree::LoadTree(Long64_t entry)
    }
    return centry;
 }
-*/
 
-void kuSkimTree::Init(TTree *tree)
+void newvar::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -291,14 +279,12 @@ void kuSkimTree::Init(TTree *tree)
 
    // Set object pointer
    DataSetKey = 0;
-
    genPartEnergy = 0;
    genPartEta = 0;
    genPartPdgId = 0;
    genPartPhi = 0;
    genPartPt = 0;
-   genPartSusId = 0; 
-
+   genPartSusId = 0;
    selPhoClstrRn = 0;
    selPhoCovEtaEta = 0;
    selPhoCovEtaPhi = 0;
@@ -336,7 +322,6 @@ void kuSkimTree::Init(TTree *tree)
    selPhoTrkSumPtHollowConeDR03 = 0;
    selPhoTrkSumPtHollowConeDR04 = 0;
    selPhoTrkSumPtSolidConeDR04 = 0;
-
    selGenJetDpt = 0;
    selGenJetEnergy = 0;
    selGenJetImpAng = 0;
@@ -364,7 +349,6 @@ void kuSkimTree::Init(TTree *tree)
    selJetSusyId = 0;
    selJetTime = 0;
    selJetchHEF = 0;
-
    SCosA = 0;
    SMass = 0;
    X1aCosA = 0;
@@ -379,22 +363,19 @@ void kuSkimTree::Init(TTree *tree)
    if (!tree) return;
    fChain = tree;
    fCurrent = -1;
-   //fChain->SetMakeClass(1);
+   fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("DataSetKey", &DataSetKey, &b_DataSetKey);
    fChain->SetBranchAddress("evtGenWgt", &evtGenWgt, &b_evtGenWgt);
-
    fChain->SetBranchAddress("selCMet", &selCMet, &b_selCMet);
    fChain->SetBranchAddress("selCMetPx", &selCMetPx, &b_selCMetPx);
    fChain->SetBranchAddress("selCMetPy", &selCMetPy, &b_selCMetPy);
-
    fChain->SetBranchAddress("genPartEnergy", &genPartEnergy, &b_genPartEnergy);
    fChain->SetBranchAddress("genPartEta", &genPartEta, &b_genPartEta);
    fChain->SetBranchAddress("genPartPdgId", &genPartPdgId, &b_genPartPdgId);
    fChain->SetBranchAddress("genPartPhi", &genPartPhi, &b_genPartPhi);
    fChain->SetBranchAddress("genPartPt", &genPartPt, &b_genPartPt);
    fChain->SetBranchAddress("genPartSusId", &genPartSusId, &b_genPartSusId);
-
    fChain->SetBranchAddress("leadSelPho", &leadSelPho, &b_leadSelPho);
    fChain->SetBranchAddress("nPhotons", &nPhotons, &b_nPhotons);
    fChain->SetBranchAddress("nSelPhotons", &nSelPhotons, &b_nSelPhotons);
@@ -436,7 +417,6 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selPhoTrkSumPtHollowConeDR04", &selPhoTrkSumPtHollowConeDR04, &b_selPhoTrkSumPtHollowConeDR04);
    fChain->SetBranchAddress("selPhoTrkSumPtSolidConeDR04", &selPhoTrkSumPtSolidConeDR04, &b_selPhoTrkSumPtSolidConeDR04);
    fChain->SetBranchAddress("subLeadSelPho", &subLeadSelPho, &b_subLeadSelPho);
-
    fChain->SetBranchAddress("nJets", &nJets, &b_nJets);
    fChain->SetBranchAddress("nSelJets", &nSelJets, &b_nSelJets);
    fChain->SetBranchAddress("selGenJetDpt", &selGenJetDpt, &b_selGenJetDpt);
@@ -466,7 +446,6 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selJetSusyId", &selJetSusyId, &b_selJetSusyId);
    fChain->SetBranchAddress("selJetTime", &selJetTime, &b_selJetTime);
    fChain->SetBranchAddress("selJetchHEF", &selJetchHEF, &b_selJetchHEF);
-
    fChain->SetBranchAddress("SCosA", &SCosA, &b_SCosA);
    fChain->SetBranchAddress("SMass", &SMass, &b_SMass);
    fChain->SetBranchAddress("X1aCosA", &X1aCosA, &b_X1aCosA);
@@ -477,112 +456,10 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("X2aMass", &X2aMass, &b_X2aMass);
    fChain->SetBranchAddress("X2bCosA", &X2bCosA, &b_X2bCosA);
    fChain->SetBranchAddress("X2bMass", &X2bMass, &b_X2bMass);
-   //Notify();
+   Notify();
 }
 
-void kuSkimTree::getBranches(Long64_t entry){
-
-   b_DataSetKey->GetEntry(entry);   //!
-   b_evtGenWgt->GetEntry(entry);   //!
-
-   b_selCMet->GetEntry(entry);   //!
-   b_selCMetPx->GetEntry(entry);   //!
-   b_selCMetPy->GetEntry(entry);   //!
-
-   b_genPartEnergy->GetEntry(entry);   //!
-   b_genPartEta->GetEntry(entry);   //!
-   b_genPartPdgId->GetEntry(entry);   //!
-   b_genPartPhi->GetEntry(entry);   //!
-   b_genPartPt->GetEntry(entry);   //!
-   b_genPartSusId->GetEntry(entry);   //!
-
-   b_leadSelPho->GetEntry(entry);   //!
-   b_nPhotons->GetEntry(entry);   //!
-   b_nSelPhotons->GetEntry(entry);   //!
-   b_selPhoClstrRn->GetEntry(entry);   //!
-   b_selPhoCovEtaEta->GetEntry(entry);   //!
-   b_selPhoCovEtaPhi->GetEntry(entry);   //!
-   b_selPhoCovPhiPhi->GetEntry(entry);   //!
-   b_selPhoEcalRHSumEtConeDR04->GetEntry(entry);   //!
-   b_selPhoEnergy->GetEntry(entry);   //!
-   b_selPhoEta->GetEntry(entry);   //!
-   b_selPhoEtaWidth->GetEntry(entry);   //!
-   b_selPhoGenDp->GetEntry(entry);   //!
-   b_selPhoGenDr->GetEntry(entry);   //!
-   b_selPhoGenIdx->GetEntry(entry);   //!
-   b_selPhoGenPt->GetEntry(entry);   //!
-   b_selPhoHadOverEM->GetEntry(entry);   //!
-   b_selPhoHadTowOverEM->GetEntry(entry);   //!
-   b_selPhoHcalTowerSumEtBcConeDR04->GetEntry(entry);   //!
-   b_selPhoNrh->GetEntry(entry);   //!
-   b_selPhoOOT->GetEntry(entry);   //!
-   b_selPhoPhi->GetEntry(entry);   //!
-   b_selPhoPhiWidth->GetEntry(entry);   //!
-   b_selPhoPhoIsoDr->GetEntry(entry);   //!
-   b_selPhoPixelSeed->GetEntry(entry);   //!
-   b_selPhoPt->GetEntry(entry);   //!
-   b_selPhoPtOrder->GetEntry(entry);   //!
-   b_selPhoQuality->GetEntry(entry);   //!
-   b_selPhoR9->GetEntry(entry);   //!
-   b_selPhoS4->GetEntry(entry);   //!
-   b_selPhoSAlp->GetEntry(entry);   //!
-   b_selPhoSMaj->GetEntry(entry);   //!
-   b_selPhoSMin->GetEntry(entry);   //!
-   b_selPhoSieie->GetEntry(entry);   //!
-   b_selPhoSieip->GetEntry(entry);   //!
-   b_selPhoSipip->GetEntry(entry);   //!
-   b_selPhoSusyId->GetEntry(entry);   //!
-   b_selPhoTime->GetEntry(entry);   //!
-   b_selPhoTrkSumPtHollowConeDR03->GetEntry(entry);   //!
-   b_selPhoTrkSumPtHollowConeDR04->GetEntry(entry);   //!
-   b_selPhoTrkSumPtSolidConeDR04->GetEntry(entry);   //!
-   b_subLeadSelPho->GetEntry(entry);   //!
-
-   b_nJets->GetEntry(entry);   //!
-   b_nSelJets->GetEntry(entry);   //!
-   b_selGenJetDpt->GetEntry(entry);   //!
-   b_selGenJetEnergy->GetEntry(entry);   //!
-   b_selGenJetImpAng->GetEntry(entry);   //!
-   b_selGenJetLlpTime->GetEntry(entry);   //!
-   b_selGenJetPt->GetEntry(entry);   //!
-   b_selGenJetTime->GetEntry(entry);   //!
-   b_selGenJetTof->GetEntry(entry);   //!
-   b_selGenJetdr->GetEntry(entry);   //!
-   b_selGenJeteta->GetEntry(entry);   //!
-   b_selJetArea->GetEntry(entry);   //!
-   b_selJetChEmEF->GetEntry(entry);   //!
-   b_selJetChHM->GetEntry(entry);   //!
-   b_selJetEnergy->GetEntry(entry);   //!
-   b_selJetEta->GetEntry(entry);   //!
-   b_selJetLlpDp->GetEntry(entry);   //!
-   b_selJetLlpDr->GetEntry(entry);   //!
-   b_selJetMass->GetEntry(entry);   //!
-   b_selJetMuEF->GetEntry(entry);   //!
-   b_selJetNeEmEF->GetEntry(entry);   //!
-   b_selJetNeHEF->GetEntry(entry);   //!
-   b_selJetNeHM->GetEntry(entry);   //!
-   b_selJetPhi->GetEntry(entry);   //!
-   b_selJetPt->GetEntry(entry);   //!
-   b_selJetQuality->GetEntry(entry);   //!
-   b_selJetSusyId->GetEntry(entry);   //!
-   b_selJetTime->GetEntry(entry);   //!
-   b_selJetchHEF->GetEntry(entry);   //!
-
-   b_SCosA->GetEntry(entry);   //!
-   b_SMass->GetEntry(entry);   //!
-   b_X1aCosA->GetEntry(entry);   //!
-   b_X1aMass->GetEntry(entry);   //!
-   b_X1bCosA->GetEntry(entry);   //!
-   b_X1bMass->GetEntry(entry);   //!
-   b_X2aCosA->GetEntry(entry);   //!
-   b_X2aMass->GetEntry(entry);   //!
-   b_X2bCosA->GetEntry(entry);   //!
-   b_X2bMass->GetEntry(entry);   //!
-
-}//<<>>void kuSkimTree::getBranches(Long64_t entry)
-
-/*
-Bool_t kuSkimTree::Notify()
+Bool_t newvar::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -593,20 +470,18 @@ Bool_t kuSkimTree::Notify()
    return kTRUE;
 }
 
-void kuSkimTree::Show(Long64_t entry)
+void newvar::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t kuSkimTree::Cut(Long64_t entry)
+Int_t newvar::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-*/
-
-#endif // #ifdef kuSkimTree_cxx
+#endif // #ifdef newvar_cxx

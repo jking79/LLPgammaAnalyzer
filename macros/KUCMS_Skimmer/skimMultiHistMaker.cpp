@@ -19,7 +19,7 @@
 //// HistMaker class ----------------------------------------------------------------------------------------------------------------
 ////-----------------------------------------------------------------------------------------------------------------------------
 
-void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float va, float vb, float vc ){
+void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float va, float vb, float vc, float vd ){
 
     //bool debug = true;
     bool debug = false;
@@ -33,6 +33,7 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
 	cutva = va;
     cutvb = vb;
     cutvc = vc;
+    cutvd = vd;
     preCutNPhotons = 0;
     preCut30NPhotons = 0;
     preCut100NPhotons = 0;
@@ -262,7 +263,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 		bool jetphoton = false;
 		for( int jit = 0; jit < nSelJets; jit++ ){
 
-			float dpjeta = (*selJetEta)[jit] - (*selPhoPhi)[it];
+			float dpjeta = (*selJetEta)[jit] - (*selPhoEta)[it];
 			float dpjphi = dPhi( (*selJetPhi)[jit], (*selPhoPhi)[it] );	
 			float dr = hypo( dpjeta, dpjphi );
 			if( dr < 0.4 ) jetphoton = true;
@@ -330,12 +331,18 @@ void HistMaker::eventLoop( Long64_t entry ){
 		if( (*selPhoPt)[it] > 30 ) totNSel30Photons++;
         if( (*selPhoPt)[it] > 100 ) totNSel100Photons++;
 
-        bool hcalsum = true;
-        //bool hcalsum = (*selPhoHcalTowerSumEtBcConeDR04)[it] < 2.45;
-        bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < cutvb; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+        //bool hcalsum = true;
+        //bool hcalsum = (*selPhoHcalTowerSumEtBcConeDR04)[it] < cutvd;
+        bool hcalsum = (*selPhoHcalTowerSumEtConeDR04)[it] < cutvd;
+        //bool hcalsum = (*selPhoHcalTowerSumEtBcConeDR04)[it] < ( 0.0025 * (*selPhoPt)[it] + 2.2 );
+        bool tsptscdr4 = (*selPhoTrkSumPtHollowConeDR04)[it] < cutvb; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+        //bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] <( 0.001 * (*selPhoPt)[it] + 3.5 ); 
 		bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < cutvc;
+        //bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < ( 0.006 * (*selPhoPt)[it] + 4.2 );
         bool htoem = (*selPhoHadTowOverEM)[it] < cutva;
+        //bool htoem = (*selPhoHadTowOverEM)[it] < 0.05;
         bool isoskip = not ( htoem && tsptscdr4 && ecalrhsum && hcalsum );
+        //bool isoskip = false;
         if( isoskip ) continue;
         totNCutPhotons++;
 
@@ -368,23 +375,40 @@ void HistMaker::eventLoop( Long64_t entry ){
         //hist1d[117]->Fill((*selPhoGeoSMin)[it]);
         hist1d[125]->Fill((*selPhoHcalTowerSumEtBcConeDR04)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[206]->Fill((*selPhoHcalTowerSumEtBcConeDR04)[it],(*selPhoPt)[it]);
+        hist2d[213]->Fill((*selPhoHcalTowerSumEtBcConeDR04)[it],(*selPhoTrkSumPtSolidConeDR04)[it]);
+        hist2d[214]->Fill((*selPhoHcalTowerSumEtBcConeDR04)[it],(*selPhoEcalRHSumEtConeDR04)[it]);
+        hist2d[215]->Fill((*selPhoHcalTowerSumEtBcConeDR04)[it],(*selPhoHadTowOverEM)[it]);
         hist1d[126]->Fill((*selPhoTrkSumPtHollowConeDR03)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[207]->Fill((*selPhoTrkSumPtHollowConeDR03)[it],(*selPhoPt)[it]);
+
         hist1d[127]->Fill((*selPhoTrkSumPtHollowConeDR04)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[208]->Fill((*selPhoTrkSumPtHollowConeDR04)[it],(*selPhoPt)[it]);
         hist1d[128]->Fill((*selPhoTrkSumPtSolidConeDR04)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[209]->Fill((*selPhoTrkSumPtSolidConeDR04)[it],(*selPhoPt)[it]);
+        hist2d[216]->Fill((*selPhoTrkSumPtSolidConeDR04)[it],(*selPhoEcalRHSumEtConeDR04)[it]);
+        hist2d[217]->Fill((*selPhoTrkSumPtSolidConeDR04)[it],(*selPhoHadTowOverEM)[it]);
         //hist1d[129]->Fill((*selPhoPixelSeed)[it]); //("phoPt", "phoPt", 500, 0, 5000);
         if( DEBUG ) std::cout << " -- looping photons : filling var hist 5" << std::endl;
         hist1d[130]->Fill((*selPhoEcalRHSumEtConeDR04)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[210]->Fill((*selPhoEcalRHSumEtConeDR04)[it],(*selPhoPt)[it]);
+        hist2d[218]->Fill((*selPhoEcalRHSumEtConeDR04)[it],(*selPhoHadTowOverEM)[it]);
         hist1d[131]->Fill((*selPhoHadTowOverEM)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         hist2d[211]->Fill((*selPhoHadTowOverEM)[it],(*selPhoPt)[it]);
         if( DEBUG ) std::cout << " -- looping photons : filling var hist 6" << std::endl;
-        hist1d[132]->Fill((*selPhoSieip)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
+        //hist1d[132]->Fill((*selPhoSieip)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         //if( DEBUG ) std::cout << " -- looping photons : selPhoSipip = " << (*selPhoSipip)[it] << std::endl;
         //hist1d[134]->Fill((*selPhoSipip)[it],fillwt); //("phoPt", "phoPt", 500, 0, 5000);
         if( DEBUG ) std::cout << " -- looping photons : filling var hist done" << std::endl;
+        //hist1d[81]->Fill((*)[it],fillwt); //
+        hist1d[82]->Fill((*selPhoS4)[it],fillwt); //
+        hist1d[83]->Fill((*selPhoEtaWidth)[it],fillwt); //
+        hist1d[84]->Fill((*selPhoPhiWidth)[it],fillwt); //
+        hist1d[85]->Fill((*selPhoSAlp)[it],fillwt); //
+        hist1d[86]->Fill((*selPhoCovEtaEta)[it],fillwt); //
+        hist1d[87]->Fill((*selPhoCovEtaPhi)[it],fillwt); //
+        hist1d[88]->Fill((*selPhoCovPhiPhi)[it],fillwt); //
+        hist1d[89]->Fill((*selPhoSieip)[it],fillwt); //
+        hist1d[90]->Fill((*selPhoSipip)[it],fillwt); //
 
         //if( DEBUG ) std::cout << " -- looping photons : filling lead phio" << std::endl;
         if( (*selPhoPt)[it] >= 30  ){
@@ -695,6 +719,17 @@ void HistMaker::initHists( std::string ht ){
     //std::vector<float>   *selPhoTime;
     //UInt_t          subLeadSelPho;
 
+    //hist1d[81] = new TH1D("SigmaIEtaIEta", mkht(ht,"SigmaIEtaIEta").c_str(), 100, 0, 0.01);
+    hist1d[82] = new TH1D("S4", mkht(ht,"S4").c_str(), 100, 0, 1);
+    hist1d[83] = new TH1D("etaWidth", mkht(ht,"etaWidth").c_str(), 50, 0, 0.5);
+    hist1d[84] = new TH1D("phiWidth", mkht(ht,"phiWidth").c_str(), 120, 0, 1.2);
+    hist1d[85] = new TH1D("SAlp", mkht(ht,"SAlp").c_str(), 250, -1.75, 1.75);
+    hist1d[86] = new TH1D("CovEtaEta", mkht(ht,"CovEtaEta").c_str(), 100, 0, 0.01);
+    hist1d[87] = new TH1D("CovEtaPhi", mkht(ht,"CovEtaPhi").c_str(), 100, -0.005, 0.005);
+    hist1d[88] = new TH1D("CovPhiPhi", mkht(ht,"CovPhiPhi").c_str(), 125, 0, 0.0125);
+    hist1d[89] = new TH1D("phoSieip", mkht(ht,"phoSieip").c_str(), 400, -0.002, 0.002);
+    hist1d[90] = new TH1D("phoSipip", mkht(ht,"phoSipip").c_str(), 100, 0, 0.1);
+
     hist1d[100] = new TH1D("phoEff", mkht(ht,"phoEff").c_str(), 11, 0, 1.1);
     hist1d[101] = new TH1D("phoClstrRn", mkht(ht,"phoClstrRn").c_str(), 100, 0, 1);
     hist1d[102] = new TH1D("phoEta", mkht(ht,"phoEta").c_str(), 700, -3.5, 3.5);
@@ -704,10 +739,10 @@ void HistMaker::initHists( std::string ht ){
     hist1d[106] = new TH1D("phoGenPt", mkht(ht,"phoGenPt").c_str(), 750, 0, 750);
     hist1d[108] = new TH1D("phoPhoIsoDr", mkht(ht,"phoPhoIsoDr").c_str(), 100, 0, 10);
     hist1d[109] = new TH1D("phoR9", mkht(ht,"phoR9").c_str(), 100, 0, 1);
-    hist1d[110] = new TH1D("phoNrh", mkht(ht,"phoNrh").c_str(), 100, 0, 100); 
-    hist1d[111] = new TH1D("phoSMaj", mkht(ht,"phoSMaj").c_str(), 20, 0, 2); 
-    hist1d[112] = new TH1D("phoSMin", mkht(ht,"phoSMin").c_str(), 100, 0, 1); 
-    hist1d[113] = new TH1D("phoSieie", mkht(ht,"phoSieie").c_str(), 100, 0, 0.02); 
+    hist1d[110] = new TH1D("phoNrh", mkht(ht,"phoNrh").c_str(), 125, 0, 125); 
+    hist1d[111] = new TH1D("phoSMaj", mkht(ht,"phoSMaj").c_str(), 300, 0, 3); 
+    hist1d[112] = new TH1D("phoSMin", mkht(ht,"phoSMin").c_str(), 300, 0, 3); 
+    hist1d[113] = new TH1D("phoSieie", mkht(ht,"phoSieie").c_str(), 100, 0, 0.1); 
     hist1d[114] = new TH1D("phoTime", mkht(ht,"phoTime").c_str(), 500, -25, 25);
     hist1d[115] = new TH1D("phoQuality", mkht(ht,"phoQuality").c_str(), 4, 0, 4);
     hist1d[116] = new TH1D("phoR9zoom", mkht(ht,"phoR9zoom").c_str(), 200, 0.8, 1);
@@ -728,8 +763,6 @@ void HistMaker::initHists( std::string ht ){
     hist1d[129] = new TH1D("selPhoPixelSeed", mkht(ht,"selPhoPixelSeed").c_str(), 2, 0, 1);
     hist1d[130] = new TH1D("selPhoEcalRHSumEtConeDR04", mkht(ht,"selPhoEcalRHSumEtConeDR04").c_str(), 200, 0, 20);
     hist1d[131] = new TH1D("selPhoHadTowOverEM", mkht(ht,"selPhoHadTowOverEM").c_str(), 200, 0, 0.2);
-    hist1d[132] = new TH1D("selPhoSieip", mkht(ht,"selPhoSieip").c_str(), 100, 0, 0.01);
-    //hist1d[134] = new TH1D("selPhoSipip", mkht(ht,"selPhoSipip").c_str(), 100, 0, 0.01);
 
     hist1d[134] = new TH1D("nNoGenMatch", mkht(ht,"nNoGenMatch").c_str(), 20, 0, 20);
     hist1d[135] = new TH1D("phoGenType", mkht(ht,"phoGenType").c_str(), 45, -5, 40);
@@ -839,6 +872,13 @@ void HistMaker::initHists( std::string ht ){
     hist2d[211] = new TH2D("phoEvHtoem", mkht(ht,"pho Htoem v Pt;HadTowOverEM;Pt [GeV]").c_str(), 100, 0, 0.1, 1000, 0, 1000);
     hist2d[212] = new TH2D("phoPhoIsovPt", mkht(ht,"pho Iso Dr v Pt;pho Iso Dr; Pt [GeV}").c_str(), 100, 0, 10, 1000, 0, 1000);
 
+    hist2d[213] = new TH2D("phoHtsumvTsptsc", mkht(ht,"pho Htsebcdr04 v Tsptscdr04;HcalTowSumDR04;TrkSumPtSolidConeDR04").c_str(), 200, 0, 20, 200, 0, 20);
+    hist2d[214] = new TH2D("phoHtsumvErhsec", mkht(ht,"pho Htsebcdr04 v Erhsecdr04;HcalTowSumDR04;EcalRHSumEtConeDR04").c_str(), 200, 0, 20, 200, 0, 20);
+    hist2d[215] = new TH2D("phoHtsumvHtoem", mkht(ht,"pho Htsebcdr04 v Htoem;HcalTowSumDR04;HadTowOverEM").c_str(), 200, 0, 20, 300, 0, 0.06);
+    hist2d[216] = new TH2D("phoTspvErhsec", mkht(ht,"pho Tsptscdr04 v Erhsecdr04;TrkSumPtSolidConeDR04;EcalRHSumEtConeDR04").c_str(), 200, 0, 20, 200, 0, 20);
+    hist2d[217] = new TH2D("phoTspvHtoem", mkht(ht,"pho Tsptscdr04 v Htoem;TrkSumPtSolidConeDR04;HadTowOverEM").c_str(), 200, 0, 20, 300, 0, 0.06);
+    hist2d[218] = new TH2D("phoErhsecvHtoem", mkht(ht,"pho Erhsecdr04 v Htoem;EcalRHSumEtConeDR04;HadTowOverEM").c_str(), 200, 0, 20, 300, 0, 0.06);
+
 	//60 - 63
 
 	//--- rechit collections 350 - 399 -------------------------------------------------
@@ -897,101 +937,68 @@ int main ( int argc, char *argv[] ){
 				int cutb = 11;
                 float value0 = 10000.0;
                 // -- ecalRHSumEtConeDR04 (1)
-                float vcP = 3.6;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
-				std::list<float> cutsvc = { 8.0, 9.0, 10.0 };
+                float vcP = 5.4;// 0.006*(*Photon_pt)[it] + 4.2 : 4.32 4.5 4.8 5.4
+                std::list<float> cutsvc = { 10.0 };
+				//std::list<float> cutsvc = { 9.0, 10.0, 11.0 };
+                //std::list<float> cutsvc = { 11.0, 12.0, 13.0 };
                 //float value1 = 7.0;
                 //float value2 = 6.0;
                 //float value3 = 5.0;
+                //
 				// -- selPhoTrkSumPtSolidConeDR04 (2) 
-                float vbP = 4.8;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
-				std::list<float> cutsvb = { 5.0, 6.0, 7.0 };
+                float vbP = 3.7;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T) : 3.52 3.55 3.6 3.7
+				std::list<float> cutsvb = { 6.0 };
+				//std::list<float> cutsvb = { 5.0, 6.0, 7.0 };
+                //std::list<float> cutsvb = { 8.0, 9.0, 10.0 };
                 //float value1 = 13.0;
                 //float value2 = 15.0;
                 //float value3 = 17.0;
+                //
 				// -- selPhoHadTowOverEM (1)
-                float vaP = 0.05;// 0.001*(*Photon_pt)[it] + 3.5(L)2.0(T)
-                std::list<float> cutsva = { 0.01, 0.02, 0.03 };
+                float vaP = 0.05;// 0.05;
+                std::list<float> cutsva = { 0.02 };
+                //std::list<float> cutsva = { 0.01, 0.02, 0.03 };
+                //std::list<float> cutsva = { 0.04, 0.05, 0.06 };
                 //float value1 = 0.03;
                 //float value2 = 0.02;
                 //float value3 = 0.01;
+                //
+                // -- hcalTowerSumEtBcConeDR04
+                float vdP = 2.7;// 0.0025*(*Photon_pt)[it] + 2.2 : 2.25 2.325 2.45 2.7
+                std::list<float> cutsvd = { 10000000 }; 
 
-                //auto outfilenamePs = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"; //7
-                //auto outfilename1s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"; //7
-                //auto outfilename2s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"; //7
-                //auto outfilename3s = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"; //7
+                std::string outfilename0s = "KUCMS_GMSB_L100_Met150_Signal_v16b_"; //iso0_Skim_BaseHists.root"; //7
+                std::string outfilename0b = "KUCMS_GMSB_L100_Met150_notSig_v16b_"; //iso0_Skim_BaseHists.root"; //11
+                std::string outfilename0d = "KUCMS_JetHt_18D_Met150_notSig_v16b_"; //iso0_Skim_BaseHists.root"; //11                
+                std::string ofnending = "Skim_multiHists.root";
 
-                //auto outfilenamePb = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"; //11
-                //auto outfilename1b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"; //11
-                //auto outfilename2b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"; //11
-                //auto outfilename3b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"; //11
-                //auto outfilenamePd = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"; //11
-                //auto outfilename1d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"; //11
-                //auto outfilename2d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"; //11
-                //auto outfilename3d = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"; //11
-
-
-                //auto outfilename = "KUCMS_GMSB_L100_Met150_XFSR_v13_Skim_BaseHists.root"; //8
-                //auto outfilename = "KUCMS_GMSB_L100_Met150_Other_v15_Skim_BaseHists.root"; //9
-                //auto outfilename = "KUCMS_GMSB_L100_Met150_UnMatched_v13_Skim_BaseHists.root"; //10
-                //auto outfilename0b = "KUCMS_GMSB_L100_Met150_notSig_v15_Skim_BaseHists.root"; //11
-
-                //auto outfilename = "KUCMS_GJets_HT40tInf_Met150_Other_v10a_Skim_BaseHists.root"; //9
-                //auto outfilename = "KUCMS_GJets_HT40tInf_Met150_UnMatched_v10a_Skim_BaseHists.root"; //10
-
-                //auto outfilename = "KUCMS_JetHT_Met150_Other_v15_Skim_BaseHists.root"; //9
-
-				//auto htitle = "GMSB_met150_1t4_v9_Not2_";
-
-                //auto htitle0s = "GMSB_met150_L100_v15_iso0_Signal_";
-                //auto htitlePs = "GMSB_met150_L100_v15_iso1_Signal_";
-                //auto htitle1s = "GMSB_met150_L100_v15_iso2_Signal_";
-                //auto htitle2s = "GMSB_met150_L100_v15_iso3_Signal_";
-                //auto htitle3s = "GMSB_met150_L100_v15_iso4_Signal_";
-
-                //auto htitle0b = "GMSB_met150_L100_v15_iso0_notSig_";
-                //auto htitlePb = "GMSB_met150_L100_v15_iso1_notSig_";
-                //auto htitle1b = "GMSB_met150_L100_v15_iso2_notSig_";
-                //auto htitle2b = "GMSB_met150_L100_v15_iso3_notSig_";
-                //auto htitle3b = "GMSB_met150_L100_v15_iso4_notSig_";
-
-                //auto htitle0d = "JetHT_met150_18D_v15_iso0_notSig_";
-                //auto htitlePd = "JetHT_met150_18D_v15_iso1_notSig_";
-                //auto htitle1d = "JetHT_met150_18D_v15_iso2_notSig_";
-                //auto htitle2d = "JetHT_met150_18D_v15_iso3_notSig_";
-                //auto htitle3d = "JetHT_met150_18D_v15_iso4_notSig_";
-
-                //auto htitle = "GJets_met150_40tInf_Other_v10_";
-                //auto htitle = "GJets_met150_40tInf_UnMatched_v10_";
-
-                //auto htitle = "JetHT_met150_L100_v15_Other_";
-
-                std::string outfilename0s = "KUCMS_GMSB_L100_Met150_Signal_v15_"; //iso0_Skim_BaseHists.root"; //7
-                std::string outfilename0b = "KUCMS_GMSB_L100_Met150_notSig_v15_"; //iso0_Skim_BaseHists.root"; //11
-                std::string outfilename0d = "KUCMS_JetHt_18D_Met150_notSig_v15_"; //iso0_Skim_BaseHists.root"; //11                
-                std::string ofnending = "Skim_BaseHists.root";
-
-                std::string htitle0s = "GMSB_met150_L100_v15_Signal_";
-                std::string htitle0b = "GMSB_met150_L100_v15_notSig_";
-                std::string htitle0d = "JetHT_met150_18D_v15_notSig_";
+                std::string htitle0s = "GMSB_met150_L100_v16_Signal_";
+                std::string htitle0b = "GMSB_met150_L100_v16_notSig_";
+                std::string htitle0d = "JetHT_met150_18D_v16_notSig_";
 
                 HistMaker base;
+/*
+				//std::string isoline = "iso_005_360_480_245_";
+                std::string isoline = "iso_2610_shape_";
+				
+				std::string outfilenames = outfilename0s + isoline + ofnending;
+                std::string outfilenameb = outfilename0b + isoline + ofnending;
+                std::string outfilenamed = outfilename0d + isoline + ofnending; 				
 
-				//std::string outfilenames = outfilename0s + "iso_005_360_480_245_" + ofnending;
-                //std::string outfilenameb = outfilename0b + "iso_005_360_480_245_" + ofnending;
-                //std::string outfilenamed = outfilename0d + "iso_005_360_480_245_" + ofnending; 				
+                std::string htitles =  htitle0s + isoline;
+                std::string htitleb =  htitle0b + isoline;
+                std::string htitled =  htitle0d + isoline;
 
-                //std::string htitles =  htitle0s + "iso_005_360_480_245_";
-                //std::string htitleb =  htitle0b + "iso_005_360_480_245_";
-                //std::string htitled =  htitle0d + "iso_005_360_480_245_";
-
-                //base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, vaP, vbP, vcP );
-                //base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, vaP, vbP, vcP );
-                //base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, vaP, vbP, vcP );
+                base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, vaP, vbP, vcP, vdP );
+                //base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, vaP, vbP, vcP, vdP );
+                //base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, vaP, vbP, vcP, vdP );
+*/
 
 				for( auto va : cutsva ){
 					for( auto vb : cutsvb ){
 						for( auto vc : cutsvc ){
 
+							float vd = 1000000;
 							std::string astr = std::to_string( int(va * 100) );
                             std::string bstr = std::to_string( int(vb * 10) );
                             std::string cstr = std::to_string( int(vc * 10) );
@@ -1006,29 +1013,14 @@ int main ( int argc, char *argv[] ){
             			    std::string outfilenameb = outfilename0b + isostr + ofnending;
 			                std::string outfilenamed = outfilename0d + isostr + ofnending;
                             //std::cout << " - " << outfilenames << std::endl;
-                			base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, va, vb, vc );
-                			base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, va, vb, vc );
-                			base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, va, vb, vc );
+                			base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, va, vb, vc, vd );
+                			//base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, va, vb, vc, vd );
+                			base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, va, vb, vc, vd );
 
 						}//for( vc : cutsvc )
 					}//for( vb : cutsvb )
 				}//for( va : cutsva )
 			
-
-                //base.histMaker( listdir, infilenameGMSB, outfilenamePs, htitlePs, cuts, valueP );
-                //base.histMaker( listdir, infilenameGMSB, outfilename1s, htitle1s, cuts, value1 );
-                //base.histMaker( listdir, infilenameGMSB, outfilename2s, htitle2s, cuts, value2 );
-                //base.histMaker( listdir, infilenameGMSB, outfilename3s, htitle3s, cuts, value3 );
-
-                //base.histMaker( listdir, infilenameGMSB, outfilenamePb, htitlePb, cutb, valueP );
-                //base.histMaker( listdir, infilenameGMSB, outfilename1b, htitle1b, cutb, value1 );
-                //base.histMaker( listdir, infilenameGMSB, outfilename2b, htitle2b, cutb, value2 );
-                //base.histMaker( listdir, infilenameGMSB, outfilename3b, htitle3b, cutb, value3 );
-
-                //base.histMaker( listdir, infilenameJetHT, outfilenamePd, htitlePd, cutb, valueP );
-                //base.histMaker( listdir, infilenameJetHT, outfilename1d, htitle1d, cutb, value1 );
-                //base.histMaker( listdir, infilenameJetHT, outfilename2d, htitle2d, cutb, value2 );
-                //base.histMaker( listdir, infilenameJetHT, outfilename3d, htitle3d, cutb, value3 );
 
     //}
     return 1;

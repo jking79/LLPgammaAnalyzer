@@ -19,7 +19,7 @@
 //// HistMaker class ----------------------------------------------------------------------------------------------------------------
 ////-----------------------------------------------------------------------------------------------------------------------------
 
-void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle, int cut, float value ){
+void HistMaker::histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle ){
 
     //bool debug = true;
     bool debug = false;
@@ -29,8 +29,6 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
     const std::string eosdir("");
     const std::string listdir("");
 
-    cutselection = cut;
-	cutvalue = value;
     preCutNPhotons = 0;
     preCut30NPhotons = 0;
     preCut100NPhotons = 0;
@@ -196,6 +194,8 @@ void HistMaker::eventLoop( Long64_t entry ){
 	int totNCutPhotons = 0;
     int totNCut30Photons = 0;
     int totNCut100Photons = 0;
+	std::map<float,int> phoOrderIndx;
+	//vector<int> phoOrderIndx;
     int nSusPhoGN1(0), nSusPhoGN1d(0), nSusPhoGN2(0), nSusPhoGN2d(0), nSusPhoWN(0), nSusPhoZC(0), nPhoNoGen(0);
     if( DEBUG ) std::cout << " - Looping over " << nSelPhotons << " photons" << std::endl;
     for( int it = 0; it < nSelPhotons; it++ ){
@@ -259,7 +259,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 		bool isOtherType = isPrompt || isSfsr; // || phoSusId < 1;
         bool isNotSusyType = isPrompt || phoSusId < 9;
 
-		if( isSigType ) continue;
+		//if( isSigType ) continue;
 		//if( isNotSusyType ) continue;
 
         if( DEBUG ) std::cout << " -- looping photons : getting susy ids for " << selPhoSusyId->size() << std::endl;        
@@ -269,15 +269,38 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( (*selPhoPt)[it] > 100 ) totNSel100Photons++;
 
         bool hcalsum = true;
-        bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
-		bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < 9.0;
+        bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < 6.0; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+		bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < 10.0;
         bool htoem = (*selPhoHadTowOverEM)[it] < 0.02;
         bool isoskip = not ( htoem && tsptscdr4 && ecalrhsum && hcalsum );
         if( isoskip ) continue;
         totNCutPhotons++;
+		if( phoOrderIndx.count((*selPhoPt)[it]) > 0 ) std::cout << "Duplicate Pho Pt ---------------------- " << std::endl;
+        else phoOrderIndx[(*selPhoPt)[it]] = it;
 
 
     }//<<>>for( int it = 0; it < nPhotons; it++ )
+	bool pho1sig(false), pho2sig(false), pho12sig(false), pho3sig(false);
+	int phocount = 0;
+	if( phoOrderIndx.size() > 1 ){
+		//std::cout << " Pho Pts : ";
+		for( auto phoptit = phoOrderIndx.crbegin(); phoptit != phoOrderIndx.crend(); phoptit++ ){ 
+			auto index = phoptit->second;
+			bool isGMSB = (*selPhoSusyId)[index] == 22;
+			//std::cout << phoptit->first << " " << (*selPhoPt)[index] << " " << isGMSB << " : ";
+			phocount++;
+			if( phocount == 1 && isGMSB ){ pho1sig = true; pho12sig = true; }
+			if( phocount == 2 && isGMSB ){ pho2sig = true; } 
+			if( phocount == 2 && not isGMSB ){ pho12sig = pho12sig && false; }
+			if( phocount > 2 && isGMSB ){ pho3sig = true; }
+		}
+		//std::cout << std::endl;
+	}
+	if( not( pho1sig || pho2sig || pho12sig || pho3sig ) ) hist1d[0]->Fill(0);
+	if( pho12sig )  hist1d[0]->Fill(1);
+    if( pho1sig )  hist1d[0]->Fill(2);
+    if( pho2sig )  hist1d[0]->Fill(3);
+    if( pho3sig )  hist1d[0]->Fill(4);
 
     preCutNPhotons += totNSelPhotons;
     preCut30NPhotons += totNSel30Photons;
@@ -332,6 +355,7 @@ void HistMaker::initHists( std::string ht ){
 	//------------------------------------------------------------------------------------------
     //------ 1D Hists --------------------------------------------------------------------------
 
+    hist1d[0] = new TH1D("phoSigMatchEff", "phoSigMatchEEff", 5, 0, 5); 
 
 	//------- jets 0 - 99
     //UInt_t          nJets;
@@ -408,7 +432,7 @@ int main ( int argc, char *argv[] ){
 				auto htitle = "KUCMS_This_BaseHists_";
 
                 HistMaker base;
-                base.histMaker( listdir, infilename, outfilename, htitle, 0, 0 );
+                base.histMaker( listdir, infilename, outfilename, htitle );
     //}
     return 1;
 
