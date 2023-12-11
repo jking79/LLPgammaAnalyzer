@@ -33,17 +33,18 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'EGamma/'
 #command = eosll+mdis+'KUCMSNtuple/GMSB_AOD_v1/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v5/'
-command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v10/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v10/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_WJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v5/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v10/'
+command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v13/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_ZJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DYTT_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v10/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHTi_Met50_AOD_v2/'
 
 #version = 'Run2018A'
-version = 'GJets'
+#version = 'GJets'
+version = 'GMSB'
 #version = '_noOOTAmp_'
 #version = '_wthOOTAmp_'
 rootfile = '.root'
@@ -57,7 +58,7 @@ rootfile = '.root'
 #dirselect = 'noOOTCC_kustc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 #dirselect = 'CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 
-#dirselect = 'GMSB'
+dirselect = 'GMSB'
 #dirselect = 'AOD'
 #dirselect = 'WJetsToLNu_HT-800'
 #dirselect = 'QCD_HT100to200'
@@ -65,7 +66,7 @@ rootfile = '.root'
 #dirselect = 'DYJetsToLL_M-50'
 #dirselect = 'TTJets'
 #dirselect = 'JetHT'
-dirselect = 'GJets'
+#dirselect = 'GJets'
 
 #dirselect = ''
 
@@ -131,7 +132,7 @@ for line2 in targdirs :
     		if rootfile in lline : filelist.append(subdir2+lline)
    
     select =  line2.split("Tune")
-    outfile = 'kuntuple_' + select[0] + 'v10.txt'
+    outfile = 'kuntuple_' + select[0] + 'v11.txt'
     #print( outfile )
     outf = open( outfile, 'w' )
     for thefile in filelist:

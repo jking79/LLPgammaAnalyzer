@@ -242,7 +242,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 
         if( DEBUG ) std::cout << " -- looping photons : getting susy ids for " << selPhoSusyId->size() << std::endl;
         bool hcalsum = true;
-        bool tsptscdr4 = (*selPhoTrkSumPtSolidConeDR04)[it] < 6.0; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+        bool tsptscdr4 = (*selPhoTrkSumPtHollowConeDR04)[it] < 6.0; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
         bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < 10.0;
         bool htoem = (*selPhoHadTowOverEM)[it] < 0.02;
         bool isoskip = not ( htoem && tsptscdr4 && ecalrhsum && hcalsum );
@@ -275,8 +275,18 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( DEBUG ) std::cout << " -- looping photons : getting susy ids for " << selPhoSusyId->size() << std::endl;        
 
 		totNSelPhotons++;
-		if( (*selPhoPt)[it] > 30 ) totNSel30Photons++;
-        if( (*selPhoPt)[it] > 100 ) totNSel100Photons++;
+
+
+
+		if( (*selPhoPt)[it] < 30 ) continue;
+		totNSel30Photons++;
+
+
+
+        if( (*selPhoPt)[it] < 100 ) continue;
+		totNSel100Photons++;
+
+
 
 
     }//<<>>for( int it = 0; it < nPhotons; it++ )
@@ -311,54 +321,10 @@ void HistMaker::initHists( std::string ht ){
 
     hist1d[0] = new TH1D("phoSigMatchEff", "phoSigMatchEEff", 5, 0, 5); 
 
-	//------- jets 0 - 99
-    //UInt_t          nJets;
-    //UInt_t          nSelJets;
-    //std::vector<float>   *selJetEnergy;
-    //std::vector<float>   *selJetEta;
-    //std::vector<float>   *selJetMass;
-    //std::vector<float>   *selJetPhi;
-    //std::vector<float>   *selJetPt;
-    //std::vector<int>     *selJetQuality;
-    //std::vector<float>   *selJetTime;
 
-	//----- photons 100 - 249
-    //UInt_t          leadSelPho;
-    //UInt_t          nPhotons;
-    //UInt_t          nSelPhotons;
-    //std::vector<float>   *selPhoClstrRn;
-    //std::vector<float>   *selPhoEnergy;
-    //std::vector<float>   *selPhoEta;
-    //std::vector<float>   *selPhoGeoEgnVal;
-    //std::vector<float>   *selPhoGeoSMaj;
-    //std::vector<float>   *selPhoGeoSMin;
-    //std::vector<unsigned int> *selPhoNrh;
-    //std::vector<float>   *selPhoPhi;
-    //std::vector<float>   *selPhoPt;
-    //std::vector<int>     *selPhoQuality;
-    //std::vector<float>   *selPhoR9;
-    //std::vector<float>   *selPhoSMaj;
-    //std::vector<float>   *selPhoSMin;
-    //std::vector<float>   *selPhoSieie;
-    //std::vector<float>   *selPhoTime;
-    //UInt_t          subLeadSelPho;
 
-	//------  rjr 250 - 299
-    //std::vector<float>   *SCosA;
-    //std::vector<float>   *SMass;
-    //std::vector<float>   *X1aCosA;
-    //std::vector<float>   *X1aMass;
-    //std::vector<float>   *X1bCosA;
-    //std::vector<float>   *X1bMass;
-    //std::vector<float>   *X2aCosA;
-    //std::vector<float>   *X2aMass;
-    //std::vector<float>   *X2bCosA;
-    //std::vector<float>   *X2bMass;
 
-    //------  electrons 350 - 400
 
-	//-------- event vars 400 - 450
-	
     for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]) hist1d[it]->Sumw2();}
 
 	//------------------------------------------------------------------------------------------
@@ -381,9 +347,10 @@ int main ( int argc, char *argv[] ){
                 const std::string listdir = "skims_files/";
 				auto infilename = "KUCMS_Master_Skim_List.txt";
 
-                auto outfilename = "KUCMS_This_Skim_BaseHists.root"; //9
+                auto outfilename = "KUCMS_ShapeVar_Sig_SkimHists.root"; //9
+                //auto outfilename = "KUCMS_ShapeVar_Bkg_SkimHists.root"; //9
 
-				auto htitle = "KUCMS_This_BaseHists_";
+				auto htitle = "KUCMS_ShapeVar_Hists_";
 
                 HistMaker base;
                 base.histMaker( listdir, infilename, outfilename, htitle );
