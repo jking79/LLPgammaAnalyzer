@@ -16,6 +16,7 @@ p1=runKUCMSAodSkimmer
 p2=phoSelSkimHistMaker
 p3=skimMultiHistMaker
 p4=crStyleSkimHistMaker
+p5=skimSVHistMaker
 
 all: $(p1) 
 
@@ -30,3 +31,6 @@ $(p3): $(p3).cpp
 
 $(p4): $(p4).cpp
 	$(CC) -o $(p4).obj $(p4).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p5): $(p5).cpp
+	$(CC) -o $(p5).obj $(p5).cpp $(RTCFLAGS) $(RTGLIBS)

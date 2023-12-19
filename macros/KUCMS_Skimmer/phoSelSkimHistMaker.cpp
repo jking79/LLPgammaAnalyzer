@@ -10,8 +10,8 @@
 
 #include "skimHistMaker.hh"
 
-#define DEBUG true
-//#define DEBUG false
+//#define DEBUG true
+#define DEBUG false
 #define doEBEEmaps false
 
 //------------------------------------------------------------------------------------------------------------------------------------------
@@ -194,19 +194,20 @@ void HistMaker::eventLoop( Long64_t entry ){
 
 	std::vector<uInt> genSigPhoAccIdx;
     std::vector<uInt> genSigPhoIdx;
-	int nGenSigPho = 0;
 	uInt nGenPart = genPartPdgId->size();
 	for( uInt it = 0; it < nGenPart; it++ ){
 
 		auto partType = (*genPartPdgId)[it];
 		if( partType == 22 ){
 
-			if( std::abs((*selPhoEta)[it]) > 1.479 ) continue;
+            if( std::abs((*genPartEta)[it]) > 1.442 ) continue;
+            if( (*genPartPt)[it] < 30 ) continue;
 
 			auto phoSusType = (*genPartSusId)[it];
-            if( phoSusType == 22 ){ genSigPhoIdx.push_back(it); nGenSigPho++; }
+            if( phoSusType == 22 ){ genSigPhoIdx.push_back(it); }
 
-        	if( (*genPartPt)[it] < 30 ) continue;
+            //if( std::abs((*genPartEta)[it]) > 1.442 ) continue;
+            //if( (*genPartPt)[it] < 30 ) continue;
 
         	bool jetphoton = false;
         	for( int jit = 0; jit < nSelJets; jit++ ){
@@ -221,7 +222,7 @@ void HistMaker::eventLoop( Long64_t entry ){
             	if( dr < 0.4 ) jetphoton = true;
 
         	} // for( int jit = 0; jit < nSelJets; jit++ )
-        	//if( jetphoton ) continue; //{ std::cout << "Jet-Photon Overlap!!!" << std::endl; continue; }
+        	if( jetphoton ) continue; //{ std::cout << "Jet-Photon Overlap!!!" << std::endl; continue; }
 
 			if( phoSusType == 22 ){ genSigPhoAccIdx.push_back(it); }
 
@@ -292,11 +293,10 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( DEBUG ) std::cout << " - Looping over " << nSelPhotons << " photons" << std::endl;
     for( int it = 0; it < nSelPhotons; it++ ){
 
-		if( std::abs((*selPhoEta)[it]) > 1.479 ) continue;
+		if( std::abs((*selPhoEta)[it]) > 1.442 ) continue;
+        if( (*selPhoPt)[it] < 20 ) continue;
 
         recoPhoOrderIndx.push_back(it);
-
-        if( (*selPhoPt)[it] < 20 ) continue;
 
 		bool jetphoton = false;
 		for( int jit = 0; jit < nSelJets; jit++ ){
@@ -332,22 +332,22 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( DEBUG ) std::cout << "Finding Susy-Gen Matched for Reco: " << recoPhoOrderIndx.size() << " Gen: " << genSigPhoIdx.size() << std::endl;
 
     std::vector<int> genPhoSigMatch;
-	int nGenPhoSigMatch = 0;
 	for( auto genIndx : genSigPhoIdx ){
 		int genSusMatch = -1;
+		if( DEBUG ) std::cout << " - for genIndx: " << genIndx << std::endl;
 		for( auto phoptit : recoPhoOrderIndx ){
 			if( DEBUG ) std::cout << " -- looping photons : getting gen index for " << phoptit << std::endl;
 			auto partIndx = (*selPhoGenIdx)[phoptit];
-            if( DEBUG ) std::cout << " -- looping photons : getting susy ids for " << partIndx << std::endl;
-            auto susyid =  ( partIndx >= 0 ) ? (*genPartSusId)[partIndx] : -1;
-            bool isGMSB = ( susyid == 22 );
-            if( not isGMSB ) continue;
+            if( DEBUG ) std::cout << " -- looping photons : hass partIndx: " << partIndx << std::endl;
+            //auto susyid =  ( partIndx >= 0 ) ? (*genPartSusId)[partIndx] : -1;
+            //bool isGMSB = ( susyid == 22 );
+            //if( not isGMSB ) continue;
 			if( partIndx == genIndx ){ genSusMatch = genIndx; break; }
 		}//<<>>for( auto phoptit = recoPhoOrderIndx.crbegin(); phoptit != recoPhoOrderIndx.crend(); phoptit++ )
-		if( genSusMatch != -1 ){ genPhoSigMatch.push_back(genSusMatch); nGenPhoSigMatch++; }
+		if( genSusMatch != -1 ){ genPhoSigMatch.push_back(genSusMatch); }
 	}//<<>>for( auto genIndx : genSigPhoIdx )
 
-    if( DEBUG ) std::cout << "Finding reco-gen signal photon match acc" << std::endl;
+    if( DEBUG ) std::cout << "Finding reco-gen signal photon match" << std::endl;
     /////////////////// find reco-gen signal photon match ////////////////////////////////////////////////////////////////////////////////
 
 	int phocount = 0;
@@ -362,13 +362,12 @@ void HistMaker::eventLoop( Long64_t entry ){
             auto partIndx = (*selPhoGenIdx)[phoptit];
 			auto susyid =  ( partIndx >= 0 ) ? (*genPartSusId)[partIndx] : -1;
             bool isGMSB = ( susyid == 22 );
-
+            if( DEBUG ) std::cout << " --- looping phoOrder : getGenindx :  "  << partIndx << std::endl;
 			//bool isGMSB = (*selPhoSusyId)[index] == 22;
             if( DEBUG ) std::cout << " --- looping phoOrder : find is susy :  "  << (*genPartSusId)[partIndx] << std::endl;
 			//std::cout << phoptit->first << " " << (*selPhoPt)[index] << " " << isGMSB << " : ";
 			if( not isGMSB ) continue;
 
-			if( DEBUG ) std::cout << " --- looping phoOrder : getGenindx :  "  << partIndx << std::endl;
 			int genSusMatch = -1;
 			int genSusOrder = 0;
 			int genSusCnt = 0;
@@ -382,24 +381,25 @@ void HistMaker::eventLoop( Long64_t entry ){
 		//std::cout << std::endl;
 	}//<<>>if( recoPhoOrderIndx.size() > 0 )
 
+    if( DEBUG ) std::cout << "Finding reco-gen signal photon match acc" << std::endl;
     phocount = 0;
     std::vector<int> sigPhoAccIndx;
     std::vector<int> sigPhoAccOrder;
     std::vector<int> sigPhoGenAccMatch;
     std::vector<int> sigPhoGenAccOrder;
     if( recoPhoAccOrderIndx.size() > 0 ){
-        for( auto phoptit : genSigPhoIdx ){
+        for( auto phoptit : recoPhoAccOrderIndx ){
             phocount++;
             auto partIndx = (*selPhoGenIdx)[phoptit];
             auto susyid =  ( partIndx >= 0 ) ? (*genPartSusId)[partIndx] : -1;
             bool isGMSB = ( susyid == 22 );
-            
+          
+            if( DEBUG ) std::cout << " --- looping phoOrder acc : getGenindx :  "  << partIndx << std::endl;  
             //bool isGMSB = (*selPhoSusyId)[index] == 22;
-            if( DEBUG ) std::cout << " --- looping phoOrder : find is susy :  "  << (*genPartSusId)[partIndx] << std::endl;
+            if( DEBUG ) std::cout << " --- looping phoOrder acc : find is susy :  "  << (*genPartSusId)[partIndx] << std::endl;
             //std::cout << phoptit->first << " " << (*selPhoPt)[index] << " " << isGMSB << " : ";
             if( not isGMSB ) continue;
             
-            if( DEBUG ) std::cout << " --- looping phoOrder : getGenindx :  "  << partIndx << std::endl;
             int genSusMatch = -1;
             int genSusOrder = 0;
             int genSusCnt = 0; 
@@ -414,12 +414,6 @@ void HistMaker::eventLoop( Long64_t entry ){
 
     if( DEBUG ) std::cout << "Filling Hists Acc" << std::endl;
     /////////////////// fill hists Acc ////////////////////////////////////////////////////////////////////////////////
-
-	auto nGenPho = selPhoGenIdx->size();
-	int nGenPhoMatched = 0;
-	for( auto idx : *selPhoGenIdx ){ if( idx > -1 ) nGenPhoMatched++; }
-
-    if( DEBUG ) std::cout << " -- looping photons : Filling pho sig-gen eff hists "  << std::endl;
 
     if( DEBUG ) std::cout << " -- looping photons : Filling gen cnt Acc hists "  << std::endl;
     auto nGenSigPhoAcc = genSigPhoAccIdx.size();
@@ -458,15 +452,15 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( nSigPhoAcc == 0 && nGenSigPhoAcc == 1 ) hist1d[0]->Fill(11);
     if( nSigPhoAcc > 1 && nGenSigPhoAcc == 1 ) hist1d[0]->Fill(12);
 
+
+    /////////////////// fill hists no Acc ////////////////////////////////////////////////////////////////////////////////
     if( DEBUG ) std::cout << " -- looping photons : Filling gen cnt hists "  << std::endl;
-    //auto nGenSigPho = genSigPhoIdx.size();
+
+    auto nGenSigPho = genSigPhoIdx.size();
     if( nGenSigPho == 0 ){ hist1d[7]->Fill(0); hist1d[7]->Fill(1);}
     //if( nGenSigPho == 1 ){ hist1d[7]->Fill(2); hist1d[7]->Fill(3); hist1d[7]->Fill(4); hist1d[7]->Fill(5); hist1d[7]->Fill(6);}
     if( nGenSigPho == 2 ){ hist1d[7]->Fill(2); hist1d[7]->Fill(5); hist1d[7]->Fill(8); }//<<>>if( nGenSigPho == 2 )
     if( nGenSigPho == 1 ){ hist1d[7]->Fill(9); hist1d[7]->Fill(11); hist1d[7]->Fill(12);}
-
-    if( DEBUG ) std::cout << "Filling Hists Any" << std::endl;
-    /////////////////// fill hists no Acc ////////////////////////////////////////////////////////////////////////////////
 
     if( DEBUG ) std::cout << " -- looping photons : Filling reco cnt hists "  << std::endl;
     // sigPhoGenOrder[x] == 0 -> unmatched   sigPhoGenOrder[x] > 0 -> matched
@@ -501,22 +495,16 @@ void HistMaker::eventLoop( Long64_t entry ){
 
 	if( DEBUG ) std::cout << " -- looping photons : Filling reco cnt other hists "  << std::endl;
 
-    //int nSigPho = sigPhoIndx.size();
-    int nSigPhoMatched = 0;
-    for( auto idx : sigPhoIndx ){ if( idx > -1 ) nSigPhoMatched++; }
-	double nGenSigMatch = 0;
-	for( auto idx : genPhoSigMatch ){ nGenSigMatch++; }
-	double nGenSig = 0;
-    for( auto idx : genSigPhoIdx ){ nGenSig++; }
+	double nGenSigMatch = genPhoSigMatch.size();
 
 	//hist1d[3]->Fill(0, argggghhhhh!!!!  no worky
-    hist1d[3]->Fill(2, nGenSigPhoAcc);		hist1d[4]->Fill(2, nGenSig); //	hist1d[3]->Fill(1, nGenSigPhoAcc);
+    hist1d[3]->Fill(2, nGenSigPhoAcc);		hist1d[4]->Fill(2, nGenSigPho); //	hist1d[3]->Fill(1, nGenSigPhoAcc);
 
-    hist1d[3]->Fill(3, nSigPho);			hist1d[4]->Fill(3, nGenSig); //		hist1d[3]->Fill(2, nGenSigPho);
+    hist1d[3]->Fill(3, nSigPho);			hist1d[4]->Fill(3, nGenSigPho); //		hist1d[3]->Fill(2, nGenSigPho);
     hist1d[3]->Fill(4, nSigPhoAcc);			hist1d[4]->Fill(4, nSigPho); //	hist1d[3]->Fill(3, nSigPhoAcc);
     hist1d[3]->Fill(5, nSigPhoAcc);			hist1d[4]->Fill(5, nGenSigPhoAcc); //    hist1d[3]->Fill(4, nSigPho);
 
-    hist1d[3]->Fill(1, nGenSigMatch);       hist1d[4]->Fill(1, nGenSig);//   hist1d[3]->Fill(0, nGenPhoSigMatch);
+    hist1d[3]->Fill(1, nGenSigMatch);       hist1d[4]->Fill(1, nGenSigPho);//   hist1d[3]->Fill(0, nGenPhoSigMatch);
 
 	//-------- electrons --------------------------------------
 
@@ -647,7 +635,7 @@ int main ( int argc, char *argv[] ){
                 const std::string listdir = "skims_files/";
 				auto infilename = "KUCMS_Master_Skim_List.txt";
 
-                auto outfilename = "KUCMS_phoRecoGenSigEff_Hists.root"; //9
+                auto outfilename = "KUCMS_phoRecoGenSigEff_Hists_t3.root"; //9
 
 				auto htitle = "KUCMS_phoRecoGenSigEff_Hists_";
 

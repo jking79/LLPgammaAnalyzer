@@ -99,7 +99,7 @@ void normTH1D(TH1D* hist){
 
 }//<<>>void NormTH1D(TH1D* hist)
 
-void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
+void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist, float range = 0.2 ){
 
     std::cout << "Profile " << " hist: " << nhist->GetName() << std::endl;
 
@@ -110,9 +110,9 @@ void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
         auto mean = phist->GetMean();
         auto stdv = phist->GetStdDev();
         auto norm = phist->GetBinContent(phist->GetMaximumBin());
-        auto high = mean + 0.2*stdv;
-        auto low = mean - 0.2*stdv;
-        if( abs(stdv) > 0.01 && abs(norm) > 1 ){
+        auto high = mean + range*stdv;
+        auto low = mean - range*stdv;
+        if( abs(stdv) > 0.0 && abs(norm) > 1 ){
             auto tmp_form = new TFormula("tmp_formula","[0]*exp(-0.5*((x-[1])/[2])**2)");
             auto tmp_fit  = new TF1("tmp_fit",tmp_form->GetName(),low,high);
             tmp_fit->SetParameter(0,norm); //tmp_fit->SetParLimits(0,norm/2,norm*2);
@@ -123,10 +123,12 @@ void profileTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist){
             auto error = tmp_fit->GetParError(1);
             auto fNdf = tmp_fit->GetNDF();
             auto fProb = tmp_fit->GetProb();
+			auto fChi2 = tmp_fit->GetChisquare();
             // set new contents
-            if( fNdf > 0 && fProb > 0.05 && error < 1.0 ){
-                //auto fChi2Ndf = fChi2/fNdf;
-                fithist->SetBinContent( ibinX, fProb );
+            //if( fNdf > 0 && fProb > 0.001 && error < fmean ){
+            if( fNdf > 0 && error < stdv ){
+                auto fChi2Ndf = fChi2/fNdf;
+                fithist->SetBinContent( ibinX, fChi2Ndf );
                 fithist->SetBinError( ibinX, 0 );
                 prof->SetBinContent( ibinX, fmean );
                 prof->SetBinError( ibinX, error );

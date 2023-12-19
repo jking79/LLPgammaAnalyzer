@@ -280,6 +280,10 @@ rfgmsb3 = "hist_files/KUCMS_GMSB_L100t400_Met150_Other_v10_Skim_BaseHists.root"
 rfgmsb4 = "hist_files/KUCMS_GMSB_L100t400_Met150_UnMatched_v10_Skim_BaseHists.root"
 #rfgmsb3 = "KUCMS_GMSB_L200_Met0_UnMatched_v9A_Skim_BaseHists.root"
 
+rfgmsbsv1 = "hist_files/KUCMS_ShapeVar_Sig_SkimHists_v1.root"
+rfgmsbsv2 = "hist_files/KUCMS_ShapeVar_GMSB_Bkg_SkimHists.root"
+rfgmsbsv3 = "hist_files/KUCMS_ShapeVar_GJets_Bkg_SkimHists.root"
+
 rfgjets1 = "hist_files/KUCMS_GJets_HT40tInf_Met150_Other_v10_Skim_BaseHists.root"
 rfgjets2 = "hist_files/KUCMS_GJets_HT40tInf_Met150_UnMatched_v10_Skim_BaseHists.root"
 
@@ -320,12 +324,12 @@ t = [0.2,0.825,0.0,0.175,0.225] # titles position
 #rhname = "phoEta"
 #x = [ -3.0, 3.0 ]
 #y = [ 0.00001, 0.0325 ]
-rhname = "phoPt"
+#rhname = "phoPt"
 #rhname = "phoEnergy" # same
 #x = [ 0.0, 1500.0 ]
-x = [ 0.0, 250.0 ] 
+#x = [ 0.0, 250.0 ] 
 #x = [ 0.0, 100.0 ] 
-y = [ 0.001, 0.1 ]
+#y = [ 0.001, 0.1 ]
 #rhname = "phoNrh"
 #x = [ 0.0, 100.0 ]
 #y = [ 0.00001, 0.25 ]
@@ -367,6 +371,73 @@ y = [ 0.001, 0.1 ]
 #l = [ 0.7,0.65,0.925,0.9 ]
 ##rhname = "selPhoSipip"
 ##x = [ 0.0, 0.1 ]
+
+#rhname = "selPhoNrh_pt20"
+#rhname = "selPhoNrh_pt30"
+#rhname = "selPhoNrh_pt100"
+#x = [ 0.0, 50.0 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoEtaWidth_pt20"
+#rhname = "selPhoEtaWidth_pt30"
+#rhname = "selPhoEtaWidth_pt100"
+#x = [ 0.0, 0.035 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoPhiWidth_pt20"
+#rhname = "selPhoPhiWidth_pt30"
+#rhname = "selPhoPhiWidth_pt100"
+#x = [ 0.0, 0.15 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoR9_pt20"
+#rhname = "selPhoR9_pt30"
+#rhname = "selPhoR9_pt100"
+#x = [ 0.2, 1.2 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.2,0.65,0.425,0.9 ] 
+#rhname = "selPhoS4_pt20"
+#rhname = "selPhoS4_pt30"
+#rhname = "selPhoS4_pt100"
+#x = [ 0.2, 1.2 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.2,0.65,0.425,0.9 ]
+#rhname = "selPhoSAlp_pt20"
+#rhname = "selPhoSAlp_pt30"
+#rhname = "selPhoSAlp_pt100"
+#x = [ -1.75, 1.75 ]
+#y = [ 0.001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoSMaj_pt20"
+#rhname = "selPhoSMaj_pt30"
+#rhname = "selPhoSMaj_pt100"
+#x = [ 0, 3.0 ]
+#y = [ 0.001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoSMin_pt20"
+#rhname = "selPhoSMin_pt30"
+#rhname = "selPhoSMin_pt100"
+#x = [ 0, 1.5 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoSieie_pt20"
+#rhname = "selPhoSieie_pt30"
+rhname = "selPhoSieie_pt100"
+#x = [ 0, 0.025 ]
+#y = [ 0.0001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoSieip_pt20"
+#rhname = "selPhoSieip_pt30"
+#rhname = "selPhoSieip_pt100"
+#x = [ -0.0005, 0.0005 ]
+#y = [ 0.001, 1.0 ]
+#l = [ 0.7,0.65,0.925,0.9 ]
+#rhname = "selPhoSipip_pt20"
+#rhname = "selPhoSipip_pt30"
+rhname = "selPhoSipip_pt100"
+x = [ 0, 0.025 ]
+y = [ 0.0001, 1.0 ]
+l = [ 0.7,0.65,0.925,0.9 ]
 
 #y = [ 1, 1e8 ]
 #rhname = "jetPt"
@@ -420,7 +491,11 @@ inhistlist = [
 #    [ rhname, "", rfgmsbroc1, "Signal"],
 #    [ rhname, "", rfgmsbroc2, "NotSignal"],
 
-    [ rhname, "", rfgmsb100, "Other"],
+#    [ rhname, "", rfgmsb100, "Other"],
+
+    [ rhname, "", rfgmsbsv1, "Signal"],
+    [ rhname, "", rfgmsbsv2, "notSignal"],
+#    [ rhname, "", rfgmsbsv3, "GJets"],
 
 ]
 

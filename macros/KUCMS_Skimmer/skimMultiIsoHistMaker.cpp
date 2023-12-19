@@ -258,7 +258,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 //   vector<float>   *selPhoGenDr;
 
         if( (*selPhoPt)[it] < 20 ) continue;
-        if( std::abs((*selPhoEta)[it]) > 1.479 ) continue;
+        if( std::abs((*selPhoEta)[it]) > 1.442 ) continue;
 
 		bool jetphoton = false;
 		for( int jit = 0; jit < nSelJets; jit++ ){

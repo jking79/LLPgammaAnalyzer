@@ -386,6 +386,9 @@ void KUCMSAodSkimmer::processGenParticles(){
         auto vx = (*Gen_vx)[it];
         auto vy = (*Gen_vy)[it];
         auto vz = (*Gen_vz)[it];
+        auto px = (*Gen_px)[it];
+        auto py = (*Gen_py)[it];
+        auto pz = (*Gen_pz)[it];
 
 		selGenPart.fillBranch( "genPartEnergy", energy );
         selGenPart.fillBranch( "genPartEta", eta );
@@ -399,6 +402,9 @@ void KUCMSAodSkimmer::processGenParticles(){
         selGenPart.fillBranch( "genVx", vx );
         selGenPart.fillBranch( "genVy", vy );
         selGenPart.fillBranch( "genVz", vz );
+        selGenPart.fillBranch( "genPx", px );
+        selGenPart.fillBranch( "genPy", py );
+        selGenPart.fillBranch( "genPz", pz );
 
     }//<<>>for( int it = 0; it < nGenParts; it++ )
 
@@ -473,8 +479,11 @@ void KUCMSAodSkimmer::processPhotons(){
         auto etawide = (*Photon_etaWidth)[it];
         auto phiwide = (*Photon_phiWidth)[it];
         auto sigmaieie = (*Photon_SigmaIEtaIEta)[it];   //!
+        auto scx = (*Photon_x_calo)[it];
+        auto scy = (*Photon_y_calo)[it];
+        auto scz = (*Photon_z_calo)[it];
 
-        float genIdx = -1;
+        int genIdx = -1;
         float susId = -1;
 		float genpt = -1;
         float momEnergy = -1;   //!
@@ -577,6 +586,9 @@ void KUCMSAodSkimmer::processPhotons(){
         selPhotons.fillBranch( "selPhoOOT", phoOOT );
 		selPhotons.fillBranch( "selPhoQuality", phoQuality );
         selPhotons.fillBranch( "selPhoTime", time );
+        selPhotons.fillBranch( "selPhoSCx", scx );
+        selPhotons.fillBranch( "selPhoSCy", scy );
+        selPhotons.fillBranch( "selPhoSCz", scz );
 		//selPhotons.fillBranch( "selPhoGeoEgnVal", evaluegeo );
         selPhotons.fillBranch( "selPhoEta", eta );
         selPhotons.fillBranch( "selPhoPhi", phi );
@@ -1106,6 +1118,9 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selGenPart.makeBranch( "genVx", VFLOAT );   //!
     selGenPart.makeBranch( "genVy", VFLOAT );   //!
     selGenPart.makeBranch( "genVz", VFLOAT );   //!
+    selGenPart.makeBranch( "genPx", VFLOAT );   //!
+    selGenPart.makeBranch( "genPy", VFLOAT );   //!
+    selGenPart.makeBranch( "genPz", VFLOAT );   //!
 
 	selGenPart.attachBranches( fOutTree );
 
@@ -1120,6 +1135,9 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selPhotons.makeBranch( "selPhoEta", VFLOAT ); 
     selPhotons.makeBranch( "selPhoPhi", VFLOAT );     
 	selPhotons.makeBranch( "selPhoPt", VFLOAT ); 
+    selPhotons.makeBranch( "selPhoSCx", VFLOAT );
+    selPhotons.makeBranch( "selPhoSCy", VFLOAT );
+    selPhotons.makeBranch( "selPhoSCz", VFLOAT );
 
     selPhotons.makeBranch( "selPhoHcalTowerSumEtBcConeDR04", VFLOAT );
     selPhotons.makeBranch( "selPhoTrkSumPtHollowConeDR03", VFLOAT );
@@ -1163,7 +1181,7 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
 
     selPhotons.makeBranch( "selPhoGenPt", VFLOAT );
     selPhotons.makeBranch( "selPhoPhoIsoDr", VFLOAT );
-    selPhotons.makeBranch( "selPhoGenIdx", VFLOAT );
+    selPhotons.makeBranch( "selPhoGenIdx", VINT );
 
     selPhotons.makeBranch( "selPhoGenSigMomEnergy", VFLOAT );   //!
     selPhotons.makeBranch( "selPhoGenSigMomEta", VFLOAT );   //!
