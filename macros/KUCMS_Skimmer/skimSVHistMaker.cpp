@@ -172,8 +172,8 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
 void HistMaker::eventLoop( Long64_t entry ){
 
     //auto dskey  = *DataSetKey
-    //float evtgwt = evtGenWgt;
-    float evtgwt = 1;
+    float evtgwt = evtGenWgt;
+    //float evtgwt = 1;
     float scale = 1;
     std::string configKey(*DataSetKey);
     float xsec = (configInfo[configKey])["sCrossSection"];
@@ -223,7 +223,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 	///////////  pho selection ////////////////////////////////////////////////////////////////////
 		if( DEBUG ) std::cout << " - Starting Pho Loop" << std::endl;
 
-        if( (*selPhoPt)[it] < 20 ) continue;
+        if( (*selPhoPt)[it] < 30 ) continue;
         if( std::abs((*selPhoEta)[it]) > 1.442 ) continue;
 
 		bool jetphoton = false;
@@ -239,7 +239,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 			if( dr < 0.4 ) jetphoton = true;
 
 		} // for( int jit = 0; jit < nSelJets; jit++ )
-		if( jetphoton ) continue; //{ std::cout << "Jet-Photon Overlap!!!" << std::endl; continue; }
+		//if( jetphoton ) continue; //{ std::cout << "Jet-Photon Overlap!!!" << std::endl; continue; }
 
         if( DEBUG ) std::cout << " -- looping photons : getting susy ids for " << selPhoSusyId->size() << std::endl;
         bool hcalsum = true;
@@ -247,7 +247,7 @@ void HistMaker::eventLoop( Long64_t entry ){
         bool ecalrhsum = (*selPhoEcalRHSumEtConeDR04)[it] < 10.0;
         bool htoem = (*selPhoHadTowOverEM)[it] < 0.02;
         bool isoskip = not ( htoem && tsptscdr4 && ecalrhsum && hcalsum );
-        if( isoskip ) continue;
+        //if( isoskip ) continue;
 
 	///////////  pho selection ////////////////////////////////////////////////////////////////////
 
@@ -288,20 +288,57 @@ void HistMaker::eventLoop( Long64_t entry ){
 			if( DEBUG ) std::cout << " --- gidx: " << gidx << std::endl;
 			auto geta = (*genPartEta)[gidx];
 			auto gphi = (*genPartPhi)[gidx];
+			auto ge = (*genPartEnergy)[gidx];
+            auto gpt = (*genPartPt)[gidx];
+            auto re = (*selPhoEnergy)[it];
 			auto gvx = (*genVx)[gidx];
             auto gvy = (*genVy)[gidx];
             auto gvz = (*genVz)[gidx];
 			auto rvx = (*selPhoSCx)[it];
             auto rvy = (*selPhoSCy)[it];
             auto rvz = (*selPhoSCz)[it]; 
+            auto rpt = (*selPhoPt)[it];
 
             if( DEBUG ) std::cout << " -- doing reco calcs" << std::endl;
 			float ceta = std::asinh((rvz-gvz)/hypo(rvx-gvx,rvy-gvy));
 			float cphi = std::atan2(rvy-gvy,rvx-gvx);
 			auto dr = dR1(geta,gphi,ceta,cphi);
-			auto rege = (*selPhoEnergy)[it]/(*genPartEnergy)[gidx];
+			//auto rege = re/ge;
 			auto rtime = (*selPhoTime)[it];
 			auto peta = (*selPhoEta)[it];
+
+	        float core = 1 - sq2(rtime)/345 - rtime/64;
+            float ce = re/core;
+			auto rege = ce/ge;
+
+            float cms000 = hypo(rvx,rvy,rvz);
+            float calcor = cms000/SOL;
+            float plp = hypo(rvx-PVx,rvy-PVy,rvz-PVz);
+            float tmes = rtime*SOL+plp;
+            float treco = rtime*SOL;
+            float m1 = std::sqrt(sq2(plp)+8*sq2(tmes));
+            float m2 = (plp+m1)*(plp/(4*sq2(tmes)));
+            float m3 = plp/tmes;
+            float mllpe = 2*ge*std::sqrt(1-sq2(m2));
+            float mllpm = 2*ge*std::sqrt(1-sq2(m3));
+
+			hist2d[66]->Fill(ce,ge);
+
+			if( isNotSusyType ){
+
+                hist1d[63]->Fill(mllpe,fillwt);
+                hist1d[64]->Fill(mllpm,fillwt);
+                hist1d[67]->Fill(ce,fillwt);
+                hist1d[68]->Fill(rpt,fillwt);
+
+                hist2d[62]->Fill(mllpe,treco);
+                hist2d[63]->Fill(mllpm,treco);
+                hist2d[65]->Fill(mllpe,mllpm);
+				hist2d[68]->Fill(ce,ge);
+
+
+			}//<<>>if( (*selPhoSusyId)[it] != 22 )
+
 
 			if( DEBUG ) std::cout << " -- Filling reco 2d hists" << std::endl;
 
@@ -309,7 +346,7 @@ void HistMaker::eventLoop( Long64_t entry ){
             hist2d[2]->Fill(rege,rtime);
             hist2d[4]->Fill(peta,rtime);
 
-			if( (*selPhoSusyId)[it] == 22 ){
+			if( isSigType ){
 
                 //std::cout << " -- Filling gen 2d hists susID: " << (*selPhoSusyId)[it] << std::endl;
 				auto nvx = (*selPhoGenSigMomVx)[it];
@@ -326,15 +363,32 @@ void HistMaker::eventLoop( Long64_t entry ){
 				//std::cout << " -- Filling gen 2d hists smpt: " << (*selPhoGenSigMomPt)[it] << " sme: " << (*selPhoGenSigMomEnergy)[it] << std::endl;
 				float pl1 = hypo( gvx-nvx, gvy-nvy, gvz-nvz ); 
 				float pl2 = hypo( rvx-gvx, rvy-gvy, rvz-gvz );
-				//`std::cout << " -- Filling gen 2d hists gp: " << gp << " ge: " << ge << " SOL: " << SOL << " beta: " << beta << std::endl;
+				//float plp = hypo( rvx-nvx, rvy-nvy, rvz-nvz );
+				//std::cout << " -- Filling gen 2d hists gp: " << gp << " ge: " << ge << " SOL: " << SOL << " beta: " << beta << std::endl;
 				float t1 = pl1/(beta*SOL);
 				float t2 = pl2/SOL;
-				float calcor = hypo(rvx,rvy,rvz)/SOL;
 				float gtime = t1+t2-calcor;
-                //float gtime = t1+t2;
+                //float tmes = (t1+t2)*SOL;
+				float rlalb = (pl1-pl2)/(pl1+pl2);
 
 				//std::cout << " -- Filling gen 2d hists gtime: " << gtime << std::endl;
 				if( DEBUG ) std::cout << " -- Filling gen 2d hists" << std::endl;
+
+                hist1d[60]->Fill(rlalb,fillwt);
+                hist1d[61]->Fill(mllpe,fillwt);
+                hist1d[62]->Fill(mllpm,fillwt);
+                hist1d[65]->Fill(ge,fillwt);
+                hist1d[66]->Fill(rpt,fillwt);
+
+                hist1d[69]->Fill(beta,fillwt);
+                hist1d[70]->Fill(m2,fillwt);
+                hist1d[71]->Fill(m3,fillwt);
+				
+				hist2d[60]->Fill(mllpe,treco);
+				hist2d[61]->Fill(mllpm,treco);
+
+				hist2d[64]->Fill(mllpe,mllpm);
+				hist2d[67]->Fill(ce,ge);
 
 				hist1d[50]->Fill(rtime-gtime,fillwt);
 				hist1d[0]->Fill(gtime,fillwt);
@@ -506,7 +560,20 @@ void HistMaker::initHists( std::string ht ){
 
 	hist1d[50] = new TH1D("rtgtdif","Diff( RecoTime - GenTime )",500,-5,5 );
     hist1d[51] = new TH1D("profile_srtvrege","profile_srtvrege;SRecoTime [ns]",100,-5,20);
-    hist1d[52] = new TH1D("fit__srtvrege","fit__srtvrege;SRecoTime [ns]",100,-5,20);
+    hist1d[52] = new TH1D("fit_srtvrege","fit_srtvrege;SRecoTime [ns]",100,-5,20);
+
+	hist1d[60] = new TH1D("rlalb","(la-lb)/(la+lb);(la-lb)/(la+lb)",200,-1,1);
+    hist1d[61] = new TH1D("mllpe","M_{llp}^{la=lb}; M [GeV]",750,0,750);
+    hist1d[62] = new TH1D("mllpm","M_{llp}^{promt}; M [GeV]",750,0,750);
+    hist1d[63] = new TH1D("mllpeb","M_{llp}^{la=lb} notSig;M [GeV]",750,0,750);
+    hist1d[64] = new TH1D("mllpmb","M_{llp}^{promt} notSig; M [GeV]",750,0,750);
+    hist1d[65] = new TH1D("phoe","E_{pho};E [GeV]",1000,0,1000);
+    hist1d[66] = new TH1D("phopt","Pt_{pho};Pt [GeV]",1000,0,1000);
+    hist1d[67] = new TH1D("phoeb","E_{pho} notSig;E [GeV]",1000,0,1000);
+    hist1d[68] = new TH1D("phoptb","Pt_{pho} notSig;Pt [GeV]",1000,0,1000);
+    hist1d[69] = new TH1D("beta","Beta;Beta",100,0,1);
+    hist1d[70] = new TH1D("e1beta","Beta La=Lb;Beta",100,0,1);
+    hist1d[71] = new TH1D("e2beta","Beta Prompt;Beta",100,0,1);
 
     for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]) hist1d[it]->Sumw2();}
 
@@ -529,6 +596,17 @@ void HistMaker::initHists( std::string ht ){
     hist2d[50] = new TH2D("covievsie_pt20","CovEtaEtaVsSieie_pt20;CovEtaEta;Sieie^{2}", 100, 0, 0.001, 100, 0, 0.001 );
     hist2d[51] = new TH2D("salpvsie_pt20","SAlpVsSieie_pt20;SAlp;Sieie", 100, -2.5, 2.5, 50, 0, 0.025 );
 
+    hist2d[60] = new TH2D("mllpvrt","M_{llp}^{la=lb} v dt_{mean-nom};M [GeV];dt_{mean-nom} [cm]",200,0,500,180,0,450);
+    hist2d[61] = new TH2D("mllpevrt","M_{llp}^{promt} v dt_{mean-nom};M [GeV];dt_{mean-nom} [cm]",200,0,500,180,0,450);
+    hist2d[62] = new TH2D("mllpvrtb","M_{llp}^{la=lb} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [cm]",200,0,500,180,0,450);
+    hist2d[63] = new TH2D("mllpevrtb","M_{llp}^{promt} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [cm]",200,0,500,180,0,450);
+
+    hist2d[64] = new TH2D("mllpvmllpe","M_{llp}^{la=lb} v M_{llp}^{promt};M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
+    hist2d[65] = new TH2D("mllpbvmllpeb","M_{llp}^{la=lb} v M_{llp}^{promt} notSig;M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
+    hist2d[66] = new TH2D("cevge","Corr Energy Vs Gen Energy; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
+    hist2d[67] = new TH2D("cevges","Corr Energy Vs Gen Energy Sig; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
+    hist2d[68] = new TH2D("cevgeb","Corr Energy Vs Gen Energy notSig; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
+
     //------------------------------------------------------------------------------------------
     //------ 3D Hists --------------------------------------------------------------------------
 
@@ -545,8 +623,9 @@ int main ( int argc, char *argv[] ){
                 const std::string listdir = "skims_files/";
 				auto infilename = "KUCMS_Master_Skim_List.txt";
 
-                //auto outfilename = "KUCMS_ShapeVar_Sig_SkimHists_v1.root"; //9
-                auto outfilename = "KUCMS_ShapeVar_GJets_Bkg_SkimHists.root"; //9
+                auto outfilename = "KUCMS_ShapeVar_Sig_SkimHists_v2.root"; //9
+                //auto outfilename = "KUCMS_ShapeVar_GJets_Bkg_SkimHists.root"; //9
+                //auto outfilename = "KUCMS_ShapeVar_JetHt_Bkg_SkimHists.root"; //9
 
 				auto htitle = "KUCMS_ShapeVar_Hists_";
 

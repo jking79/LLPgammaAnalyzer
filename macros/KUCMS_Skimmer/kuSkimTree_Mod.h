@@ -34,6 +34,10 @@ public :
    Float_t         selCMetPx;
    Float_t         selCMetPy;
 
+   Float_t         PVx;
+   Float_t         PVy;
+   Float_t         PVz;
+
    vector<float>   *genPartEnergy;
    vector<float>   *genPartEta;
    vector<unsigned int> *genPartPdgId;
@@ -156,6 +160,10 @@ public :
    TBranch        *b_selCMet;   //!
    TBranch        *b_selCMetPx;   //!
    TBranch        *b_selCMetPy;   //!
+
+   TBranch        *b_PVx;
+   TBranch        *b_PVy;
+   TBranch        *b_PVz;
 
    TBranch        *b_genPartEnergy;   //!
    TBranch        *b_genPartEta;   //!
@@ -469,6 +477,11 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selCMetPx", &selCMetPx, &b_selCMetPx);
    fChain->SetBranchAddress("selCMetPy", &selCMetPy, &b_selCMetPy);
 
+   fChain->SetBranchAddress("PVx", &PVx, &b_PVx);
+   fChain->SetBranchAddress("PVy", &PVy, &b_PVy);
+   fChain->SetBranchAddress("PVz", &PVz, &b_PVz);
+
+
    fChain->SetBranchAddress("genPartEnergy", &genPartEnergy, &b_genPartEnergy);
    fChain->SetBranchAddress("genPartEta", &genPartEta, &b_genPartEta);
    fChain->SetBranchAddress("genPartPdgId", &genPartPdgId, &b_genPartPdgId);
@@ -599,6 +612,10 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selCMet->GetEntry(entry);   //!
    b_selCMetPx->GetEntry(entry);   //!
    b_selCMetPy->GetEntry(entry);   //!
+
+   b_PVx->GetEntry(entry);   //!
+   b_PVy->GetEntry(entry);   //!
+   b_PVz->GetEntry(entry);   //!
 
    b_genPartEnergy->GetEntry(entry);   //!
    b_genPartEta->GetEntry(entry);   //!

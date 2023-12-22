@@ -398,17 +398,35 @@ void HistMaker::eventLoop( Long64_t entry ){
             //bool isGMSB = (*selPhoSusyId)[index] == 22;
             if( DEBUG ) std::cout << " --- looping phoOrder acc : find is susy :  "  << (*genPartSusId)[partIndx] << std::endl;
             //std::cout << phoptit->first << " " << (*selPhoPt)[index] << " " << isGMSB << " : ";
-            if( not isGMSB ) continue;
+            if( isGMSB ){
             
-            int genSusMatch = -1;
-            int genSusOrder = 0;
-            int genSusCnt = 0; 
-            for( auto genIndx : genSigPhoAccIdx ){ genSusCnt++; if( partIndx == genIndx ){genSusMatch = genIndx; genSusOrder = phocount; break;}}
-            sigPhoAccIndx.push_back(partIndx);
-            sigPhoAccOrder.push_back(phocount);
-            sigPhoGenAccMatch.push_back(genSusMatch);
-            sigPhoGenAccOrder.push_back(genSusOrder);
-        
+            	int genSusMatch = -1;
+            	int genSusOrder = 0;
+            	int genSusCnt = 0; 
+            	for( auto genIndx : genSigPhoAccIdx ){ genSusCnt++; if( partIndx == genIndx ){genSusMatch = genIndx; genSusOrder = phocount; break;}}
+            	sigPhoAccIndx.push_back(partIndx);
+            	sigPhoAccOrder.push_back(phocount);
+            	sigPhoGenAccMatch.push_back(genSusMatch);
+            	sigPhoGenAccOrder.push_back(genSusOrder);
+
+					hist1d[20]->Fill((*selPhoPt)[phoptit]);
+                    hist1d[21]->Fill((*selPhoHadTowOverEM)[phoptit]);
+                    hist1d[22]->Fill((*selPhoTrkSumPtHollowConeDR04)[phoptit]);
+                    hist1d[23]->Fill((*selPhoEcalRHSumEtConeDR04)[phoptit]);
+			
+			} else { //<<>>if( isGMSB )
+				
+				//if( phocount < 3 && genSigPhoAccIdx.size() > 0 ){
+                if( phocount < 3 ){
+
+					hist1d[25]->Fill((*selPhoPt)[phoptit]);
+                    hist1d[26]->Fill((*selPhoHadTowOverEM)[phoptit]);
+                    hist1d[27]->Fill((*selPhoTrkSumPtHollowConeDR04)[phoptit]);
+                    hist1d[28]->Fill((*selPhoEcalRHSumEtConeDR04)[phoptit]);
+
+				}//if( phocount < 3 )
+			}//<<>> else { //<<>>if( isGMSB )        
+
         }//<<>>for( auto phoptit = recoPhoAccOrderIndx.crbegin(); phoptit != recoPhoAccOrderIndx.crend(); phoptit++ )
     }//<<>>if( recoPhoAccOrderIndx.size() > 0 )
 
@@ -422,11 +440,14 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( nGenSigPhoAcc == 2 ){ hist1d[1]->Fill(2); hist1d[1]->Fill(5); hist1d[1]->Fill(8); }//<<>>if( nGenSigPho == 2 )
     if( nGenSigPhoAcc == 1 ){ hist1d[1]->Fill(9); hist1d[1]->Fill(11); hist1d[1]->Fill(12);}
 
-
+    auto nRecoAccPhos = recoPhoAccOrderIndx.size();
     if( DEBUG ) std::cout << " -- looping photons : Filling reco cnt Acc hists "  << std::endl;
 	// sigPhoGenAccOrder[x] == 0 -> unmatched   sigPhoGenAccOrder[x] > 0 -> matched
     int nSigPhoAcc = sigPhoAccIndx.size();
-	if( nSigPhoAcc == 0 && nGenSigPhoAcc == 0 ) hist1d[0]->Fill(0);
+	if( nSigPhoAcc == 0 && nGenSigPhoAcc == 0 ){
+        hist1d[0]->Fill(0); hist1d[1]->Fill(13);
+        if( nRecoAccPhos > 0 ) hist1d[0]->Fill(13);
+    }//<<>>if( nSigPho == 0 && nGenSigPho == 0 )
     if( nSigPhoAcc > 0 && nGenSigPhoAcc == 0 ) hist1d[0]->Fill(1);
 	if( nSigPhoAcc == 2 && nGenSigPhoAcc == 2 ){
 		hist1d[0]->Fill(2); hist1d[1]->Fill(3); hist1d[1]->Fill(4);
@@ -436,20 +457,29 @@ void HistMaker::eventLoop( Long64_t entry ){
 		}//<<>>if( sigPhoGenAccMatch[0] > -1 && sigPhoGenAccMatch[1] > -1 )
 	}//<<>>if( nSigPhoAcc == 2 && nGenSigPhoAcc == 2 )
     if( nSigPhoAcc == 1 && nGenSigPhoAcc == 2 ){
-        hist1d[0]->Fill(5); hist1d[1]->Fill(6); hist1d[1]->Fill(7);
+        hist1d[0]->Fill(5); hist1d[1]->Fill(6); hist1d[1]->Fill(7); hist1d[1]->Fill(14);
+        if( nRecoAccPhos > 1 ) hist1d[0]->Fill(14);
         if( sigPhoGenAccMatch[0] > -1 ){
             if( sigPhoGenAccOrder[0] == 1 ) hist1d[0]->Fill(6);
             if( sigPhoGenAccOrder[0] == 2 ) hist1d[0]->Fill(7);
     	}//<<>>if( sigPhoGenAccMatch[0] > -1 )
     }//<<>>if( nSigPhoAcc == 1 && nGenSigPhoAcc == 2 )
-    if( nSigPhoAcc == 0 && nGenSigPhoAcc == 2 ) hist1d[0]->Fill(8); //<<>>if( nSigPhoAcc == 0 && nGenSigPhoAcc == 2 )
+    if( nSigPhoAcc == 0 && nGenSigPhoAcc == 2 ){
+        hist1d[0]->Fill(8); hist1d[1]->Fill(15); hist1d[1]->Fill(16);
+        if( nRecoAccPhos > 0 ) hist1d[0]->Fill(15);
+        if( nRecoAccPhos > 1 ) hist1d[0]->Fill(16);
+    }//<<>>if( nSigPhoAcc == 0 && nGenSigPhoAcc == 2 )
     if( nSigPhoAcc == 1 && nGenSigPhoAcc == 1 ){
-        hist1d[0]->Fill(9); hist1d[1]->Fill(10);
+        hist1d[0]->Fill(9); hist1d[1]->Fill(10); hist1d[1]->Fill(17);
+        if( nRecoAccPhos > 1 ) hist1d[0]->Fill(17);
         if( sigPhoGenAccMatch[0] > -1 ){
             if( sigPhoGenAccOrder[0] == 1 ) hist1d[0]->Fill(10);
         }//<<>>if( sigPhoGenAccMatch[0] > -1 )
     }//<<>>if( nSigPhoAcc == 1 && nGenSigPhoAcc == 2 )
-    if( nSigPhoAcc == 0 && nGenSigPhoAcc == 1 ) hist1d[0]->Fill(11);
+    if( nSigPhoAcc == 0 && nGenSigPhoAcc == 1 ){
+        hist1d[0]->Fill(11); hist1d[1]->Fill(18);
+        if( nRecoAccPhos > 0 ) hist1d[0]->Fill(18);
+    }//<<>>if( nSigPho == 0 && nGenSigPho == 1 )
     if( nSigPhoAcc > 1 && nGenSigPhoAcc == 1 ) hist1d[0]->Fill(12);
 
 
@@ -462,10 +492,14 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( nGenSigPho == 2 ){ hist1d[7]->Fill(2); hist1d[7]->Fill(5); hist1d[7]->Fill(8); }//<<>>if( nGenSigPho == 2 )
     if( nGenSigPho == 1 ){ hist1d[7]->Fill(9); hist1d[7]->Fill(11); hist1d[7]->Fill(12);}
 
+	auto nRecoPhos = recoPhoOrderIndx.size();
     if( DEBUG ) std::cout << " -- looping photons : Filling reco cnt hists "  << std::endl;
     // sigPhoGenOrder[x] == 0 -> unmatched   sigPhoGenOrder[x] > 0 -> matched
     int nSigPho = sigPhoIndx.size();
-    if( nSigPho == 0 && nGenSigPho == 0 ) hist1d[6]->Fill(0);
+    if( nSigPho == 0 && nGenSigPho == 0 ){ 
+		hist1d[6]->Fill(0); hist1d[7]->Fill(13); 
+		if( nRecoPhos > 0 ) hist1d[6]->Fill(13);
+	}//<<>>if( nSigPho == 0 && nGenSigPho == 0 )
     if( nSigPho > 0 && nGenSigPho == 0 ) hist1d[6]->Fill(1);
     if( nSigPho == 2 && nGenSigPho == 2 ){
         hist1d[6]->Fill(2); hist1d[7]->Fill(3); hist1d[7]->Fill(4);
@@ -475,20 +509,29 @@ void HistMaker::eventLoop( Long64_t entry ){
         }//<<>>if( sigPhoGenMatch[0] > -1 && sigPhoGenMatch[1] > -1 )
     }//<<>>if( nSigPho == 2 && nGenSigPho == 2 )
     if( nSigPho == 1 && nGenSigPho == 2 ){
-        hist1d[6]->Fill(5); hist1d[7]->Fill(6); hist1d[7]->Fill(7);
+        hist1d[6]->Fill(5); hist1d[7]->Fill(6); hist1d[7]->Fill(7); hist1d[7]->Fill(14);
+		if( nRecoPhos > 1 ) hist1d[6]->Fill(14);
         if( sigPhoGenMatch[0] > -1 ){
             if( sigPhoGenOrder[0] == 1 ) hist1d[6]->Fill(6);
             if( sigPhoGenOrder[0] == 2 ) hist1d[6]->Fill(7);
         }//<<>>if( sigPhoGenMatch[0] > -1 )
     }//<<>>if( nSigPho == 1 && nGenSigPho == 2 )
-    if( nSigPho == 0 && nGenSigPho == 2 ) hist1d[6]->Fill(8); //<<>>if( nSigPho == 0 && nGenSigPho == 2 )
+    if( nSigPho == 0 && nGenSigPho == 2 ){ 
+		hist1d[6]->Fill(8); hist1d[7]->Fill(15); hist1d[7]->Fill(16); 
+		if( nRecoPhos > 0 ) hist1d[6]->Fill(15);
+		if( nRecoPhos > 1 ) hist1d[6]->Fill(16);
+	}//<<>>if( nSigPho == 0 && nGenSigPho == 2 )
     if( nSigPho == 1 && nGenSigPho == 1 ){
-        hist1d[6]->Fill(9); hist1d[7]->Fill(10);
+        hist1d[6]->Fill(9); hist1d[7]->Fill(10); hist1d[7]->Fill(17);
+		if( nRecoPhos > 1 ) hist1d[6]->Fill(17);
         if( sigPhoGenMatch[0] > -1 ){
             if( sigPhoGenOrder[0] == 1 ) hist1d[6]->Fill(10);
         }//<<>>if( sigPhoGenMatch[0] > -1 )
     }//<<>>if( nSigPho == 1 && nGenSigPho == 2 )
-    if( nSigPho == 0 && nGenSigPho == 1 ) hist1d[6]->Fill(11);
+    if( nSigPho == 0 && nGenSigPho == 1 ){ 
+		hist1d[6]->Fill(11); hist1d[7]->Fill(18); 
+		if( nRecoPhos > 0 ) hist1d[6]->Fill(18);
+	}//<<>>if( nSigPho == 0 && nGenSigPho == 1 )
     if( nSigPho > 1 && nGenSigPho == 1 ) hist1d[6]->Fill(12);
 
     /////////////////// fill hists other ////////////////////////////////////////////////////////////////////////////////
@@ -564,6 +607,17 @@ void HistMaker::initHists( std::string ht ){
     hist1d[6] = new TH1D("phoSigMatchCnt", "phoSigMatchCnt", bins, 0, bins);
     hist1d[7] = new TH1D("phoGenMatchCnt", "phoGenMatchCnt", bins, 0, bins);
     hist1d[8] = new TH1D("phoSigGenMatchEff", "phoSigGenMatchEff", bins, 0, bins);
+
+	hist1d[20] = new TH1D("sigPhoPt", "sigPhoPt", 250, 0, 250);
+    hist1d[21] = new TH1D("sigPhoHoe", "sigPhoHoe", 250, 0, 0.25);
+    hist1d[22] = new TH1D("sigPhoTrk", "sigPhoTrk", 200, 0, 20);
+    hist1d[23] = new TH1D("sigPhoEcal", "sigPhoEcal", 200, 0, 20);
+
+    hist1d[25] = new TH1D("fakePhoPt", "fakePhoPt", 250, 0, 250);
+    hist1d[26] = new TH1D("fakePhoHoe", "fakePhoHoe", 250, 0, 0.25);
+    hist1d[27] = new TH1D("fakePhoTrk", "fakePhoTrk", 200, 0, 20);
+    hist1d[28] = new TH1D("fakePhoEcal", "fakePhoEcal", 200, 0, 20);
+
 
 	//------- jets 0 - 99
     //UInt_t          nJets;

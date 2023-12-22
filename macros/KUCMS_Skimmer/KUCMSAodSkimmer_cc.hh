@@ -307,7 +307,10 @@ void KUCMSAodSkimmer::processEvntVars(){
 
 	// calc
     nEvents++;
-    
+    selEvtVars.fillBranch( "PVx", PV_x );
+    selEvtVars.fillBranch( "PVy", PV_y );
+    selEvtVars.fillBranch( "PVz", PV_z ); 
+   
 	//fill
 
     selEvtVars.fillBranch( "dsKey", dataSetKey );
@@ -1098,6 +1101,9 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
 	//fOutTree->Branch( "RunNumber", &RunNumber );
     selEvtVars.makeBranch( "dsKey", "DataSetKey", STR, "Key for source data set of event" );
     selEvtVars.makeBranch( "evtGenWgt", FLOAT );
+    selEvtVars.makeBranch( "PVx", FLOAT );
+    selEvtVars.makeBranch( "PVy", FLOAT );
+    selEvtVars.makeBranch( "PVz", FLOAT );
     selEvtVars.attachBranches( fOutTree );
 
 	//selMet.makeBranch( "Met", FLOAT );
