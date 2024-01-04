@@ -18,8 +18,8 @@ int main ( int argc, char *argv[] ){
                 //const string KUCMSAodSkimmer::eosdir = "root://cmseos.fnal.gov//store/user/jaking/";
                 const std::string eosdir = "root://cmseos.fnal.gov//store/user/lpcsusylep/jaking/";
 
-                //auto infilename = "KUCMS_Ntuple_Master_BG_Files_List.txt";
-                auto infilename = "KUCMS_Ntuple_Master_GMSB_Files_List.txt";
+                auto infilename = "KUCMS_Ntuple_Master_BG_Files_List.txt";
+                //auto infilename = "KUCMS_Ntuple_Master_GMSB_Files_List.txt";
                 //auto infilename = "KUCMS_Ntuple_Master_JetHT_Files_List.txt";
 
 				auto outfilename = "_Ntuple_v12_LLPgama_Skim_v13.root";
