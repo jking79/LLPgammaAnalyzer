@@ -5,7 +5,7 @@ Long Lived Particle to Photon Analyzer
 ### Install [BayesianClustering](https://github.com/mlazarovits/BayesianClustering)
 First, install the BayesianClustering package. Be sure this is done in the CMSSW `src/` directory. This package does not rely on CMSSW, but the paths in this skimmer's `makefile` rely on the directory structure of CMSSW.
 ```
-git clone https://github.com/mlazarovits/BayesianClustering master
+git clone https://github.com/mlazarovits/BayesianClustering
 ```
 ### Make the shared library
 Go to the BayesianClustering package and make the shared library.
