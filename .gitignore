@@ -11,6 +11,7 @@ test/GMSBWorkSpace/
 test/oldworkingArea/
 test/myWorkSpace/
 macros/*.obj
+.nfs*
 *.txt
 *.root
 *.pyc

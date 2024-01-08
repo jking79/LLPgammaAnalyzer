@@ -59,7 +59,7 @@ void profileThisTH2D(TH2D* nhist, TH1D* prof, TH1D* fithist, float range ){
         }//<<>>if( stdv > 0.01 )
 
     }//<<>>for (auto ibinX = 1; ibinX <= nBins; ibinX++)
-	for( int it = 0; it < nXBins; it++ ){ if(prohists[it]) prohists[it]->Write(); }
+	//for( int it = 0; it < nXBins; it++ ){ if(prohists[it]) prohists[it]->Write(); }
 
 }//<<>>void profileTH2D(TH2D* hist, TH1D* prof)
 
@@ -336,17 +336,28 @@ void HistMaker::eventLoop( Long64_t entry ){
         auto rvz = (*selPhoSCz)[it];
         auto rpt = (*selPhoPt)[it];
         auto re = (*selPhoEnergy)[it];
+        auto rtime = (*selPhoTime)[it];
+        auto peta = (*selPhoEta)[it];
+
 
         float cms000 = hypo(rvx,rvy,rvz);
         float calcor = cms000/SOL;
 		float pvtof = hypo(rvx-PVx,rvy-PVy,rvz-PVz)/SOL;
 		rtime = rtime + calcor - pvtof;
 
+		if( rtime < 0.04 ) continue;
+
         float rt2 = sq2(rtime);
-        float rt3 = rtime*rt2;
         float s1 = 0.99736-0.0035*rtime-0.00319*rt2;
-        float s2 = 1.205-0.079*rtime+0.00093*rt2;
-        float core = ( rtime < -0.549 ) ? 1 : ( rtime < 3.37 ) ? s1 : s2;
+        float s2 = 1.205-0.079*rtime+0.00093*rt2;//<100, <3 // 
+		float s3 = std::exp( -1*sq2(rtime-0.2037)/144.942338);
+        //float core = ( rtime < -0.549 ) ? 1 : ( rtime < 3.37 ) ? s1 : s2;
+        float core = ( rtime < -0.549 ) ? 1 : s1;
+		if( re < 325 && rtime > 7.0 ) core = s2;
+        if( re < 200 && rtime > 6.0 ) core = s2;
+        if( re < 150 && rtime > 5.0 ) core = s2;
+        if( re < 100 && rtime > 4.0 ) core = s2;
+		if( rtime > 16.0 ) core = s3;
         ////float core = ( rtime < 0.204 ) ? 1 : std::exp(-1*sq2(rtime-0.204)/144.942338);
         float ce = re/core;
         auto cpt = rpt/core;
@@ -366,44 +377,56 @@ void HistMaker::eventLoop( Long64_t entry ){
             auto gvy = (*genVy)[gidx];
             auto gvz = (*genVz)[gidx];
 
-			if( ge < 20 ) continue;
+			//if( ge < 20 ) continue;
 	
 
             if( DEBUG ) std::cout << " -- doing reco calcs" << std::endl;
 			float ceta = std::asinh((rvz-gvz)/hypo(rvx-gvx,rvy-gvy));
 			float cphi = std::atan2(rvy-gvy,rvx-gvx);
 			auto dr = dR1(geta,gphi,ceta,cphi);
-			auto rtime = (*selPhoTime)[it];
-			auto peta = (*selPhoEta)[it];
             auto rege = re/ge;
             auto cege = ce/ge;
 
-            float plp = hypo(rvx-PVx,rvy-PVy,rvz-PVz);
-            float tmes = rtime*SOL+plp;
-            float m1 = std::sqrt(sq2(plp)+8*sq2(tmes));
-            float m2 = (plp+m1)*(plp/(4*sq2(tmes)));
-            float m3 = plp/tmes;
-            float mllpe = 2*ce*std::sqrt(1-sq2(m2));
-            float mllpm = 2*ce*std::sqrt(1-sq2(m3));
+            float tofPVtoRH = hypo(rvx-PVx,rvy-PVy,rvz-PVz);
+            float tmeasured = rtime*SOL+tofPVtoRH;
 
-			hist2d[66]->Fill(ce,ge);
+            float m1 = std::sqrt(sq2(tofPVtoRH)+8*sq2(tmeasured));
+            float m2 = (tofPVtoRH+m1)*(tofPVtoRH/(4*sq2(tmeasured)));
+            float m3 = tofPVtoRH/tmeasured;
+			float m2_phys = ( m2 > 1 ) ? 1 : m2;
+            float m3_phys = ( m3 > 1 ) ? 1 : m3;
+            float MBetaEqual = 2*ce*std::sqrt(1-sq2(m2_phys));
+            //float MBetaEqual = 2*ce*m2_phys;
+            float MBetaPrompt = 2*ce*std::sqrt(1-sq2(m3_phys));
+            //float MBetaPrompt = 2*ce*m3_phys;
+			float bgbeta = gpt/ge;
+
+			hist2d[66]->Fill(ce,ge,fillwt);
 
 			if( not isGMSB ){
 
-                hist1d[63]->Fill(mllpe,fillwt);
-                hist1d[64]->Fill(mllpm,fillwt);
+                hist1d[63]->Fill(MBetaEqual,fillwt);
+                hist1d[64]->Fill(MBetaPrompt,fillwt);
                 hist1d[67]->Fill(ce,fillwt);
                 hist1d[68]->Fill(cpt,fillwt);
 
-                hist2d[62]->Fill(mllpe,rtime);
-                hist2d[63]->Fill(mllpm,rtime);
-                hist2d[65]->Fill(mllpe,mllpm);
+                hist2d[62]->Fill(MBetaEqual,rtime);
+                hist2d[63]->Fill(MBetaPrompt,rtime);
+                hist2d[65]->Fill(MBetaEqual,MBetaPrompt);
 				hist2d[68]->Fill(ce,ge);
 
 				hist2d[12]->Fill(rege,rtime);
 
                 hist2d[70]->Fill(ce,rtime);
                 hist2d[72]->Fill(cpt,rtime);
+
+                hist1d[74]->Fill(bgbeta,fillwt);
+                hist1d[75]->Fill(m2,fillwt);
+                hist1d[76]->Fill(m3,fillwt);
+                hist1d[77]->Fill(tmeasured,fillwt);
+                hist1d[78]->Fill(m1,fillwt);
+                hist1d[80]->Fill(rtime,fillwt);
+
 
 			}//<<>>if( (*selPhoSusyId)[it] != 22 )
 
@@ -434,39 +457,44 @@ void HistMaker::eventLoop( Long64_t entry ){
 				float np = hypo( npx, npy, npz );
 				//float gp = (*selPhoGenSigMomPt)[it];
 				float beta = np/ne;
+                MBetaEqual = 2*ce*std::sqrt(1-sq2(beta));
+                MBetaPrompt = 2*ce*std::sqrt(1-sq2(beta));
 				//std::cout << " -- Filling gen 2d hists smpt: " << (*selPhoGenSigMomPt)[it] << " sme: " << (*selPhoGenSigMomEnergy)[it] << std::endl;
 				float pl1 = hypo( gvx-nvx, gvy-nvy, gvz-nvz ); 
 				float pl2 = hypo( rvx-gvx, rvy-gvy, rvz-gvz );
-				//float plp = hypo( rvx-nvx, rvy-nvy, rvz-nvz );
+				//float tofPVtoRH = hypo( rvx-nvx, rvy-nvy, rvz-nvz );
 				//std::cout << " -- Filling gen 2d hists gp: " << gp << " ge: " << ge << " SOL: " << SOL << " beta: " << beta << std::endl;
 				float t1 = pl1/(beta*SOL);
 				float t2 = pl2/SOL;
 				float gtime = t1+t2-calcor;
-                //float tmes = (t1+t2)*SOL;
+                //float tmeasured = (t1+t2)*SOL;
 				float rlalb = (pl1-pl2)/(pl1+pl2);
 
 				//std::cout << " -- Filling gen 2d hists gtime: " << gtime << std::endl;
 				if( DEBUG ) std::cout << " -- Filling gen 2d hists" << std::endl;
 
                 hist1d[60]->Fill(rlalb,fillwt);
-                hist1d[61]->Fill(mllpe,fillwt);
-                hist1d[62]->Fill(mllpm,fillwt);
+                hist1d[61]->Fill(MBetaEqual,fillwt);
+                hist1d[62]->Fill(MBetaPrompt,fillwt);
                 hist1d[65]->Fill(ce,fillwt);
                 hist1d[66]->Fill(rpt,fillwt);
 
                 hist1d[69]->Fill(beta,fillwt);
                 hist1d[70]->Fill(m2,fillwt);
                 hist1d[71]->Fill(m3,fillwt);
-				
-				hist2d[60]->Fill(mllpe,rtime);
-				hist2d[61]->Fill(mllpm,rtime);
+                hist1d[72]->Fill(tmeasured,fillwt);
+                hist1d[73]->Fill(m1,fillwt);				
+                hist1d[79]->Fill(rtime,fillwt);
 
-				hist2d[64]->Fill(mllpe,mllpm);
+				hist2d[60]->Fill(MBetaEqual,rtime);
+				hist2d[61]->Fill(MBetaPrompt,rtime);
+
+				hist2d[64]->Fill(MBetaEqual,MBetaPrompt);
 				hist2d[67]->Fill(ce,ge);
 
 				hist1d[50]->Fill(rtime-gtime,fillwt);
 				hist1d[0]->Fill(gtime,fillwt);
-           	 	hist2d[1]->Fill(rtime,gtime);
+           	 	hist2d[1]->Fill(rtime,gtime,fillwt);
             	hist2d[6]->Fill(dr,gtime);
             	hist2d[3]->Fill(rege,gtime);
             	hist2d[5]->Fill(peta,gtime);
@@ -478,6 +506,8 @@ void HistMaker::eventLoop( Long64_t entry ){
 
                 hist2d[69]->Fill(ce,rtime);
                 hist2d[71]->Fill(cpt,rtime);
+                hist2d[73]->Fill(ce,MBetaEqual);
+                hist2d[74]->Fill(cpt,MBetaEqual);
 
 			}//<<>>if( (*selPhoSusyId)[it] != 22 ) 
 
@@ -572,6 +602,12 @@ void HistMaker::endJobs(){
 
 	profileThisTH2D( hist2d[11], hist1d[51], hist1d[52], 1.0 );
 	//normTH1D(hist1d[52]);
+	hist1d[400] = (TH1D*)hist1d[63]->Clone("ratio_mllp_b/s");
+	hist1d[400]->Divide(hist1d[61]);
+    hist1d[401] = (TH1D*)hist1d[67]->Clone("ratio_ce_b/s");
+    hist1d[401]->Divide(hist1d[65]);
+    hist1d[402] = (TH1D*)hist1d[68]->Clone("ratio_cpt_b/s");
+    hist1d[402]->Divide(hist1d[66]);
 
 }//<<>>void HistMaker::endJobs()
 
@@ -642,19 +678,34 @@ void HistMaker::initHists( std::string ht ){
     hist1d[51] = new TH1D("profile_srtvrege","profile_srtvrege;SRecoTime [ns]",100,-5,20);
     hist1d[52] = new TH1D("fit_srtvrege","fit_srtvrege;SRecoTime [ns]",100,-5,20);
 
-	hist1d[60] = new TH1D("rlalb","(la-lb)/(la+lb);(la-lb)/(la+lb)",200,-1,1);
-    hist1d[61] = new TH1D("mllpe","M_{llp}^{la=lb}; M [GeV]",150,0,750);
-    hist1d[62] = new TH1D("mllpm","M_{llp}^{promt}; M [GeV]",150,0,750);
-    hist1d[63] = new TH1D("mllpeb","M_{llp}^{la=lb} notSig;M [GeV]",150,0,750);
-    hist1d[64] = new TH1D("mllpmb","M_{llp}^{promt} notSig; M [GeV]",150,0,750);
-    hist1d[65] = new TH1D("phoe","E_{pho};E [GeV]",200,0,1000);
-    hist1d[66] = new TH1D("phopt","Pt_{pho};Pt [GeV]",200,0,1000);
-    hist1d[67] = new TH1D("phoeb","E_{pho} notSig;E [GeV]",200,0,1000);
-    hist1d[68] = new TH1D("phoptb","Pt_{pho} notSig;Pt [GeV]",200,0,1000);
-    hist1d[69] = new TH1D("beta","Beta;Beta",100,0,1);
-    hist1d[70] = new TH1D("e1beta","Beta La=Lb;Beta",100,0,1);
-    hist1d[71] = new TH1D("e2beta","Beta Prompt;Beta",100,0,1);
 
+	hist1d[60] = new TH1D("rlalb","(la-lb)/(la+lb);(la-lb)/(la+lb)",200,-1,1);
+    hist1d[61] = new TH1D("mllpe","M_{llp}^{la=lb}; M [GeV]",260,-100,2500);
+    hist1d[62] = new TH1D("mllp_pm","M_{llp}^{promt}; M [GeV]",260,-100,2500);
+    hist1d[63] = new TH1D("mllpeb","M_{llp}^{la=lb} notSig;M [GeV]",260,-100,2500);
+    hist1d[64] = new TH1D("mllp_pmb","M_{llp}^{promt} notSig; M [GeV]",260,-100,2500);
+    hist1d[65] = new TH1D("phoe","Cor E_{pho};E [GeV]",50,0,1000);
+    hist1d[66] = new TH1D("phopt","Cor Pt_{pho};Pt [GeV]",50,0,1000);
+    hist1d[67] = new TH1D("phoeb","Cor E_{pho} notSig;E [GeV]",50,0,1000);
+    hist1d[68] = new TH1D("phoptb","Cor Pt_{pho} notSig;Pt [GeV]",50,0,1000);
+
+    hist1d[69] = new TH1D("beta","Beta;Beta",120,-1,5);
+    hist1d[70] = new TH1D("e1beta","Beta(m2) La=Lb;Beta",120,-1,5);
+    hist1d[71] = new TH1D("e2beta","Beta(m3) Prompt;Beta",120,-1,5);
+    hist1d[72] = new TH1D("tmeas","Tmeas;Tmeas [cm]",110,-100,1000);
+    hist1d[73] = new TH1D("m1","M1;M1",260,-100,2500);
+
+    hist1d[74] = new TH1D("betabg","Beta BG;Beta",120,-1,5);
+    hist1d[75] = new TH1D("e1betabg","Beta(m2) La=Lb BG;Beta",120,-1,5);
+    hist1d[76] = new TH1D("e2betabg","Beta(m3) Prompt BG;Beta",120,-1,5);
+    hist1d[77] = new TH1D("tmeasbg","Tmeas BG;Tmeas [cm]",110,-100,1000);
+    hist1d[78] = new TH1D("m1bg","M1 BG;M1 [GeV]",260,-100,2500);
+
+    hist1d[79] = new TH1D("rtime", "rtime", 100, -5, 20);
+    hist1d[80] = new TH1D("rtimeb", "rtime BG", 100, -5, 20);
+
+	//hisst1d 400 + for special use ( see end jobs )
+	
     for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]) hist1d[it]->Sumw2();}
 
 	//------------------------------------------------------------------------------------------
@@ -678,13 +729,13 @@ void HistMaker::initHists( std::string ht ){
     hist2d[50] = new TH2D("covievsie_pt20","CovEtaEtaVsSieie_pt20;CovEtaEta;Sieie^{2}", 100, 0, 0.001, 100, 0, 0.001 );
     hist2d[51] = new TH2D("salpvsie_pt20","SAlpVsSieie_pt20;SAlp;Sieie", 100, -2.5, 2.5, 50, 0, 0.025 );
 
-    hist2d[60] = new TH2D("mllpvrt","M_{llp}^{la=lb} v dt_{mean-nom};M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
-    hist2d[61] = new TH2D("mllpevrt","M_{llp}^{promt} v dt_{mean-nom};M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
-    hist2d[62] = new TH2D("mllpvrtb","M_{llp}^{la=lb} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
-    hist2d[63] = new TH2D("mllpevrtb","M_{llp}^{promt} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
+    hist2d[60] = new TH2D("mllpevrt","M_{llp}^{la=lb} v dt_{mean-nom};M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
+    hist2d[61] = new TH2D("mllppvrt","M_{llp}^{promt} v dt_{mean-nom};M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
+    hist2d[62] = new TH2D("mllpevrtb","M_{llp}^{la=lb} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
+    hist2d[63] = new TH2D("mllppvrtb","M_{llp}^{promt} v dt_{mean-nom} notSig;M [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
 
-    hist2d[64] = new TH2D("mllpvmllpe","M_{llp}^{la=lb} v M_{llp}^{promt};M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
-    hist2d[65] = new TH2D("mllpbvmllpeb","M_{llp}^{la=lb} v M_{llp}^{promt} notSig;M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
+    hist2d[64] = new TH2D("mllpevmllpp","M_{llp}^{la=lb} v M_{llp}^{promt};M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
+    hist2d[65] = new TH2D("mllpeebvmllppb","M_{llp}^{la=lb} v M_{llp}^{promt} notSig;M_{llp}^{la=lb} [GeV];M_{llp}^{promt} [GeV]",200,0,500,200,0,500);
     hist2d[66] = new TH2D("cevge","Corr Energy Vs Gen Energy; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
     hist2d[67] = new TH2D("cevges","Corr Energy Vs Gen Energy Sig; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
     hist2d[68] = new TH2D("cevgeb","Corr Energy Vs Gen Energy notSig; E_{cor} [GeV];E_{gen} [GeV]",500,0,1000,500,0,1000);
@@ -693,6 +744,8 @@ void HistMaker::initHists( std::string ht ){
     hist2d[70] = new TH2D("crevrtb","Corr Reco E v dt_{mean-nom} notSig;E [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
     hist2d[71] = new TH2D("crptvrt","Corr Reco Pt v dt_{mean-nom};Pt [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
     hist2d[72] = new TH2D("crptvrtb","Corr Reco Pt v dt_{mean-nom} notSig;Pt [GeV];dt_{mean-nom} [ns]",100,0,1000,210,-1,20);
+    hist2d[73] = new TH2D("crevmllpe","Corr Reco E v M_{llp}^{la=lb};E [GeV];M_{llp}^{la=lb} [GeV]",100,0,1000,100,0,1000);
+    hist2d[74] = new TH2D("crptvmllpe","Corr Reco Pt M_{llp}^{la=lb};Pt [GeV];M_{llp}^{la=lb} [GeV]",100,0,1000,100,0,1000);
 
     //for( int it = 0; it < 40; it++ ){
     //    std::string temp_title = "rregvre" + std::to_string( it );
@@ -721,7 +774,7 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "KUCMS_ShapeVar_QCD_SkimHists_v3.root"; //9
                 //auto outfilename = "KUCMS_ShapeVar_GJets_SkimHists_v4.root"; //9
                 //auto outfilename = "KUCMS_ShapeVar_JetHt_Bkg_SkimHists.root"; //9
-				auto outfilename = "KUCMS_ShapeVar_Sig_L400_QCD_SkimHists_v4.root";
+				auto outfilename = "KUCMS_ShapeVar_Sig_L400_GJets_SkimHists_v5.root";
 
 				auto htitle = "KUCMS_ShapeVar_Hists_";
 
