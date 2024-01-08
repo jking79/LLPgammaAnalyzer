@@ -15,8 +15,8 @@
 //// KUCMSAodSkimmer class ----------------------------------------------------------------------------------------------------
 ////---------------------------------------------------------------------------------------------------------------------------
 
-//#define DEBUG true
-#define DEBUG false
+#define DEBUG true
+//#define DEBUG false
 
 //#define CLSTRMAPS true
 #define CLSTRMAPS false
@@ -460,6 +460,7 @@ void KUCMSAodSkimmer::processPhotons(){
 		//if( not isEB ) continue;
         auto rhids = (*Photon_rhIds)[it];
         uInt nrh = rhids.size();
+cout << "n rhs: " << nrh << endl;
 		//if( nrh < 2 ) continue;
 
 		//--------------------------------------------------------------
@@ -553,6 +554,10 @@ void KUCMSAodSkimmer::processPhotons(){
         //auto evaluegeo = phoEigens2D[2];
 		//auto geosmaj = phoEigens2D[3];
         //auto geosmin = phoEigens2D[4];
+
+	//do bayesian stuff
+	map<string,vector<float>> phoBayes;
+	getRhGrpBayes(rhids, phoBayes);
 
         float phoPhoIsoDr = 10.0;
         for( uInt it2 = 0; it2 < nPhotons; it2++ ){
@@ -652,6 +657,10 @@ void KUCMSAodSkimmer::processPhotons(){
         selPhotons.fillBranch( "selPhoGenSigMomVx", momVx  );   //!
         selPhotons.fillBranch( "selPhoGenSigMomVy", momVy  );   //!
         selPhotons.fillBranch( "selPhoGenSigMomVz", momVz  );   //!
+
+	//will eventually need to fill a vector<vector<float>> branch
+	for(int i = 0; i < phoBayes["rot"].size(); i++)
+        selPhotons.fillBranch( "selPhoRotundity2D", phoBayes["rot"][i]  );   //!
 		//if( verbose ) std::cout << " -- selPho Pt: " << pt << " phi: " << phi << " geo: " << evaluegeo << " clrn: " << phoClstrR9;
 		if( verbose ) std::cout << " nrh: " << nrh << " quality: " << phoQuality << std::endl;
 
@@ -1201,6 +1210,8 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selPhotons.makeBranch( "selPhoGenSigMomVy", VFLOAT );   //!
     selPhotons.makeBranch( "selPhoGenSigMomVz", VFLOAT );   //!
 
+    selPhotons.makeBranch( "selPhoRotundity2D", VFLOAT );
+
     selPhotons.attachBranches( fOutTree );
 
     //selJets.makeBranch( "JetHt", &JetHt );
@@ -1383,6 +1394,98 @@ std::vector<float> KUCMSAodSkimmer::getRhGrpTimes( std::vector<uInt> rechitids )
     return result;
 
 };//<<>>std::vector<float> KUCMSAodSkimmer::getRhGrpTimes( std::vector<uInt> rechitids )
+
+void KUCMSAodSkimmer::getRhGrpBayes(const vector<uInt>& rhids, map<string, vector<float>>& result, double gev){
+	result.clear();
+	//declear observables to save
+	result["rot"] = {};
+	if(rhids.size() < 1) return;
+
+	//the BayesCluster class clusters "Jet"
+	//a Jet can be a rec hit, but a rec hit (specifically a JetPoint) cannot be a Jet
+	//Jets can be made up one or more JetPoints 
+	vector<Jet> rhs;
+	Point vtx = Point({PV_x, PV_y, PV_z});
+	for(auto id : rhids){
+		double rhtime = (*ECALRecHit_time)[getRhIdx(id)];
+		if(fabs(rhtime) > 20) continue;
+		double rhx = (*ECALRecHit_rhx)[getRhIdx(id)];
+		double rhy = (*ECALRecHit_rhy)[getRhIdx(id)];
+		double rhz = (*ECALRecHit_rhz)[getRhIdx(id)];
+		//JetPoints are defined by their x, y, z, t coordinates
+		//Jets can be constructed from a JetPoint (with the vertex set after)
+		//or from px, py, pz, E
+		JetPoint rh(rhx, rhy, rhz, rhtime);
+		//the energy of the JetPoint MUST be set
+		//the BayesCluster class gets the transfer factor from the energy and the weight defined below
+		rh.SetEnergy((*ECALRecHit_energy)[getRhIdx(id)]);
+		rh.SetWeight((*ECALRecHit_energy)[getRhIdx(id)]*gev);
+		Jet jrh(rh);
+		jrh.SetVertex(vtx);
+		rhs.push_back(jrh);
+	}
+	if(rhs.size() < 2) return;
+	
+	//define data smear
+	Matrix smear = Matrix(3,3);
+	double dphi = 2*acos(-1)/360.;
+	double deta = dphi;
+	smear.SetEntry(deta*deta,0,0);
+	smear.SetEntry(dphi*dphi,1,1);
+	//no time smear for now
+
+	//define the algorithm and its hyperparameters
+	BayesCluster algo(rhs);
+	algo.SetDataSmear(smear);
+	algo.SetThresh(1.0);
+	algo.SetSubclusterAlpha(0.5);
+	algo.SetVerbosity(0);
+	//the call below does the subclustering and returns the final mixture model
+	GaussianMixture* gmm = algo.SubCluster();	
+	int nSubclusters = gmm->GetNClusters();
+	map<string, Matrix> params;
+	Matrix cov = Matrix(3,3);
+	Matrix cov2d = Matrix(2,2);
+	for(int k = 0; k < nSubclusters; k++){
+		params = gmm->GetPriorParameters(k);
+		cov = params["cov"];
+		EtaTimeSignFlip(cov, params["mean"].at(0,0));	
+		Get2DMat(cov,cov2d);
+		result["rot"].push_back(CalcRotundity(cov2d));		
+	}
+
+};
+
+void KUCMSAodSkimmer::EtaTimeSignFlip(Matrix& inmat, double eta){
+	if(eta < 0){
+		inmat.SetEntry(-inmat.at(0,2),0,2);
+		inmat.SetEntry(-inmat.at(2,0),2,0);
+	}
+	else return;
+};
+
+void KUCMSAodSkimmer::Get2DMat(Matrix& inmat, Matrix& outmat){
+	if(!outmat.square()) return;
+	if(outmat.GetDims()[0] != 2) return;
+	outmat.reset();
+	outmat.SetEntry(inmat.at(0,0),0,0);
+	outmat.SetEntry(inmat.at(0,1),0,1);
+	outmat.SetEntry(inmat.at(1,0),1,0);
+	outmat.SetEntry(inmat.at(1,1),1,1);
+}
+
+double KUCMSAodSkimmer::CalcRotundity(Matrix& inmat){
+		vector<Matrix> eigenvecs;
+                vector<double> eigenvals;
+                inmat.eigenCalc(eigenvals, eigenvecs);
+                int maxd = inmat.GetDims()[0] - 1;
+                double rot = 0;
+                for(int i = 0; i < (int)eigenvals.size(); i++) rot += eigenvals[i];
+                rot = eigenvals[maxd]/rot;
+                if(rot < 0.5 || rot > 1) cout << "rot: " << rot << endl;
+                return rot;
+
+}
 
 std::vector<float> KUCMSAodSkimmer::getRhGrpEigenFromAngles( std::vector<uInt> rechitids ){
 

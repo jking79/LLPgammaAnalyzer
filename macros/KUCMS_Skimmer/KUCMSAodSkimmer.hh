@@ -14,6 +14,7 @@
 #include "KUCMSBranchManager2.hh"
 
 #include "RestFrames/RestFrames.hh"
+#include "BayesianClustering/BayesianClustering.hh"
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
 
@@ -90,6 +91,10 @@ class KUCMSAodSkimmer : public root_base {
 	std::vector<float> getRhGrpEigenFromAngles( std::vector<uInt> rechitids );
     std::vector<float> getLeadTofRhTime( std::vector<uInt> recHitIds, double vtxX, double vtxY, double vtxZ );
     std::vector<float> getRhGrpEigen_sph( std::vector<float> times, std::vector<uInt> rechitids );
+	void getRhGrpBayes(const vector<uInt>& rhids, map<string,vector<float>>& result, double gev = 1./30.);
+	double CalcRotundity(Matrix& inmat);
+	void EtaTimeSignFlip(Matrix& inmat, double eta);
+	void Get2DMat(Matrix& inmat, Matrix& outmat);
 
   	// RestFrames frames and friends
 
