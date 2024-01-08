@@ -27,4 +27,4 @@ This line can also be added at the end of your `~/.bash_profile` to have this se
 Then, in your executable be sure to include the header `#include BayesianClustering/BayesianClustering.hh`
 
 ### Troubleshooting
-For more information, see the BayesianClustering README.
+For more information, see the [BayesianClustering README](https://github.com/mlazarovits/BayesianClustering/blob/main/README.md).
