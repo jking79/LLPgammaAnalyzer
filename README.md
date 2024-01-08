@@ -9,7 +9,8 @@ git clone https://github.com/mlazarovits/BayesianClustering master
 ```
 ### Make the shared library
 Go to the BayesianClustering package and make the shared library.
-``` make lpclib
+```
+ make lpclib
 ```
 ### Update paths in environment variables
 The CGAL package needs to be found during compilation.
