@@ -34,6 +34,7 @@ class HistMaker : public kuSkimTree {
     void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle );
 	void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::string htitle,int cut,float va,float vb,float vc,float vd );
 	void histMaker( std::string indir, std::vector<std::string> infilelists, std::string outfilename, std::string htitle );
+    void histMaker( std::string indir, std::string infilelist, std::string outfilename, std::vector<std::vector<std::string>> deflist, std::vector<float> params );
 
 	void initHists( std::string htitle );
     void initHists( std::string htitle, int nhists );
@@ -45,6 +46,10 @@ class HistMaker : public kuSkimTree {
     TH1D *hist1d[n1dHists];
     TH2D *hist2d[n2dHists];
     TH3D *hist3d[n3dHists];
+    TH1D *sigHist[n1dHists];
+    TH1D *bkgHist[n1dHists];
+    TH1D *dataHist[n1dHists];
+
     int cutselection;
 	int preCutNPhotons, preCut30NPhotons, preCut100NPhotons; 
     int postCutNPhotons, postCut30NPhotons, postCut100NPhotons;
@@ -52,6 +57,9 @@ class HistMaker : public kuSkimTree {
     float sumEvtGenWgt;
 
     std::map< std::string, std::map< std::string, float > > configInfo;
+
+	std::vector<std::string> bkglist, siglist, datalist, bkgleg, sigleg, dataleg, title, varsel;
+	float lumi, maxy, miny, maxr;
 
 	int nMaps, Nsample;
 	bool fMap[nEBEEMaps];

@@ -227,7 +227,7 @@ void HistMaker::eventLoop( Long64_t entry ){
     std::string configKey(*DataSetKey);
     float xsec = (configInfo[configKey])["sCrossSection"];
     float segwt = (configInfo[configKey])["nEvents"];
-    auto fillwt = scale * ( xsec * 1000 ) * ( evtgwt / segwt );
+    float fillwt = scale * ( xsec * 1000 ) * ( evtgwt / segwt );
     //std::cout << " evtfillwt :( " << xsec << " * 1000 ) * ( " << evtgwt << " / " << segwt << " ) = " << fillwt << std::endl;
     //auto fillwt = (configInfo[configKey])["sCrossSection"] * evtwt;
 	// JetHT2018D
@@ -305,9 +305,9 @@ void HistMaker::eventLoop( Long64_t entry ){
         if( DEBUG ) std::cout << " -- looping photons : Start getting dr dp info" << std::endl;
 		auto phoClass = (*selPhoQuality)[it];
         //if( phoClass < 1 ) continue;
-        auto phoSusId = (*selPhoSusyId)[it]; // selPhoSusyId->at(it);
-        auto phoTime = (*selPhoTime)[it];
-        auto phoOOT = (*selPhoOOT)[it];
+        uInt phoSusId = (*selPhoSusyId)[it]; // selPhoSusyId->at(it);
+        float phoTime = (*selPhoTime)[it];
+        bool phoOOT = (*selPhoOOT)[it];
 
         bool isNino = phoSusId == 22;
         bool isXinoWZ = phoSusId == 23 || phoSusId == 24 || phoSusId == 33 || phoSusId == 34;
@@ -367,15 +367,15 @@ void HistMaker::eventLoop( Long64_t entry ){
 		if( (*selPhoGenIdx)[it] > -1 ){
 
 			if( DEBUG ) std::cout << " -- Filling gen/reco info 2ds in loop" << std::endl;
-			auto gidx = (*selPhoGenIdx)[it];
+			uInt gidx = (*selPhoGenIdx)[it];
 			if( DEBUG ) std::cout << " --- gidx: " << gidx << std::endl;
-			auto geta = (*genPartEta)[gidx];
-			auto gphi = (*genPartPhi)[gidx];
-			auto ge = (*genPartEnergy)[gidx];
-            auto gpt = (*genPartPt)[gidx];
-			auto gvx = (*genVx)[gidx];
-            auto gvy = (*genVy)[gidx];
-            auto gvz = (*genVz)[gidx];
+			float geta = (*genPartEta)[gidx];
+			float gphi = (*genPartPhi)[gidx];
+			float nge = (*genPartEnergy)[gidx];
+            float gpt = (*genPartPt)[gidx];
+			float gvx = (*genVx)[gidx];
+            float gvy = (*genVy)[gidx];
+            float gvz = (*genVz)[gidx];
 
 			//if( ge < 20 ) continue;
 	
@@ -383,9 +383,9 @@ void HistMaker::eventLoop( Long64_t entry ){
             if( DEBUG ) std::cout << " -- doing reco calcs" << std::endl;
 			float ceta = std::asinh((rvz-gvz)/hypo(rvx-gvx,rvy-gvy));
 			float cphi = std::atan2(rvy-gvy,rvx-gvx);
-			auto dr = dR1(geta,gphi,ceta,cphi);
-            auto rege = re/ge;
-            auto cege = ce/ge;
+			float dr = dR1(geta,gphi,ceta,cphi);
+            float rege = re/ge;
+            float cege = ce/ge;
 
             float tofPVtoRH = hypo(rvx-PVx,rvy-PVy,rvz-PVz);
             float tmeasured = rtime*SOL+tofPVtoRH;
@@ -703,6 +703,9 @@ void HistMaker::initHists( std::string ht ){
 
     hist1d[79] = new TH1D("rtime", "rtime", 100, -5, 20);
     hist1d[80] = new TH1D("rtimeb", "rtime BG", 100, -5, 20);
+
+
+
 
 	//hisst1d 400 + for special use ( see end jobs )
 	

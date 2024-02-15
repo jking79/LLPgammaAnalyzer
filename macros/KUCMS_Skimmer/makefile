@@ -17,6 +17,8 @@ p2=phoSelSkimHistMaker
 p3=skimMultiHistMaker
 p4=crStyleSkimHistMaker
 p5=skimSVHistMaker
+p6=calibration_averhtime_isoot_filter
+p7=stackSkimHistMaker
 
 all: $(p1) 
 
@@ -34,3 +36,9 @@ $(p4): $(p4).cpp
 
 $(p5): $(p5).cpp
 	$(CC) -o $(p5).obj $(p5).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p6): $(p6).cpp
+	$(CC) -o $(p6).obj $(p6).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p7): $(p7).cpp
+	$(CC) -o $(p7).obj $(p7).cpp $(RTCFLAGS) $(RTGLIBS)

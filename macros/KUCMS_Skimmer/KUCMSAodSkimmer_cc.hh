@@ -269,10 +269,10 @@ bool KUCMSAodSkimmer::eventLoop( Long64_t entry ){
 	// counts events and saves event varibles
 	// --------------------------------------
 	processEvntVars();	
-	//processRechits();
+	processRechits();
 	processMet();
 	processPhotons();
-	//processElectrons();
+	processElectrons();
 	//processMuons();
 	processJets();
 	if( doGenInfo ){ processGenParticles(); }
@@ -280,7 +280,7 @@ bool KUCMSAodSkimmer::eventLoop( Long64_t entry ){
 	// select events to process and store
 	//--------------------------------------
 	auto saveToTree = eventSelection();	
-	if( saveToTree ) processRJR();
+	//if( saveToTree ) processRJR();
 	return saveToTree;
 
 }//<<>>void KUCMSAodSkimmer::eventLoop( Long64_t entry )
@@ -354,6 +354,7 @@ void KUCMSAodSkimmer::processRechits(){
 		auto idinfo = DetIDMap[id];
 		if( idinfo.ecal == ECAL::EB ){
 
+			hist1d[0]->Fill( (*ECALRecHit_energy)[it], 1 );
 			//auto radius = hypo( (*rhPosX)[it], (*rhPosY)[it] );
 
 		}//<<>>if( (*rhSubdet)[it] == 0 )
@@ -393,6 +394,8 @@ void KUCMSAodSkimmer::processGenParticles(){
         auto py = (*Gen_py)[it];
         auto pz = (*Gen_pz)[it];
 
+		//if( pdgId < 7 ) continue;
+
 		selGenPart.fillBranch( "genPartEnergy", energy );
         selGenPart.fillBranch( "genPartEta", eta );
         selGenPart.fillBranch( "genPartPhi", phi );
@@ -421,13 +424,13 @@ void KUCMSAodSkimmer::processCalojets(){
 	// initilize
     // selCaloJets.clearBranches(); // <<<<<<<   must do
 
-	// calc
+	/* calc
 	int nCaloJets = 0;
 	for( int it = 0; it < nCaloJets; it++ ){
 
 
 	}//<<>>for( int it = 0; it < nCaloJets; it++ )
-
+	*/
 	//fill
 
 
@@ -447,46 +450,87 @@ void KUCMSAodSkimmer::processPhotons(){
 
 	std::vector<int> phoOrderIndx;
     uInt nSelPhotons = 0;
+	//uint nEleVeto = 0;
     uInt nPhotons = Photon_excluded->size();	
     if( DEBUG || verbose ) std::cout << " - Looping over for " << nPhotons << " photons" << std::endl;
     for( uInt it = 0; it < nPhotons; it++ ){
 
 		//---------------------------------------------------
-        if( DEBUG ) std::cout << " -- pho isEB, has min rhs, not excluded" << std::endl;
+    ///////////  pho selection ////////////////////////////////////////////////////////////////////
+        if( DEBUG ) std::cout << " -- looping photons : getting pho isEB, has min pt, not excluded, electron veto " << std::endl;
 		auto isExcluded = (*Photon_excluded)[it];
-        //auto isCmb = phoExcluded[it];
-		if( isExcluded ) continue; 
-        //auto isEB = (*Photon_seedIsEB)[it];
-		//if( not isEB ) continue;
-        auto rhids = (*Photon_rhIds)[it];
-        uInt nrh = rhids.size();
-		//if( nrh < 2 ) continue;
+		auto scIndx = (*Photon_scIndex)[it];
+        auto isEB = (*SuperCluster_seedIsEB)[scIndx];
+		auto hasEleVeto = (*Photon_electronVeto)[it];
+        bool hasPixSeed = (*Photon_pixelSeed)[it];
 
-		//--------------------------------------------------------------
+        auto pt = (*Photon_pt)[it];
+		bool underMinPt = pt < 30;
+        auto eta = (*Photon_eta)[it];
+		auto overMaxEta = std::abs(eta) > 1.479;
+        auto phi = (*Photon_phi)[it];
+
+        if( DEBUG ) std::cout << " -- looping photons : getting phojet iso " << std::endl;
+        bool isJetPhoton = false;
+        for( int jit = 0; jit < Jet_energy->size(); jit++ ){
+
+            bool underMinJPt = (*Jet_pt)[jit] < 75.0;
+            bool underMinJQual = getJetQuality(it)  < 2;
+			auto jeta = (*Jet_eta)[jit];
+            auto jphi = (*Jet_phi)[jit];
+			auto overMaxJEta = std::abs(jeta) > 2.4;
+            if( underMinJPt || underMinJQual || overMaxJEta ) continue;
+			
+            float dpjeta = jeta - eta;
+            float dpjphi = dPhi( jphi, phi );
+            float dr = hypo( dpjeta, dpjphi );
+            if( dr < 0.4 ) isJetPhoton = true;
+
+        } // for( int jit = 0; jit < nSelJets; jit++ )
+
+        if( DEBUG ) std::cout << " -- looping photons : getting pho iso " << std::endl;
+        auto htsecdr4 = (*Photon_hcalTowerSumEtConeDR04)[it];   //!
+        bool passHcalSum = true;
+        auto tspscdr4 = (*Photon_trkSumPtSolidConeDR04)[it];
+        bool passTrkSum = tspscdr4 < 6.0; //(*selPhoTrkSumPtSolidConeDR04)[it] < cutvalue;
+		auto erhsecdr4 = (*Photon_ecalRHSumEtConeDR04)[it];
+        bool passsEcalRhSum = erhsecdr4 < 10.0;
+		auto htoem = (*Photon_hadTowOverEM)[it];
+        bool passHOE = htoem < 0.02;
+        bool failPhoIso = not ( passHOE && passsEcalRhSum && passTrkSum && passHcalSum );
+
+		bool phoskip = isExcluded || hasPixSeed || overMaxEta || underMinPt || isJetPhoton || failPhoIso;
+		if( phoskip ) continue;		
+
+    ///////////  pho selection ////////////////////////////////////////////////////////////////////
+
+        if( DEBUG ) std::cout << " -- pho pull SC info" << std::endl;
+        auto scSize = SuperCluster_seedIsEB->size();
+        auto rhids = (*SuperCluster_rhIds)[scIndx];
+        uInt nrh = rhids.size();
+
         if( DEBUG ) std::cout << " -- pho pull info" << std::endl;
 		auto isOOT = (*Photon_isOot)[it];
 		auto time = (*Photon_seedTOFTime)[it];
-		auto eta = (*Photon_eta)[it];
-        auto phi = (*Photon_phi)[it];
-        auto pt = (*Photon_pt)[it];
-		auto smaj = (*Photon_smaj)[it];
-        auto smin = (*Photon_smin)[it];
+		auto smaj = (*SuperCluster_smaj)[scIndx];
+        auto smin = (*SuperCluster_smin)[scIndx];
         auto r9 = (*Photon_r9)[it];
-        auto sieie = (*Photon_sieie)[it];
+        auto sieie = 0.f;//(*Photon_sieie)[it];
         auto energy = (*Photon_energy)[it];
-        auto cee = (*Photon_covEtaEta)[it];
-        auto cep = (*Photon_covEtaPhi)[it];
-        auto cpp = (*Photon_covPhiPhi)[it];
+        auto cee = (*SuperCluster_covEtaEta)[scIndx];
+        auto cep = (*SuperCluster_covEtaPhi)[scIndx];
+        auto cpp = (*SuperCluster_covPhiPhi)[scIndx];
         auto s4 = (*Photon_s4)[it];
-        auto salp = (*Photon_salp)[it];
-        auto etawide = (*Photon_etaWidth)[it];
-        auto phiwide = (*Photon_phiWidth)[it];
+        auto salp = (*SuperCluster_salp)[scIndx];
+        auto etawide = (*SuperCluster_etaWidth)[scIndx];
+        auto phiwide = (*SuperCluster_phiWidth)[scIndx];
         auto sigmaieie = (*Photon_SigmaIEtaIEta)[it];   //!
-        auto scx = (*Photon_x_calo)[it];
-        auto scy = (*Photon_y_calo)[it];
-        auto scz = (*Photon_z_calo)[it];
+        auto scx = (*SuperCluster_x_calo)[scIndx];
+        auto scy = (*SuperCluster_y_calo)[scIndx];
+        auto scz = (*SuperCluster_z_calo)[scIndx];
 
         int genIdx = -1;
+        int momIdx = -1;
         float susId = -1;
 		float genpt = -1;
         float momEnergy = -1;   //!
@@ -503,35 +547,40 @@ void KUCMSAodSkimmer::processPhotons(){
 
 		if( doGenInfo ){
 			genIdx = (*Photon_genIdx)[it];
-        	susId = (*Photon_genLlpId)[it];
+			momIdx = (*Photon_genSigMomId)[it];
+        	susId = (*Gen_susId)[genIdx];
+
 			if( genIdx > -1.0 ){ 
 				genpt = (*Gen_pt)[genIdx]; 
 			}//if( genIdx > -1.0 )
-            momEnergy = (*Photon_genSigMomEnergy)[it];   //!
-            momEta = (*Photon_genSigMomEta)[it];   //!
-            momMass = (*Photon_genSigMomMass)[it];   //!
-            momPhi = (*Photon_genSigMomPhi)[it];   //!
-            momPt = (*Photon_genSigMomPt)[it];   //!
-            momPx = (*Photon_genSigMomPx)[it];   //!
-            momPy = (*Photon_genSigMomPy)[it];   //!
-            momPz = (*Photon_genSigMomPz)[it];   //!
-            momVx = (*Photon_genSigMomVx)[it];   //!
-            momVy = (*Photon_genSigMomVy)[it];   //!
-            momVz = (*Photon_genSigMomVz)[it];   //!
+			
+			if( momIdx > -1.0 ){
+                momEnergy = (*Gen_energy)[momIdx];   //!
+                momEta = (*Gen_eta)[momIdx];   //!
+                momMass = (*Gen_mass)[momIdx];   //!
+                momPhi = (*Gen_phi)[momIdx];   //!
+                momPt = (*Gen_pt)[momIdx];   //!
+                momPx = (*Gen_px)[momIdx];   //!
+                momPy = (*Gen_py)[momIdx];   //!
+                momPz = (*Gen_pz)[momIdx];   //!
+                momVx = (*Gen_vx)[momIdx];   //!
+                momVy = (*Gen_vy)[momIdx];   //!
+                momVz = (*Gen_vz)[momIdx];   //!
+			}//<<>>if( momIdx > -1.0 )
+
 		}//if( doGenInfo )
 
         auto htsebcdr4 = (*Photon_hcalTowerSumEtBcConeDR04)[it];
         auto tsphcdr3 = (*Photon_trkSumPtHollowConeDR03)[it];
         auto tsphcdr4 = (*Photon_trkSumPtHollowConeDR04)[it];
-        auto tspscdr4 = (*Photon_trkSumPtSolidConeDR04)[it];
-        auto pixseed = (*Photon_pixelSeed)[it];
-        auto erhsecdr4 = (*Photon_ecalRHSumEtConeDR04)[it];
-        auto htoem = (*Photon_hadTowOverEM)[it];
+        //auto tspscdr4 = (*Photon_trkSumPtSolidConeDR04)[it];
+        //auto erhsecdr4 = (*Photon_ecalRHSumEtConeDR04)[it];
+        //auto htoem = (*Photon_hadTowOverEM)[it];
         auto hoem = (*Photon_hadOverEM)[it];
-        auto sieip = (*Photon_sieip)[it];
-        auto sipip = (*Photon_sipip)[it];
+        auto sieip = 0.f;//(*Photon_sieip)[it];
+        auto sipip = 0.f;//(*Photon_sipip)[it];
         auto phoOOT = (*Photon_isOot)[it];
-        auto htsecdr4 = (*Photon_hcalTowerSumEtConeDR04)[it];   //!
+        //auto htsecdr4 = (*Photon_hcalTowerSumEtConeDR04)[it];   //!
         auto nthcdr4 = (*Photon_nTrkHollowConeDR04)[it];   //!
         auto ntscdr4 = (*Photon_nTrkSolidConeDR04)[it];   //!
         auto epfciso = (*Photon_ecalPFClusterIso)[it];   //!
@@ -547,7 +596,7 @@ void KUCMSAodSkimmer::processPhotons(){
 
         //--------------------------------------------------------------
         if( DEBUG ) std::cout << " -- pho get calclated values" << std::endl;
-        auto phoQuality = getPhoQuality(it);
+        int phoQuality = getPhoQuality(it);
         auto phoClstrR9 = clstrR9( rhids );
         //auto phoEigens2D = getRhGrpEigenFromAngles( rhids );
         //auto evaluegeo = phoEigens2D[2];
@@ -557,9 +606,10 @@ void KUCMSAodSkimmer::processPhotons(){
         float phoPhoIsoDr = 10.0;
         for( uInt it2 = 0; it2 < nPhotons; it2++ ){
             if( it == it2 ) continue;
-        	auto eta2 = (*Photon_eta)[it2];
-        	auto phi2 = (*Photon_phi)[it2];
-			auto pho2dr = hypo( eta-eta2, dPhi(phi,phi2) ); 
+        	float eta2 = (*Photon_eta)[it2];
+        	float phi2 = (*Photon_phi)[it2];
+			auto dphi12 = dPhi( phi, phi2 );
+			auto pho2dr = hypo( eta-eta2, dphi12 ); 
             //std::cout << " -- Eta : " << eta-eta2 << " Phi : " << dPhi(phi,phi2) << " dr : " << pho2dr << std::endl;
 			if( pho2dr < phoPhoIsoDr ) phoPhoIsoDr = pho2dr;
 		}//for( uInt it2 = it+1; it2 < nPhotons; it2++ )
@@ -587,6 +637,7 @@ void KUCMSAodSkimmer::processPhotons(){
 		// fill ( vectors )
 		if( DEBUG ) std::cout << " -- pho fill out branches" << std::endl;
         selPhotons.fillBranch( "selPhoOOT", phoOOT );
+        selPhotons.fillBranch( "selPhoEleVeto", hasEleVeto );
 		selPhotons.fillBranch( "selPhoQuality", phoQuality );
         selPhotons.fillBranch( "selPhoTime", time );
         selPhotons.fillBranch( "selPhoSCx", scx );
@@ -621,7 +672,7 @@ void KUCMSAodSkimmer::processPhotons(){
         selPhotons.fillBranch( "selPhoTrkSumPtHollowConeDR03", tsphcdr3 );
         selPhotons.fillBranch( "selPhoTrkSumPtHollowConeDR04", tsphcdr4 );
         selPhotons.fillBranch( "selPhoTrkSumPtSolidConeDR04", tspscdr4 );
-        selPhotons.fillBranch( "selPhoPixelSeed", pixseed );
+        selPhotons.fillBranch( "selPhoPixelSeed", hasPixSeed );
         selPhotons.fillBranch( "selPhoEcalRHSumEtConeDR04", erhsecdr4 );
         selPhotons.fillBranch( "selPhoHadTowOverEM", htoem );
         selPhotons.fillBranch( "selPhoHadOverEM", hoem );
@@ -674,6 +725,7 @@ void KUCMSAodSkimmer::processPhotons(){
     geCnts.set( "nSelPhotons", nSelPhotons );	
 	selPhotons.fillBranch( "nSelPhotons",  nSelPhotons );
     selPhotons.fillBranch( "nPhotons", nPhotons );	
+    //selPhotons.fillBranch( "nEleVeto", nEleVeto );
     //selPhotons.fillBranch( "selPhoPtOrder", phoPtOrder );
 
     //if( DEBUG || verbose ) std::cout << " - Setting Leading/Subleading Photon with " << phoPtOrder.size() << std::endl;
@@ -702,13 +754,62 @@ void KUCMSAodSkimmer::processElectrons(){
 	//-------- electrons --------------------------------------
 
     // intilize
-    // selElectrons.clearBranches(); // <<<<<<<   must do
+    selElectrons.clearBranches(); // <<<<<<<   must do
 
-	int nElectrons = 0;
-    if( DEBUG ) std::cout << " - Looping over for " << nElectrons << " electrons" << std::endl;
-    for( int it = 0; it < nElectrons; it++ ){
+	uInt nElectrons = Electron_energy->size();
+	float nEpDrMatch = 0;
+    float nEpSeedIdMatch = 0;
+    float nEpsidsolo = 0;
+    float elePhoIsoMinDr(10.0); 
+    if( DEBUG ) std::cout << " -- Looping electrons: " << std::endl;
+    for( uInt itr = 0; itr < nElectrons; itr++ ){
+		
+    	if( DEBUG ) std::cout << " ---- Processing  electron: " << itr << " of: " << nElectrons << std::endl;
+		float eta = (*Electron_eta)[itr];
+    	float phi = (*Electron_phi)[itr];
+		auto scIdx = (*Electron_scIndex)[itr];
+		if( DEBUG ) std::cout << " -- doing sc sstuff " << std::endl;
+		auto esid = getLeadRhID( (*SuperCluster_rhIds)[scIdx] );
+		//std::cout << " -- esid : " << esid << std::endl;
+		auto eletime = (*Electron_seedTOFTime)[itr];
+		if( std::abs(eletime) > 30 ) continue;
+    	uInt nPhotons = Photon_excluded->size();
+		float elePhoIsoDr(0.5);
+		bool epSeedIdMatch = false;
+		bool epsidsolo = true;
+		if( DEBUG ) std::cout << " -- doing ele pho iso sstuff " << std::endl;
+    	for( uInt pit2 = 0; pit2 < nPhotons; pit2++ ){
+        	float eta2 = (*Photon_eta)[pit2];
+        	float phi2 = (*Photon_phi)[pit2];
+			auto scIdx2 = (*Photon_scIndex)[pit2];
+			auto dphi12 = dPhi( phi, phi2 );
+        	float elephodr = hypo( eta-eta2, dphi12 );
+        	//std::cout << " -- Eta : " << eta-eta2 << " Phi : " << dPhi(phi,phi2) << " dr : " << elephodr << std::endl;
+        	if( elephodr < elePhoIsoDr ) elePhoIsoDr = elephodr;
+            //std::cout << " -- scIdx : " << scIdx2 << std::endl; 
+			auto rhIds = (*SuperCluster_rhIds)[scIdx2];
+			//std::cout << " -- scRh1 : " << rhIds[0] << std::endl;
+			auto psid = getLeadRhID(rhIds);
+			//std::cout << " -- psid : " << psid << std::endl;
+			if( esid == psid ){ if( epSeedIdMatch == true ) epsidsolo = false ; epSeedIdMatch = true; }
+    	}//for( uInt pit2 = 0; pit2 < nPhotons; pit2++ )
+		elePhoIsoMinDr = elePhoIsoDr;
+		bool epDrMatch = ( elePhoIsoDr < 0.2  ) ? true : false;
 
-    }//<<>>for( int it = 0; it < nElectrons; it++ )
+		if( epDrMatch ) nEpDrMatch++;
+		if( epSeedIdMatch ) nEpSeedIdMatch++;
+		if( epsidsolo ) nEpsidsolo++;
+		if( DEBUG ) std::cout << " ---- next electrons: " << std::endl;
+
+	}//<<>>for( int itr = 0; itr < nElectrons; itr++ )
+    if( DEBUG ) std::cout << " -- Finishd looping electrons " << std::endl;
+
+    selElectrons.fillBranch( "elePhoMinDr", elePhoIsoMinDr );
+    selElectrons.fillBranch( "nElectrons", nElectrons );
+	if( nElectrons == 0 ) nElectrons = 1;
+    selElectrons.fillBranch( "epDrMatch", nEpDrMatch/nElectrons );
+    selElectrons.fillBranch( "epSeedIdMatch", nEpSeedIdMatch/nElectrons );
+    selElectrons.fillBranch( "epSeedIdUnique", nEpsidsolo/nElectrons );
 
 }//<<>>void KUCMSAodSkimmer::processElectrons
 
@@ -727,7 +828,7 @@ void KUCMSAodSkimmer::processJets(){
     std::vector<float> seljeteta;
     std::vector<float> seljetphi;
     std::vector<float> seljetmass;
-    //if( DEBUG ) std::cout << " - Looping over for " << nJets << " jets" << std::endl;
+    if( DEBUG ) std::cout << " - Looping over for " << nJets << " jets" << std::endl;
     for( uInt it = 0; it < nJets; it++ ){
 
 		// pull values ---------------------------------------------------
@@ -739,6 +840,7 @@ void KUCMSAodSkimmer::processJets(){
 		auto eta = (*Jet_eta)[it];
         auto phi = (*Jet_phi)[it];
 		auto rhids = (*Jet_drRhIds)[it];
+		if( DEBUG ) std::cout << " -- jettDrId size: " << rhids.size() << std::endl;		
 
         auto area = (*Jet_area)[it];
         auto chEmEF = (*Jet_chEmEF)[it];
@@ -777,17 +879,17 @@ void KUCMSAodSkimmer::processJets(){
 		}//if( doGenInfo )
 
 		// get cacluated values-------------------------------------------
-		//if( DEBUG ) std::cout << " - Finding Jet Time." << std::endl;
+		if( DEBUG ) std::cout << " - Finding Jet Time." << std::endl;
 		auto rhenergies = getRhGrpEnergies( rhids );
 		auto rhtimes = getRhGrpTimes( rhids );
 		auto timedist = getDistStats( rhtimes, rhenergies );
 		auto time = timedist[6];
 
-		//if( DEBUG ) std::cout << " - Jet Obj selection." << std::endl;
+		if( DEBUG ) std::cout << " - Jet Obj selection." << std::endl;
 		// jet object selection ------------------------------------------
-		auto overMinPt = pt > 75; 
-		auto underMaxEta = std::abs(eta) <= 3.0;
-		auto isMinQuality = quality > 0;
+		auto overMinPt = pt > 30; 
+		auto underMaxEta = std::abs(eta) <= 2.4;
+		auto isMinQuality = quality > 1; // 2 = "tight" 3 = "tighter"
 
 		auto jetSelected = underMaxEta && isMinQuality && overMinPt;
 		if( not jetSelected ) continue;
@@ -830,7 +932,7 @@ void KUCMSAodSkimmer::processJets(){
         selJets.fillBranch( "selGenJetLlpTime", jgllpt ); //*Jet_genTimeLLP)[it]; 
 
 	}//<<>>for( int it = 0; it < nJets; it++ )
-    //if( DEBUG ) std::cout << " - Finished Jet loop." << std::endl;
+    if( DEBUG ) std::cout << " - Finished Jet loop." << std::endl;
 
 	// fill other
 	geVects.set( "selJetPt", seljetpt );
@@ -871,11 +973,15 @@ void KUCMSAodSkimmer::processRJR(){
     auto phoRMetCPy = geVars("metPy"); //selMet.getFLBranchValue("metPy");
     auto nSelPhotons = geCnts("nSelPhotons");
 
+	int n_selphos = 1;
 	if( DEBUG ) std::cout << " - Loading MET." << std::endl;
-	phoRMetCPx =+ leadPhoPt*std::cos(leadPhoPhi); 
-    if( nSelPhotons > 1 ) phoRMetCPx =+ subLeadPhoPt*std::cos(subLeadPhoPhi);
-    phoRMetCPy =+ leadPhoPt*std::sin(leadPhoPhi); 
-    if( nSelPhotons > 1 ) phoRMetCPy =+ subLeadPhoPhi*std::sin(subLeadPhoPhi);
+	phoRMetCPx += leadPhoPt*std::cos(leadPhoPhi); 
+    phoRMetCPy += leadPhoPt*std::sin(leadPhoPhi);
+    if( nSelPhotons > 1 ){ 
+		n_selphos = 2;
+		phoRMetCPx += subLeadPhoPt*std::cos(subLeadPhoPhi);
+    	phoRMetCPy += subLeadPhoPt*std::sin(subLeadPhoPhi);
+	}//<<>>if( nSelPhotons > 1 )
 	TVector3 ETMiss(phoRMetCPx,phoRMetCPy,0);
 	if( verbose ){
 		std::cout << " - Loading MET lPt: " << leadPhoPt << " lPhi: " << leadPhoPhi << std::endl;
@@ -896,7 +1002,7 @@ void KUCMSAodSkimmer::processRJR(){
 		auto sjetPt = selJetPt[it]; //selJets.getFLBranchValue( "selJetPt", it );
 		auto sjetEta = selJetEta[it]; //selJets.getFLBranchValue( "selJetEta", it );
 		auto sjetPhi = selJetPhi[it]; //selJets.getFLBranchValue( "selJetPhi", it ); 
-        auto sjetMass = selJetMass[it]; //selJets.getFLBranchValue( "selJetMass", it );
+        auto sjetMass = ( selJetMass[it] > 0 ) ? selJetMass[it] : 0; //selJets.getFLBranchValue( "selJetMass", it );   
 		TLorentzVector jet;
 		jet.SetPtEtaPhiM( sjetPt, sjetEta, sjetPhi, sjetMass );
 		if( verbose ) std::cout << " - Loading Jet Pt: " << sjetPt << " Eta: " << sjetEta;
@@ -953,6 +1059,9 @@ void KUCMSAodSkimmer::processRJR(){
     selRjrVars.fillBranch( "SMass", m_MS );
     selRjrVars.fillBranch( "SCosA", m_cosS );
 
+   selRjrVars.fillBranch( "RjrMET", hypo(phoRMetCPx,phoRMetCPy) ); 
+   selRjrVars.fillBranch( "nRjrPhotons", n_selphos );
+
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -968,22 +1077,22 @@ bool KUCMSAodSkimmer::eventSelection(){
 	//float selmet; selMet.getBranch( "Met", selmet );
 	//std::cout << " Event Met : " << selmet << std::endl;
 
-	auto nSelJets = geCnts("nSelJets"); //selJets.getUIBranchValue("nSelJets");
-    auto nSelPhotons = geCnts("nSelPhotons"); //selPhotons.getUIBranchValue("nSelPhotons");
-	auto leadSelPho = geCnts("leadPho"); //selPhotons.getUIBranchValue("leadSelPho");
-    auto subLeadSelPho = geCnts("subLeadPho"); //selPhotons.getUIBranchValue("subLeadSelPho");
-	auto leadPhoPt = ( nSelPhotons > 0 ) ? geVars("leadPhoPt") : 0;
-    auto subLeadPhoPt = ( nSelPhotons > 1 ) ? geVars("subLeadPhoPt") : 0;
+	int nSelJets = geCnts("nSelJets"); //selJets.getUIBranchValue("nSelJets");
+    float nSelPhotons = geCnts("nSelPhotons"); //selPhotons.getUIBranchValue("nSelPhotons");
+	float leadSelPho = geCnts("leadPho"); //selPhotons.getUIBranchValue("leadSelPho");
+    float subLeadSelPho = geCnts("subLeadPho"); //selPhotons.getUIBranchValue("subLeadSelPho");
+	float leadPhoPt = ( nSelPhotons > 0 ) ? geVars("leadPhoPt") : 0;
+    float subLeadPhoPt = ( nSelPhotons > 1 ) ? geVars("subLeadPhoPt") : 0;
 	if( DEBUG ) std::cout << " - Lead/Sublead Photons: " << leadSelPho << " - " << subLeadSelPho << std::endl;
 
-    auto gt1phos = nSelPhotons >= 1;
-    auto gt2jets = nSelJets >= 2;
-    auto gt2phos = nSelPhotons >= 2;
-	auto leadPhoPt70 = leadPhoPt >= 70;
-    auto leadPhoPt20 = leadPhoPt >= 20;
-	auto subLeadPhoPt40 = subLeadPhoPt >= 40; 
+    bool gt1phos = nSelPhotons >= 1;
+    bool gt2jets = nSelJets >= 2;
+    bool gt2phos = nSelPhotons >= 2;
+	bool leadPhoPt70 = leadPhoPt >= 70;
+    bool leadPhoPt30 = leadPhoPt >= 30;
+	bool subLeadPhoPt40 = subLeadPhoPt >= 40; 
 	
-    auto evtSelected = gt2jets && gt1phos && leadPhoPt20;
+    bool evtSelected = gt2jets && gt1phos && leadPhoPt30;
 	//auto evtSelected = leadPhoPt70 && subLeadPhoPt40 && gt2jets && gt2phos;
 
 	if( DEBUG ){ if( evtSelected ) std::cout << " - Event Passed." << std::endl; else std::cout << " - Event Failed." << std::endl;}
@@ -1130,8 +1239,17 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
 
 	selGenPart.attachBranches( fOutTree );
 
+	selElectrons.makeBranch( "nElectrons", UINT );
+    selElectrons.makeBranch( "epDrMatch", VFLOAT );
+    selElectrons.makeBranch( "epSeedIdMatch", VFLOAT );
+    selElectrons.makeBranch( "epSeedIdUnique", VFLOAT );
+    selElectrons.makeBranch( "elePhoMinDr", VFLOAT );
+
+    selElectrons.attachBranches( fOutTree );
+
     selPhotons.makeBranch( "nPhotons", UINT );
     selPhotons.makeBranch( "nSelPhotons", UINT ); 
+    selPhotons.makeBranch( "selPhoEleVeto", UINT );
     selPhotons.makeBranch( "selPhoOOT", VBOOL );
     selPhotons.makeBranch( "selPhoSusyId", VFLOAT );
     selPhotons.makeBranch( "selPhoQuality", VINT ); 
@@ -1248,6 +1366,8 @@ void KUCMSAodSkimmer::setOutputBranches( TTree* fOutTree ){
     selRjrVars.makeBranch( "X2bCosA", VFLOAT );
     selRjrVars.makeBranch( "SMass", VFLOAT );
     selRjrVars.makeBranch( "SCosA", VFLOAT );
+    selRjrVars.makeBranch( "nRjrPhotons", VINT );
+    selRjrVars.makeBranch( "RjrMET", VFLOAT );
 
     selRjrVars.attachBranches( fOutTree );
 
@@ -1293,6 +1413,8 @@ void KUCMSAodSkimmer::initHists(){
 
 	//------------------------------------------------------------------------------------------
     //------ 1D Hists --------------------------------------------------------------------------
+
+	hist1d[0] = new TH1D("ecalrhenergy", "RecHit Energy;rechit E [GeV]",200,0,2);
 
     ////hist1d[100] = new TH1D("genPhoPt", "genPhoPt;Pt [GeV]",500,0,1000);
 
@@ -1377,8 +1499,9 @@ std::vector<float> KUCMSAodSkimmer::getRhGrpTimes( std::vector<uInt> rechitids )
     std::vector<float> result;
     for ( auto id : rechitids ){
 		auto rhtime = (*ECALRecHit_time)[getRhIdx(id)];
-		auto rhtof = (*ECALRecHit_TOF)[getRhIdx(id)];
-		result.push_back(rhtime+rhtof); 
+		auto rh0tof = (*ECALRecHit_0TOF)[getRhIdx(id)];
+        auto rhpvtof = (*ECALRecHit_pvTOF)[getRhIdx(id)];
+		result.push_back(rhtime+rh0tof-rhpvtof); 
 	}//<<>>for ( auto id : recHitIds )
     return result;
 

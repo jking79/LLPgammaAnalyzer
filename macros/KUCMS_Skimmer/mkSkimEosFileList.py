@@ -33,22 +33,28 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mspc+'EGamma/'
 #command = eosll+mdis+'KUCMSNtuple/GMSB_AOD_v1/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v5/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v13/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_WJETS_AOD_v5/'
-command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v13/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v13/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/'
+command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_ZJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DYTT_AOD_v5/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v13/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHTi_Met50_AOD_v2/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DiPhoBox_AOD_v14/'
 
 #version = 'Run2018D'
 #version = 'GJets'
-version = 'QCD'
+#version = 'QCD'
 #version = '_Ctau-0p'
 #version = '_noOOTAmp_'
 #version = '_wthOOTAmp_'
+version = 'GMSB'
+#version = 'JetHT' 
+#version = 'DiPhotonJetsBox'
+
 rootfile = '.root'
+
 #dirselect = 'HTo2LongLivedTo4b'
 #dirselect = '_newRtParams4_v26b_'
 #dirselect = '_newRtParams3_test_v26_'
@@ -58,16 +64,16 @@ rootfile = '.root'
 #dirselect = '22eraC_CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357328-357331'
 #dirselect = 'noOOTCC_kustc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 #dirselect = 'CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
-
-#dirselect = 'GMSB'
+dirselect = 'GMSB'
 #dirselect = 'AOD'
 #dirselect = 'WJetsToLNu_HT-800'
-dirselect = 'QCD'
+#dirselect = 'QCD'
 #dirselect = 'GMSB_L-400TeV'
 #dirselect = 'DYJetsToLL_M-50'
 #dirselect = 'TTJets'
 #dirselect = 'JetHT'
 #dirselect = 'GJets'
+#dirselect = 'DiPhotonJetsBox'
 
 #dirselect = ''
 
@@ -133,7 +139,7 @@ for line2 in targdirs :
     		if rootfile in lline : filelist.append(subdir2+lline)
    
     select =  line2.split("Tune")
-    outfile = 'kuntuple_' + select[0] + 'v13.txt'
+    outfile = 'kuntuple_' + select[0] + 'v14.txt'
     #print( outfile )
     outf = open( outfile, 'w' )
     for thefile in filelist:

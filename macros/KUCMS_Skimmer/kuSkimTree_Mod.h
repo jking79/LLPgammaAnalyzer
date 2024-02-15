@@ -152,6 +152,7 @@ public :
    vector<float>   *X2aMass;
    vector<float>   *X2bCosA;
    vector<float>   *X2bMass;
+   vector<float>   *nRjrPhotons;
 
    // List of branches
    TBranch        *b_DataSetKey;   //!
@@ -283,6 +284,7 @@ public :
    TBranch        *b_X2aMass;   //!
    TBranch        *b_X2bCosA;   //!
    TBranch        *b_X2bMass;   //!
+   TBranch        *b_nRjrPhotons;
 
    //kuSkimTree(TTree *tree=0);
    //virtual ~kuSkimTree();
@@ -464,7 +466,9 @@ void kuSkimTree::Init(TTree *tree)
    X2aMass = 0;
    X2bCosA = 0;
    X2bMass = 0;
-   // Set branch addresses and branch pointers
+   nRjrPhotons = 0; 
+
+  // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
    fCurrent = -1;
@@ -477,9 +481,9 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selCMetPx", &selCMetPx, &b_selCMetPx);
    fChain->SetBranchAddress("selCMetPy", &selCMetPy, &b_selCMetPy);
 
-   fChain->SetBranchAddress("PVx", &PVx, &b_PVx);
-   fChain->SetBranchAddress("PVy", &PVy, &b_PVy);
-   fChain->SetBranchAddress("PVz", &PVz, &b_PVz);
+   //fChain->SetBranchAddress("PVx", &PVx, &b_PVx);
+   //fChain->SetBranchAddress("PVy", &PVy, &b_PVy);
+   //fChain->SetBranchAddress("PVz", &PVz, &b_PVz);
 
 
    fChain->SetBranchAddress("genPartEnergy", &genPartEnergy, &b_genPartEnergy);
@@ -600,6 +604,8 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("X2aMass", &X2aMass, &b_X2aMass);
    fChain->SetBranchAddress("X2bCosA", &X2bCosA, &b_X2bCosA);
    fChain->SetBranchAddress("X2bMass", &X2bMass, &b_X2bMass);
+   fChain->SetBranchAddress("nRjrPhotons", &nRjrPhotons, &b_nRjrPhotons);
+
    //Notify();
 }
 
@@ -613,9 +619,9 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selCMetPx->GetEntry(entry);   //!
    b_selCMetPy->GetEntry(entry);   //!
 
-   b_PVx->GetEntry(entry);   //!
-   b_PVy->GetEntry(entry);   //!
-   b_PVz->GetEntry(entry);   //!
+   //b_PVx->GetEntry(entry);   //!
+   //b_PVy->GetEntry(entry);   //!
+   //b_PVz->GetEntry(entry);   //!
 
    b_genPartEnergy->GetEntry(entry);   //!
    b_genPartEta->GetEntry(entry);   //!
@@ -732,6 +738,7 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selJetTime->GetEntry(entry);   //!
    b_selJetchHEF->GetEntry(entry);   //!
 
+   //std::cout << "Branch 6" << std::endl;
    b_SCosA->GetEntry(entry);   //!
    b_SMass->GetEntry(entry);   //!
    b_X1aCosA->GetEntry(entry);   //!
@@ -742,6 +749,9 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_X2aMass->GetEntry(entry);   //!
    b_X2bCosA->GetEntry(entry);   //!
    b_X2bMass->GetEntry(entry);   //!
+   b_nRjrPhotons->GetEntry(entry);   //!
+
+   //std::cout << "Done getting entries" << std::endl;
 
 }//<<>>void kuSkimTree::getBranches(Long64_t entry)
 

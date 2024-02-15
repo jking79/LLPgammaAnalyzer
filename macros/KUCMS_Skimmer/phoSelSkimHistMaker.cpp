@@ -200,14 +200,13 @@ void HistMaker::eventLoop( Long64_t entry ){
 		auto partType = (*genPartPdgId)[it];
 		if( partType == 22 ){
 
-            if( std::abs((*genPartEta)[it]) > 1.442 ) continue;
+            //if( std::abs((*genPartEta)[it]) > 1.442 ) continue;
+            if( std::abs((*genPartEta)[it]) > 1.479 ) continue;
+ 
             if( (*genPartPt)[it] < 30 ) continue;
 
 			auto phoSusType = (*genPartSusId)[it];
             if( phoSusType == 22 ){ genSigPhoIdx.push_back(it); }
-
-            //if( std::abs((*genPartEta)[it]) > 1.442 ) continue;
-            //if( (*genPartPt)[it] < 30 ) continue;
 
         	bool jetphoton = false;
         	for( int jit = 0; jit < nSelJets; jit++ ){
@@ -226,10 +225,11 @@ void HistMaker::eventLoop( Long64_t entry ){
 
 			if( phoSusType == 22 ){ genSigPhoAccIdx.push_back(it); }
 
+
 		}//<<>>if( partType == 22 )
 
 	}//<<>>for( int it = 0; it < nGenPart; it++ )
-
+	if( DEBUG ) std::cout << " - GenSig in Acc: " << genSigPhoAccIdx.size() << " all: " << genSigPhoIdx.size() << std::endl;
 
 /*
 	//////////////////////////////  gen matching exclusive   ///////////////////////////////////////////////////
@@ -285,7 +285,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 
 */
 
-    if( DEBUG ) std::cout << "Finding reeco signal photons" << std::endl;
+    if( DEBUG ) std::cout << "Finding reco signal photons" << std::endl;
 	////////////////////// find reco signal photons  /////////////////////////////////////////////////////////////////////////////////////////
 
 	std::vector<int> recoPhoOrderIndx;
@@ -293,17 +293,21 @@ void HistMaker::eventLoop( Long64_t entry ){
     if( DEBUG ) std::cout << " - Looping over " << nSelPhotons << " photons" << std::endl;
     for( int it = 0; it < nSelPhotons; it++ ){
 
-		if( std::abs((*selPhoEta)[it]) > 1.442 ) continue;
-        if( (*selPhoPt)[it] < 20 ) continue;
+
+		//if( std::abs((*selPhoEta)[it]) > 1.442 ) continue;  
+        if( std::abs((*selPhoEta)[it]) > 1.479 ) continue; // in sskimmer
+        if( (*selPhoPt)[it] < 30 ) continue;
 
         recoPhoOrderIndx.push_back(it);
+
 
 		bool jetphoton = false;
 		for( int jit = 0; jit < nSelJets; jit++ ){
 
             bool minPt = (*selJetPt)[jit] < 75.0;
             bool minQual = (*selJetQuality)[jit]  < 2;
-            if( minPt || minQual ) continue;
+            auto overMaxJEta = std::abs((*selJetEta)[jit]) > 2.4; // in sskimmer
+            if( minPt || minQual || overMaxJEta ) continue;
 
 			float dpjeta = (*selJetEta)[jit] - (*selPhoEta)[it];
 			float dpjphi = dPhi( (*selJetPhi)[jit], (*selPhoPhi)[it] );	
@@ -326,6 +330,7 @@ void HistMaker::eventLoop( Long64_t entry ){
         recoPhoAccOrderIndx.push_back(it);
 
     }//<<>>for( int it = 0; it < nPhotons; it++ )
+    if( DEBUG ) std::cout << "  - RecoSig in Acc: " << recoPhoAccOrderIndx.size() << " all: " << recoPhoOrderIndx.size() << std::endl;
 
 	/////////////////// find gen-reco signal photon match any ////////////////////////////////////////////////////////////////////////////////
 
@@ -346,6 +351,7 @@ void HistMaker::eventLoop( Long64_t entry ){
 		}//<<>>for( auto phoptit = recoPhoOrderIndx.crbegin(); phoptit != recoPhoOrderIndx.crend(); phoptit++ )
 		if( genSusMatch != -1 ){ genPhoSigMatch.push_back(genSusMatch); }
 	}//<<>>for( auto genIndx : genSigPhoIdx )
+	if( DEBUG ) std::cout << " - Found Susy-Gen Matched #: " << genPhoSigMatch.size() << std::endl;
 
     if( DEBUG ) std::cout << "Finding reco-gen signal photon match" << std::endl;
     /////////////////// find reco-gen signal photon match ////////////////////////////////////////////////////////////////////////////////
@@ -686,10 +692,12 @@ int main ( int argc, char *argv[] ){
 
     //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
     //else {
-                const std::string listdir = "skims_files/";
+                const std::string listdir = "skim_files/";
+                //const std::string listdir = "";
 				auto infilename = "KUCMS_Master_Skim_List.txt";
+                //auto infilename = "KUCMS_Master_Skim_TestList.txt";
 
-                auto outfilename = "KUCMS_phoRecoGenSigEff_Hists_t3.root"; //9
+                auto outfilename = "KUCMS_phoRecoGenSigEff_Hists_t4D.root"; //9
 
 				auto htitle = "KUCMS_phoRecoGenSigEff_Hists_";
 

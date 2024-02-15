@@ -17,7 +17,7 @@
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
 
-#include "kucmsntuple_root_rebase_v2.hh"
+#include "kucmsntuple_root_rebase_v3.hh"
 
 
 #ifndef KUCMSAodSkimmer_header
@@ -131,6 +131,7 @@ class KUCMSAodSkimmer : public root_base {
 
 	KUCMSBranchManager selEvtVars;
 	KUCMSBranchManager selMet;
+    KUCMSBranchManager selElectrons;
 	KUCMSBranchManager selPhotons;
 	KUCMSBranchManager selJets;
 	KUCMSBranchManager selRjrVars;

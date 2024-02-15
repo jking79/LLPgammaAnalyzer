@@ -21,8 +21,10 @@ int main ( int argc, char *argv[] ){
                 auto infilename = "KUCMS_Ntuple_Master_BG_Files_List.txt";
                 //auto infilename = "KUCMS_Ntuple_Master_GMSB_Files_List.txt";
                 //auto infilename = "KUCMS_Ntuple_Master_JetHT_Files_List.txt";
+                //auto infilename = "KUCMS_Ntuple_Master_GMSB_Test_Files_List.txt";
 
-				auto outfilename = "_Ntuple_v12_LLPgama_Skim_v13.root";
+				//auto outfilename = "_Ntuple_v14_LLPgama_Skim_v15.root";
+				auto outfilename = "_Ntuple_v13_LLPgama_Skim_v15_rechits.root";
 
 				bool hasGenInfo = true;
                 //bool hasGenInfo = false;
