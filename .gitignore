@@ -13,6 +13,7 @@ test/myWorkSpace/
 macros/*.obj
 .nfs*
 *.txt
+!*List.txt
 *.root
 *.pyc
 *.obj

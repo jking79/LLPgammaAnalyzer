@@ -240,12 +240,12 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
    fChain->SetBranchAddress("event", &event, &b_event);
-
+/*
    fChain->SetBranchAddress("rhCaliID", &rhCaliID, &b_rhCaliID);
    fChain->SetBranchAddress("rhCaliEnergy", &rhCaliEnergy, &b_rhCaliEnergy);
    fChain->SetBranchAddress("rhCaliRtTime", &rhCaliRtTime, &b_rhCaliRtTime);
    fChain->SetBranchAddress("rhCaliCCTime", &rhCaliCCTime, &b_rhCaliCCTime);
-
+*/
    fChain->SetBranchAddress("resRhID", &resRhID, &b_resRhID);
    fChain->SetBranchAddress("resAmp", &resAmp, &b_resAmp);
    fChain->SetBranchAddress("resE", &resE, &b_resE);
@@ -253,17 +253,17 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("resCCTime", &resCCTime, &b_resCCTime);
    fChain->SetBranchAddress("resTOF", &resTOF, &b_resTOF);
 
-/*
+
    fChain->SetBranchAddress("rhID", &rhID, &b_rhID);
-   fChain->SetBranchAddress("rhRtTime", &rhRtTime, &b_rhRtTime);
-   fChain->SetBranchAddress("rhCCTime", &rhCCTime, &b_rhCCTime);
+   fChain->SetBranchAddress("rhTime", &rhRtTime, &b_rhRtTime);
+   //fChain->SetBranchAddress("rhTime", &rhCCTime, &b_rhCCTime);
    fChain->SetBranchAddress("rhEnergy", &rhEnergy, &b_rhEnergy);
-   fChain->SetBranchAddress("rhRtisOOT", &rhRtisOOT, &b_rhRtisOOT);
-   fChain->SetBranchAddress("rhCCisOOT", &rhCCisOOT, &b_rhCCisOOT);
+   fChain->SetBranchAddress("rhisOOT", &rhRtisOOT, &b_rhRtisOOT);
+   //fChain->SetBranchAddress("rhisOOT", &rhCCisOOT, &b_rhCCisOOT);
    fChain->SetBranchAddress("rhisWeird", &rhisWeird, &b_rhisWeird);
    fChain->SetBranchAddress("rhisDiWeird", &rhisDiWeird, &b_rhisDiWeird);
    fChain->SetBranchAddress("rhSwCross", &rhSwCross, &b_rhSwCross);
-*/
+
 
 /*
    fChain->SetBranchAddress("phoEnergy", &phoEnergy, &b_phoEnergy);
@@ -289,12 +289,12 @@ void egammares_hist_base::Init(TTree *tree)
    fChain->SetBranchAddress("phoDiPhi", &phoDiPhi, &b_phoDiPhi);
    fChain->SetBranchAddress("phoDiEta", &phoDiEta, &b_phoDiEta);
 */
-
+/*
    fChain->SetBranchAddress("unrhJitter", &unrhJitter, &b_unrhJitter);
    fChain->SetBranchAddress("unrhNonJitter", &unrhNonJitter, &b_unrhNonJitter);
    fChain->SetBranchAddress("unrhEncNonJitter", &unrhEncNonJitter, &b_unrhEncNonJitter);
    fChain->SetBranchAddress("unrhEnergy", &unrhEnergy, &b_unrhEnergy);
-
+*/
    //Notify();
 }
 

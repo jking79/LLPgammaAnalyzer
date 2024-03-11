@@ -1,0 +1,6 @@
+# ------------------------------------
+# Master Filelist : GMSB
+# -------------------------------------
+
+KUCMSNtuple/kucmsntuple_DYTT_AOD_v2/ kuntuple_ttjets.txt TTJets 831.76 0 0 1 0
+# KUCMSNtuple/kucmsntuple_DYTT_AOD_v2/ kuntuple_ddyjetstoll.txt DYjets 5343 0 0 1 0

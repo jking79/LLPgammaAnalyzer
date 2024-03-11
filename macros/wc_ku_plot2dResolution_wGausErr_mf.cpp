@@ -849,7 +849,8 @@ int main ( int argc, char *argv[] ){
             //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v5_phoclean/EGamma/";
         	//auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/";
             //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v7_diag_unclean/EGamma/";
-            auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
+            //auto indir = "jaking/ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
+            auto indir = "jaking/";
 
             //auto infilelistname = "gres_Run2022A_infilelist.txt"; //argv[2];
             //auto infilelistname = "egres_Run2022C_355892_test_infilelist.txt";
@@ -899,8 +900,9 @@ int main ( int argc, char *argv[] ){
             //auto infilelistname = "tt_run3_2022D1_Prompt_355794_359021_126_gammares_v10_reso_plotfilelist.txt";
             //auto infilelistname = "tt_run3_2022D2_Prompt_355794_359021_126_gammares_v10_reso_plotfilelist.txt";
             //auto infilelistname = "tt_run3_2022E_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
-            auto infilelistname = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
+            //auto infilelistname = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
             //auto infilelistname = "tt_run3_2022G_Prompt_359022_362760_126_gammares_v10_reso_plotfilelist.txt";
+    		auto infilelistname = "ku_23D_eg0_diag_126_gammares_v10_reso_plotfilelist.txt";
 
             //std::string outfilename = "gres_Run2022A_2dhists_test"; //argv[3];
             //std::string outfilename = "egres_Run2022C_partial_126_v2a_resplots";
@@ -950,11 +952,12 @@ int main ( int argc, char *argv[] ){
             //std::string outfilename = "egres_Run2018D1_357600_357700_126_v10_resplots";
             //std::string outfilename = "egres_Run2018D2_357800_358200_126_v10_resplots";
             //std::string outfilename = "egres_Run2018E_359022_362760_126_v10_resplots";
-            std::string outfilename = "egres_Run2018F_360332_362180_126_v10_resplots";
+            //std::string outfilename = "egres_Run2018F_360332_362180_126_v10_resplots";
             //std::string outfilename = "egres_Run2018G_362350_362700_126_v10_resplots";
+            std::string outfilename = "egres_Run2023D_dmv_eg0_diag_126_v10_resplots";
 
             auto tvarname = ""; //argv[4];
-			auto calimapname = "kucc"; //argv[5];
+			auto calimapname = "none"; //argv[5];
             auto isd_type = "yes"; //argv[6];
             //auto brun = std::stoi(argv[7]);
             //auto erun = std::stoi(argv[8]);
@@ -965,9 +968,9 @@ int main ( int argc, char *argv[] ){
 			runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_Data_Hist", xbinstr );
             runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_Data_Hist", xbinstr );
             runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_Data_Hist", xbinstr );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_CC_Data_Hist", xbinstr );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_CC_Data_Hist", xbinstr );
-            runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_CC_Data_Hist", xbinstr );
+            //runTimeFitter( fitInFile, "", "", "", "", outfilename, "SRO_CC_Data_Hist", xbinstr );
+            //runTimeFitter( fitInFile, "", "", "", "", outfilename, "DRO_CC_Data_Hist", xbinstr );
+            //runTimeFitter( fitInFile, "", "", "", "", outfilename, "ZEE_CC_Data_Hist", xbinstr );
         //}
         return 1;
 }

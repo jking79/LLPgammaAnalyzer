@@ -312,8 +312,13 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          //vector<float>   *resCCtime;
          //vector<float>   *resTOF;
 
-		 vector<int> scIndex;
-		 vector<vector<unsigned int>> scRhIds;
+         vector<float>   *htsecdr4;
+         vector<float>   *tspscdr4;
+         vector<float>   *erhsecdr4;
+         vector<float>   *htoem;
+
+		 vector<int> *scIndex;
+		 vector<vector<unsigned int>> *scRhIds;
 
 //Photon_scIndex vector<int>
 //SuperCluster_rhIds vector<vector<unsigned int>>
@@ -338,6 +343,10 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          //TBranch        *b_resCCtime;   //!
          //TBranch        *b_resTOF;   //!
 
+         TBranch        *b_htsecdr4;
+         TBranch        *b_tspscdr4;
+         TBranch        *b_erhsecdr4;
+         TBranch        *b_htoem;
 
     	std::ifstream infilelist(infilelistname);
     	std::string infilestr;
@@ -370,16 +379,25 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          	//std::cout << "--  adding file: " << tfilename << std::endl;
          	std::cout << ".";
          	fInTree->Add(tfilename.c_str());
+			//break;
          }//<<>>while (std::getline(infile,str))
 		std::cout <<std::endl;
 
          run = 0;
+         event = 0;
          rhCaliID = 0;
          rhCaliRtTime = 0;
          //rhCaliCCTime = 0;
    		 rhEnergy = 0;
 		 pvTOF = 0;
          cms0TOF = 0;
+
+		 scIndex = 0;
+		 scRhIds = 0;
+		 htsecdr4 = 0;
+		 tspscdr4 = 0;
+		 erhsecdr4 = 0;
+		 htoem = 0;
 
          fInTree->SetBranchAddress("Evt_run", &run, &b_run);
          fInTree->SetBranchAddress("Evt_event", &event, &b_event);
@@ -391,8 +409,12 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          //if( useEnergy ) 
 		 fInTree->SetBranchAddress("ECALRecHit_energy", &rhEnergy, &b_rhEnergy);
     
-         //fInTree->SetBranchAddress("Photon_scIndex", &scIndex, &b_scIndex);
-         //fInTree->SetBranchAddress("SuperCluster_rhIds", &scRhIds, &b_scRhIds);
+         fInTree->SetBranchAddress("Photon_scIndex", &scIndex, &b_scIndex);
+         fInTree->SetBranchAddress("SuperCluster_rhIds", &scRhIds, &b_scRhIds);
+         fInTree->SetBranchAddress("Photon_hcalTowerSumEtConeDR04", &htsecdr4, &b_htsecdr4);
+         fInTree->SetBranchAddress("Photon_trkSumPtSolidConeDR04", &tspscdr4, &b_tspscdr4);
+         fInTree->SetBranchAddress("Photon_ecalRHSumEtConeDR04", &erhsecdr4, &b_erhsecdr4);
+         fInTree->SetBranchAddress("Photon_hadTowOverEM", &htoem, &b_htoem);
 
          // >> calcs  <<
      
@@ -427,59 +449,76 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
              //b_resRtTime->GetEntry(entry);   //!
              //b_resCCtime->GetEntry(entry);   //!
              //b_resTOF->GetEntry(entry);   //!
+			 b_scIndex->GetEntry(entry);
+			 b_scRhIds->GetEntry(entry);
+
+             b_htsecdr4->GetEntry(entry);
+             b_tspscdr4->GetEntry(entry);
+             b_erhsecdr4->GetEntry(entry);
+             b_htoem->GetEntry(entry);
 
 			 //if( run < srun || run > erun ) continue;
 
+         	 //vector<int> scIndex;
+         	 //vector<vector<unsigned int>> scRhIds;
+
              const auto nRecHits1 = rhCaliID->size(); //(cluster[ipho0])->size();
-             if( debug ) std::cout << "Looping over first recHits"  << std::endl;
-             for ( auto rh_i = 0U; rh_i < nRecHits1; rh_i++ ){
-				  auto rhe = useEnergy ? (*rhEnergy)[rh_i] : 999;	
-				  if( rhe < minRhEnergy ) continue;
-                  auto id_i = (*rhCaliID)[rh_i];
-				  const auto & fill_idinfo = DetIDMap[id_i];
-                  auto iEta = fill_idinfo.i2;
-                  auto iPhi = fill_idinfo.i1;
-                  auto Mini_t_i = (*rhCaliRtTime)[rh_i] + (*cms0TOF)[rh_i] - (*pvTOF)[rh_i];
-                  //auto CCStc_t_i = (*rhCaliCCTime)[rh_i];
-     	     	  if( debug ) std::cout << "Getting maps " << std::endl;
-                  sumXtalMiniRecTime[id_i] += Mini_t_i; 
-				  numXtalMiniRecTime[id_i] += 1;
-                  sumXtal2MiniRecTime[id_i] += Mini_t_i*Mini_t_i;
+			 const auto nPhos = scIndex->size();
+			 for( int pindx = 0; pindx < nPhos; pindx++ ){
 
-				if( fill_idinfo.ecal == ECAL::EB && Mini_t_i != 0.0 ){
-                  sumXtalEtaRecTime[iEta] += Mini_t_i;
-                  numXtalEtaRecTime[iEta] += 1;
-                  sumXtal2EtaRecTime[iEta] += Mini_t_i*Mini_t_i;
+				bool passTrkSum = (*tspscdr4)[pindx] < 6.0; 
+				bool passsEcalRhSum = (*erhsecdr4)[pindx] < 10.0;
+				bool passHOE = (*htoem)[pindx] < 0.02;
+				bool passHcalSum = true;
+				bool failPhoIso = not ( passHOE && passsEcalRhSum && passTrkSum && passHcalSum );			
+				if( failPhoIso ) continue;
 
-                  sumXtalPhiRecTime[iPhi] += Mini_t_i;
-                  numXtalPhiRecTime[iPhi] += 1;
-                  sumXtal2PhiRecTime[iPhi] += Mini_t_i*Mini_t_i;
-                  //sumXtalCCStcRecTime[id_i] += CCStc_t_i; 
-				  //numXtalCCStcRecTime[id_i] += 1;
-                  //sumXtal2CCStcRecTime[id_i] += CCStc_t_i*CCStc_t_i;
-				}//<<>>if( fill_idinfo.ecal == ECAL::EB )
-/*
-				auto EVPHR(1000000000.0);
-				auto rhIdInfo = DetIDMap[(*rhCaliID)[rh_i]];
-            	//auto rh22x135 = (rhIdInfo.i2 == 22) && (rhIdInfo.i1 == 135);
-				for( int i = 0; i < nCrys; i++ ){
-                auto rhsel = (rhIdInfo.i2 == (crystals[i])[0]) && (rhIdInfo.i1 == (crystals[i])[1]);
-				if( rhsel ){
-					//auto evntSel = (event/EVPHR) + (run - srun)*10;
-                    auto evntSel = run - srun;
-					if( debug ) std::cout << " eventSel  " << evntSel << " " << event << " " << run - srun << std::endl;
-            		//hist1d136[i]->Fill(evntSel,(*rhCaliCCTime)[rh_i]);
-                    hist1d140[i]->Fill(evntSel,(*rhCaliRtTime)[rh_i]);
-            		hist1d137[i]->Fill(evntSel);
-            		//hist1d138[i]->Fill((*rhCaliCCTime)[rh_i]);
-            		hist1d139[i]->Fill((*rhCaliRtTime)[rh_i]);
-				}//<<>>if( rh22x135 )
-				}//<<>>for( int i = 0; i < nCrys; i++ )
-*/
+				 auto rhlist = (*scRhIds)[pindx];
+				 const int nScRh = rhlist.size();
+				 for( int rhindx = 0; rhindx < nScRh; rhindx++){
+					 uInt scrhid = rhlist[rhindx]; 			
+		
+		             if( debug ) std::cout << "Looping over first recHits"  << std::endl;
+		             for ( auto rh_i = 0U; rh_i < nRecHits1; rh_i++ ){
+		
+						  auto id_i = (*rhCaliID)[rh_i];
+						  if( scrhid == id_i ){
+		
+						  	auto rhe = useEnergy ? (*rhEnergy)[rh_i] : 999;	
+						  	if( rhe < minRhEnergy ) continue;
+						  	const auto & fill_idinfo = DetIDMap[id_i];
+		                  	auto iEta = fill_idinfo.i2;
+		                  	auto iPhi = fill_idinfo.i1;
+		                  	auto Mini_t_i = (*rhCaliRtTime)[rh_i] + (*cms0TOF)[rh_i] - (*pvTOF)[rh_i];
+		                  	//auto CCStc_t_i = (*rhCaliCCTime)[rh_i];
+		     	     	  	if( debug ) std::cout << "Getting maps " << std::endl;
+		                  	sumXtalMiniRecTime[id_i] += Mini_t_i; 
+						  	numXtalMiniRecTime[id_i] += 1;
+		                  	sumXtal2MiniRecTime[id_i] += Mini_t_i*Mini_t_i;
+		
+						  	if( fill_idinfo.ecal == ECAL::EB && Mini_t_i != 0.0 ){
+		                  		sumXtalEtaRecTime[iEta] += Mini_t_i;
+		                  		numXtalEtaRecTime[iEta] += 1;
+		                  		sumXtal2EtaRecTime[iEta] += Mini_t_i*Mini_t_i;
+		
+		                  		sumXtalPhiRecTime[iPhi] += Mini_t_i;
+		                  		numXtalPhiRecTime[iPhi] += 1;
+		                  		sumXtal2PhiRecTime[iPhi] += Mini_t_i*Mini_t_i;
+		                  		//sumXtalCCStcRecTime[id_i] += CCStc_t_i; 
+						  		//numXtalCCStcRecTime[id_i] += 1;
+		                  		//sumXtal2CCStcRecTime[id_i] += CCStc_t_i*CCStc_t_i;
+						  	}//<<>>if( fill_idinfo.ecal == ECAL::EB )
+						  break;
+						  }//if( scrhid == id_i )
+		
+		             }//<<>>for (auto i = 0U; i < nRecHits1; i++) // end loop over rechits
+	
+	             }//for( int rhindx = 0; rhindex < nScRh; rhidx++){
+             }//for( int pindx = 0; pindx < nPhos; pindx++ ){
 
-             }//<<>>for (auto i = 0U; i < nRecHits1; i++) // end loop over rechits
              if( debug ) std::cout << "RecHits Loop done "<< std::endl;
          }  //  end entry loop
+
 	delete fInTree;
 
     } // while (std::getline(infilelist,infiles))
@@ -662,18 +701,18 @@ int main ( int argc, char *argv[] ){
 
 				float minE = 5.0;
 
-                auto indir = "KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/";
-                //auto indir = "KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/";
+                //auto indir = "KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/";
+                auto indir = "KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/";
 
-                auto infilelist = "cali_list_files/KUCMS_QCD_v14_califilelist.txt";
-                //auto infilelist = "cali_list_files/KUCMS_GJets_v14_califilelist.txt";
+                //auto infilelist = "cali_list_files/KUCMS_QCD_v14_califilelist.txt";
+                auto infilelist = "cali_list_files/KUCMS_GJets_v14_califilelist.txt";
                 //auto infilelist = "cali_list_files/KUCMS_GMSB_v14_califilelist.txt";
 				//auto infilelist = "cali_list_files/KUCMS_JetHT18D_v14_califilelist.txt";
 
-                auto outfilename = "KUCMS_QCD_v14B2_rhE5_Cali.root";
-                //auto outfilename = "KUCMS_GJets_v14B2_rhE5_Cali.root";
+                //auto outfilename = "KUCMS_QCD_v14B3_phorhE5_Cali.root";
+                auto outfilename = "KUCMS_GJets_v14B23_phorhE5_Cali.root";
                 //auto outfilename = "KUCMS_GMSB_ct200_L350_v14_rhE0_Cali.root";
                 //auto outfilename = "KUCMS_JetHT18D_v14_rhE2_Cali.root";
 

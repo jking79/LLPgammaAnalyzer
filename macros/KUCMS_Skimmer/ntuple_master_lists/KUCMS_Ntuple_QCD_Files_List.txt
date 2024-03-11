@@ -1,0 +1,11 @@
+# # # 0 0 0 0 0  
+# Master Filelist 0 0 0 0 0 
+# # # 0 0 0 0 0
+#
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht100t200.txt QCDHt100t200 23590000.0 0 0 1 0
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht200t300.txt QCDHt200t300 1551000.0 0 0 1 0
+KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht500t700.txt QCDHt500t700 30140.0 0 0 1 0
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht700t1000.txt QCDHt700t1000 6344.0 0 0 1 0
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht1000t1500.txt QCDHt1000t1500 1092.0 0 0 1 0
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht1500t200.txt QCDHt1500t2000 99.76 0 0 1 0
+# KUCMSNtuple/kucmsntuple_QCD_AOD_v2/ kuntuple_qcdht2000tinf.txt QCDHt2000tInf 20.35 0 0 1 0

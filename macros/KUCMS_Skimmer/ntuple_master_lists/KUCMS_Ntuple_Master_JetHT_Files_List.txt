@@ -1,0 +1,6 @@
+# ------------------------------------
+# Master Filelist : GMSB
+# -------------------------------------
+
+KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/ kuntuple_JetHT_2018C_v14.txt JetHT2018C 1 0 0 0 0
+KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/ kuntuple_JetHT_2018D_v14.txt JetHT2018D 1 0 0 0 0

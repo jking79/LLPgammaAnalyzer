@@ -17,8 +17,9 @@
 #include "KUCMSHelperFunctions.hh"
 #include "KUCMSRootHelperFunctions.hh"
 
-#include "kucmsntuple_root_rebase_v3.hh"
-
+//#include "kucmsntuple_root_rebase_v3.hh"
+#include "kucmsntuple_root_rebase_v15.hh"
+//#include "kucmsntuple_root_rebase_v16.hh"
 
 #ifndef KUCMSAodSkimmer_header
 #define KUCMSAodSkimmer_header
@@ -33,8 +34,8 @@ using namespace RestFrames;
 #define n3dHists 16
 #define nEBEEMaps 36
 
+//class KUCMSAodSkimmer : public root_base_v16 {
 class KUCMSAodSkimmer : public root_base {
-
     public:
 
     KUCMSAodSkimmer();
@@ -42,6 +43,7 @@ class KUCMSAodSkimmer : public root_base {
 
 	// tchian processing functions
     void kucmsAodSkimmer( std::string listdir, std::string eosdir, std::string infilelist, std::string outfilename, bool hasGenInfo );
+    void kucmsAodSkimmer( std::string listdir, std::string eosdir, std::string infilelist, std::string outfilename, bool hasGenInfo, bool genSigPerfect );
     void initHists();
     bool eventLoop( Long64_t entry );
 	void startJobs();
@@ -52,6 +54,7 @@ class KUCMSAodSkimmer : public root_base {
 	// object processing & selection
 	void processEvntVars();
 	void processRechits();
+    void processRechitsHist();
 	void processGenParticles();
 	void processCalojets();
 	void processPhotons();
@@ -126,6 +129,9 @@ class KUCMSAodSkimmer : public root_base {
 	ItemManager<float> geVars;	
 	uInt nEvents, nSelectedEvents;
     float sumEvtGenWgt;
+	std::vector<bool> rhused;
+    std::vector<float> rhispho;
+    std::vector<float> rhisele;
 
     // Output Branch variables
 

@@ -34,14 +34,20 @@ eosll = 'eos root://cmseos.fnal.gov ls '
 #command = eosll+mdis+'KUCMSNtuple/GMSB_AOD_v1/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_R17_v15/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GJETS_rhe1k_v14/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_WJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/'
-command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_QCD_R17_v15/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_R17_v15/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_rhe1k_v14/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_ZJETS_AOD_v5/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DYTT_AOD_v5/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/'
-#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHTi_Met50_AOD_v2/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_AOD_v144/'
+#command = eosll+mdis+'KUCMSNtuple/kucmsntuple_JetHT_rhe1k_v14/'
 #command = eosll+mdis+'KUCMSNtuple/kucmsntuple_DiPhoBox_AOD_v14/'
+command = eosll+mdis+'KUCMSNtuple/kucmsntuple_MET_R17_v15/'
 
 #version = 'Run2018D'
 #version = 'GJets'
@@ -49,9 +55,10 @@ command = eosll+mdis+'KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/'
 #version = '_Ctau-0p'
 #version = '_noOOTAmp_'
 #version = '_wthOOTAmp_'
-version = 'GMSB'
+#version = 'GMSB'
 #version = 'JetHT' 
 #version = 'DiPhotonJetsBox'
+version = 'MET'
 
 rootfile = '.root'
 
@@ -64,7 +71,8 @@ rootfile = '.root'
 #dirselect = '22eraC_CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357328-357331'
 #dirselect = 'noOOTCC_kustc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
 #dirselect = 'CCstc0_EGamma_MINIAOD_Run2022C-PromptReco-v1_357101-357268'
-dirselect = 'GMSB'
+#dirselect = 'GMSB'
+#dirselect = 'GMSB_L-350TeV_Ctau-200cm'
 #dirselect = 'AOD'
 #dirselect = 'WJetsToLNu_HT-800'
 #dirselect = 'QCD'
@@ -73,19 +81,20 @@ dirselect = 'GMSB'
 #dirselect = 'TTJets'
 #dirselect = 'JetHT'
 #dirselect = 'GJets'
+#dirselect = 'GJets_HT-100To200'
 #dirselect = 'DiPhotonJetsBox'
+#dirselect = 'Run2018C'
+dirselect = 'MET'
 
 #dirselect = ''
 
 debug = True
 #debug = False
 
-#deep = True
-deep = False
-
 targdirs = []
 
 dirls = bashout( command ).splitlines()
+print( dirls )
 print( '************************************************')
 for line in dirls:
 	#print( line )
@@ -139,7 +148,7 @@ for line2 in targdirs :
     		if rootfile in lline : filelist.append(subdir2+lline)
    
     select =  line2.split("Tune")
-    outfile = 'kuntuple_' + select[0] + 'v14.txt'
+    outfile = 'kuntuple_' + select[0] + 'R17_v15.txt'
     #print( outfile )
     outf = open( outfile, 'w' )
     for thefile in filelist:

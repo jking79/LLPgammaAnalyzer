@@ -269,19 +269,20 @@ bool KUCMSAodSkimmer::eventLoop( Long64_t entry ){
 
 	// counts events and saves event varibles
 	// --------------------------------------
-	processEvntVars();	
+    //if( doGenInfo ){ processGenParticles(); }
+	//processEvntVars();	
 	processRechits();
-	processMet();
+	//processMet();
 	processPhotons();
 	processElectrons();
 	//processMuons();
-	processJets();
-	if( doGenInfo ){ processGenParticles(); }
+	//processJets();
+    processRechitsHist();
 
 	// select events to process and store
 	//--------------------------------------
 	auto saveToTree = eventSelection();	
-	if( saveToTree ) processRJR();
+	//if( saveToTree ) processRJR();
 	return saveToTree;
 
 }//<<>>void KUCMSAodSkimmer::eventLoop( Long64_t entry )
@@ -347,21 +348,16 @@ void KUCMSAodSkimmer::processRechits(){
     if( DEBUG ) std::cout << "Finding rechits" << std::endl;
 	//------------ rechits -------------------------
 
+	rhused.clear();
+	rhispho.clear();
+	rhisele.clear();
     auto nRecHits = ECALRecHit_ID->size();
     if( DEBUG ) std::cout << " -- Looping over " << nRecHits << " rechits" << std::endl;
     for( int it = 0; it < nRecHits; it++ ){
 
-		auto id = (*ECALRecHit_ID)[it];
-		auto idinfo = DetIDMap[id];
-		//if( idinfo.ecal == ECAL::EB ){
-        if( true ){
-
-			hist1d[0]->Fill( (*ECALRecHit_energy)[it], 1 );
-            hist1d[1]->Fill( (*ECALRecHit_energy)[it], 1 );
-            hist1d[2]->Fill( (*ECALRecHit_energy)[it], 1 );
-			//auto radius = hypo( (*rhPosX)[it], (*rhPosY)[it] );
-
-		}//<<>>if( (*rhSubdet)[it] == 0 )
+		rhispho.push_back(0);
+		rhisele.push_back(0);
+		rhused.push_back(false);
 
 	}//<<>>for( int it = 0; it < nRecHits; it++ )
 
@@ -369,6 +365,98 @@ void KUCMSAodSkimmer::processRechits(){
 
 
 }//<<>>void KUCMSAodSkimmer::processRechits()
+
+void KUCMSAodSkimmer::processRechitsHist(){
+
+    // initilize
+    //selECALRecHit.clearBranches(); // <<<<<<<   must do
+
+    // calc
+    if( DEBUG ) std::cout << "Finding rechits" << std::endl;
+    //------------ rechits -------------------------
+
+    auto nRecHits = ECALRecHit_ID->size();
+    if( DEBUG ) std::cout << " -- Looping over " << nRecHits << " rechits" << std::endl;
+    for( int it = 0; it < nRecHits; it++ ){
+
+        auto id = (*ECALRecHit_ID)[it];
+        auto idinfo = DetIDMap[id];
+        if( idinfo.ecal == ECAL::EB ){
+        //if( true ){
+
+            hist1d[10]->Fill( (*ECALRecHit_energy)[it], 1 );
+            hist1d[0]->Fill( (*ECALRecHit_energy)[it], 1 );
+            hist1d[1]->Fill( (*ECALRecHit_energy)[it], 1 );
+            hist1d[2]->Fill( (*ECALRecHit_energy)[it], 1 );
+            //auto radius = hypo( (*rhPosX)[it], (*rhPosY)[it] )
+
+			if( rhispho[it] > 0 ){
+
+				hist2d[0]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_isOOT)[it] );
+                hist2d[1]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_swCross)[it] );
+                hist2d[2]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_eta)[it] );
+                hist2d[3]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_amplitude)[it] );
+                hist2d[4]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_time)[it] );
+				hist1d[13]->Fill( (*ECALRecHit_energy)[it], rhispho[it] );
+				hist1d[12]->Fill( 1 );
+
+			}//<<>>if( rhispho[it] )
+
+            //if( rhisele[it] && not rhispho[it] ){
+            if( rhisele[it] > 0 ){
+
+                hist2d[10]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_isOOT)[it] );
+                hist2d[11]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_swCross)[it] );
+                hist2d[12]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_eta)[it] );
+                hist2d[13]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_amplitude)[it] );
+                hist2d[14]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_time)[it] );
+                hist1d[14]->Fill( (*ECALRecHit_energy)[it], 1 );
+                hist1d[15]->Fill( rhisele[it] );
+
+            }//<<>>if( rhispho[it] )
+
+            if( rhispho[it] == 0 && rhisele[it] == 0 ){
+
+                hist2d[20]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_isOOT)[it] );
+                hist2d[21]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_swCross)[it] );
+                hist2d[22]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_eta)[it] );
+                hist2d[23]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_amplitude)[it] );
+                hist2d[24]->Fill( (*ECALRecHit_energy)[it], (*ECALRecHit_time)[it] );
+				hist1d[17]->Fill( (*ECALRecHit_energy)[it], 1 );
+
+            }//<<>>if( rhispho[it] )
+
+			//if( not rhispho[it] && rhisele[it] ) std::cout << " -- Electron not in Photons !!!!!!!! " << std::endl;
+
+			if( not rhused[it] ){ hist1d[7]->Fill( (*ECALRecHit_energy)[it], 1 ); }
+
+
+        }//<<>>if( (*rhSubdet)[it] == 0 )
+
+    }//<<>>for( int it = 0; it < nRecHits; it++ )
+
+	int nSuperClusters = SuperCluster_nHFXtals->size();
+	for( int sciter = 0; sciter < nSuperClusters; sciter++ ){
+
+		int nhflist = (*SuperCluster_nHFXtals)[sciter];
+		int nhfrh = (*SuperCluster_nRHXtals)[sciter];
+        auto misFracs = (*SuperCluster_MissingRhFracs)[sciter];
+        int nBClutrs = (*SuperCluster_nBasicClusters)[sciter];
+
+		int hfdiff = nhflist - nhflist;
+		hist1d[100]->Fill(hfdiff); 
+				// = new TH1D("hfdiff", "Photon H&F Diff;Diff( rh found - rh in H&F )",100,-50,50);
+    	hist1d[101]->Fill(nhfrh);// = new TH1D("hffound", "Photon # H&F found;# rh found ",100,0,100);
+    	hist1d[102]->Fill(nhflist);//  = new TH1D("hfin", "Photon # in H&F ;# rh in H&F ",100,0,100);
+    	hist2d[100]->Fill(nhflist,nhfrh);
+				// = new TH1D("hfinvfound", "Photon # in vs found H&F ;# rh in H&F;# rh H&F found",100,0,100,100,0,100);
+
+	}//<<>>for( int sciter = 0; sciter < nSuperClusters; sciter++ )
+    // fill
+
+}//<<>>void KUCMSAodSkimmer::processRechits()
+
+
 
 void KUCMSAodSkimmer::processGenParticles(){
 
@@ -464,16 +552,74 @@ void KUCMSAodSkimmer::processPhotons(){
 
 	std::vector<int> phoOrderIndx;
     uInt nSelPhotons = 0;
-	//uint nEleVeto = 0;
     uInt nPhotons = Photon_excluded->size();	
     if( DEBUG || verbose ) std::cout << " - Looping over for " << nPhotons << " photons" << std::endl;
     for( uInt it = 0; it < nPhotons; it++ ){
+
+		if( (*Photon_excluded)[it] ) continue;
+        int scIndx = (*Photon_scIndex)[it];
+        auto rhlist = (*SuperCluster_rhIds)[scIndx]; // std::vector<std::vector<uInt>>
+		//float scetawidth = (*SuperCluster_etaWidth)[scIndx];
+		//float scphiwidth = (*SuperCluster_phiWidth)[scIndx];
+		//float scdrsize = hypo(scetawidth/2,scphiwidth/2);
+		float scdrsize = 0.15;
+		//std::cout << " -- pho scdrsize: " << scdrsize << std::endl;
+        float eta = (*Photon_eta)[it];
+        float phi = (*Photon_phi)[it];
+		auto isOOT = (*Photon_isOot)[it];
+
+        int cntRhList = rhlist.size();
+        int nRecHits = ECALRecHit_ID->size();
+        for( int scrhit = 0; scrhit < cntRhList; scrhit++ ){
+
+            uInt scrhid = rhlist[scrhit];
+            for( int rhit = 0; rhit < nRecHits; rhit++ ){
+
+                uInt rhid = (*ECALRecHit_ID)[rhit];
+                if( scrhid == rhid ){
+
+                    float rhe = (*ECALRecHit_energy)[rhit];
+                    rhused[rhit] = true;
+					//rhispho[rhit] = true;
+                    rhispho[rhit] += 1;
+                    hist1d[3]->Fill( rhe, 1 );
+					if( isOOT ){ 
+
+						hist1d[8]->Fill( rhe, 1 );
+                   		hist2d[15]->Fill( (*ECALRecHit_energy)[rhit], (*ECALRecHit_isOOT)[rhit] );
+                    	hist2d[16]->Fill( (*ECALRecHit_energy)[rhit], (*ECALRecHit_swCross)[rhit] );
+                    	hist2d[17]->Fill( (*ECALRecHit_energy)[rhit], (*ECALRecHit_eta)[rhit] );
+                    	hist2d[18]->Fill( (*ECALRecHit_energy)[rhit], (*ECALRecHit_amplitude)[rhit] );
+                    	hist2d[19]->Fill( (*ECALRecHit_energy)[rhit], (*ECALRecHit_time)[rhit] );
+
+					}//<<>>if( isOOT )
+
+					//break;
+
+                }//<<>> if( rh == id )
+				else {
+
+                    float rheta = (*ECALRecHit_eta)[rhit];
+                    float rhphi = (*ECALRecHit_phi)[rhit];
+                    float dphi12 = dPhi( rhphi, phi );
+                    float pho2dr = hypo( rheta-eta, dphi12 );
+                    if( pho2dr < scdrsize ){
+
+                    	float rhe = (*ECALRecHit_energy)[rhit];
+                        hist1d[5]->Fill( rhe, 1 );
+
+                    }//<<>>if( pho2dr < scdrsize )
+
+				}//<<>> else
+            }//<<>>for( int it = 0; it < nRecHits; it+;
+
+        }//<<>>for( auto rh : rhlist )
 
 		//---------------------------------------------------
     ///////////  pho selection ////////////////////////////////////////////////////////////////////
         if( DEBUG ) std::cout << " -- looping photons : getting pho isEB, has min pt, not excluded, electron veto " << std::endl;
 		auto isExcluded = (*Photon_excluded)[it];
-		auto scIndx = (*Photon_scIndex)[it];
+		//auto scIndx = (*Photon_scIndex)[it];
         auto isEB = (*SuperCluster_seedIsEB)[scIndx];
 		auto hasEleVeto = (*Photon_electronVeto)[it];
         bool hasPixSeed = (*Photon_pixelSeed)[it];
@@ -483,9 +629,9 @@ void KUCMSAodSkimmer::processPhotons(){
 
         auto pt = (*Photon_pt)[it];
 		bool underMinPt = pt < 30;
-        auto eta = (*Photon_eta)[it];
+        //auto eta = (*Photon_eta)[it];
 		auto overMaxEta = std::abs(eta) > 1.479;
-        auto phi = (*Photon_phi)[it];
+        //auto phi = (*Photon_phi)[it];
 
         if( DEBUG ) std::cout << " -- looping photons : getting phojet iso " << std::endl;
         bool isJetPhoton = false;
@@ -531,7 +677,7 @@ void KUCMSAodSkimmer::processPhotons(){
         uInt nrh = rhids.size();
 
         if( DEBUG ) std::cout << " -- pho pull info" << std::endl;
-		auto isOOT = (*Photon_isOot)[it];
+		//auto isOOT = (*Photon_isOot)[it];
 		auto time = (*Photon_seedTOFTime)[it];
 		auto smaj = (*SuperCluster_smaj)[scIndx];
         auto smin = (*SuperCluster_smin)[scIndx];
@@ -549,6 +695,13 @@ void KUCMSAodSkimmer::processPhotons(){
         auto scx = (*SuperCluster_x_calo)[scIndx];
         auto scy = (*SuperCluster_y_calo)[scIndx];
         auto scz = (*SuperCluster_z_calo)[scIndx];
+        int nhflist = (*SuperCluster_nHFXtals)[scIndx];
+        int nhfrh = (*SuperCluster_nRHXtals)[scIndx];
+        auto misFracs = (*SuperCluster_MissingRhFracs)[scIndx];
+		int nMisFracs = misFracs.size();
+        int nBClutrs = (*SuperCluster_nBasicClusters)[scIndx];
+
+		hist1d[18]->Fill(nMisFracs);
 
         int genIdx = -1;
         int momIdx = -1;
@@ -784,10 +937,57 @@ void KUCMSAodSkimmer::processElectrons(){
     float elePhoIsoMinDr(10.0); 
     if( DEBUG ) std::cout << " -- Looping electrons: " << std::endl;
     for( uInt itr = 0; itr < nElectrons; itr++ ){
-		
+
+        int scIndx = (*Electron_scIndex)[itr];
+        auto rhlist = (*SuperCluster_rhIds)[scIndx]; // std::vector<std::vector<uInt>>
+        //float scetawidth = (*SuperCluster_etaWidth)[scIndx];
+        //float scphiwidth = (*SuperCluster_phiWidth)[scIndx];
+        //float scdrsize = hypo(scetawidth/2,scphiwidth/2);
+        float scdrsize = 0.15;
+        //std::cout << " -- ele scdrsize: " << scdrsize << std::endl;
+        float eta = (*Electron_eta)[itr];
+        float phi = (*Electron_phi)[itr];
+
+		int cntRhList = rhlist.size();
+		int nRecHits = ECALRecHit_ID->size();
+        for( int scrhit = 0; scrhit < cntRhList; scrhit++ ){
+
+			uInt scrhid = rhlist[scrhit];
+            for( int rhit = 0; rhit < nRecHits; rhit++ ){
+				
+				float rhe = (*ECALRecHit_energy)[rhit];
+                uInt rhid = (*ECALRecHit_ID)[rhit];
+                if( scrhid == rhid ){
+
+                    rhused[rhit] = true;
+					//rhisele[rhit] = true;
+                    rhisele[rhit] += 1;
+                    hist1d[4]->Fill( rhe, 1 );
+
+					//break;
+
+                }//<<>> if( rh == id )
+                else {
+
+                    float rheta = (*ECALRecHit_eta)[rhit];
+                    float rhphi = (*ECALRecHit_phi)[rhit];
+                    float dphi12 = dPhi( rhphi, phi );
+                    float pho2dr = hypo( rheta-eta, dphi12 );
+                    if( pho2dr < scdrsize ){
+
+                        hist1d[6]->Fill( rhe, 1 );
+
+                    }//<<>>if( pho2dr < scdrsize )
+
+                }//<<>> else
+
+            }//<<>>for( int it = 0; it < nRecHits; it+;
+
+        }//<<>>for( auto rh : rhlist )
+
     	if( DEBUG ) std::cout << " ---- Processing  electron: " << itr << " of: " << nElectrons << std::endl;
-		float eta = (*Electron_eta)[itr];
-    	float phi = (*Electron_phi)[itr];
+		//float eta = (*Electron_eta)[itr];
+    	//float phi = (*Electron_phi)[itr];
 		auto scIdx = (*Electron_scIndex)[itr];
 		if( DEBUG ) std::cout << " -- doing sc sstuff " << std::endl;
 		auto esid = getLeadRhID( (*SuperCluster_rhIds)[scIdx] );
@@ -1097,7 +1297,7 @@ bool KUCMSAodSkimmer::eventSelection(){
 
 	//float selmet; selMet.getBranch( "Met", selmet );
 	//std::cout << " Event Met : " << selmet << std::endl;
-
+/*
 	int nSelJets = geCnts("nSelJets"); //selJets.getUIBranchValue("nSelJets");
     float nSelPhotons = geCnts("nSelPhotons"); //selPhotons.getUIBranchValue("nSelPhotons");
 	float leadSelPho = geCnts("leadPho"); //selPhotons.getUIBranchValue("leadSelPho");
@@ -1117,8 +1317,9 @@ bool KUCMSAodSkimmer::eventSelection(){
 	//auto evtSelected = leadPhoPt70 && subLeadPhoPt40 && gt2jets && gt2phos;
 	//if( geVars( "genSigPerfect" ) == 1 ) std::cout << "  -- Event sel nSGlue : " << geVars( "nSGlue" ) << std::endl;
 	if( ( geVars( "genSigPerfect" ) == 1 ) && ( geVars( "nSGlue" ) < 1 ) ) evtSelected = false;
+*/
 
-
+	bool evtSelected = false;
 	if( DEBUG ){ 
 		if( evtSelected ) std::cout << " ---------------- Event Passed !!!!!!!" << std::endl; 
 		else std::cout << " --------------------- Event Failed." << std::endl;}
@@ -1441,10 +1642,32 @@ void KUCMSAodSkimmer::initHists(){
 	//------------------------------------------------------------------------------------------
     //------ 1D Hists --------------------------------------------------------------------------
 
-	hist1d[0] = new TH1D("ecalrhenergy0", "RecHit Energy;rechit E [GeV]",1000,0,1000);
+	hist1d[0] = new TH1D("ecalrhenergy0", "RecHit Energy;rechit E [GeV]",200,0,0.2);
     hist1d[1] = new TH1D("ecalrhenergy1", "RecHit Energy;rechit E [GeV]",200,0,20);
     hist1d[2] = new TH1D("ecalrhenergy2", "RecHit Energy;rechit E [GeV]",200,0,2);
 
+    hist1d[3] = new TH1D("inphorhe", "inPhoRecHit;rechit E [GeV]",200,0,2);
+    hist1d[4] = new TH1D("inelerhe", "inEleRecHit;rechit E [GeV]",200,0,2);
+    hist1d[5] = new TH1D("sbinphorhe", "In dr width of PhoSC;rechit E [GeV]",800,0,200);
+    hist1d[6] = new TH1D("sbinelerhe", "In dr width of EleSC;rechit E [GeV]",800,0,200);
+    hist1d[7] = new TH1D("notinrhe", "Not in Ele/Pho SC;rechit E [GeV]",200,0,2);
+    hist1d[8] = new TH1D("inootphorhe", "inOOTPhoRecHit;rechit E [GeV]",200,0,2);
+
+    hist1d[10] = new TH1D("ecalrhenergy4", "RecHit Energy;rechit E [GeV]",200,0,200);
+
+    hist1d[13] = new TH1D("inphorhe2", "inPhoRecHit;rechit E [GeV]",200,0,2);
+    hist1d[12] = new TH1D("inphorhecnt", "inPhoRecHit;rechit cnt",200,0,200);
+
+    hist1d[14] = new TH1D("inelerhe2", "inEleRecHit;rechit E [GeV]",200,0,2);
+    hist1d[15] = new TH1D("inelerhecnt", "inEleRecHit;rechit cnt",200,0,200);
+
+    hist1d[17] = new TH1D("notinrhe2", "Not in Ele/Pho SC;rechit E [GeV]",200,0,2);
+
+    hist1d[18] = new TH1D("nduphfpho", "#DupHF in Photons;#DupHF",200,0,200);
+
+	hist1d[100] = new TH1D("hfdiff", "Photon H&F Diff;Diff( rh found - rh in H&F )",100,-50,50);
+    hist1d[101] = new TH1D("hffound", "Photon # H&F found;# rh found ",100,0,100);
+    hist1d[102] = new TH1D("hfin", "Photon # in H&F ;# rh in H&F ",100,0,100);
     ////hist1d[100] = new TH1D("genPhoPt", "genPhoPt;Pt [GeV]",500,0,1000);
 
     for( int it = 0; it < n1dHists; it++ ){ if(hist1d[it]) hist1d[it]->Sumw2();}
@@ -1453,7 +1676,33 @@ void KUCMSAodSkimmer::initHists(){
     //------ 2D Hists --------------------------------------------------------------------------
 
     ////hist2d[1] = new TH2D("jetDrMuTime_pt", "jetDrMuTime_pt", jtdiv, -1*jtran, jtran, 500, 0, 500);
+
+	hist2d[0] = new TH2D("prhevoot", "prhe v isOOT", 200, 0, 2, 3, -1, 2);
+    hist2d[1] = new TH2D("prhevswcr", "prhe v swissCross", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[2] = new TH2D("prheveta", "prhe v Eta", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[3] = new TH2D("prhevamp", "prhe v amplitude", 200, 0, 2, 150, 0, 150);
+    hist2d[4] = new TH2D("prhevtime", "prhe v time", 200, 0, 1, 150, -15, 15);
+
+    hist2d[10] = new TH2D("erhevoot", "erhe v isOOT", 200, 0, 2, 3, -1, 2);
+    hist2d[11] = new TH2D("erhevswcr", "erhe v swissCross", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[12] = new TH2D("erheveta", "erhe v Eta", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[13] = new TH2D("erhevamp", "erhe v amplitude", 200, 0, 2, 150, 0, 150);
+    hist2d[14] = new TH2D("erhevtime", "erhe v time", 200, 0, 1, 150, -15, 15);
+
+    hist2d[15] = new TH2D("ootprhevoot", "ootprhe v isOOT", 200, 0, 2, 3, -1, 2);
+    hist2d[16] = new TH2D("ootprhevswcr", "ootprhe v swissCross", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[17] = new TH2D("ootprheveta", "ootprhe v Eta", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[18] = new TH2D("ootprhevamp", "ootprhe v amplitude", 200, 0, 2, 150, 0, 150);
+    hist2d[19] = new TH2D("ootprhevtime", "ootprhe v time", 200, 0, 1, 150, -15, 15);
+
+    hist2d[20] = new TH2D("urhevoot", "urhe v isOOT", 200, 0, 2, 3, -1, 2);
+    hist2d[21] = new TH2D("urhevswcr", "urhe v swissCross", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[22] = new TH2D("urheveta", "urhe v Eta", 200, 0, 2, 150, -1.5, 1.5);
+    hist2d[23] = new TH2D("urhevamp", "urhe v amplitude", 200, 0, 2, 150, 0, 150);
+    hist2d[24] = new TH2D("urhevtime", "urhe v time", 200, 0, 1, 150, -15, 15);
     
+    hist2d[100] = new TH2D("hfinvfound", "Photon # in vs found H&F ;# rh in H&F;# rh H&F found",100,0,100,100,0,100);
+
 	//------------------------------------------------------------------------------------------
     //------ 3D Hists --------------------------------------------------------------------------
 

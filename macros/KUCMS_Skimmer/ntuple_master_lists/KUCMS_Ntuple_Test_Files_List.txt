@@ -1,0 +1,34 @@
+#KUCMSNtuple/kucmsntuple_GMSB_AOD_v143/ kuntuple_GMSB_L-350TeV_Ctau-200cm_v143.txt gmsbt 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v143/JetHT/ kuntuple_JetHT_Run2018C_v143.txt datat 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GJETS_AOD_v143/ kuntuple_GJets_HT-100To200_v143.txt gjetst 1.0 0.0 0.0 1 0
+#
+#KUCMSNtuple/kucmsntuple_GJETS_rhe1k_v14/ kuntuple_GJets_HT-100To200_rhe1k_v14.txt gjetst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GMSB_rhe1k_v14/ kuntuple_GMSB_L-350TeV_Ctau-200cm_rhe1k_v14.txt gmsbt 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_JetHT_rhe1k_v14/JetHT/ kuntuple_JetHT_rhe1k_v14.txt datat 1.0 0.0 0.0 1 0
+#
+#KUCMSNtuple/kucmsntuple_GJETS_AOD_v144/ kuntuple_GJets_HT-100To200_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-0_1cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-0p001cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-10000cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-1000cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-10cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-200cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-400cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-600cm_v144.txt  gmsbt 1.0 0.0 0.0 1 0
+##KUCMSNtuple/kucmsntuple_GMSB_AOD_v144/ kuntuple_GMSB_L-350TeV_Ctau-800cm_v144.txt gmsbt 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_JetHT_AOD_v144/JetHT/ kuntuple_JetHT_v144.txt datat 1.0 0.0 0.0 1 0
+
+#KUCMSNtuple/kucmsntuple_GJETS_R17_v15/ kuntuple_GJets_HT-40To100_R17_v15.txt gjetst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GJETS_R17_v15/ kuntuple_GJets_HT-100To200_R17_v15.txt gjetst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GJETS_R17_v15/ kuntuple_GJets_HT-200To400_R17_v15.txt gjetst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GJETS_R17_v15/ kuntuple_GJets_HT-400To600_R17_v15.txt gjetst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_GJETS_R17_v15/ kuntuple_GJets_HT-600ToInf_R17_v15.txt gjetst 1.0 0.0 0.0 1 0
+
+#KUCMSNtuple/kucmsntuple_GMSB_R17_v15/ kuntuple_GMSB_L-350TeV_Ctau-200cm_R17_v15.txt gmsbt 1.0 0.0 0.0 1 0
+
+#KUCMSNtuple/kucmsntuple_MET_R17_v15/ kuntuple_MET_R17_v15.txt datat 1.0 0.0 0.0 1 0
+
+test_ntuples/ kuntuple_test_v15.txt datat 1.0:q 0.0 0.0 1 0
+
+#KUCMSNtuple/kucmsntuple_QCD_R17_v15/ kuntuple_QCD_HT50to100_R17_v15.txt qcdst 1.0 0.0 0.0 1 0
+#KUCMSNtuple/kucmsntuple_QCD_R17_v15/ kuntuple_QCD_HT100to200_R17_v15.txt qcdst 1.0 0.0 0.0 1 0

@@ -237,7 +237,8 @@ ytitle = 'CC rechit time [ns]'
 #ytitle = 'sum pCalo energy [GeV]'
 #ytitle = 'pCalo energy [GeV]'
 #xtitle = 'pCalo energy [GeV]'
-xtitle = 'pCalo rechit time [ns]'
+#xtitle = 'pCalo rechit time [ns]'
+xtitle = 'SwissCross'
 #ytitle = 'pCalo energy / sum pCalo energy [GeV]'
 #xtitle = 'sum pCalo energy [GeV]'
 #htitle = 'A_{eff}/#sigma_{n} vs #sigma_{#delta_{t}}'
@@ -266,8 +267,13 @@ Ic_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : i
 glo_layout = { 'xtitle' : xtitle, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle + gi_legtitle }
 
 
+hl_swisscross = [
+     ["SwcrVRtTimeOOT","","../../egammares_diag_23D_dvm_Partial_v11_EB.root",""],
+]
+
 #ptitle=[' DYJetsToLL','','']
-ptitle=[' HTo2LongLivedTo4b','','#splitline{10 GeV < rechit Energy < 120 GeV}{With OOT Amplitude Correction}']
+ptitle=['','','#splitline{Energy < 10 GeV}{#splitline{Run 369999}{EB Topo + kOOT Cuts}}']
+#ptitle=[' HTo2LongLivedTo4b','','#splitline{10 GeV < rechit Energy < 120 GeV}{With OOT Amplitude Correction}']
 #ptitle=[' HTo2LongLivedTo4b','','#splitline{10 GeV < rechit Energy < 120 GeV}{Without OOT Amplitude Correction}']
 #ptitle=[' HTo2LongLivedTo4b','','#splitline{10 GeV < rechit Energy < 120 GeV}{Adjusted OOT Amplitude Correction}']
 #ptitle=[' DYJetsToLL','','#splitline{#splitline{ECAL Barrel}{#splitline{Calibrated pCalo time}{pCalo energy > 1.5 GeV}}}{4 Crystal}']
@@ -277,7 +283,7 @@ ptitle=[' HTo2LongLivedTo4b','','#splitline{10 GeV < rechit Energy < 120 GeV}{Wi
 #ptitle=[' DYJetsToLL','','#splitline{#splitline{ECAL Barrel}{pCalo Wt Time}}{iEta 26, iPhi 357}']
 #ptitle=[' DYJetsToLL','','#splitline{#splitline{ECAL Barrel}{pCalo Wt Time}}{iEta -48, iPhi 61}']
 #z = [10, 1000000]
-z = [1, 1000]
+z = [1, 10000]
 #y = [ 60, 0 ]
 #y = [ 280, 0.8 ]
 #x = [ -0.01, 0.5 ]
@@ -291,13 +297,15 @@ z = [1, 1000]
 #y = [-2.25, 14]
 #x = [ -1.25, 8.25 ]
 #y = [-1.25, 6 ]
-x = [ -1.25, 3.5 ]
-y = [-1.25, 2.375 ]
+x = [ 0.1, 1.1 ]
+y = [-15, 15 ]
+#x = [ -1.25, 3.5 ]
+#y = [-1.25, 2.375 ]
 #l = [ 0.7,0.65,0.925,0.9 ]
 l = [ 0.7,0.66,0.9,0.9]
 #t = [0.7,0.775,0.0]
 #t = [0.225,0.85,0.0]
-t = [0.4,0.225,0.0]
+t = [0.2,0.225,0.0]
 #outname = 'downloads/tr_pcaloMtime_hist'
 #outname = 'downloads/tr_pcaloMulti3_hist'
 #outname = 'downloads/tr_pcaloWtRMS3_hist'
@@ -308,7 +316,9 @@ t = [0.4,0.225,0.0]
 #outname = 'downloads/tr_2d_pcrmsvspce'
 #outname = 'downloads/tr_2d_spcevmulti'
 #outname = 'downloads/tr_2d_apctvnpce'
-outname = 'downloads/tr_2d_delay_orig_zoom_pcvcc'
-dostack(hl_other_plots, outname, date, Ic_layout, ptitle, z, y, x, l, t)
+#outname = 'downloads/tr_2d_delay_orig_zoom_pcvcc'
+outname = 'tr_2d_scvttopo_r3_eg0'
+
+dostack(hl_swisscross, outname, date, Ic_layout, ptitle, z, y, x, l, t)
 #dostack(hl_sp_plots, outname, date, Ic_layout, ptitle, z, y, x, l, t)
 
