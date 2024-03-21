@@ -28,12 +28,12 @@
 
 ##KUCMSNtuple/kucmsntuple_DYTT_AOD_v5/ kuntuple_DYJetsToLL_M-50_v5.txt DYJets 5343 0.0 0.0 1 0
 
-#KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-100To200_v14.txt GJets1 8625 0.0 0.0 1 0
-#KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-200To400_v14.txt GJets2 2196 0.0 0.0 1 0
-#KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-400To600_v14.txt GJets4 258 0.0 0.0 1 0
-#KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-40To100_v14.txt GJets0 18620 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-100To200_v14.txt GJets1 8625 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-200To400_v14.txt GJets2 2196 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-400To600_v14.txt GJets4 258 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-40To100_v14.txt GJets0 18620 0.0 0.0 1 0
 KUCMSNtuple/kucmsntuple_GJETS_AOD_v13/ kuntuple_GJets_HT-40To100_v13.txt GJets0 18620 0.0 0.0 1 0
-#KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-600ToInf_v14.txt GJets5 85.18 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_GJETS_AOD_v14/ kuntuple_GJets_HT-600ToInf_v14.txt GJets5 85.18 0.0 0.0 1 0
 
 ##KUCMSNtuple/kucmsntuple_DiPhoBox_AOD_v14/ kuntuple_DiPhotonJetsBox_MGG-1000to2000_13TeV-sherpav14.txt DiPhoBox1 
 ##KUCMSNtuple/kucmsntuple_DiPhoBox_AOD_v14/ kuntuple_DiPhotonJetsBox_MGG-2000to4000_13TeV-sherpav14.txt

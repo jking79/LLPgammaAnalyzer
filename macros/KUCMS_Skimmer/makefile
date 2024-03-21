@@ -20,6 +20,7 @@ p5=skimSVHistMaker
 p6=calibration_averhtime_isoot_filter
 p7=stackSkimHistMaker
 p8=calibration_averhtime_isoot_filter_pho
+p9=calibration_averhtime_isoot_filter_pho_ew
 
 all: $(p1) 
 
@@ -46,3 +47,6 @@ $(p7): $(p7).cpp
 
 $(p8): $(p8).cpp
 	$(CC) -o $(p8).obj $(p8).cpp $(RTCFLAGS) $(RTGLIBS)
+
+$(p9): $(p9).cpp
+	$(CC) -o $(p9).obj $(p9).cpp $(RTCFLAGS) $(RTGLIBS)

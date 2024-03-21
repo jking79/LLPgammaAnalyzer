@@ -699,22 +699,27 @@ int main ( int argc, char *argv[] ){
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
         //else {
 
-				float minE = 5.0;
+				float minE = 4.0;
 
                 //auto indir = "KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/";
-                auto indir = "KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/";
+                auto indir = "KUCMSNtuple/kucmsntuple_GJETS_R17_v16_MET0/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/";
+                //auto indir = "KUCMSNtuple/kucmsntuple_QCD_R17_v16_MET0/";
 
                 //auto infilelist = "cali_list_files/KUCMS_QCD_v14_califilelist.txt";
-                auto infilelist = "cali_list_files/KUCMS_GJets_v14_califilelist.txt";
+                //auto infilelist = "cali_list_files/KUCMS_GJets_v14_califilelist.txt";
+                auto infilelist = "cali_list_files/KUCMS_GJets_R17_v16_califilelist.txt";
                 //auto infilelist = "cali_list_files/KUCMS_GMSB_v14_califilelist.txt";
 				//auto infilelist = "cali_list_files/KUCMS_JetHT18D_v14_califilelist.txt";
+                //auto infilelist = "cali_list_files/KUCMS_QCD_R17_v16_califilelist.txt";
 
                 //auto outfilename = "KUCMS_QCD_v14B3_phorhE5_Cali.root";
-                auto outfilename = "KUCMS_GJets_v14B23_phorhE5_Cali.root";
+                //auto outfilename = "KUCMS_GJets_v14B23_phorhE5_Cali.root";
                 //auto outfilename = "KUCMS_GMSB_ct200_L350_v14_rhE0_Cali.root";
                 //auto outfilename = "KUCMS_JetHT18D_v14_rhE2_Cali.root";
+                auto outfilename = "KUCMS_GJets_R17_v16_phorhE5_mo_Cali.root";
+                //auto outfilename = "KUCMS_QCD_R17_v16_phorhE5_mo_Cali.root";
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename, minE );
         //}

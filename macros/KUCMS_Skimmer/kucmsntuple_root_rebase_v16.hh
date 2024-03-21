@@ -70,7 +70,7 @@ public :
    std::vector<float>   *SuperCluster_clcx;
    std::vector<float>   *SuperCluster_clcy;
    std::vector<float>   *SuperCluster_clcz;
-   std::vector<std::vector<float> > *SuperCluster_MissingRhFracs;
+   //std::vector<std::vector<float> > *SuperCluster_MissingRhFracs;
    Int_t           SuperCluster_nSuperCluster;
    std::vector<unsigned int> *SuperCluster_nRHXtals;
    std::vector<float>   *SuperCluster_phi;
@@ -78,7 +78,7 @@ public :
    std::vector<std::vector<unsigned int> > *SuperCluster_rhIds;
    std::vector<unsigned int> *SuperCluster_XtalSeedID;
    std::vector<unsigned int> *SuperCluster_nHFXtals;
-   std::vector<unsigned int> *SuperCluster_diffXtrals;
+   //std::vector<unsigned int> *SuperCluster_diffXtrals;
    std::vector<float>   *SuperCluster_x_calo;
    std::vector<float>   *SuperCluster_y_calo;
    std::vector<float>   *SuperCluster_z_calo;
@@ -251,7 +251,7 @@ public :
    TBranch        *b_SuperCluster_clcx;   //!
    TBranch        *b_SuperCluster_clcy;   //!
    TBranch        *b_SuperCluster_clcz;   //!
-   TBranch        *b_SuperCluster_MissingRhFracs;   //!
+   //TBranch        *b_SuperCluster_MissingRhFracs;   //!
    TBranch        *b_SuperCluster_nSuperCluster;   //!
    TBranch        *b_SuperCluster_nRHXtals;   //!
    TBranch        *b_SuperCluster_phi;   //!
@@ -259,7 +259,7 @@ public :
    TBranch        *b_SuperCluster_rhIds;   //!
    TBranch        *b_SuperCluster_XtalSeedID;   //!
    TBranch        *b_SuperCluster_nHFXtals;   //!
-   TBranch        *b_SuperCluster_diffXtrals;   //!
+   //TBranch        *b_SuperCluster_diffXtrals;   //!
    TBranch        *b_SuperCluster_x_calo;   //!
    TBranch        *b_SuperCluster_y_calo;   //!
    TBranch        *b_SuperCluster_z_calo;   //!
@@ -393,17 +393,17 @@ public :
    //virtual Int_t    Cut(Long64_t entry);
    //virtual Int_t    GetEntry(Long64_t entry);
    //virtual Long64_t LoadTree(Long64_t entry);
-   void     Init( TTree *tree, bool doGenInfo );
-   void     getBranches( Long64_t entry, bool doGenInfo );
+   virtual void     Init( TTree *tree, bool doGenInfo );
+   virtual void     getBranches( Long64_t entry, bool doGenInfo );
    //virtual void     Loop();
    //virtual Bool_t   Notify();
    //virtual void     Show(Long64_t entry = -1);
 
 };
 
-#endif
+//#endif
 
-#ifdef root_base_cxx
+//#ifdef root_base_cxx
 /*
 root_base::kuntuple_v16(TTree *tree) : fChain(0) 
 {
@@ -503,14 +503,14 @@ void root_base::Init(TTree *tree, bool doGenInfo )
    SuperCluster_clcx = 0;
    SuperCluster_clcy = 0;
    SuperCluster_clcz = 0;
-   SuperCluster_MissingRhFracs = 0;
+   //SuperCluster_MissingRhFracs = 0;
    SuperCluster_nRHXtals = 0;
    SuperCluster_phi = 0;
    SuperCluster_rhFracs = 0;
    SuperCluster_rhIds = 0;
    SuperCluster_XtalSeedID = 0;
    SuperCluster_nHFXtals = 0;
-   SuperCluster_diffXtrals = 0;
+   //SuperCluster_diffXtrals = 0;
    SuperCluster_x_calo = 0;
    SuperCluster_y_calo = 0;
    SuperCluster_z_calo = 0;
@@ -667,7 +667,7 @@ void root_base::Init(TTree *tree, bool doGenInfo )
    fChain->SetBranchAddress("SuperCluster_clcx", &SuperCluster_clcx, &b_SuperCluster_clcx);
    fChain->SetBranchAddress("SuperCluster_clcy", &SuperCluster_clcy, &b_SuperCluster_clcy);
    fChain->SetBranchAddress("SuperCluster_clcz", &SuperCluster_clcz, &b_SuperCluster_clcz);
-   fChain->SetBranchAddress("SuperCluster_MissingRhFracs", &SuperCluster_MissingRhFracs, &b_SuperCluster_MissingRhFracs);
+   //fChain->SetBranchAddress("SuperCluster_MissingRhFracs", &SuperCluster_MissingRhFracs, &b_SuperCluster_MissingRhFracs);
    fChain->SetBranchAddress("SuperCluster_nSuperCluster", &SuperCluster_nSuperCluster, &b_SuperCluster_nSuperCluster);
    fChain->SetBranchAddress("SuperCluster_nRHXtals", &SuperCluster_nRHXtals, &b_SuperCluster_nRHXtals);
    fChain->SetBranchAddress("SuperCluster_phi", &SuperCluster_phi, &b_SuperCluster_phi);
@@ -675,7 +675,7 @@ void root_base::Init(TTree *tree, bool doGenInfo )
    fChain->SetBranchAddress("SuperCluster_rhIds", &SuperCluster_rhIds, &b_SuperCluster_rhIds);
    fChain->SetBranchAddress("SuperCluster_XtalSeedID", &SuperCluster_XtalSeedID, &b_SuperCluster_XtalSeedID);
    fChain->SetBranchAddress("SuperCluster_nHFXtals", &SuperCluster_nHFXtals, &b_SuperCluster_nHFXtals);
-   fChain->SetBranchAddress("SuperCluster_diffXtrals", &SuperCluster_diffXtrals, &b_SuperCluster_diffXtrals);
+   //fChain->SetBranchAddress("SuperCluster_diffXtrals", &SuperCluster_diffXtrals, &b_SuperCluster_diffXtrals);
    fChain->SetBranchAddress("SuperCluster_x_calo", &SuperCluster_x_calo, &b_SuperCluster_x_calo);
    fChain->SetBranchAddress("SuperCluster_y_calo", &SuperCluster_y_calo, &b_SuperCluster_y_calo);
    fChain->SetBranchAddress("SuperCluster_z_calo", &SuperCluster_z_calo, &b_SuperCluster_z_calo);
@@ -868,7 +868,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_SuperCluster_clcx->GetEntry(entry);   //!
    b_SuperCluster_clcy->GetEntry(entry);   //!
    b_SuperCluster_clcz->GetEntry(entry);   //!
-   b_SuperCluster_MissingRhFracs->GetEntry(entry);   //!
+   //b_SuperCluster_MissingRhFracs->GetEntry(entry);   //!
    b_SuperCluster_nSuperCluster->GetEntry(entry);   //!
    b_SuperCluster_nRHXtals->GetEntry(entry);   //!
    b_SuperCluster_phi->GetEntry(entry);   //!
@@ -876,7 +876,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_SuperCluster_rhIds->GetEntry(entry);   //!
    b_SuperCluster_XtalSeedID->GetEntry(entry);   //!
    b_SuperCluster_nHFXtals->GetEntry(entry);   //!
-   b_SuperCluster_diffXtrals->GetEntry(entry);   //!
+   //b_SuperCluster_diffXtrals->GetEntry(entry);   //!
    b_SuperCluster_x_calo->GetEntry(entry);   //!
    b_SuperCluster_y_calo->GetEntry(entry);   //!
    b_SuperCluster_z_calo->GetEntry(entry);   //!

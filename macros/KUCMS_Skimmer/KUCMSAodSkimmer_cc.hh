@@ -520,7 +520,7 @@ void KUCMSAodSkimmer::processPhotons(){
 		//if( geVars("genSigPerfect") == 1 && isGenSig ) std::cout << " -- pho sel: phoskip " << phoskip <<  " isGenSig " << isGenSig << std::endl;  
 		//if( geVars("genSigPerfect") == 1 &&  phoskip && isGenSig  ){ 
 		//		std::cout << "   -- xsepji: " << isExcluded  << hasPixSeed << overMaxEta << underMinPt << isJetPhoton << failPhoIso << std::endl; }
-		if( phoskip ) continue;		
+		if( ( geVars("genSigPerfect") != 1 ) && phoskip ) continue;		
 		if( ( geVars("genSigPerfect") == 1 ) &&  ( not isGenSig ) ) continue;
 
     ///////////  pho selection ////////////////////////////////////////////////////////////////////
@@ -1116,7 +1116,7 @@ bool KUCMSAodSkimmer::eventSelection(){
     bool evtSelected = gt2jets && gt1phos && leadPhoPt30;
 	//auto evtSelected = leadPhoPt70 && subLeadPhoPt40 && gt2jets && gt2phos;
 	//if( geVars( "genSigPerfect" ) == 1 ) std::cout << "  -- Event sel nSGlue : " << geVars( "nSGlue" ) << std::endl;
-	if( ( geVars( "genSigPerfect" ) == 1 ) && ( geVars( "nSGlue" ) < 1 ) ) evtSelected = false;
+	if( ( geVars( "genSigPerfect" ) == 1 ) && ( geVars( "nSQuark" ) < 1 ) ) evtSelected = false;
 
 
 	if( DEBUG ){ 
