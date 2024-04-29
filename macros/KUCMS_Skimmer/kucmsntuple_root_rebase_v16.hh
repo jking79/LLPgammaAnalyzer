@@ -122,6 +122,7 @@ public :
    std::vector<float>   *Gen_vy;
    std::vector<float>   *Gen_vz;
    Float_t         Evt_genWgt;
+   std::vector<int>     *Gen_susEvtType;
 
    std::vector<float>   *Jet_area;
    std::vector<float>   *Jet_chEmEF;
@@ -303,6 +304,7 @@ public :
    TBranch        *b_Gen_vy;   //!
    TBranch        *b_Gen_vz;   //!
    TBranch        *b_Evt_genWgt;   //!
+   TBranch        *b_Gen_susEvtType;   //!
 
    TBranch        *b_Jet_area;   //!
    TBranch        *b_Jet_chEmEF;   //!
@@ -544,6 +546,7 @@ void root_base::Init(TTree *tree, bool doGenInfo )
    Gen_vx = 0;
    Gen_vy = 0;
    Gen_vz = 0;
+   Gen_susEvtType = 0;
 
    Jet_area = 0;
    Jet_chEmEF = 0;
@@ -724,6 +727,7 @@ void root_base::Init(TTree *tree, bool doGenInfo )
    fChain->SetBranchAddress("Gen_vy", &Gen_vy, &b_Gen_vy);
    fChain->SetBranchAddress("Gen_vz", &Gen_vz, &b_Gen_vz);
    fChain->SetBranchAddress("Evt_genWgt", &Evt_genWgt, &b_Evt_genWgt);
+   fChain->SetBranchAddress("Gen_susEvtType", &Gen_susEvtType, &b_Gen_susEvtType);
    }//if( doGenInfo )
 
    fChain->SetBranchAddress("Jet_area", &Jet_area, &b_Jet_area);
@@ -927,6 +931,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_Gen_vy->GetEntry(entry);   //!
    b_Gen_vz->GetEntry(entry);   //!
    b_Evt_genWgt->GetEntry(entry);   //!
+   b_Gen_susEvtType->GetEntry(entry);   //!
    }//if( doGenInfo )
 
    if( sbDEBUG ) std::cout << "Getting Branches Jet" << std::endl;
@@ -985,6 +990,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_Photon_genIdx->GetEntry(entry);   //!
    b_Photon_genSigMomId->GetEntry(entry);   //!
    }//if( doGenInfo )
+   if( sbDEBUG ) std::cout << "Getting Branches Photon-GEN post" << std::endl;
    b_Photon_hadOverEM->GetEntry(entry);   //!
    b_Photon_hadTowOverEM->GetEntry(entry);   //!
    b_Photon_hcalTowerSumEtBcConeDR04->GetEntry(entry);   //!
@@ -992,6 +998,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_Photon_isOot->GetEntry(entry);   //!
    b_Photon_nTrkHollowConeDR04->GetEntry(entry);   //!
    b_Photon_nTrkSolidConeDR04->GetEntry(entry);   //!
+   if( sbDEBUG ) std::cout << "Getting Branches Photon iso" << std::endl;
    b_Photon_phi->GetEntry(entry);   //!
    b_Photon_pt->GetEntry(entry);   //!
    b_Photon_px->GetEntry(entry);   //!
@@ -999,6 +1006,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_Photon_pz->GetEntry(entry);   //!
    b_Photon_r9->GetEntry(entry);   //!
    b_Photon_s4->GetEntry(entry);   //!
+   if( sbDEBUG ) std::cout << "Getting Branches Photon shape" << std::endl;
    b_Photon_seedTOFTime->GetEntry(entry);   //!
    b_Photon_SigmaIEtaIEta->GetEntry(entry);   //!
    b_Photon_trkSumPtHollowConeDR03->GetEntry(entry);   //!
@@ -1007,6 +1015,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_Photon_ecalPFClusterIso->GetEntry(entry);   //!
    b_Photon_electronVeto->GetEntry(entry);   //!
    b_hasConversionTracks->GetEntry(entry);   //!
+   if( sbDEBUG ) std::cout << "Getting Branches Photon iso 2" << std::endl;
    b_Photon_pixelSeed->GetEntry(entry);   //!
    b_Photon_hcalPFClusterIso->GetEntry(entry);   //!
    b_Photon_Hoe_PUcorr->GetEntry(entry);   //!
@@ -1017,6 +1026,7 @@ void root_base::getBranches( Long64_t entry, bool doGenInfo ){
    b_pfRelIso03_all_quadratic->GetEntry(entry);   //!
    b_pfRelIso03_chg_quadratic->GetEntry(entry);   //!
    b_Photon_scIndex->GetEntry(entry);   //!
+   if( sbDEBUG ) std::cout << "Getting Branches Photon shape 2" << std::endl;
    b_Photon_sieie->GetEntry(entry);   //!
    b_Photon_sieip->GetEntry(entry);   //!
    b_Photon_sipip->GetEntry(entry);   //!

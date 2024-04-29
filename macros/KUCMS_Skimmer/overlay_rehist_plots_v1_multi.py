@@ -202,116 +202,97 @@ islogy = True
 #     #["Data_sigma","",mc_single_loc+pcal+lstfr,"Single"],
 #]
 
-y = [ 0.001, 0.25 ]
-x = [ 0.0, 1.2 ]
+#y = [ 0.001, 0.25 ]
+#x = [ 0.0, 1.2 ]
 l = [ 0.7,0.725,0.925,0.9 ] # legend position top right
 #l = [ 0.2,0.65,0.425,0.9 ] # legend position top left
 #l = [ 0.25,0.20,0.52,0.525 ] # legend position bottom left
 t = [0.2,0.825,0.0,0.175,0.225] # titles position
 
-cut = '<'
-#rhname1 = "selPhoHcalTowerSumEtBcConeDR04"
-#rhname1 = "pho30ptHcalTowerSumEtBcConeDR04"
-#rhname1 = "pho100ptHTSumEtBcConeDR04"
-rhname1 = [ "selPhoHcalTowerSumEtBcConeDR04", "pho30ptHcalTowerSumEtBcConeDR04", "pho100ptHTSumEtBcConeDR04" ]
-##rhname = "selPhoTrkSumPtHollowConeDR04" # same
-x1 = [ -0.1, 25.0 ]
 y1 = [ 0.0001, 1 ]
-#rhname2 = "selPhoTrkSumPtSolidConeDR04" # same
-#rhname2 = "pho30ptTrkSumPtSolidConeDR04" # same
-#rhname2 = "pho100ptTrkSumPtSolidConeDR04" # same
-rhname2 = [ "selPhoTrkSumPtSolidConeDR04", "pho30ptTrkSumPtSolidConeDR04", "pho100ptTrkSumPtSolidConeDR04" ]
-#x = [ 0.0, 5.0 ]
-x2 = [ -0.2, 25.0 ]
-y2 = [ 0.0001, 1 ]
-#y = [ 0.001, 1.2 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#l = [ 0.7,0.25,0.925,0.5 ]
-#rhname3 = "selPhoEcalRHSumEtConeDR04"
-#rhname3 = "pho30ptEcalRHSumEtConeDR04"
-#rhname3 = "pho100ptEcalRHSumEtConeDR04"
-rhname3 = [ "selPhoEcalRHSumEtConeDR04", "pho30ptEcalRHSumEtConeDR04", "pho100ptEcalRHSumEtConeDR04" ]
-#x = [ 0.0, 25.0 ]
-#cut = '<'
-y3 = [ 0.0001, 1 ]
-x3 = [ -0.1, 25 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname4 = "selPhoHadTowOverEM"
-#rhname4 = "pho30ptHadTowOverEM"
-#rhname4 = "pho100ptHadTowOverEM"
-rhname4 = [ "selPhoHadTowOverEM", "pho30ptHadTowOverEM", "pho100ptHadTowOverEM" ]
-#x = [ 0.0, 0.05 ]
-x4 = [ -0.001, 0.05 ]
-#cut = '<'
-y4 = [ 0.0001, 1 ]
-#y = [ 0.0001, 0.5 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-#rhname = "selPhoSieip"
-#x = [ 0.0, 0.001 ]
-#l = [ 0.7,0.65,0.925,0.9 ]
-##rhname = "selPhoSipip"
-##x = [ 0.0, 0.1 ]
+cut = ''
 
-rfgmsbroc10 = "KUCMS_JetHt_18D_Met150_notSig_v15_iso0_Skim_BaseHists.root"
-rfgmsbroc1P = "KUCMS_JetHt_18D_Met150_notSig_v15_iso1_Skim_BaseHists.root"
-rfgmsbroc1a = "KUCMS_JetHt_18D_Met150_notSig_v15_iso2_Skim_BaseHists.root"
-rfgmsbroc1b = "KUCMS_JetHt_18D_Met150_notSig_v15_iso3_Skim_BaseHists.root"
-rfgmsbroc1c = "KUCMS_JetHt_18D_Met150_notSig_v15_iso4_Skim_BaseHists.root"
+#rhname1 = [ "selPhoHcalTowerSumEtBcConeDR04", "pho30ptHcalTowerSumEtBcConeDR04", "pho100ptHTSumEtBcConeDR04" ]
+#rhname1 = [ "rjrX2NGMean" ]
+#rhname1 = [ "rjrX2NAve" ]
+#rhname1 = [ "rjrX2NVSum" ]
+#x1 = [ 0, 0.5 ]
 
-rfgmsbroc20 = "KUCMS_GMSB_L100_Met150_Signal_v15_iso0_Skim_BaseHists.root"
-rfgmsbroc2P = "KUCMS_GMSB_L100_Met150_Signal_v15_iso1_Skim_BaseHists.root"
-rfgmsbroc2a = "KUCMS_GMSB_L100_Met150_Signal_v15_iso2_Skim_BaseHists.root"
-rfgmsbroc2b = "KUCMS_GMSB_L100_Met150_Signal_v15_iso3_Skim_BaseHists.root"
-rfgmsbroc2c = "KUCMS_GMSB_L100_Met150_Signal_v15_iso4_Skim_BaseHists.root"
+#rhname1 = [ "SMass" ]
+#x1 = [ 0, 10000 ]
 
-rfgmsbroc30 = "KUCMS_GMSB_L100_Met150_notSig_v15_iso0_Skim_BaseHists.root"
-rfgmsbroc3P = "KUCMS_GMSB_L100_Met150_notSig_v15_iso1_Skim_BaseHists.root"
-rfgmsbroc3a = "KUCMS_GMSB_L100_Met150_notSig_v15_iso2_Skim_BaseHists.root"
-rfgmsbroc3b = "KUCMS_GMSB_L100_Met150_notSig_v15_iso3_Skim_BaseHists.root"
-rfgmsbroc3c = "KUCMS_GMSB_L100_Met150_notSig_v15_iso4_Skim_BaseHists.root"
+#rhname1 = [ "X2aMass" ]
+#rhname1 = [ "X2bMass" ]
+#rhname1 = [ "rjrX2GMean" ]
+#rhname1 = [ "rjrX2Ave" ]
+#rhname1 = [ "rjrX2VSum" ]
+#x1 = [ 0, 3600 ]
 
-rfgmsbroc1 = rfgmsbroc20
-rfgmsbroc2 = rfgmsbroc30
-rfgmsbroc3 = rfgmsbroc10
+#rhname1 = [ "rjrX2aPtS" ]
+#rhname1 = [ "rjrX2bPtS" ]
+#x1 = [ 0, 10000 ]
 
-boutname = 'llpa_met150_sbdist_pt'
-title = ' 2018 GMSB L100 '
-ptcut = 'Pt < '
+#rhname1 = [ "rjrNJetsJa" ]
+#rhname1 = [ "rjrNJetsJb" ]
+#x1 = [ 0, 15 ]
+
+#rhname1 = [ "rjrX2Diff" ]
+#x1 = [ 0, 1.0 ]
+
+#rhname1 = [ "SCosA" ]
+#x1 = [ -1.5, 1.5 ]
+#y1 = [ 0.01, 1 ]
+
+#rhname1 = [ "evtMetPt" ]
+#rhname1 = [ "evtRjrMetPt" ]
+#rhname1 = [ "evtRawMetPt" ]
+#x1 = [ 0, 10000 ]
+
+#rhname1 = [ "rjrDphiMETV" ]
+rhname1 = [ "rjrSdphiBV" ]
+#rhname1 = [ "rjrSdphiDA" ]
+x1 = [ -1.5, 1.5 ]
+y1 = [ 0.01, 1 ]
+
+rjrgjetsp1 = "KUCMS_GJets_v19_RjrSkim_multiHists.root"
+rjrqcdp1 = "KUCMS_QCD_v19_RjrSkim_multiHists.root"
+
+rjrgmsbl100t11p1 = "KUCMS_GMSB_L100_T11_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl100t11p2 = "KUCMS_GMSB_L100_T11_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl100t22p1 = "KUCMS_GMSB_L100_T22_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl100t22p2 = "KUCMS_GMSB_L100_T22_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl100t33p1 = "KUCMS_GMSB_L100_T33_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl100t33p2 = "KUCMS_GMSB_L100_T33_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl100t44p1 = "KUCMS_GMSB_L100_T44_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl100t44p2 = "KUCMS_GMSB_L100_T44_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+
+rjrgmsbl300t11p1 = "KUCMS_GMSB_L300_T11_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl300t11p1 = "KUCMS_GMSB_L300_T11_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl300t22p1 = "KUCMS_GMSB_L300_T22_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl300t22p2 = "KUCMS_GMSB_L300_T22_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl300t33p1 = "KUCMS_GMSB_L300_T33_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl300t33p2 = "KUCMS_GMSB_L300_T33_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+rjrgmsbl300t44p1 = "KUCMS_GMSB_L300_T44_v19_genSigPerfect_nSigPho1_RjrSkim_multiHists.root"
+rjrgmsbl300t44p2 = "KUCMS_GMSB_L300_T44_v19_genSigPerfect_nSigPho2_RjrSkim_multiHists.root"
+
+boutname = 'llpa_T11_P1_rjr'
+title = ' 2017 '
+ptcut = ''
 #isocut = 'hadTowOverEM < 0.02'
 isocut = ''
-ptlist = [ '20','30','100']
+ptlist = [ '' ]
+#ptlist = [ '100','300' ]
 
 for rhname, pt in zip(rhname1,ptlist) :
   ptitle=[ title, ptcut+pt, isocut ]
   soutname = boutname+pt+'_'
-  inhistlist = [[rhname,"",rfgmsbroc1,"Sig",cut ],[rhname,"",rfgmsbroc2,"GMSB",cut],[rhname,"",rfgmsbroc3,"JetHt",cut]]
+  inhistlist = [[rhname,"",rjrgjetsp1,"GJet",cut ],[rhname,"",rjrqcdp1,"QCD",cut],
+                [rhname,"",rjrgmsbl100t22p1,"L100t22",cut],[rhname,"",rjrgmsbl300t22p1,"L300t22",cut],
+                [rhname,"",rjrgmsbl100t33p1,"L100t33",cut],[rhname,"",rjrgmsbl300t33p1,"L300t33",cut]]
+
   outname = soutname + rhname
   layout = { 'xtitle' : rhname, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
   dostack(inhistlist, outname, date, layout, ptitle,  y1, x1, l, t)
-
-for rhname, pt in zip(rhname2,ptlist) :
-  ptitle=[ title, ptcut+pt, isocut ]
-  soutname = boutname+pt+'_'
-  inhistlist = [[rhname,"",rfgmsbroc1,"Sig",cut ],[rhname,"",rfgmsbroc2,"GMSB",cut],[rhname,"",rfgmsbroc3,"JetHt",cut]]
-  outname = soutname + rhname
-  layout = { 'xtitle' : rhname, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
-  dostack(inhistlist, outname, date, layout, ptitle,  y2, x2, l, t)
-
-for rhname, pt in zip(rhname3,ptlist) :
-  ptitle=[ title, ptcut+pt, isocut ]
-  soutname = boutname+pt+'_'
-  inhistlist = [[rhname,"",rfgmsbroc1,"Sig",cut ],[rhname,"",rfgmsbroc2,"GMSB",cut],[rhname,"",rfgmsbroc3,"JetHt",cut]]
-  outname = soutname + rhname
-  layout = { 'xtitle' : rhname, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
-  dostack(inhistlist, outname, date, layout, ptitle,  y3, x3, l, t)
-
-for rhname, pt in zip(rhname4,ptlist) :
-  soutname = boutname+pt+'_'
-  ptitle=[ title, ptcut+pt, isocut ]
-  inhistlist = [[rhname,"",rfgmsbroc1,"Sig",cut ],[rhname,"",rfgmsbroc2,"GMSB",cut],[rhname,"",rfgmsbroc3,"JetHt",cut]]
-  outname = soutname + rhname
-  layout = { 'xtitle' : rhname, 'ytitle' : ytitle, 'title' : htitle, 'logx' : islogx, 'logy' : islogy, 'legtitle' : legtitle }
-  dostack(inhistlist, outname, date, layout, ptitle,  y4, x4, l, t)
 
 
 #ptitle=[' 2022 IOV5 359421-360089','','#splitline{EBEB}{CC Ave RH Time by Channel}'] #{GT 106X_dataRun2_v28}'

@@ -22,14 +22,16 @@ int main ( int argc, char *argv[] ){
 
                 //const std::string infilename = "KUCMS_Ntuple_Master_BG_Files_List.txt";
                 const std::string infilename = "KUCMS_Ntuple_Master_GMSB_Files_List.txt";
+                //const std::string infilename = "KUCMS_Ntuple_Test_GMSB_Files_List.txt";
                 //const std::string infilename = "KUCMS_Ntuple_Master_JetHT_Files_List.txt";
-                ////const std::string infilename = "KUCMS_Ntuple_Master_GMSB_Test_Files_List.txt";
                 //const std::string infilename = "KUCMS_Ntuple_Test_Files_List.txt";
 
 				//const std::string outfilename = "_Ntuple_v14_LLPgama_Skim_v15.root";
 				//const std::string outfilename = "_LLPgama_Skim_v15b_rhe1k.root";
                 //const std::string outfilename = "_LLPgama_Skim_v16_rhe0p2.root";
-				const std::string outfilename = "_LLPgama_Skim_v15_genSigPerfect.root";
+				//const std::string outfilename = "_LLPgama_Skim_v17_noseedmatch_scstudies.root";
+                //const std::string outfilename = "_Ntuple_v19_LLPgama_Skim_v17_scstudies2.root";
+                const std::string outfilename = "_Ntuple_v19_LLPgama_Skim_v18_rjrstudies.root";
 
 				bool hasGenInfo = true;
                 //bool hasGenInfo = false;

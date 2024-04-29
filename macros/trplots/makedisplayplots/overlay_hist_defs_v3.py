@@ -1233,3 +1233,15 @@ hl_r3_22IOV9 = [
     ["ZEE_CC_Data_Hist_sigma","",egres_r3_22IOV9,"ZEE CC"],
 ]
 
+egres_r3_24B_EG1_IA_v12 = 'r3_2024_plots/egammares_diag_24B_IOVA_EGamma1_v12_EB.root'
+egres_r3_24B_EG1_IB_v12 = 'r3_2024_plots/egammares_diag_24B_IOVB_EGamma1_v12_EB.root'
+egres_r3_24B_EG1_IC_v12 = 'r3_2024_plots/egammares_diag_24B_IOVC_EGamma1_v12_EB.root'
+egres_r3_24B_EG01_IB_v12 = 'r3_2024_plots/egammares_diag_24B_IOVB_EGamma01_v12_EB.root'
+
+hl_r3_24B = [
+
+	[],
+
+]
+
+

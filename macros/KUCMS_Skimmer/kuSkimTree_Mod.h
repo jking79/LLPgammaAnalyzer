@@ -34,22 +34,33 @@ public :
    Float_t         selCMetPx;
    Float_t         selCMetPy;
 
+   Float_t         selMet;
+   Float_t         selMetPx;
+   Float_t         selMetPy;
+
    Float_t         PVx;
    Float_t         PVy;
    Float_t         PVz;
 
-   vector<float>   *genPartEnergy;
-   vector<float>   *genPartEta;
-   vector<unsigned int> *genPartPdgId;
-   vector<float>   *genPartPhi;
-   vector<float>   *genPartPt;
-   vector<int>     *genPartSusId;
-   vector<int>     *genCharge;
-   vector<float>   *genMass;
-   vector<bool>    *genStatus;
-   vector<float>   *genVx;
-   vector<float>   *genVy;
-   vector<float>   *genVz;
+   std::vector<int>     *genCharge;
+   std::vector<float>   *genMass;
+   std::vector<float>   *genPartEnergy;
+   std::vector<float>   *genPartEta;
+   std::vector<unsigned int> *genPartPdgId;
+   std::vector<float>   *genPartPhi;
+   std::vector<float>   *genPartPt;
+   std::vector<int>     *genPartSusId;
+   std::vector<float>   *genPx;
+   std::vector<float>   *genPy;
+   std::vector<float>   *genPz;
+   std::vector<float>   *genSGMass;
+   std::vector<float>   *genSQMass;
+   Int_t           genSigType;
+   Bool_t          genStatus;
+   std::vector<float>   *genVx;
+   std::vector<float>   *genVy;
+   std::vector<float>   *genVz;
+
 
    //Int_t           leadSelPho;
    UInt_t          nPhotons;
@@ -142,17 +153,42 @@ public :
    vector<float>   *selJetTime;
    vector<float>   *selJetchHEF;
 
-   vector<float>   *SCosA;
-   vector<float>   *SMass;
-   vector<float>   *X1aCosA;
-   vector<float>   *X1aMass;
-   vector<float>   *X1bCosA;
-   vector<float>   *X1bMass;
-   vector<float>   *X2aCosA;
-   vector<float>   *X2aMass;
-   vector<float>   *X2bCosA;
-   vector<float>   *X2bMass;
-   vector<float>   *nRjrPhotons;
+   std::vector<float>   *rjrDphiMETV;
+   std::vector<float>   *rjrEVa;
+   std::vector<float>   *rjrEVb;
+   std::vector<float>   *rjrMET;
+   std::vector<float>   *rjrMV;
+   std::vector<float>   *rjrMVa;
+   std::vector<float>   *rjrMVb;
+   Int_t           rjrNJetsJa;
+   Int_t           rjrNJetsJb;
+   std::vector<int>     *rjrNRjrJets;
+   std::vector<int>     *rjrNRjrPhotons;
+   std::vector<float>   *rjrPV;
+   std::vector<float>   *rjrPVa;
+   std::vector<float>   *rjrPVb;
+   std::vector<float>   *rjrPVlab;
+   std::vector<float>   *rjrSCosA;
+   std::vector<float>   *rjrSMass;
+   std::vector<float>   *rjrSdphiBV;
+   std::vector<float>   *rjrSdphiDA;
+   std::vector<float>   *rjrX1aCosA;
+   std::vector<float>   *rjrX1aMass;
+   std::vector<float>   *rjrX1bCosA;
+   std::vector<float>   *rjrX1bMass;
+   std::vector<float>   *rjrX2Ave;
+   std::vector<float>   *rjrX2Diff;
+   std::vector<float>   *rjrX2GMean;
+   std::vector<float>   *rjrX2NAve;
+   std::vector<float>   *rjrX2NGMean;
+   std::vector<float>   *rjrX2NVSum;
+   std::vector<float>   *rjrX2VSum;
+   std::vector<float>   *rjrX2aCosA;
+   std::vector<float>   *rjrX2aMass;
+   std::vector<float>   *rjrX2aPtS;
+   std::vector<float>   *rjrX2bCosA;
+   std::vector<float>   *rjrX2bMass;
+   std::vector<float>   *rjrX2bPtS;
 
    // List of branches
    TBranch        *b_DataSetKey;   //!
@@ -162,18 +198,29 @@ public :
    TBranch        *b_selCMetPx;   //!
    TBranch        *b_selCMetPy;   //!
 
+   TBranch        *b_selMet;   //!
+   TBranch        *b_selMetPx;   //!
+   TBranch        *b_selMetPy;   //!
+
+
    TBranch        *b_PVx;
    TBranch        *b_PVy;
    TBranch        *b_PVz;
 
+   TBranch        *b_genCharge;   //!
+   TBranch        *b_genMass;   //!
    TBranch        *b_genPartEnergy;   //!
    TBranch        *b_genPartEta;   //!
    TBranch        *b_genPartPdgId;   //!
    TBranch        *b_genPartPhi;   //!
    TBranch        *b_genPartPt;   //!
    TBranch        *b_genPartSusId;   //!
-   TBranch        *b_genCharge;   //!
-   TBranch        *b_genMass;   //!
+   TBranch        *b_genPx;   //!
+   TBranch        *b_genPy;   //!
+   TBranch        *b_genPz;   //!
+   TBranch        *b_genSGMass;   //!
+   TBranch        *b_genSQMass;   //!
+   TBranch        *b_genSigType;   //!
    TBranch        *b_genStatus;   //!
    TBranch        *b_genVx;   //!
    TBranch        *b_genVy;   //!
@@ -274,17 +321,42 @@ public :
    TBranch        *b_selJetTime;   //!
    TBranch        *b_selJetchHEF;   //!
 
-   TBranch        *b_SCosA;   //!
-   TBranch        *b_SMass;   //!
-   TBranch        *b_X1aCosA;   //!
-   TBranch        *b_X1aMass;   //!
-   TBranch        *b_X1bCosA;   //!
-   TBranch        *b_X1bMass;   //!
-   TBranch        *b_X2aCosA;   //!
-   TBranch        *b_X2aMass;   //!
-   TBranch        *b_X2bCosA;   //!
-   TBranch        *b_X2bMass;   //!
-   TBranch        *b_nRjrPhotons;
+   TBranch        *b_rjrDphiMETV;   //!
+   TBranch        *b_rjrEVa;   //!
+   TBranch        *b_rjrEVb;   //!
+   TBranch        *b_rjrMET;   //!
+   TBranch        *b_rjrMV;   //!
+   TBranch        *b_rjrMVa;   //!
+   TBranch        *b_rjrMVb;   //!
+   TBranch        *b_rjrNJetsJa;   //!
+   TBranch        *b_rjrNJetsJb;   //!
+   TBranch        *b_rjrNRjrJets;   //!
+   TBranch        *b_rjrNRjrPhotons;   //!
+   TBranch        *b_rjrPV;   //!
+   TBranch        *b_rjrPVa;   //!
+   TBranch        *b_rjrPVb;   //!
+   TBranch        *b_rjrPVlab;   //!
+   TBranch        *b_rjrSCosA;   //!
+   TBranch        *b_rjrSMass;   //!
+   TBranch        *b_rjrSdphiBV;   //!
+   TBranch        *b_rjrSdphiDA;   //!
+   TBranch        *b_rjrX1aCosA;   //!
+   TBranch        *b_rjrX1aMass;   //!
+   TBranch        *b_rjrX1bCosA;   //!
+   TBranch        *b_rjrX1bMass;   //!
+   TBranch        *b_rjrX2Ave;   //!
+   TBranch        *b_rjrX2Diff;   //!
+   TBranch        *b_rjrX2GMean;   //!
+   TBranch        *b_rjrX2NAve;   //!
+   TBranch        *b_rjrX2NGMean;   //!
+   TBranch        *b_rjrX2NVSum;   //!
+   TBranch        *b_rjrX2VSum;   //!
+   TBranch        *b_rjrX2aCosA;   //!
+   TBranch        *b_rjrX2aMass;   //!
+   TBranch        *b_rjrX2aPtS;   //!
+   TBranch        *b_rjrX2bCosA;   //!
+   TBranch        *b_rjrX2bMass;   //!
+   TBranch        *b_rjrX2bPtS;   //!
 
    //kuSkimTree(TTree *tree=0);
    //virtual ~kuSkimTree();
@@ -356,15 +428,19 @@ void kuSkimTree::Init(TTree *tree)
    // Set object pointer
    DataSetKey = 0;
 
+   genCharge = 0;
+   genMass = 0;
    genPartEnergy = 0;
    genPartEta = 0;
    genPartPdgId = 0;
    genPartPhi = 0;
    genPartPt = 0;
-   genPartSusId = 0; 
-   genCharge = 0;
-   genMass = 0;
-   genStatus = 0;
+   genPartSusId = 0;
+   genPx = 0;
+   genPy = 0;
+   genPz = 0;
+   genSGMass = 0;
+   genSQMass = 0;
    genVx = 0;
    genVy = 0;
    genVz = 0;
@@ -456,17 +532,40 @@ void kuSkimTree::Init(TTree *tree)
    selJetTime = 0;
    selJetchHEF = 0;
 
-   SCosA = 0;
-   SMass = 0;
-   X1aCosA = 0;
-   X1aMass = 0;
-   X1bCosA = 0;
-   X1bMass = 0;
-   X2aCosA = 0;
-   X2aMass = 0;
-   X2bCosA = 0;
-   X2bMass = 0;
-   nRjrPhotons = 0; 
+   rjrDphiMETV = 0;
+   rjrEVa = 0;
+   rjrEVb = 0;
+   rjrMET = 0;
+   rjrMV = 0;
+   rjrMVa = 0;
+   rjrMVb = 0;
+   rjrNRjrJets = 0;
+   rjrNRjrPhotons = 0;
+   rjrPV = 0;
+   rjrPVa = 0;
+   rjrPVb = 0;
+   rjrPVlab = 0;
+   rjrSCosA = 0;
+   rjrSMass = 0;
+   rjrSdphiBV = 0;
+   rjrSdphiDA = 0;
+   rjrX1aCosA = 0;
+   rjrX1aMass = 0;
+   rjrX1bCosA = 0;
+   rjrX1bMass = 0;
+   rjrX2Ave = 0;
+   rjrX2Diff = 0;
+   rjrX2GMean = 0;
+   rjrX2NAve = 0;
+   rjrX2NGMean = 0;
+   rjrX2NVSum = 0;
+   rjrX2VSum = 0;
+   rjrX2aCosA = 0;
+   rjrX2aMass = 0;
+   rjrX2aPtS = 0;
+   rjrX2bCosA = 0;
+   rjrX2bMass = 0;
+   rjrX2bPtS = 0;
 
   // Set branch addresses and branch pointers
    if (!tree) return;
@@ -481,19 +580,28 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selCMetPx", &selCMetPx, &b_selCMetPx);
    fChain->SetBranchAddress("selCMetPy", &selCMetPy, &b_selCMetPy);
 
-   //fChain->SetBranchAddress("PVx", &PVx, &b_PVx);
-   //fChain->SetBranchAddress("PVy", &PVy, &b_PVy);
-   //fChain->SetBranchAddress("PVz", &PVz, &b_PVz);
+   fChain->SetBranchAddress("selMet", &selMet, &b_selMet);
+   fChain->SetBranchAddress("selMetPx", &selMetPx, &b_selMetPx);
+   fChain->SetBranchAddress("selMetPy", &selMetPy, &b_selMetPy);
 
+   fChain->SetBranchAddress("PVx", &PVx, &b_PVx);
+   fChain->SetBranchAddress("PVy", &PVy, &b_PVy);
+   fChain->SetBranchAddress("PVz", &PVz, &b_PVz);
 
+   fChain->SetBranchAddress("genCharge", &genCharge, &b_genCharge);
+   fChain->SetBranchAddress("genMass", &genMass, &b_genMass);
    fChain->SetBranchAddress("genPartEnergy", &genPartEnergy, &b_genPartEnergy);
    fChain->SetBranchAddress("genPartEta", &genPartEta, &b_genPartEta);
    fChain->SetBranchAddress("genPartPdgId", &genPartPdgId, &b_genPartPdgId);
    fChain->SetBranchAddress("genPartPhi", &genPartPhi, &b_genPartPhi);
    fChain->SetBranchAddress("genPartPt", &genPartPt, &b_genPartPt);
    fChain->SetBranchAddress("genPartSusId", &genPartSusId, &b_genPartSusId);
-   fChain->SetBranchAddress("genCharge", &genCharge, &b_genCharge);
-   fChain->SetBranchAddress("genMass", &genMass, &b_genMass);
+   fChain->SetBranchAddress("genPx", &genPx, &b_genPx);
+   fChain->SetBranchAddress("genPy", &genPy, &b_genPy);
+   fChain->SetBranchAddress("genPz", &genPz, &b_genPz);
+   fChain->SetBranchAddress("genSGMass", &genSGMass, &b_genSGMass);
+   fChain->SetBranchAddress("genSQMass", &genSQMass, &b_genSQMass);
+   fChain->SetBranchAddress("genSigType", &genSigType, &b_genSigType);
    fChain->SetBranchAddress("genStatus", &genStatus, &b_genStatus);
    fChain->SetBranchAddress("genVx", &genVx, &b_genVx);
    fChain->SetBranchAddress("genVy", &genVy, &b_genVy);
@@ -594,17 +702,42 @@ void kuSkimTree::Init(TTree *tree)
    fChain->SetBranchAddress("selJetTime", &selJetTime, &b_selJetTime);
    fChain->SetBranchAddress("selJetchHEF", &selJetchHEF, &b_selJetchHEF);
 
-   fChain->SetBranchAddress("SCosA", &SCosA, &b_SCosA);
-   fChain->SetBranchAddress("SMass", &SMass, &b_SMass);
-   fChain->SetBranchAddress("X1aCosA", &X1aCosA, &b_X1aCosA);
-   fChain->SetBranchAddress("X1aMass", &X1aMass, &b_X1aMass);
-   fChain->SetBranchAddress("X1bCosA", &X1bCosA, &b_X1bCosA);
-   fChain->SetBranchAddress("X1bMass", &X1bMass, &b_X1bMass);
-   fChain->SetBranchAddress("X2aCosA", &X2aCosA, &b_X2aCosA);
-   fChain->SetBranchAddress("X2aMass", &X2aMass, &b_X2aMass);
-   fChain->SetBranchAddress("X2bCosA", &X2bCosA, &b_X2bCosA);
-   fChain->SetBranchAddress("X2bMass", &X2bMass, &b_X2bMass);
-   fChain->SetBranchAddress("nRjrPhotons", &nRjrPhotons, &b_nRjrPhotons);
+   fChain->SetBranchAddress("rjrDphiMETV", &rjrDphiMETV, &b_rjrDphiMETV);
+   fChain->SetBranchAddress("rjrEVa", &rjrEVa, &b_rjrEVa);
+   fChain->SetBranchAddress("rjrEVb", &rjrEVb, &b_rjrEVb);
+   fChain->SetBranchAddress("rjrMET", &rjrMET, &b_rjrMET);
+   fChain->SetBranchAddress("rjrMV", &rjrMV, &b_rjrMV);
+   fChain->SetBranchAddress("rjrMVa", &rjrMVa, &b_rjrMVa);
+   fChain->SetBranchAddress("rjrMVb", &rjrMVb, &b_rjrMVb);
+   fChain->SetBranchAddress("rjrNJetsJa", &rjrNJetsJa, &b_rjrNJetsJa);
+   fChain->SetBranchAddress("rjrNJetsJb", &rjrNJetsJb, &b_rjrNJetsJb);
+   fChain->SetBranchAddress("rjrNRjrJets", &rjrNRjrJets, &b_rjrNRjrJets);
+   fChain->SetBranchAddress("rjrNRjrPhotons", &rjrNRjrPhotons, &b_rjrNRjrPhotons);
+   fChain->SetBranchAddress("rjrPV", &rjrPV, &b_rjrPV);
+   fChain->SetBranchAddress("rjrPVa", &rjrPVa, &b_rjrPVa);
+   fChain->SetBranchAddress("rjrPVb", &rjrPVb, &b_rjrPVb);
+   fChain->SetBranchAddress("rjrPVlab", &rjrPVlab, &b_rjrPVlab);
+   fChain->SetBranchAddress("rjrSCosA", &rjrSCosA, &b_rjrSCosA);
+   fChain->SetBranchAddress("rjrSMass", &rjrSMass, &b_rjrSMass);
+   fChain->SetBranchAddress("rjrSdphiBV", &rjrSdphiBV, &b_rjrSdphiBV);
+   fChain->SetBranchAddress("rjrSdphiDA", &rjrSdphiDA, &b_rjrSdphiDA);
+   fChain->SetBranchAddress("rjrX1aCosA", &rjrX1aCosA, &b_rjrX1aCosA);
+   fChain->SetBranchAddress("rjrX1aMass", &rjrX1aMass, &b_rjrX1aMass);
+   fChain->SetBranchAddress("rjrX1bCosA", &rjrX1bCosA, &b_rjrX1bCosA);
+   fChain->SetBranchAddress("rjrX1bMass", &rjrX1bMass, &b_rjrX1bMass);
+   fChain->SetBranchAddress("rjrX2Ave", &rjrX2Ave, &b_rjrX2Ave);
+   fChain->SetBranchAddress("rjrX2Diff", &rjrX2Diff, &b_rjrX2Diff);
+   fChain->SetBranchAddress("rjrX2GMean", &rjrX2GMean, &b_rjrX2GMean);
+   fChain->SetBranchAddress("rjrX2NAve", &rjrX2NAve, &b_rjrX2NAve);
+   fChain->SetBranchAddress("rjrX2NGMean", &rjrX2NGMean, &b_rjrX2NGMean);
+   fChain->SetBranchAddress("rjrX2NVSum", &rjrX2NVSum, &b_rjrX2NVSum);
+   fChain->SetBranchAddress("rjrX2VSum", &rjrX2VSum, &b_rjrX2VSum);
+   fChain->SetBranchAddress("rjrX2aCosA", &rjrX2aCosA, &b_rjrX2aCosA);
+   fChain->SetBranchAddress("rjrX2aMass", &rjrX2aMass, &b_rjrX2aMass);
+   fChain->SetBranchAddress("rjrX2aPtS", &rjrX2aPtS, &b_rjrX2aPtS);
+   fChain->SetBranchAddress("rjrX2bCosA", &rjrX2bCosA, &b_rjrX2bCosA);
+   fChain->SetBranchAddress("rjrX2bMass", &rjrX2bMass, &b_rjrX2bMass);
+   fChain->SetBranchAddress("rjrX2bPtS", &rjrX2bPtS, &b_rjrX2bPtS);
 
    //Notify();
 }
@@ -619,24 +752,34 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selCMetPx->GetEntry(entry);   //!
    b_selCMetPy->GetEntry(entry);   //!
 
-   //b_PVx->GetEntry(entry);   //!
-   //b_PVy->GetEntry(entry);   //!
-   //b_PVz->GetEntry(entry);   //!
+   b_selMet->GetEntry(entry);   //!
+   b_selMetPx->GetEntry(entry);   //!
+   b_selMetPy->GetEntry(entry);   //!
 
+   b_PVx->GetEntry(entry);   //!
+   b_PVy->GetEntry(entry);   //!
+   b_PVz->GetEntry(entry);   //!
+
+   b_genCharge->GetEntry(entry);   //!
+   b_genMass->GetEntry(entry);   //!
    b_genPartEnergy->GetEntry(entry);   //!
    b_genPartEta->GetEntry(entry);   //!
    b_genPartPdgId->GetEntry(entry);   //!
    b_genPartPhi->GetEntry(entry);   //!
    b_genPartPt->GetEntry(entry);   //!
    b_genPartSusId->GetEntry(entry);   //!
-   b_genCharge->GetEntry(entry);   //!
-   b_genMass->GetEntry(entry);   //!
+   b_genPx->GetEntry(entry);   //!
+   b_genPy->GetEntry(entry);   //!
+   b_genPz->GetEntry(entry);   //!
+   b_genSGMass->GetEntry(entry);   //!
+   b_genSQMass->GetEntry(entry);   //!
+   b_genSigType->GetEntry(entry);   //!
    b_genStatus->GetEntry(entry);   //!
    b_genVx->GetEntry(entry);   //!
    b_genVy->GetEntry(entry);   //!
    b_genVz->GetEntry(entry);   //!
 
-   //std::cout << "Branch 2" << std::endl;
+   //std::cout << "Branch 2" << std::endl->GetEntry(entry);
    //b_leadSelPho->GetEntry(entry);   //!
    b_nPhotons->GetEntry(entry);   //!
    b_nSelPhotons->GetEntry(entry);   //!
@@ -662,7 +805,7 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selPhoPhoIsoDr->GetEntry(entry);   //!
    b_selPhoPixelSeed->GetEntry(entry);   //!
    b_selPhoPt->GetEntry(entry);   //!
-   //std::cout << "Branch 3" << std::endl;
+   //std::cout << "Branch 3" << std::endl->GetEntry(entry);
    //b_selPhoPtOrder->GetEntry(entry);   //!
    b_selPhoQuality->GetEntry(entry);   //!
    b_selPhoR9->GetEntry(entry);   //!
@@ -678,7 +821,7 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selPhoTrkSumPtHollowConeDR03->GetEntry(entry);   //!
    b_selPhoTrkSumPtHollowConeDR04->GetEntry(entry);   //!
    b_selPhoTrkSumPtSolidConeDR04->GetEntry(entry);   //!
-   //std::cout << "Branch 4" << std::endl;
+   //std::cout << "Branch 4" << std::endl->GetEntry(entry);
    //b_subLeadSelPho->GetEntry(entry);   //!
    b_selPhoGenSigMomEnergy->GetEntry(entry);   //!
    b_selPhoGenSigMomEta->GetEntry(entry);   //!
@@ -691,23 +834,23 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selPhoGenSigMomVx->GetEntry(entry);   //!
    b_selPhoGenSigMomVy->GetEntry(entry);   //!
    b_selPhoGenSigMomVz->GetEntry(entry);   //!
-   //std::cout << "Branch 4a" << std::endl; 
+   //std::cout << "Branch 4a" << std::endl->GetEntry(entry); 
    b_selPhoEcalPFClusterIso->GetEntry(entry);   //!     
    b_selPhoHasConversionTracks->GetEntry(entry);   //!
    b_selPhoHcalTowerSumEtConeDR04->GetEntry(entry);   //!
    b_selPhoNTrkHollowConeDR04->GetEntry(entry);   //!
    b_selPhoNTrkSolidConeDR04->GetEntry(entry);   //!
-   //std::cout << "Branch 4b" << std::endl;
+   //std::cout << "Branch 4b" << std::endl->GetEntry(entry);
    b_selPhoPfChargedIso->GetEntry(entry);   //!
    b_selPhoPfChargedIsoPFPV->GetEntry(entry);   //!
    //b_selPhoPfPhoIso03->GetEntry(entry);   //!   
    b_selPhoSigmaIEtaIEta->GetEntry(entry);   //!
-   //std::cout << "Branch 4c" << std::endl;
+   //std::cout << "Branch 4c" << std::endl->GetEntry(entry);
    b_selPhoSCx->GetEntry(entry);   //!
    b_selPhoSCy->GetEntry(entry);   //!
    b_selPhoSCz->GetEntry(entry);   //!
 
-   //std::cout << "Branch 5" << std::endl;
+   //std::cout << "Branch 5" << std::endl->GetEntry(entry);
    b_nJets->GetEntry(entry);   //!
    b_nSelJets->GetEntry(entry);   //!
    b_selGenJetDpt->GetEntry(entry);   //!
@@ -738,18 +881,43 @@ void kuSkimTree::getBranches(Long64_t entry){
    b_selJetTime->GetEntry(entry);   //!
    b_selJetchHEF->GetEntry(entry);   //!
 
-   //std::cout << "Branch 6" << std::endl;
-   b_SCosA->GetEntry(entry);   //!
-   b_SMass->GetEntry(entry);   //!
-   b_X1aCosA->GetEntry(entry);   //!
-   b_X1aMass->GetEntry(entry);   //!
-   b_X1bCosA->GetEntry(entry);   //!
-   b_X1bMass->GetEntry(entry);   //!
-   b_X2aCosA->GetEntry(entry);   //!
-   b_X2aMass->GetEntry(entry);   //!
-   b_X2bCosA->GetEntry(entry);   //!
-   b_X2bMass->GetEntry(entry);   //!
-   b_nRjrPhotons->GetEntry(entry);   //!
+   //std::cout << "Branch 6" << std::endl->GetEntry(entry);
+   b_rjrDphiMETV->GetEntry(entry);   //!
+   b_rjrEVa->GetEntry(entry);   //!
+   b_rjrEVb->GetEntry(entry);   //!
+   b_rjrMET->GetEntry(entry);   //!
+   b_rjrMV->GetEntry(entry);   //!
+   b_rjrMVa->GetEntry(entry);   //!
+   b_rjrMVb->GetEntry(entry);   //!
+   b_rjrNJetsJa->GetEntry(entry);   //!
+   b_rjrNJetsJb->GetEntry(entry);   //!
+   b_rjrNRjrJets->GetEntry(entry);   //!
+   b_rjrNRjrPhotons->GetEntry(entry);   //!
+   b_rjrPV->GetEntry(entry);   //!
+   b_rjrPVa->GetEntry(entry);   //!
+   b_rjrPVb->GetEntry(entry);   //!
+   b_rjrPVlab->GetEntry(entry);   //!
+   b_rjrSCosA->GetEntry(entry);   //!
+   b_rjrSMass->GetEntry(entry);   //!
+   b_rjrSdphiBV->GetEntry(entry);   //!
+   b_rjrSdphiDA->GetEntry(entry);   //!
+   b_rjrX1aCosA->GetEntry(entry);   //!
+   b_rjrX1aMass->GetEntry(entry);   //!
+   b_rjrX1bCosA->GetEntry(entry);   //!
+   b_rjrX1bMass->GetEntry(entry);   //!
+   b_rjrX2Ave->GetEntry(entry);   //!
+   b_rjrX2Diff->GetEntry(entry);   //!
+   b_rjrX2GMean->GetEntry(entry);   //!
+   b_rjrX2NAve->GetEntry(entry);   //!
+   b_rjrX2NGMean->GetEntry(entry);   //!
+   b_rjrX2NVSum->GetEntry(entry);   //!
+   b_rjrX2VSum->GetEntry(entry);   //!
+   b_rjrX2aCosA->GetEntry(entry);   //!
+   b_rjrX2aMass->GetEntry(entry);   //!
+   b_rjrX2aPtS->GetEntry(entry);   //!
+   b_rjrX2bCosA->GetEntry(entry);   //!
+   b_rjrX2bMass->GetEntry(entry);   //!
+   b_rjrX2bPtS->GetEntry(entry);   //!
 
    //std::cout << "Done getting entries" << std::endl;
 

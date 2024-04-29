@@ -143,6 +143,27 @@ class KUCMSAodSkimmer : public root_base {
 	KUCMSBranchManager selRjrVars;
     KUCMSBranchManager selGenPart;
 
+
+   std::vector<float>   *OSuperCluster_diffEnergy;
+   std::vector<float>   *OSuperCluster_dR;
+   std::vector<unsigned int> *OSuperCluster_otherMatchSeedID;
+   Int_t           OSuperCluster_nOther;
+   Int_t           OSuperCluster_nOtherEx;
+   Int_t           OSuperCluster_nOtherIn;
+   std::vector<unsigned int> *OSuperCluster_otherSeedID;
+   std::vector<int>     *OSuperCluster_nXtalOverlap;
+
+
+   TBranch        *b_OSuperCluster_diffEnergy;   //!
+   TBranch        *b_OSuperCluster_dR;   //!
+   TBranch        *b_OSuperCluster_otherMatchSeedID;   //!
+   TBranch        *b_OSuperCluster_nOther;   //!
+   TBranch        *b_OSuperCluster_nOtherEx;   //!
+   TBranch        *b_OSuperCluster_nOtherIn;   //!
+   TBranch        *b_OSuperCluster_otherSeedID;   //!
+   TBranch        *b_OSuperCluster_nXtalOverlap;   //!
+
+
 };
 
 #endif

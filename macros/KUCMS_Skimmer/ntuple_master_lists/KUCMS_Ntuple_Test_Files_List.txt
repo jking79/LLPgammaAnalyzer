@@ -28,7 +28,10 @@
 
 #KUCMSNtuple/kucmsntuple_MET_R17_v15/ kuntuple_MET_R17_v15.txt datat 1.0 0.0 0.0 1 0
 
-test_ntuples/ kuntuple_test_v15.txt datat 1.0:q 0.0 0.0 1 0
+#test_ntuples/ kuntuple_test_v15.txt datat 1.0:q 0.0 0.0 1 0
+
+#KUCMSNtuple/kucmsntuple_MET_R17_v16/ kuntuple_MET_R17_v16.txt met 1.0 0.0 0.0 1 0
+KUCMSNtuple/kucmsntuple_MET_R17_v19/ kuntuple_MET_R17_v19.txt met 1.0 0.0 0.0 1 0
 
 #KUCMSNtuple/kucmsntuple_QCD_R17_v15/ kuntuple_QCD_HT50to100_R17_v15.txt qcdst 1.0 0.0 0.0 1 0
 #KUCMSNtuple/kucmsntuple_QCD_R17_v15/ kuntuple_QCD_HT100to200_R17_v15.txt qcdst 1.0 0.0 0.0 1 0

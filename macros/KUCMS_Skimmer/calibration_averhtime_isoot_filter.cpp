@@ -272,6 +272,7 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          SetupDetIDsEB( DetIDMap );
          SetupDetIDsEE( DetIDMap );
 
+         std::cout << "Decalring Varibles" << std::endl;
    	 	 std::map<UInt_t,Float_t> sumXtalMiniRecTime;
     	 std::map<int,Float_t> sumXtalEtaRecTime;
          std::map<int,Float_t> sumXtalPhiRecTime;
@@ -339,9 +340,10 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
          //TBranch        *b_resTOF;   //!
 
 
-    	std::ifstream infilelist(infilelistname);
-    	std::string infilestr;
-    	while (std::getline(infilelist,infilestr)){
+         std::cout << "Getting input files." << std::endl;
+    	 std::ifstream infilelist(infilelistname);
+    	 std::string infilestr;
+    	 while (std::getline(infilelist,infilestr)){
 
 			//std::cout << "open input string 1: " << infilestr << " ; " << infilestr.size() << std::endl;
 			if( infilestr[0] == '#' ) continue;
@@ -658,28 +660,35 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 int main ( int argc, char *argv[] ){
 
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
+		// standard + eta/phi maps
         //else {
 
 				float minE = 5.0;
 
-                auto indir = "KUCMSNtuple/kucmsntuple_GJETS_R17_v16_MET0/";
+                //auto indir = "KUCMSNtuple/kucmsntuple_GJETS_R17_v16_MET0/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_QCD_R17_v16_MET0/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_QCD_AOD_v14B/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_GJETS_AOD_v14B/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_GMSB_AOD_v14/";
                 //auto indir = "KUCMSNtuple/kucmsntuple_JetHT_Met150_AOD_v14/";
+                //auto indir = "KUCMSNtuple/kucmsntuple_JetHT_R17_v18/";
+                auto indir = "KUCMSNtuple/kucmsntuple_DEG_R17_v18/";
 
-				auto infilelist = "cali_list_files/KUCMS_GJets_R17_v16_califilelist.txt";
+				//auto infilelist = "cali_list_files/KUCMS_GJets_R17_v16_califilelist.txt";
                 //auto infilelist = "cali_list_files/KUCMS_QCD_R17_v16_califilelist.txt";
                 //auto infilelist = "cali_list_files/KUCMS_GJets_v14_califilelist.txt";
                 //auto infilelist = "cali_list_files/KUCMS_GMSB_v14_califilelist.txt";
 				//auto infilelist = "cali_list_files/KUCMS_JetHT18D_v14_califilelist.txt";
+				//auto infilelist = "cali_list_files/KUCMS_JetHT_R17_v18_califilelist.txt";
+                auto infilelist = "cali_list_files/KUCMS_DoubleEG_R17_v18_califilelist.txt";
 
-				auto outfilename = "KUCMS_GJets_R17_v16_rhE5_mo_Cali.root";
+				//auto outfilename = "KUCMS_GJets_R17_v16_rhE5_mo_Cali.root";
                 //auto outfilename = "KUCMS_QCD_R17_v16_rhE5_mo_Cali.root";
                 //auto outfilename = "KUCMS_GJets_v14B2_rhE5_Cali.root";
                 //auto outfilename = "KUCMS_GMSB_ct200_L350_v14_rhE0_Cali.root";
                 //auto outfilename = "KUCMS_JetHT18D_v14_rhE2_Cali.root";
+                //auto outfilename = "KUCMS_JetHT_R17_v18_rhE5_Cali.root";
+                auto outfilename = "KUCMS_DoubleEG_R17_v18_rhE5_Cali.root";
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename, minE );
         //}

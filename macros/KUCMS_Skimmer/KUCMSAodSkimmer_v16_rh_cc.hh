@@ -184,6 +184,24 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir,
 		SetupDetIDsEE(DetIDMap);
 	
 		startJobs();
+
+   OSuperCluster_diffEnergy = 0;
+   OSuperCluster_dR = 0;
+   OSuperCluster_otherMatchSeedID = 0;
+   OSuperCluster_otherSeedID = 0;
+   OSuperCluster_nXtalOverlap = 0;
+
+
+   fChain->SetBranchAddress("OSuperCluster_diffEnergy", &OSuperCluster_diffEnergy, &b_OSuperCluster_diffEnergy);
+   fChain->SetBranchAddress("OSuperCluster_dR", &OSuperCluster_dR, &b_OSuperCluster_dR);
+   fChain->SetBranchAddress("OSuperCluster_otherMatchSeedID", &OSuperCluster_otherMatchSeedID, &b_OSuperCluster_otherMatchSeedID);
+   fChain->SetBranchAddress("OSuperCluster_nOther", &OSuperCluster_nOther, &b_OSuperCluster_nOther);
+   fChain->SetBranchAddress("OSuperCluster_nOtherEx", &OSuperCluster_nOtherEx, &b_OSuperCluster_nOtherEx);
+   fChain->SetBranchAddress("OSuperCluster_nOtherIn", &OSuperCluster_nOtherIn, &b_OSuperCluster_nOtherIn);
+   fChain->SetBranchAddress("OSuperCluster_otherSeedID", &OSuperCluster_otherSeedID, &b_OSuperCluster_otherSeedID);
+   fChain->SetBranchAddress("OSuperCluster_nXtalOverlap", &OSuperCluster_nXtalOverlap, &b_OSuperCluster_nXtalOverlap);
+
+
 	
 	    std::cout << "Setting up For Main Loop." << std::endl;
 		int loopCounter(100000);
@@ -198,6 +216,19 @@ void KUCMSAodSkimmer::kucmsAodSkimmer( std::string listdir, std::string eosdir,
 	        auto entry = fInTree->LoadTree(centry);
 			if(DEBUG) std::cout << " -- Getting Branches " << std::endl;
 			getBranches( entry, doGenInfo );
+
+   			//std::cout << "Getting OSuperCluster branches " << std::endl;
+   			b_OSuperCluster_diffEnergy->GetEntry(entry);   //!
+   			b_OSuperCluster_dR->GetEntry(entry);   //!
+   			//std::cout << "Getting OSuperCluster branches 2" << std::endl;
+   			b_OSuperCluster_otherMatchSeedID->GetEntry(entry);   //!
+   			b_OSuperCluster_nOther->GetEntry(entry);   //!
+   			b_OSuperCluster_nOtherEx->GetEntry(entry);   //!
+   			b_OSuperCluster_nOtherIn->GetEntry(entry);   //!
+   			//std::cout << "Getting OSuperCluster branches 3" << std::endl;
+   			b_OSuperCluster_otherSeedID->GetEntry(entry);   //!
+   			b_OSuperCluster_nXtalOverlap->GetEntry(entry);   //!
+   			//std::cout << "Getting OSuperCluster branches done" << std::endl;
 			geCnts.clear();
             geVars.clear();
 			if( genSigPerfect ) geVars.set( "genSigPerfect", 1 ); else geVars.set( "genSigPerfect", 0 );
@@ -271,10 +302,10 @@ bool KUCMSAodSkimmer::eventLoop( Long64_t entry ){
 	// --------------------------------------
     //if( doGenInfo ){ processGenParticles(); }
 	//processEvntVars();	
-	processRechits();
+	//processRechits();
 	//processMet();
-	processPhotons();
-	processElectrons();
+	//processPhotons();
+	//processElectrons();
 	//processMuons();
 	//processJets();
     processRechitsHist();
@@ -377,8 +408,8 @@ void KUCMSAodSkimmer::processRechitsHist(){
 
     auto nRecHits = ECALRecHit_ID->size();
     if( DEBUG ) std::cout << " -- Looping over " << nRecHits << " rechits" << std::endl;
-    for( int it = 0; it < nRecHits; it++ ){
-
+    //for( int it = 0; it < nRecHits; it++ ){
+/*
         auto id = (*ECALRecHit_ID)[it];
         auto idinfo = DetIDMap[id];
         if( idinfo.ecal == ECAL::EB ){
@@ -432,15 +463,18 @@ void KUCMSAodSkimmer::processRechitsHist(){
 
 
         }//<<>>if( (*rhSubdet)[it] == 0 )
+*/
 
-    }//<<>>for( int it = 0; it < nRecHits; it++ )
+    //}//<<>>for( int it = 0; it < nRecHits; it++ )
+
 
 	int nSuperClusters = SuperCluster_nHFXtals->size();
+    if( DEBUG ) std::cout << " -- Looping over " << nSuperClusters << " SCs" << std::endl;
 	for( int sciter = 0; sciter < nSuperClusters; sciter++ ){
 
 		int nhflist = (*SuperCluster_nHFXtals)[sciter];
 		int nhfrh = (*SuperCluster_nRHXtals)[sciter];
-        auto misFracs = (*SuperCluster_MissingRhFracs)[sciter];
+        //auto misFracs = (*SuperCluster_MissingRhFracs)[sciter];
         int nBClutrs = (*SuperCluster_nBasicClusters)[sciter];
 
 		int hfdiff = nhflist - nhflist;
@@ -453,6 +487,53 @@ void KUCMSAodSkimmer::processRechitsHist(){
 
 	}//<<>>for( int sciter = 0; sciter < nSuperClusters; sciter++ )
     // fill
+
+    int nOOTSuperClusters = OSuperCluster_dR->size();
+    if( DEBUG ) std::cout << " -- Looping over " << nOOTSuperClusters << " ooSCs" << std::endl;
+    for( int sciter = 0; sciter < nOOTSuperClusters; sciter++ ){
+
+        float oscde = (*OSuperCluster_diffEnergy)[sciter];
+        float oscdr = (*OSuperCluster_dR)[sciter];
+        uInt oscmid = (*OSuperCluster_otherMatchSeedID)[sciter];
+        uInt oscsid = (*OSuperCluster_otherSeedID)[sciter];
+		bool msid = ( oscmid == oscsid );
+        int oscnxo = (*OSuperCluster_nXtalOverlap)[sciter];
+
+		float swcross = 2.0;
+		float scenergy = -1.0;
+		float sctime = -100;
+		for( int rhit = 0; rhit < nRecHits; rhit++ ){ 
+			if( ECALRecHit_ID->at(rhit) == oscsid ){ 
+				swcross = ECALRecHit_swCross->at(rhit);  
+				scenergy = ECALRecHit_energy->at(rhit); 
+				sctime = ECALRecHit_time->at(rhit);
+			}//<<>>if( ECALRecHit_ID->at(rhit) == oscsid )
+		}//<<>>for( int rhit = 0; rhit < nRecHits; rhit++ )
+
+		//if( msid ) continue;
+
+		oscde = ( scenergy > 0 ) ? oscde/scenergy : 100000;
+
+		hist1d[30]->Fill(oscdr);
+        hist1d[31]->Fill(oscde);
+        hist1d[32]->Fill(msid);
+        hist1d[36]->Fill(oscnxo);
+
+		hist2d[30]->Fill(oscdr,oscde);
+        hist2d[31]->Fill(oscdr,oscnxo);
+        hist2d[32]->Fill(oscde,oscnxo);
+        hist2d[33]->Fill(swcross,oscde);
+        hist2d[34]->Fill(sctime,oscde);
+
+	}//<<>>for( int sciter = 0; sciter < nOOTSuperClusters; sciter++ )
+
+	int nosc = OSuperCluster_nOther;
+	int nosce = OSuperCluster_nOtherEx;
+    int nosci = OSuperCluster_nOtherIn;
+
+    hist1d[33]->Fill(nosc);
+    hist1d[34]->Fill(nosce);
+    hist1d[35]->Fill(nosci);
 
 }//<<>>void KUCMSAodSkimmer::processRechits()
 
@@ -697,11 +778,11 @@ void KUCMSAodSkimmer::processPhotons(){
         auto scz = (*SuperCluster_z_calo)[scIndx];
         int nhflist = (*SuperCluster_nHFXtals)[scIndx];
         int nhfrh = (*SuperCluster_nRHXtals)[scIndx];
-        auto misFracs = (*SuperCluster_MissingRhFracs)[scIndx];
-		int nMisFracs = misFracs.size();
+        //auto misFracs = (*SuperCluster_MissingRhFracs)[scIndx];
+		//int nMisFracs = misFracs.size();
         int nBClutrs = (*SuperCluster_nBasicClusters)[scIndx];
 
-		hist1d[18]->Fill(nMisFracs);
+		//hist1d[18]->Fill(nMisFracs);
 
         int genIdx = -1;
         int momIdx = -1;
@@ -1662,8 +1743,16 @@ void KUCMSAodSkimmer::initHists(){
     hist1d[15] = new TH1D("inelerhecnt", "inEleRecHit;rechit cnt",200,0,200);
 
     hist1d[17] = new TH1D("notinrhe2", "Not in Ele/Pho SC;rechit E [GeV]",200,0,2);
-
     hist1d[18] = new TH1D("nduphfpho", "#DupHF in Photons;#DupHF",200,0,200);
+
+	hist1d[30] = new TH1D("oscdr", "ootSC min dR w/ prompt SC;dR",200,0,2);
+    //hist1d[31] = new TH1D("oscde", "ootSC minDr diff Energy w/ prompt SC; dE(promt-oot) [GeV]",2500,-500,2000);
+    hist1d[31] = new TH1D("oscde", "ootSC minDr diff Energy w/ prompt SC; dE(promt-oot)/SeedE",2000,-100,100);
+    hist1d[32] = new TH1D("oscmsid", "ootSC has matching seed ID",3,-0.5,2.5);
+    hist1d[33] = new TH1D("osccnt", "# ootSC",20,0,20);
+    hist1d[34] = new TH1D("osccnte", "# ootSC Excluded",20,0,20);
+    hist1d[35] = new TH1D("osccnti", "# ootSC Included",20,0,20);
+    hist1d[36] = new TH1D("oscoxtal", "# ootSC overlaping xtals;#Xtals",100,0,100);
 
 	hist1d[100] = new TH1D("hfdiff", "Photon H&F Diff;Diff( rh found - rh in H&F )",100,-50,50);
     hist1d[101] = new TH1D("hffound", "Photon # H&F found;# rh found ",100,0,100);
@@ -1700,7 +1789,16 @@ void KUCMSAodSkimmer::initHists(){
     hist2d[22] = new TH2D("urheveta", "urhe v Eta", 200, 0, 2, 150, -1.5, 1.5);
     hist2d[23] = new TH2D("urhevamp", "urhe v amplitude", 200, 0, 2, 150, 0, 150);
     hist2d[24] = new TH2D("urhevtime", "urhe v time", 200, 0, 1, 150, -15, 15);
-    
+
+    //hist2d[30] = new TH2D("ootscdrvde", "ootSC dR v dE;dR;dE(promt-oot) [GeV]", 200, 0, 2, 2500, -500, 2000);
+    hist2d[30] = new TH2D("ootscdrvde", "ootSC dR v dE;dR;dE(promt-oot)/SeedE", 200, 0, 2, 2000, -100, 100);
+    hist2d[31] = new TH2D("ootscdrvnoc", "ootSC dR v # overlap Xtals;dR;#Xtals", 200, 0, 2, 100, 0, 100);
+    //hist2d[32] = new TH2D("ootscdevnoc", "ootSC dE v # overlap Xtals;dE(promt-oot) [GeV];#Xtals", 2500, -500, 2000, 100, 0, 100);
+    hist2d[32] = new TH2D("ootscdevnoc", "ootSC dE v # overlap Xtals;dE(promt-oot)/SeedE;#Xtals", 2000, -100, 100, 100, 0, 100);
+    //hist2d[33] = new TH2D("ootscdrswvde", "ootSC SwissCross v dE;SwissCross;dE(promt-oot) [GeV]", 500, -8.9, 1.1, 2500, -500, 2000);
+    hist2d[33] = new TH2D("ootscswvde", "ootSC SwissCross v dE;SwissCross;dE(promt-oot)/SeedE", 2000, -8.9, 1.1, 2000, -100, 100);
+    hist2d[34] = new TH2D("ootscstswvde", "ootSC SeedTime v dE;SeedTime [ns];dE(promt-oot)/SeedE", 1500, -15, 15, 2000, -100, 100);
+
     hist2d[100] = new TH2D("hfinvfound", "Photon # in vs found H&F ;# rh in H&F;# rh H&F found",100,0,100,100,0,100);
 
 	//------------------------------------------------------------------------------------------

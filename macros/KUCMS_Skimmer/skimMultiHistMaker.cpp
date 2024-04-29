@@ -51,6 +51,8 @@ void HistMaker::histMaker( std::string indir, std::string infilelist, std::strin
 	int cnt = 1;
     while (std::getline(infile,str)){
         if( str[0] == '#' ) continue;
+        if( str == " " ) continue;
+		if( str == "" ) continue;
         auto tfilename = eosdir + indir + str;
         std::cout << "--  adding file: " << tfilename << std::endl;
         fInTree->Add(tfilename.c_str());
@@ -275,8 +277,8 @@ void HistMaker::eventLoop( Long64_t entry ){
 		auto phoClass = (*selPhoQuality)[it];
         //if( phoClass < 1 ) continue;
         auto phoSusId = (*selPhoSusyId)[it]; // selPhoSusyId->at(it);
-        auto phoGenMatDr = (*selPhoGenDr)[it];
-        auto phoGenMatDp = (*selPhoGenDp)[it];
+        auto phoGenMatDr = 0.f; //(*selPhoGenDr)[it];
+        auto phoGenMatDp = 0.f; //(*selPhoGenDp)[it];
         auto phoTime = (*selPhoTime)[it];
         auto phoOOT = (*selPhoOOT)[it];
 
@@ -595,18 +597,18 @@ void HistMaker::eventLoop( Long64_t entry ){
     //std::vector<float>   *X2bCosA;
     //std::vector<float>   *X2bMass;
 
-    if( SCosA->size() > 0 ){
+    if( rjrSCosA->size() > 0 ){
 
-        hist1d[250]->Fill((*SCosA)[0]); //("SCosA", mkht(ht,"SCosA"), 70, -3.5, 3.5);
-        hist1d[251]->Fill((*SMass)[0]); //("SMass", mkht(ht,"SMass"), 500, 0, 5000);
-        hist1d[252]->Fill((*X1aCosA)[0]); //("X1aCosA", mkht(ht,"X1aCosA"), 70, -3.5, 3.5);
-        hist1d[253]->Fill((*X1aMass)[0]); //("X1aMass", mkht(ht,"X1aMass"), 500, 0, 5000);
-        hist1d[254]->Fill((*X1bCosA)[0]); //("X1bCosA", mkht(ht,"X1bCosA"), 70, -3.5, 3.5);
-        hist1d[255]->Fill((*X1bMass)[0]); //("X1bMass", mkht(ht,"X1bMass"), 500, 0, 5000);
-        hist1d[256]->Fill((*X2aCosA)[0]); //("X2aCosA", mkht(ht,"X2aCosA"), 70, -3.5, 3.5);
-        hist1d[257]->Fill((*X2aMass)[0]); //("X2aMass", mkht(ht,"X2aMass"), 500, 0, 5000);
-        hist1d[258]->Fill((*X2bCosA)[0]); //("X2bCosA", mkht(ht,"X2bCosA"), 70, -3.5, 3.5);
-        hist1d[259]->Fill((*X2bMass)[0]); //("X2bMass", mkht(ht,"X2bMass"), 500, 0, 5000);
+        hist1d[250]->Fill((*rjrSCosA)[0]); //("SCosA", mkht(ht,"SCosA"), 70, -3.5, 3.5);
+        hist1d[251]->Fill((*rjrSMass)[0]); //("SMass", mkht(ht,"SMass"), 500, 0, 5000);
+        hist1d[252]->Fill((*rjrX1aCosA)[0]); //("X1aCosA", mkht(ht,"X1aCosA"), 70, -3.5, 3.5);
+        hist1d[253]->Fill((*rjrX1aMass)[0]); //("X1aMass", mkht(ht,"X1aMass"), 500, 0, 5000);
+        hist1d[254]->Fill((*rjrX1bCosA)[0]); //("X1bCosA", mkht(ht,"X1bCosA"), 70, -3.5, 3.5);
+        hist1d[255]->Fill((*rjrX1bMass)[0]); //("X1bMass", mkht(ht,"X1bMass"), 500, 0, 5000);
+        hist1d[256]->Fill((*rjrX2aCosA)[0]); //("X2aCosA", mkht(ht,"X2aCosA"), 70, -3.5, 3.5);
+        hist1d[257]->Fill((*rjrX2aMass)[0]); //("X2aMass", mkht(ht,"X2aMass"), 500, 0, 5000);
+        hist1d[258]->Fill((*rjrX2bCosA)[0]); //("X2bCosA", mkht(ht,"X2bCosA"), 70, -3.5, 3.5);
+        hist1d[259]->Fill((*rjrX2bMass)[0]); //("X2bMass", mkht(ht,"X2bMass"), 500, 0, 5000);
 
     }//<<>>if( SCosA->size() > 0 )
 
@@ -926,12 +928,14 @@ int main ( int argc, char *argv[] ){
 
     //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
     //else {
-                const std::string listdir = "skims_files/";
+                //const std::string listdir = "skims_files/";
+                const std::string listdir = "rjr_study_files/";
 
                 //auto infilenameGMSB = "KUCMS_GMSB_Skim_List.txt";
                 auto infilenameGMSB = "KUCMS_GMSB_Skim_List2.txt";
                 auto infilenameGJets = "KUCMS_GJets_Skim_List.txt";
                 auto infilenameJetHT = "KUCMS_JetHT_Skim_List.txt";
+                auto infilename = "KUCMS_RJR_Skim_List.txt";
 
                 int cuts = 7;
 				int cutb = 11;
@@ -977,7 +981,7 @@ int main ( int argc, char *argv[] ){
                 std::string htitle0d = "JetHT_met150_18D_v16_notSig_";
 
                 HistMaker base;
-/*
+
 				//std::string isoline = "iso_005_360_480_245_";
                 std::string isoline = "iso_2610_shape_";
 				
@@ -989,11 +993,12 @@ int main ( int argc, char *argv[] ){
                 std::string htitleb =  htitle0b + isoline;
                 std::string htitled =  htitle0d + isoline;
 
-                base.histMaker( listdir, infilenameGMSB, outfilenames, htitles, cuts, vaP, vbP, vcP, vdP );
+                base.histMaker( listdir, infilename, outfilenames, htitles, cuts, vaP, vbP, vcP, vdP );
                 //base.histMaker( listdir, infilenameGMSB, outfilenameb, htitleb, cutb, vaP, vbP, vcP, vdP );
                 //base.histMaker( listdir, infilenameJetHT, outfilenamed, htitled, cutb, vaP, vbP, vcP, vdP );
-*/
 
+
+/*
 				for( auto va : cutsva ){
 					for( auto vb : cutsvb ){
 						for( auto vc : cutsvc ){
@@ -1020,7 +1025,7 @@ int main ( int argc, char *argv[] ){
 						}//for( vc : cutsvc )
 					}//for( vb : cutsvb )
 				}//for( va : cutsva )
-			
+*/			
 
     //}
     return 1;

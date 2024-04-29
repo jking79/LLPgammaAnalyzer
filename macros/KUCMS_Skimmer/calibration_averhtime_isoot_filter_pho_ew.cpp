@@ -697,6 +697,7 @@ void wc_ku_InterCali_aveRecHit_mini( string indir, string infilelistname, string
 int main ( int argc, char *argv[] ){
 
         //if( argc != 4 ) { std::cout << "Insufficent arguments." << std::endl; }
+		// standard + eta/phi only with rechits from isolated photons, times are energy weighted
         //else {
 
 				float minE = 4.0;

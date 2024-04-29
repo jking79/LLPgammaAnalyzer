@@ -49,8 +49,7 @@ template <typename T> std::string to_string(T value)
 }
 
 enum ECAL {EB, EM, EP, NONE};
-//std::string ecal_config_path("/home/t3-ku/jaking/ecaltiming/CMSSW_10_2_5/src/Timing/TimingAnalyzer/macros/ecal_config/");
-std::string ecal_config_path("/uscms/home/jaking/nobackup/ecaltiming/CMSSW_11_3_0_pre6/src/Timing/TimingAnalyzer/macros/ecal_config/");
+std::string ecal_config_path("/uscms/home/jaking/nobackup/llpa/CMSSW_10_6_20/src/LLPGamma/LLPgammaAnalyzer/macros/ecal_config/");
 
 struct DetIDStruct
 {
@@ -488,7 +487,8 @@ int main ( int argc, char *argv[] ){
 				//auto indir = "ecalTiming/gammares_tt_kucc_126_v7_diag/EGamma/";
 				//auto indir = "ecalTiming/gammares_tt_kucc_126_v10_diag/EGamma/";
                 //auto indir = "ecalTiming/gammares_tt_kucc_126_v10_reso/EGamma/";
-                auto indir = "ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
+                //auto indir = "ecalTiming/gammares_ttcc_1307_v11_diag/EGamma1/";
+                auto indir = "ecalTiming/";
  
                 ///auto infilelist = "egamma_miniaod_run2018A_316241-316245.txt"; //argv[2];
                 ///auto infilelist = "egamma_miniaod_run2022A_352400-358400.txt";
@@ -541,7 +541,8 @@ int main ( int argc, char *argv[] ){
                 //auto infilelist = "tt_run3_2022F_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
                 //auto infilelist = "tt_run3_2022G_Prompt_359022_362760_126_gammares_v10_reso_califilelist.txt";
 
-                auto infilelist = "tt_run3_2023B_Prompt_366323_367065_1301_gammares_v11_reso_califilelist.txt";
+                //auto infilelist = "tt_run3_2023B_Prompt_366323_367065_1301_gammares_v11_reso_califilelist.txt";
+                auto infilelist = "egamma_run3_2024B_Prompt_378794_379190_1404_gammares_v11_reso_califilelist.txt";
 
                 //auto outfilename = "tt_KUCCRes_126_run2022A_352400-358400_Cali.root"; //argv[3];
                 //auto outfilename = "tt_KUCCRes_126_v2a_run2022C_partial_Cali.root"; //argv[3];
@@ -590,7 +591,9 @@ int main ( int argc, char *argv[] ){
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022F_Prompt_359022_362760_Cali.root";
                 //auto outfilename = "tt_KUCCRes_126_v10reso_run3_2022G_Prompt_359022_362760_Cali.root";
 
-                auto outfilename = "tt_KUCCRes_1307_v11_run3_2023B_Prompt_366323_367065_Cali.txt";
+                //auto outfilename = "tt_KUCCRes_1307_v11_run3_2023B_Prompt_366323_367065_Cali.root";
+                auto outfilename = "tt_KUCCRes_1404_v12_run3_2024B_Prompt_379191_379323_Cali.root";
+                //auto outfilename = "tt_KUCCRes_1404_v12_run3_2024B_Prompt_379324_379366_Cali.root";
 
                 wc_ku_InterCali_aveRecHit_mini( indir, infilelist, outfilename );
         //}

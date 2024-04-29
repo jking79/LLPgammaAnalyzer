@@ -12,6 +12,9 @@ RTVRS = 6.14.09-pafccj6
 INCLUDES = -I$(RTLOC)$(RTVRS)/include
 LFLAGS = -L$(RTLOC)$(RTVRS)/lib
 
+RTCFLAGS = $(shell root-config --cflags)
+RTGLIBS = $(shell root-config --glibs)
+
 p1=hist_maker_aodsim_test
 p2=hist_maker_aodsim
 p3=wc_ku_InterCali_aveRecHit_isoot_kucc_fliter_red
@@ -24,19 +27,19 @@ all: $(p2)
 # $(p4) $(p5) $(p7)
 
 $(p1): $(p1).cpp
-	$(CC) -o $(p1).obj $(p1).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p1).obj $(p1).cpp $(RTCFLAGS) $(RTGLIBS)
 
 $(p2): $(p2).cpp
-	$(CC) -o $(p2).obj $(p2).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p2).obj $(p2).cpp $(RTCFLAGS) $(RTGLIBS)
 
 $(p3): $(p3).cpp
-	$(CC) -o $(p3).obj $(p3).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p3).obj $(p3).cpp $(RTCFLAGS) $(RTGLIBS)
 
 $(p4): $(p4).cpp
-	$(CC) -o $(p4).obj $(p4).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p4).obj $(p4).cpp $(RTCFLAGS) $(RTGLIBS)
 
 $(p5): $(p5).cpp
-	$(CC) -o $(p5).obj $(p5).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p5).obj $(p5).cpp $(RTCFLAGS) $(RTGLIBS)
 
 $(p6): $(p6).cpp
-	$(CC) -o $(p6).obj $(p6).cpp $(CFLAGS) $(INCLUDES) $(LFLAGS) $(LIBS)
+	$(CC) -o $(p6).obj $(p6).cpp $(RTCFLAGS) $(RTGLIBS)
